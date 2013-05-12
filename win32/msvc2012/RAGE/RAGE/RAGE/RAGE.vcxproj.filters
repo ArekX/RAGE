@@ -23,6 +23,12 @@
     <Filter Include="modules\graphics\headers">
       <UniqueIdentifier>{d8565c41-5574-42fe-b0d4-0a503a6fdc19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\input">
+      <UniqueIdentifier>{3efef4bd-3334-4907-a586-e0dd5d3bf082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\input\headers">
+      <UniqueIdentifier>{0d692b15-2510-4f2d-893c-cadcacc55da3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -40,6 +46,12 @@
     <ClCompile Include="Bitmap_Wrapper.cpp">
       <Filter>modules\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Events_Wrapper.cpp">
+      <Filter>modules\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -53,6 +65,12 @@
     </ClInclude>
     <ClInclude Include="Bitmap_Wrapper.h">
       <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap.h">
+      <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Events_Wrapper.h">
+      <Filter>modules\input\headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

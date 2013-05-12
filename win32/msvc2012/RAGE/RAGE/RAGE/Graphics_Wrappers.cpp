@@ -16,6 +16,7 @@ namespace RAGE
 			rb_define_module_function(g, "setFullscreen", RFUNC(RAGE::Graphics::Graphics::rb_setFullscreen), 1);
 			rb_define_module_function(g, "setWindowPosition", RFUNC(RAGE::Graphics::Graphics::rb_setWindowPosition), 2);
 			rb_define_module_function(g, "cursorVisible", RFUNC(RAGE::Graphics::Graphics::rb_cursorVisible), 1);
+			rb_define_module_function(g, "update", RFUNC(RAGE::Graphics::Graphics::rb_graphicsupdate), 0);
 		}
 	}
 }

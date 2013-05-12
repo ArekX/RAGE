@@ -1,10 +1,11 @@
 #include "RubyInterpreter.h"
 
-
 namespace RAGE
 {
 	namespace Interpreter
 	{
+
+			
 		static VALUE rb_draw_text(VALUE self, VALUE text)
 		{
 			
@@ -14,11 +15,6 @@ namespace RAGE
 			al_flip_display();
 	
 			return Qnil;
-		}
-
-		VALUE Ruby::rb_require_protect(VALUE filename)
-		{
-			return rb_require(StringValueCStr(filename));
 		}
 
 		Ruby::Ruby(int argc, char** argv)
@@ -31,15 +27,13 @@ namespace RAGE
 				RUBY_INIT_STACK;
 				ruby_init();
 
-				VALUE protected_objects = rb_hash_new();
-				rb_gc_register_address(&protected_objects);
-		
-				/* Define Functions */
+				/* Define Global Functions */
 				rb_define_global_function("drawText", RFUNC(rb_draw_text), 1);
-				
+
 				/* Load all function wrappers */
 				RAGE::Graphics::Graphics_Wrappers::LoadWrappers();
 				RAGE::Graphics::BitmapWrapper::LoadRubyClass();
+				RAGE::Events::EventsWrapper::LoadWrappers();
 				// TODO: Finish inserting wrappers here
 
 				/* Set search path to exe file */
@@ -55,6 +49,7 @@ namespace RAGE
 				VALUE bootfile = rb_str_new_cstr("boot.rb");
 				ruby_set_script_name(bootfile);
 				rb_load_protect(bootfile, 1, &error);
+				
 
 				/* In case of error show it - do not exit the application */
 				if (error)
@@ -63,8 +58,7 @@ namespace RAGE
 					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
 					
 					printf_s("Script Error!\n\t%s: %s\n", StringValueCStr(klass), StringValueCStr(lasterr));
-					
-					getchar();
+					getc(stdin);
 				}
 			}
 		}

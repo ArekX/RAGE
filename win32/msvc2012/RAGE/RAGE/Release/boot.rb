@@ -1,48 +1,46 @@
 begin
-puts "Boot.rb script test"
-puts "\$:: #{$:.to_s}"
+@blat = nil
 
-puts "\$0: #{$0.to_s}"
-puts "\$RARGV: #{$RARGV.to_s}"
+bit = RAGE::Bitmap.new
+bit.load "test.bmp"
 
-puts "= Boot script ="
-sleep 0.5
-puts "- Title changing test - "
-sleep 0.5
-RAGE::Graphics::setTitle("Title changed from Boot.rb")
-sleep 0.5
-puts "- Windows position test -"
-sleep 0.5
-RAGE::Graphics::setWindowPosition(50, 50)
-puts "- Fullscreen test -"
-sleep 2
-RAGE::Graphics::setFullscreen(true)
-sleep 0.5
-RAGE::Graphics::setFullscreen(false)
+png = RAGE::Bitmap.new
+png.load "pngtest.png"
 
-puts "- Draw text test -"
-sleep 0.5
-drawText("Text draw call from Boot.rb")
+png.draw 250, 10
 
-
-puts "- Cursor Show/Hide test -"
-sleep 0.5
-RAGE::Graphics::cursorVisible(false)
-puts "Cursor Hidden"
-sleep 5
-RAGE::Graphics::cursorVisible(true)
-puts "Cursor Visible"
-sleep 4
-puts "- Exception Test -"
-sleep 1
-error_nil_function()
-
-rescue Exception => e  
-  puts "\n\nBoot.rb Error:\n\t\n" + e.message
-  puts "Backtrace:\n\t #{e.backtrace[0].to_s}\n\n"
+x,y = 0, 0
+speed = 10
+i = 0
+loop do
+	bit.drawRegion(100 * i, 0, 100, 95, 30 + x, 30 + y)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 30, RAGE::BITMAP_FLIP_H)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 30, 150, RAGE::BITMAP_FLIP_V)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::BITMAP_FLIP_VH)
+	RAGE::Events.update
+	case RAGE::Events.getKeyCode
+	when 84 # Up
+	  y -= speed
+	when 85 # Down
+	  y += speed
+	when 82 # Left
+	  x -= speed
+	when 83 # Right
+	  x += speed
+	end
+	RAGE::Graphics.update # Flips buffers
+	sleep 0.05 # Make animation a bit smoother
+	i += 1
+	i = 0 if i > 9
 end
 
-puts "= Testing complete ="
-sleep 5
+rescue Exception => e  
+	unless e.message == "exit"
+		puts "\n\nBoot.rb Error:\n\t\n" + e.message
+		puts "Backtrace:\n\t #{e.backtrace[0].to_s}\n\n"
+		gets
+	end
+end
+
 
 

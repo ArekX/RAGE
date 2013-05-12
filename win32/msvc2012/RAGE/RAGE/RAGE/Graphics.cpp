@@ -4,6 +4,7 @@ namespace RAGE
 {
 	namespace Graphics
 	{
+
 		Graphics::Graphics(GraphicsConfig config)
 		{
 			if (config.vsync == true)
@@ -17,6 +18,7 @@ namespace RAGE
 			al_get_window_position(disp, &window_x, &window_y);
 			al_set_window_title(disp, window_title);
 			al_flip_display();
+			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(disp));
 		}
 
 		Graphics::~Graphics(void)
@@ -29,16 +31,23 @@ namespace RAGE
 			ALLEGRO_DISPLAY *new_display, *old = al_get_current_display();
 			int width = al_get_display_width(old);
 			int height = al_get_display_height(old);
+			al_unregister_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(old));
 			al_destroy_display(old);
 			new_display = al_create_display(width, height);
 			al_set_target_backbuffer(new_display);
 			al_set_window_title(new_display, window_title);
 			al_set_window_position(new_display, window_x, window_y);
 			al_flip_display();
-			// TODO: Events
 			// TODO: Resource manager for bitmaps. When display is destroyed they are turned into memory bitmaps. 
 			//       Need to reload them.
+			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(new_display));
 			
+		}
+
+		VALUE Graphics::rb_graphicsupdate(VALUE self)
+		{
+			al_flip_display();
+			return Qtrue;
 		}
 
 		VALUE Graphics::rb_setTitle(VALUE self, VALUE title)

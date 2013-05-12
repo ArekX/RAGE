@@ -84,14 +84,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
+    <ClCompile Include="Events_Wrapper.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RubyInterpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
+    <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Graphics_Wrappers.h" />
     <ClInclude Include="RubyInterpreter.h" />

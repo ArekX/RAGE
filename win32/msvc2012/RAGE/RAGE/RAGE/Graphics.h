@@ -27,13 +27,13 @@ namespace RAGE
 			Graphics(GraphicsConfig config);
 			~Graphics(void);
 
-
 			/* Ruby functions */
 			static VALUE rb_setTitle(VALUE self, VALUE title);
 			static VALUE rb_setVSync(VALUE self, VALUE val);
 			static VALUE rb_setFullscreen(VALUE self, VALUE val);
 			static VALUE rb_setWindowPosition(VALUE self, VALUE x, VALUE y);
 			static VALUE rb_cursorVisible(VALUE self, VALUE val);
+			static VALUE rb_graphicsupdate(VALUE self);
 		};
 	}
 }

@@ -22,6 +22,11 @@ int main(int argc, char** argv)
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_primitives_addon();
+	al_install_mouse();
+    al_install_keyboard();
+
+	/* Initialize events */
+	RAGE::Events::EventsWrapper::init_queue();
 
 	/* Initialize graphics */
 	RAGE::Graphics::GraphicsConfig g;
@@ -32,6 +37,9 @@ int main(int argc, char** argv)
 
 	/* Initialize and start Interpreter */
 	RAGE::Interpreter::Ruby ri(argc, argv);
+
+	/* Destroy event queue */
+	RAGE::Events::EventsWrapper::finalize_queue();
 
 	/* Close down allegro game system */
 	al_uninstall_system();
