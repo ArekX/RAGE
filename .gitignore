@@ -22,4 +22,5 @@
 *.lastbuildstate
 *.idb
 *.pdb
+*.lib
 Release\*.*
