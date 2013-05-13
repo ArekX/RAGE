@@ -9,7 +9,7 @@ namespace RAGE
 		class Graphics_Wrappers
 		{
 		public:
-			static void LoadWrappers();
+			static void load_wrappers();
 		};
 
 	}

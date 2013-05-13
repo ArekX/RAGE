@@ -111,7 +111,7 @@ namespace RAGE
 		}
 
 		
-		void BitmapWrapper::LoadRubyClass()
+		void BitmapWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_define_const(rage, "BITMAP_FLIP_H", INT2FIX(1));

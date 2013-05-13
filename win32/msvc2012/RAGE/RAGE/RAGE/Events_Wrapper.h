@@ -14,7 +14,7 @@ namespace RAGE
 			static ALLEGRO_EVENT_QUEUE* get_queue();
 			static void init_queue();
 			static void finalize_queue();
-			static void LoadWrappers();
+			static void load_wrappers();
 		};
 	}
 }

@@ -9,7 +9,7 @@ namespace RAGE
 
 		VALUE EventsWrapper::rb_update_events(VALUE self)
 		{
-			ALLEGRO_EVENT event;
+			ALLEGRO_EVENT event = {0};
 			keyEvent = event;
 			if (al_get_next_event(event_queue, &event))
 			{
@@ -52,7 +52,7 @@ namespace RAGE
 				al_destroy_event_queue(event_queue);
 		}
 
-		void EventsWrapper::LoadWrappers()
+		void EventsWrapper::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE events = rb_define_module_under(rage, "Events");

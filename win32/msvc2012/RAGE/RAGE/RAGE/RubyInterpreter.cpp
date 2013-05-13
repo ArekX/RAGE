@@ -8,13 +8,24 @@ namespace RAGE
 			
 		static VALUE rb_draw_text(VALUE self, VALUE text)
 		{
-			
-			ALLEGRO_FONT* f = al_load_ttf_font("c:/other/acmesa.TTF", 16, 0);
+			ALLEGRO_FONT* f = al_load_ttf_font("c:/other/acmesa.ttf", 16, 0);
 			ALLEGRO_USTR* u = al_ustr_new(StringValueCStr(text));
 			al_draw_ustr(f, al_map_rgb(255,255, 255), 10, 10, 0, u);
 			al_flip_display();
 	
 			return Qnil;
+		}
+
+		static VALUE rb_get_env(VALUE self, VALUE text)
+		{
+			#ifdef WIN32
+			char *env[1024];
+			size_t t = 1024;
+			_dupenv_s(env, &t, StringValueCStr(text));
+			return rb_str_new_cstr(env[0]);
+			#else
+			return rb_str_new_cstr(getenv(StringValueCStr(text)));
+			#endif
 		}
 
 		Ruby::Ruby(int argc, char** argv)
@@ -29,11 +40,12 @@ namespace RAGE
 
 				/* Define Global Functions */
 				rb_define_global_function("drawText", RFUNC(rb_draw_text), 1);
+				rb_define_global_function("getEnvVar", RFUNC(rb_get_env), 1);
 
 				/* Load all function wrappers */
-				RAGE::Graphics::Graphics_Wrappers::LoadWrappers();
-				RAGE::Graphics::BitmapWrapper::LoadRubyClass();
-				RAGE::Events::EventsWrapper::LoadWrappers();
+				RAGE::Graphics::Graphics_Wrappers::load_wrappers();
+				RAGE::Graphics::BitmapWrapper::load_ruby_class();
+				RAGE::Events::EventsWrapper::load_wrappers();
 				// TODO: Finish inserting wrappers here
 
 				/* Set search path to exe file */
@@ -49,7 +61,6 @@ namespace RAGE
 				VALUE bootfile = rb_str_new_cstr("boot.rb");
 				ruby_set_script_name(bootfile);
 				rb_load_protect(bootfile, 1, &error);
-				
 
 				/* In case of error show it - do not exit the application */
 				if (error)

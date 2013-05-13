@@ -3,9 +3,11 @@
 #include <vector>
 #include <ruby.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_opengl.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <ruby/encoding.h>
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"

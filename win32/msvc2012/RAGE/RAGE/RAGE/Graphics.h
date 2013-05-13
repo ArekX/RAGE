@@ -21,11 +21,10 @@ namespace RAGE
 		class Graphics
 		{
 		private:
-			static void recreateDisplay();
+			static void recreate_display();
 
 		public:
 			Graphics(GraphicsConfig config);
-			~Graphics(void);
 
 			/* Ruby functions */
 			static VALUE rb_setTitle(VALUE self, VALUE title);
@@ -34,6 +33,8 @@ namespace RAGE
 			static VALUE rb_setWindowPosition(VALUE self, VALUE x, VALUE y);
 			static VALUE rb_cursorVisible(VALUE self, VALUE val);
 			static VALUE rb_graphicsupdate(VALUE self);
+			static VALUE rb_graphics_clear(VALUE self);
+			static VALUE rb_graphics_clear2(VALUE self, VALUE r, VALUE g, VALUE b);
 		};
 	}
 }

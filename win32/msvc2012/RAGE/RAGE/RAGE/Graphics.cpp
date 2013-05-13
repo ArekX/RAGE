@@ -14,19 +14,17 @@ namespace RAGE
 				al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 			
 			window_title = "RAGE Game";
+			al_set_new_display_flags(ALLEGRO_OPENGL);
 			ALLEGRO_DISPLAY* disp = al_create_display(config.width, config.height);
 			al_get_window_position(disp, &window_x, &window_y);
 			al_set_window_title(disp, window_title);
+			al_set_target_backbuffer(disp); 
 			al_flip_display();
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(disp));
+			
 		}
 
-		Graphics::~Graphics(void)
-		{
-
-		}
-
-		void Graphics::recreateDisplay()
+		void Graphics::recreate_display()
 		{
 			ALLEGRO_DISPLAY *new_display, *old = al_get_current_display();
 			int width = al_get_display_width(old);
@@ -34,7 +32,6 @@ namespace RAGE
 			al_unregister_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(old));
 			al_destroy_display(old);
 			new_display = al_create_display(width, height);
-			al_set_target_backbuffer(new_display);
 			al_set_window_title(new_display, window_title);
 			al_set_window_position(new_display, window_x, window_y);
 			al_flip_display();
@@ -47,6 +44,18 @@ namespace RAGE
 		VALUE Graphics::rb_graphicsupdate(VALUE self)
 		{
 			al_flip_display();
+			return Qtrue;
+		}
+
+		VALUE Graphics::rb_graphics_clear(VALUE self)
+		{
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			return Qtrue;
+		}
+
+		VALUE Graphics::rb_graphics_clear2(VALUE self, VALUE r, VALUE g, VALUE b)
+		{
+			al_clear_to_color(al_map_rgb(FIX2INT(r), FIX2INT(g), FIX2INT(b)));
 			return Qtrue;
 		}
 
@@ -66,13 +75,13 @@ namespace RAGE
 			if (TYPE(val) == T_TRUE)
 			{
 				al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
-				recreateDisplay();
+				recreate_display();
 				return Qtrue;
 			}
 			else if (TYPE(val) == T_FALSE)
 			{
 				al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE);
-				recreateDisplay();
+				recreate_display();
 				return Qtrue;
 			}
 			return Qfalse;
@@ -84,13 +93,13 @@ namespace RAGE
 			if (TYPE(val) == T_TRUE)
 			{
 				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN);
-				recreateDisplay();
+				recreate_display();
 				return Qtrue;
 			}
 			else if (TYPE(val) == T_FALSE)
 			{
 				al_set_new_display_flags(al_get_new_display_flags() & 0xFFD);
-				recreateDisplay();
+				recreate_display();
 				return Qtrue;
 			}
 			return Qfalse;

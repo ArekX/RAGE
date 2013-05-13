@@ -20,3 +20,6 @@
 *.tlog
 *.log
 *.lastbuildstate
+*.idb
+*.pdb
+Release\*.*

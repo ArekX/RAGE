@@ -25,7 +25,7 @@ namespace RAGE
 				                                VALUE flags);
 
 		public:
-			static void LoadRubyClass();
+			static void load_ruby_class();
 		};
 	}
 }
