@@ -112,7 +112,7 @@ RAGE::Events.unregister(RAGE::Events::KEY_PRESS, eventProc)) # Unregisters regis
 RAGE::Events.clear(RAGE::Events::KEY_PRESS) # Unregisters all Key Press events.
 
 RAGE::Events.freeze()
-# Stops all events from executing.
+# Stops all events processing.
 
 RAGE::Events.unfreeze()
 # Resumes event processing.
