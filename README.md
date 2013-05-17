@@ -1,7 +1,11 @@
 RAGE
 ====
 
-Ruby Awesome Game Engine, a 2D game engine with Ruby language support
+Ruby Awesome Game Engine, a 2D game engine with Ruby language support.
+
+Using Ruby Version: 2.0.0
+
+Using Allegro Version: 5.0.8
 
 Downloads
 ====
