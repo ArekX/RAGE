@@ -229,4 +229,5 @@ freely, subject to the following restrictions:
    distribution.
 
 Ruby License: http://www.ruby-lang.org/en/about/license.txt
+
 Allegro License: http://alleg.sourceforge.net/license.html
