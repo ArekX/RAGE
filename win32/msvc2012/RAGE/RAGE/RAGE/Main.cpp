@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 	al_init_primitives_addon();
 	al_install_mouse();
     al_install_keyboard();
+	al_install_joystick();
 
 	/* Initialize events */
 	RAGE::Events::EventsWrapper::init_queue();
@@ -40,6 +41,11 @@ int main(int argc, char** argv)
 
 	/* Destroy event queue */
 	RAGE::Events::EventsWrapper::finalize_queue();
+
+	/* Uninstall input */
+	al_uninstall_mouse();
+	al_uninstall_keyboard();
+	al_uninstall_joystick();
 
 	/* Close down allegro game system */
 	al_uninstall_system();

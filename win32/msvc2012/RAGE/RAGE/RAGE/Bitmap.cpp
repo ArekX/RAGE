@@ -9,6 +9,7 @@ namespace RAGE
 		Bitmap::Bitmap(void)
 		{
 			bitmap = NULL;
+			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 		}
 
 		Bitmap::~Bitmap(void)
@@ -21,6 +22,8 @@ namespace RAGE
 		{
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
+
+			// FIXME: Set to memory bitmap if too big width.
 			bitmap = al_create_bitmap(width, height);
 			
 		}

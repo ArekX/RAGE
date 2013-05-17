@@ -8,6 +8,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <ruby/encoding.h>
+#include <ruby/thread.h>
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
@@ -18,13 +19,15 @@
 
 #ifdef WIN32
 #define DS '\\'
+#define PRINTF(format, data) printf_s(format, data)
+#else
+#define PRINTF(format, data) printf(format, data)
 #endif
 
 namespace RAGE
 {
 	namespace Interpreter
 	{
-		
 
 		class Ruby
 		{

@@ -9,12 +9,15 @@ namespace RAGE
 		{
 			if (config.vsync == true)
 				al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
+			else
+				al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE);
 
 			if (config.fullscreen == true)
 				al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 			
 			window_title = "RAGE Game";
 			al_set_new_display_flags(ALLEGRO_OPENGL);
+			
 			ALLEGRO_DISPLAY* disp = al_create_display(config.width, config.height);
 			al_get_window_position(disp, &window_x, &window_y);
 			al_set_window_title(disp, window_title);

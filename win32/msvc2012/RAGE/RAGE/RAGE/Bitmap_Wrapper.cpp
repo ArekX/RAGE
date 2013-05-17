@@ -13,7 +13,7 @@ namespace RAGE
 				bmp->initialize(FIX2UINT(width), FIX2UINT(height));
 			}
 			else
-				rb_throw("Width and Height values need to be Fixnum.", self);
+				rb_raise(rb_eTypeError, "Width and Height values need to be Fixnum.");
 			
 			
 			return self;
@@ -114,9 +114,10 @@ namespace RAGE
 		void BitmapWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
-			rb_define_const(rage, "BITMAP_FLIP_H", INT2FIX(1));
-			rb_define_const(rage, "BITMAP_FLIP_V", INT2FIX(2));
-			rb_define_const(rage, "BITMAP_FLIP_VH", INT2FIX(3));
+			VALUE g = rb_define_module_under(rage, "Graphics");
+			rb_define_const(g, "BITMAP_FLIP_H", INT2FIX(1));
+			rb_define_const(g, "BITMAP_FLIP_V", INT2FIX(2));
+			rb_define_const(g, "BITMAP_FLIP_VH", INT2FIX(3));
 			VALUE bitmap = rb_define_class_under(rage, "Bitmap", rb_cObject);
 			
 			rb_define_alloc_func(bitmap, BitmapWrapper::rb_bitmap_alloc);

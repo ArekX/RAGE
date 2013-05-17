@@ -1,8 +1,46 @@
+class Inputer
+  def initialize
+    begin
+    @x, @y, @speed = 10, 10, 10
+	pressProc = Proc.new {|key|
+		if (key == 84)
+		  @y -= @speed
+		elsif (key == 85)
+		  @y += @speed
+		end
+		if (key == 82)
+		  @x -= @speed
+		elsif (key == 83)
+		  @x += @speed
+		end
+    }
+	@tries = 1
+	RAGE::Events.register(RAGE::Events::KEY_PRESS, pressProc)
+	RAGE::Events.register RAGE::Events::ENGINE_CLOSE, Proc.new {
+	  puts "Oh so you want to exit now?\n You tried #{@tries}/6 times."
+	  
+	  if @tries > 5
+	    puts "Okay I will let you out. :)"
+		sleep 2
+		Kernel::exit(0)
+	  end
+	  @tries += 1
+	}
+	
+    end
+  end
+  
+  def getspeed
+    return @speed
+  end
+  
+  def getxy
+    return @x, @y
+  end
+end
 begin
-
-
-puts "System - " + getEnvVar("SystemRoot")
-puts Encoding.list
+h = Inputer.new
+puts "System - " + RAGE.getEnvVar("SystemRoot")
 
 bit = RAGE::Bitmap.new
 bit.load "test.bmp"
@@ -13,31 +51,28 @@ png.load "pngtest.png"
 
 
 x,y = 0, 0
-speed = 10
+
+
+speed = 1
 i = 0
+
 loop do
+    
+	x, y = h.getxy
+	speed = h.getspeed
+	
     #RAGE::Graphics.clear
 	RAGE::Graphics.clearBackgroundColor 150 + x, 12 - x, 40 + x
 	bit.drawRegion(100 * i, 0, 100, 95, 30 + x, 30 + y)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 30, RAGE::BITMAP_FLIP_H)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 30, 150, RAGE::BITMAP_FLIP_V)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::BITMAP_FLIP_VH)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150 + x, 30 + y, RAGE::Graphics::BITMAP_FLIP_H)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 30 + x, 150 + y, RAGE::Graphics::BITMAP_FLIP_V)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150 + x, 150 + y, RAGE::Graphics::BITMAP_FLIP_VH)
+
 	png.draw 10, 10
-	RAGE::Events.update
-	case RAGE::Events.getKeyCode
-	when 84 # Up
-	  y -= speed
-	when 85 # Down
-	  y += speed
-	when 82 # Left
-	  x -= speed
-	when 83 # Right
-	  x += speed
-	end
+
 	RAGE::Graphics.update # Flips buffers
-	
-	sleep 0.05 # Make animation a bit smoother
 	i += 1
+	sleep 0.01
 	i = 0 if i >= 9
 end
 
@@ -48,6 +83,3 @@ rescue Exception => e
 		gets
 	end
 end
-
-
-
