@@ -20,6 +20,9 @@ namespace RAGE
 			int get_height();
 			void draw(float x, float y, int flags);
 			void draw_region(float sx, float sy, float sw, float sh, float dx, float dy, int flags);
+			bool save(char* filename);
+			void assign(Bitmap* src);
+			void recreate_video_bitmap();
 		};
 	}
 }

@@ -44,22 +44,60 @@ namespace RAGE
 			
 		}
 
+		VALUE Graphics::rb_set_target(VALUE self, VALUE bitmap)
+		{
+			if (TYPE(bitmap) == T_NIL)
+			{
+				al_set_target_backbuffer(al_get_current_display());
+			}
+			else
+			{
+				Bitmap* bmp;
+				Data_Get_Struct(bitmap, Bitmap, bmp);
+				al_set_target_bitmap(bmp->bitmap);
+			}
+
+			return Qnil;
+		}
+
+		VALUE Graphics::rb_get_target(VALUE self)
+		{
+			Bitmap *bmp;
+			VALUE ret_bmp = RAGE::Graphics::BitmapWrapper::new_ruby_class_instance();
+			Data_Get_Struct(ret_bmp, Bitmap, bmp);
+			bmp->bitmap = al_get_target_bitmap();
+			return ret_bmp;
+		}
+
+		VALUE Graphics::rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
+		{
+			al_set_clipping_rectangle(FIX2INT(x), FIX2INT(y), FIX2INT(w), FIX2INT(h));
+			return Qnil;
+		}
+
+		VALUE Graphics::rb_graphics_reset_clipping_rect(VALUE self)
+		{
+			ALLEGRO_BITMAP *bmp = al_get_target_bitmap();
+			al_set_clipping_rectangle(0, 0, al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+			return Qnil;
+		}
+
 		VALUE Graphics::rb_graphicsupdate(VALUE self)
 		{
 			al_flip_display();
-			return Qtrue;
+			return Qnil;
 		}
 
 		VALUE Graphics::rb_graphics_clear(VALUE self)
 		{
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			return Qtrue;
+			return Qnil;
 		}
 
 		VALUE Graphics::rb_graphics_clear2(VALUE self, VALUE r, VALUE g, VALUE b)
 		{
 			al_clear_to_color(al_map_rgb(FIX2INT(r), FIX2INT(g), FIX2INT(b)));
-			return Qtrue;
+			return Qnil;
 		}
 
 		VALUE Graphics::rb_setTitle(VALUE self, VALUE title)

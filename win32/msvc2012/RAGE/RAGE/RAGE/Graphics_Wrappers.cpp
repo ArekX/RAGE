@@ -19,6 +19,10 @@ namespace RAGE
 			rb_define_module_function(g, "update", RFUNC(RAGE::Graphics::Graphics::rb_graphicsupdate), 0);
 			rb_define_module_function(g, "clear", RFUNC(RAGE::Graphics::Graphics::rb_graphics_clear), 0);
 			rb_define_module_function(g, "clearBackgroundColor", RFUNC(RAGE::Graphics::Graphics::rb_graphics_clear2), 3);
+			rb_define_module_function(g, "setTarget", RFUNC(RAGE::Graphics::Graphics::rb_set_target), 1);
+			rb_define_module_function(g, "getTarget", RFUNC(RAGE::Graphics::Graphics::rb_get_target), 0);
+			rb_define_module_function(g, "setClippingRect", RFUNC(RAGE::Graphics::Graphics::rb_graphics_set_clipping_rect), 4);
+			rb_define_module_function(g, "resetClippingRect", RFUNC(RAGE::Graphics::Graphics::rb_graphics_reset_clipping_rect), 0);
 		}
 	}
 }

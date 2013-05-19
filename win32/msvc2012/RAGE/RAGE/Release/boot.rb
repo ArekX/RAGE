@@ -56,6 +56,8 @@ x,y = 0, 0
 speed = 1
 i = 0
 
+RAGE::Graphics.setClippingRect(0, 0, 50, 50)
+RAGE::Graphics.resetClippingRect()
 loop do
     
 	x, y = h.getxy

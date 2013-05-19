@@ -4,6 +4,9 @@ namespace RAGE
 {
 	namespace Graphics
 	{
+
+		VALUE rb_rageBitmapClass;
+
 		VALUE BitmapWrapper::rb_create(VALUE self, VALUE width, VALUE height)
 		{
 			if ((TYPE(width) == T_FIXNUM) && (TYPE(height) == T_FIXNUM))
@@ -45,19 +48,27 @@ namespace RAGE
 			return INT2FIX(bmp->get_height());
 		}
 
+		VALUE BitmapWrapper::rb_clone(VALUE self)
+		{
+			VALUE ret_bmp = new_ruby_class_instance();
+			Bitmap* current;
+			Bitmap* clone;
+
+			Data_Get_Struct(self, Bitmap, current);
+			Data_Get_Struct(ret_bmp, Bitmap, clone);
+
+			clone->assign(current);
+
+			return ret_bmp;
+		}
 
 		VALUE BitmapWrapper::rb_load_f(VALUE self, VALUE filename)
 		{
-			if (TYPE(filename) != T_STRING)
-			{
-				rb_throw("Filename must be a string value.", self);
-				return Qfalse;
-			}
-
 			VALUE fname = rb_find_file(filename);
 			if (TYPE(fname) != T_STRING)
 			{
-				rb_throw_obj(rb_sprintf("File '%s' not found.", StringValueCStr(filename)), self);
+				
+				rb_raise(rb_eArgError, "File '%s' not found.", StringValueCStr(filename));
 				return Qfalse;
 			}
 			
@@ -67,6 +78,14 @@ namespace RAGE
 
 			bmp->initialize(StringValueCStr(fname));
 			return Qtrue;
+		}
+
+		VALUE BitmapWrapper::rb_save_f(VALUE self, VALUE filename)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+			bool result = bmp->save(StringValueCStr(filename));
+			return result ? Qtrue : Qfalse;
 		}
 
 		VALUE BitmapWrapper::rb_bitmap_draw1(VALUE self, VALUE x, VALUE y)
@@ -109,7 +128,6 @@ namespace RAGE
 			 
 			return Qtrue;
 		}
-
 		
 		void BitmapWrapper::load_ruby_class()
 		{
@@ -118,17 +136,30 @@ namespace RAGE
 			rb_define_const(g, "BITMAP_FLIP_H", INT2FIX(1));
 			rb_define_const(g, "BITMAP_FLIP_V", INT2FIX(2));
 			rb_define_const(g, "BITMAP_FLIP_VH", INT2FIX(3));
-			VALUE bitmap = rb_define_class_under(rage, "Bitmap", rb_cObject);
-			
-			rb_define_alloc_func(bitmap, BitmapWrapper::rb_bitmap_alloc);
-			rb_define_method(bitmap, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
-			rb_define_method(bitmap, "create", RFUNC(BitmapWrapper::rb_create), 2);
-			rb_define_method(bitmap, "width", RFUNC(BitmapWrapper::rb_get_width), 0);
-			rb_define_method(bitmap, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
-			rb_define_method(bitmap, "draw", RFUNC(BitmapWrapper::rb_bitmap_draw1), 2);
-			rb_define_method(bitmap, "drawOpt", RFUNC(BitmapWrapper::rb_bitmap_draw2), 3);
-			rb_define_method(bitmap, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region1), 6);
-			rb_define_method(bitmap, "drawRegionOpt", RFUNC(BitmapWrapper::rb_bitmap_draw_region2), 7);
+			rb_rageBitmapClass = rb_define_class_under(rage, "Bitmap", rb_cObject);
+
+			rb_define_alloc_func(rb_rageBitmapClass, BitmapWrapper::rb_bitmap_alloc);
+			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
+			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), 1);
+			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);
+			rb_define_method(rb_rageBitmapClass, "width", RFUNC(BitmapWrapper::rb_get_width), 0);
+			rb_define_method(rb_rageBitmapClass, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
+			rb_define_method(rb_rageBitmapClass, "clone", RFUNC(BitmapWrapper::rb_clone), 0);
+			rb_define_method(rb_rageBitmapClass, "draw", RFUNC(BitmapWrapper::rb_bitmap_draw1), 2);
+			rb_define_method(rb_rageBitmapClass, "drawOpt", RFUNC(BitmapWrapper::rb_bitmap_draw2), 3);
+			rb_define_method(rb_rageBitmapClass, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region1), 6);
+			rb_define_method(rb_rageBitmapClass, "drawRegionOpt", RFUNC(BitmapWrapper::rb_bitmap_draw_region2), 7);
 		}
+
+		VALUE BitmapWrapper::get_ruby_class()
+		{
+			return rb_rageBitmapClass;
+		}
+
+		VALUE BitmapWrapper::new_ruby_class_instance()
+		{
+			return rb_class_new_instance(0, NULL, rb_rageBitmapClass);
+		}
+
 	}
 }

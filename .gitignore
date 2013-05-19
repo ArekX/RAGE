@@ -12,8 +12,6 @@
 *.lai
 *.la
 *.a
-
-# Other
 *.exe
 *.suo
 *.sdf
@@ -23,4 +21,3 @@
 *.idb
 *.pdb
 *.lib
-Release\*.*

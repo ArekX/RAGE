@@ -32,7 +32,7 @@ Some things might be added, while other things might be removed.
 # RAGE.getEnvVar(envVar)
 # Returns string which represents Enviroment Variable.
 # Example:
-RAGE::getEnvVar("windir") # returns full path to windows folder.
+RAGE.getEnvVar("windir") # returns full path to windows folder.
 
 RAGE.about()
 # Prints out version information.
@@ -76,6 +76,37 @@ RAGE::Graphics.clear()
 # Clear current screen contents to specified color.
 # Example:
 RAGE::Graphics.clearBackgroundColor(255, 255, 255) # Clears screen to white color
+
+# RAGE::Graphics.setTarget(bitmap)
+# Sets the target of all subsequent drawing operation to a RAGE::Bitmap class specified in argument.
+# If nil is passed as an argument, target is reset to main screen.
+# Example:
+dst = RAGE::Bitmap.new
+dst.create(300, 400)
+RAGE::Graphics.setTarget(dst)
+
+# RAGE::Graphics.getTarget()
+# Returns new RAGE::Bitmap object current set target for drawing.
+# Example:
+scrBit = RAGE::Graphics.getTarget()
+puts "Screen Width is: #{scrBit.width} px\n Screen Height is: #{scrBit.height} px"
+
+
+# RAGE::Graphics.setClippingRect(x, y, width, height)
+# Set the region of the target bitmap or screen that pixels get clipped to. 
+# The default is to clip pixels to the entire screen.
+# Example:
+RAGE::Graphics.setClippingRect(0, 0, 50, 50)
+RAGE::Graphics.clear # It will only clear a rectangle specified by RAGE::Graphics.setClippingRect
+
+# RAGE::Graphics.resetClippingRect()
+# Resets the region of the target bitmap or screen that pixels get clipped to. 
+# The default is to clip pixels to the entire screen.
+# Example:
+RAGE::Graphics.setClippingRect(0, 0, 50, 50)
+RAGE::Graphics.clear # It will only clear a rectangle specified by RAGE::Graphics.setClippingRect
+RAGE::Graphics.resetClippingRect() 
+RAGE::Graphics.clear # Whole screen will be cleared
 ```
 
 * Events
@@ -159,6 +190,13 @@ bit = RAGE::Bitmap.new
 bit = RAGE::Bitmap.new
 bit.load("rage.png") # Loads rage.png file.
 
+# RAGE::Bitmap.save(filename)
+# Saves contents of a bitmap to filename. Image format will be determined from extension.
+# Supported formats are: BMP, PCX, TGA, PNG, JPG
+# Example:
+bit = RAGE::Graphics.getTarget()
+bit.save("c:/screenshot.bmp") # Saves a screenshot to a BMP file.
+
 # RAGE::Bitmap.create(width, height)
 # Creates an empty bitmap.
 # Example:
@@ -178,6 +216,13 @@ puts bit.width # Prints 200
 bit = RAGE::Bitmap.new
 bit.create(200, 300)
 puts bit.height # Prints 300
+
+# RAGE::Bitmap.clone()
+# Returns a copy of current bitmap object.
+# Example:
+bit = RAGE::Bitmap.new
+bit.load("rage.png")
+bit2 = bit.clone() # bit2 contains a new clone of bit.
 
 # RAGE::Bitmap.draw(x, y)
 # Draws bitmap on the screen on specified x, y coordinates.
