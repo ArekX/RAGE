@@ -29,6 +29,9 @@
     <Filter Include="modules\input\headers">
       <UniqueIdentifier>{0d692b15-2510-4f2d-893c-cadcacc55da3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\audio\headers">
+      <UniqueIdentifier>{9c9e85d9-fc50-4bbd-9851-09133df19306}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -52,6 +55,12 @@
     <ClCompile Include="Events_Wrapper.cpp">
       <Filter>modules\input</Filter>
     </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>modules\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio_Wrapper.cpp">
+      <Filter>modules\audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -71,6 +80,12 @@
     </ClInclude>
     <ClInclude Include="Events_Wrapper.h">
       <Filter>modules\input\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>modules\audio\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio_Wrapper.h">
+      <Filter>modules\audio\headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

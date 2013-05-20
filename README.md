@@ -72,10 +72,11 @@ RAGE::Graphics.update()
 RAGE::Graphics.clear()
 # Clear current screen contents.
 
-# RAGE::Graphics.clearBackgroundColor(r, g, b)
-# Clear current screen contents to specified color.
+# RAGE::Graphics.setBackgroundColor(r, g, b)
+# Sets new clear background color.
 # Example:
-RAGE::Graphics.clearBackgroundColor(255, 255, 255) # Clears screen to white color
+RAGE::Graphics.setBackgroundColor(255, 255, 255)
+RAGE::Graphics.clear() # Clears to white color
 
 # RAGE::Graphics.setTarget(bitmap)
 # Sets the target of all subsequent drawing operation to a RAGE::Bitmap class specified in argument.
@@ -224,6 +225,13 @@ bit = RAGE::Bitmap.new
 bit.load("rage.png")
 bit2 = bit.clone() # bit2 contains a new clone of bit.
 
+# RAGE::Bitmap.dispose()
+# Frees resources held by bitmap.
+# Example:
+bit = RAGE::Bitmap.new
+bit.load("rage.png")
+bit.dispose() # Frees all resources held by bit
+
 # RAGE::Bitmap.draw(x, y)
 # Draws bitmap on the screen on specified x, y coordinates.
 # Example:
@@ -251,6 +259,58 @@ bit.drawRegion(0, 0, 10, 50, 10, 10) # Draws part of rage.png on 10, 10 coordina
 bit = RAGE::Bitmap.new
 bit.load("rage.png")
 bit.drawRegion(0, 0, 10, 50, 10, 10, RAGE::Graphics::BITMAP_FLIP_V) # Draws part of rage.png on 10, 10 coordinates on screen, flipped vertically.
+
+```
+
+* Audio
+
+```ruby
+# Constants:
+# RAGE::Sound::STREAM
+# Specifies that the sound loaded will be loaded as a stream.
+# Streams are loaded and decompressed on the fly when they are needed. Use this for big files.
+
+# RAGE::Sound::SFX
+# Specifies that the sound loaded will be loaded as a sample.
+# Samples are fully loaded and decompressed in memory before they are played which can be time consuming so
+# avoid using this for big sound files.
+
+# RAGE::Audio.new
+# Creates new instance of Audio class.
+# Example:
+audio = RAGE::Audio.new
+
+# RAGE::Audio.load(filename, type)
+# Loads file from disk and prepares it for playing depending on type.
+# Types are: RAGE::Sound::STREAM, RAGE::Sound::SFX
+# Supported formats: OGG, WAV, FLAC, IT, MOD, S3M, XM
+# Example:
+bgm = RAGE::Audio.new
+bgm.load("bgm.ogg", RAGE::Sound::STREAM) # Loads bgm.ogg audio stream from disk.
+
+# RAGE::Audio.play()
+# Plays loaded audio.
+# Example:
+bgm = RAGE::Audio.new
+bgm.load("bgm.ogg", RAGE::Sound::STREAM)
+bgm.play() # Plays audio
+
+# RAGE::Audio.stop()
+# Stops current playing audio.
+# Example:
+bgm = RAGE::Audio.new
+bgm.load("bgm.ogg", RAGE::Sound::STREAM)
+bgm.play()
+bgm.stop() # Stops audio play
+
+# RAGE::Audio.dispose()
+# Frees resources used by audio.
+# Example:
+bgm = RAGE::Audio.new
+bgm.load("bgm.ogg", RAGE::Sound::STREAM)
+bgm.play()
+bgm.stop() 
+bgm.dispose() # Disposes allocated audio resources
 
 ```
 

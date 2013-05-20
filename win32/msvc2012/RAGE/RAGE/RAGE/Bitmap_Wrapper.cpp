@@ -24,14 +24,12 @@ namespace RAGE
 
 		VALUE BitmapWrapper::rb_bitmap_alloc(VALUE self)
 		{
-			Bitmap *bit = new Bitmap();
-			return Data_Wrap_Struct(self, 0, BitmapWrapper::rb_bitmap_destroy, bit);
+			return Data_Wrap_Struct(self, 0, BitmapWrapper::rb_bitmap_destroy, new Bitmap());
 		}
 
 		void BitmapWrapper::rb_bitmap_destroy(void *value)
 		{
-			Bitmap *bit = (Bitmap*)value;
-			free(bit);
+			free((Bitmap*)value);
 		}
 
 		VALUE BitmapWrapper::rb_get_width(VALUE self)
@@ -129,6 +127,16 @@ namespace RAGE
 			return Qtrue;
 		}
 		
+		VALUE BitmapWrapper::rb_dispose(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->dispose();
+
+			return Qtrue;
+		}
+
 		void BitmapWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -145,6 +153,7 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "width", RFUNC(BitmapWrapper::rb_get_width), 0);
 			rb_define_method(rb_rageBitmapClass, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
 			rb_define_method(rb_rageBitmapClass, "clone", RFUNC(BitmapWrapper::rb_clone), 0);
+			rb_define_method(rb_rageBitmapClass, "dispose", RFUNC(BitmapWrapper::rb_dispose), 0);
 			rb_define_method(rb_rageBitmapClass, "draw", RFUNC(BitmapWrapper::rb_bitmap_draw1), 2);
 			rb_define_method(rb_rageBitmapClass, "drawOpt", RFUNC(BitmapWrapper::rb_bitmap_draw2), 3);
 			rb_define_method(rb_rageBitmapClass, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region1), 6);

@@ -7,6 +7,8 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <ruby/encoding.h>
 #include <ruby/thread.h>
 
@@ -14,6 +16,7 @@
 #include "Graphics_Wrappers.h"
 #include "Bitmap_Wrapper.h"
 #include "Events_Wrapper.h"
+#include "Audio_Wrapper.h"
 
 #define RFUNC RUBY_METHOD_FUNC
 

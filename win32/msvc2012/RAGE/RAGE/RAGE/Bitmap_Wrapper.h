@@ -17,6 +17,7 @@ namespace RAGE
 			static VALUE rb_get_width(VALUE self);
 			static VALUE rb_get_height(VALUE self);
 			static VALUE rb_clone(VALUE self);
+			static VALUE rb_dispose(VALUE self);
 			static void rb_bitmap_destroy(void *value);
 			static VALUE rb_bitmap_alloc(VALUE self);
 

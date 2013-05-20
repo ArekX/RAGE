@@ -25,6 +25,8 @@ int main(int argc, char** argv)
 	al_install_mouse();
     al_install_keyboard();
 	al_install_joystick();
+	al_install_audio();
+	al_init_acodec_addon();
 
 	/* Initialize events */
 	RAGE::Events::EventsWrapper::init_queue();

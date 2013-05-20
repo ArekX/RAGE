@@ -14,8 +14,10 @@ namespace RAGE
 
 		Bitmap::~Bitmap(void)
 		{
-			if (bitmap != NULL)
-				al_destroy_bitmap(bitmap);
+			if (al_get_target_bitmap() == bitmap)
+				bitmap = NULL;
+			else
+				dispose();
 		}
 
 		void Bitmap::initialize(int width, int height)
@@ -32,6 +34,7 @@ namespace RAGE
 		{
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
+
 			this->filename = filename;
 			
 			bitmap = al_load_bitmap(filename);
@@ -55,12 +58,14 @@ namespace RAGE
 
 		void Bitmap::draw(float x, float y, int flags)
 		{
-			al_draw_bitmap(bitmap, x, y, flags);
+			if (bitmap != NULL)
+				al_draw_bitmap(bitmap, x, y, flags);
 		}
 
 		void Bitmap::draw_region(float sx, float sy, float sw, float sh, float dx, float dy, int flags)
 		{
-			al_draw_bitmap_region(bitmap, sx, sy, sw, sh, dx, dy, flags);
+			if (bitmap != NULL)
+				al_draw_bitmap_region(bitmap, sx, sy, sw, sh, dx, dy, flags);
 		}
 
 
@@ -72,20 +77,24 @@ namespace RAGE
 
 		void Bitmap::assign(Bitmap* src)
 		{
-			
-			int oldflags = al_get_new_bitmap_flags();
-			int oldformat = al_get_new_bitmap_format();
-			ALLEGRO_BITMAP* oldtarget = al_get_target_bitmap();
-			al_set_new_bitmap_flags(al_get_bitmap_flags(src->bitmap));
-			al_set_new_bitmap_format(al_get_bitmap_format(src->bitmap));
-			
-			bitmap = al_create_bitmap(al_get_bitmap_width(src->bitmap), al_get_bitmap_height(src->bitmap));
-			al_set_target_bitmap(bitmap);
-			al_draw_bitmap(src->bitmap, 0, 0, 0);
-			
-			al_set_new_bitmap_flags(oldflags);
-			al_set_new_bitmap_format(oldformat);
-			al_set_target_bitmap(oldtarget);
+			if (bitmap != NULL) 
+				al_destroy_bitmap(bitmap);
+
+			bitmap = al_clone_bitmap(src->bitmap);
+		}
+
+		void Bitmap::dispose()
+		{
+			if (al_get_target_bitmap() == bitmap)
+			{
+				rb_raise(rb_eException, "Cannot dispose current drawing target bitmap.");
+				return;
+			}
+
+			if (bitmap != NULL) 
+				al_destroy_bitmap(bitmap);
+
+			bitmap = NULL;
 		}
 
 		void Bitmap::recreate_video_bitmap()

@@ -1,46 +1,38 @@
-class Inputer
-  def initialize
-    begin
-    @x, @y, @speed = 10, 10, 10
-	pressProc = Proc.new {|key|
-		if (key == 84)
-		  @y -= @speed
-		elsif (key == 85)
-		  @y += @speed
-		end
-		if (key == 82)
-		  @x -= @speed
-		elsif (key == 83)
-		  @x += @speed
-		end
-    }
-	@tries = 1
-	RAGE::Events.register(RAGE::Events::KEY_PRESS, pressProc)
-	RAGE::Events.register RAGE::Events::ENGINE_CLOSE, Proc.new {
-	  puts "Oh so you want to exit now?\n You tried #{@tries}/6 times."
-	  
-	  if @tries > 5
-	    puts "Okay I will let you out. :)"
-		sleep 2
-		Kernel::exit(0)
-	  end
-	  @tries += 1
-	}
-	
-    end
-  end
-  
-  def getspeed
-    return @speed
-  end
-  
-  def getxy
-    return @x, @y
-  end
+class XPChar
+   def initialize(filename)
+     @bit = RAGE::Bitmap.new
+	 @bit.load(filename)
+	 @frm = 0
+	 @cw = @bit.width / 4
+	 @ch = @bit.height / 4
+	 @counter = 0
+   end
+   
+   def draw(x, y, facing)
+     case facing
+	 when "down"
+		@bit.drawRegion(@frm * @cw, 0, @cw, @ch, x, y)
+	 when "left"
+		@bit.drawRegion(@frm * @cw, @ch, @cw, @ch, x, y)
+	 when "right"
+		@bit.drawRegion(@frm * @cw, @ch * 2, @cw, @ch, x, y)
+	 when "up"
+		@bit.drawRegion(@frm * @cw, @ch * 3, @cw, @ch, x, y)
+	 end
+	 @counter += 1
+	 if @counter > 50
+	 @frm = (@frm + 1) % 4
+	 @counter = 0
+	 end
+   end
 end
+
 begin
-h = Inputer.new
-puts "System - " + RAGE.getEnvVar("SystemRoot")
+
+c = XPChar.new("chao.png")
+facing = "down"
+
+RAGE.about()
 
 bit = RAGE::Bitmap.new
 bit.load "test.bmp"
@@ -49,33 +41,45 @@ png = RAGE::Bitmap.new
 png.load "pngtest.png"
 
 
-
 x,y = 0, 0
-
-
-speed = 1
+speed = 5.5
 i = 0
 
-RAGE::Graphics.setClippingRect(0, 0, 50, 50)
-RAGE::Graphics.resetClippingRect()
-loop do
-    
-	x, y = h.getxy
-	speed = h.getspeed
+RAGE::Events.register RAGE::Events::KEY_PRESS, Proc.new {|key|
+		if (key == 84)
+		  y -= speed
+		  facing = "up"
+		elsif (key == 85)
+		  y += speed
+		  facing = "down"
+		end
+		if (key == 82)
+		  x -= speed
+		  facing = "left"
+		elsif (key == 83)
+		  x += speed
+		  facing = "right"
+		end
+}
 	
-    #RAGE::Graphics.clear
-	RAGE::Graphics.clearBackgroundColor 150 + x, 12 - x, 40 + x
-	bit.drawRegion(100 * i, 0, 100, 95, 30 + x, 30 + y)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150 + x, 30 + y, RAGE::Graphics::BITMAP_FLIP_H)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 30 + x, 150 + y, RAGE::Graphics::BITMAP_FLIP_V)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150 + x, 150 + y, RAGE::Graphics::BITMAP_FLIP_VH)
+RAGE::Graphics.setBackgroundColor(14, 255, 14)
 
+loop do
+    RAGE::Graphics.clear
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 30, RAGE::Graphics::BITMAP_FLIP_H)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 30, 150, RAGE::Graphics::BITMAP_FLIP_V)
+	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::Graphics::BITMAP_FLIP_VH)
+    c.draw(x, y, facing)
 	png.draw 10, 10
 
 	RAGE::Graphics.update # Flips buffers
 	i += 1
-	sleep 0.01
+	sleep 0.001
 	i = 0 if i >= 9
+
+
+
 end
 
 rescue Exception => e  

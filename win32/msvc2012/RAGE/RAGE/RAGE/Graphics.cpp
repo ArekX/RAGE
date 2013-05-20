@@ -4,6 +4,7 @@ namespace RAGE
 {
 	namespace Graphics
 	{
+		ALLEGRO_COLOR bg_color;
 
 		Graphics::Graphics(GraphicsConfig config)
 		{
@@ -90,13 +91,14 @@ namespace RAGE
 
 		VALUE Graphics::rb_graphics_clear(VALUE self)
 		{
-			al_clear_to_color(al_map_rgb(0, 0, 0));
+			
+			al_clear_to_color(bg_color);
 			return Qnil;
 		}
 
-		VALUE Graphics::rb_graphics_clear2(VALUE self, VALUE r, VALUE g, VALUE b)
+		VALUE Graphics::rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b)
 		{
-			al_clear_to_color(al_map_rgb(FIX2INT(r), FIX2INT(g), FIX2INT(b)));
+			bg_color = al_map_rgb(FIX2INT(r), FIX2INT(g), FIX2INT(b));
 			return Qnil;
 		}
 

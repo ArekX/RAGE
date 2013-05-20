@@ -18,7 +18,7 @@ namespace RAGE
 			rb_define_module_function(g, "cursorVisible", RFUNC(RAGE::Graphics::Graphics::rb_cursorVisible), 1);
 			rb_define_module_function(g, "update", RFUNC(RAGE::Graphics::Graphics::rb_graphicsupdate), 0);
 			rb_define_module_function(g, "clear", RFUNC(RAGE::Graphics::Graphics::rb_graphics_clear), 0);
-			rb_define_module_function(g, "clearBackgroundColor", RFUNC(RAGE::Graphics::Graphics::rb_graphics_clear2), 3);
+			rb_define_module_function(g, "setBackgroundColor", RFUNC(RAGE::Graphics::Graphics::rb_graphics_set_background_color), 3);
 			rb_define_module_function(g, "setTarget", RFUNC(RAGE::Graphics::Graphics::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(RAGE::Graphics::Graphics::rb_get_target), 0);
 			rb_define_module_function(g, "setClippingRect", RFUNC(RAGE::Graphics::Graphics::rb_graphics_set_clipping_rect), 4);
