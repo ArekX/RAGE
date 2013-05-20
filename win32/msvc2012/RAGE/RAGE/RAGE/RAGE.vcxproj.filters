@@ -61,6 +61,9 @@
     <ClCompile Include="Audio_Wrapper.cpp">
       <Filter>modules\audio</Filter>
     </ClCompile>
+    <ClCompile Include="Input_Wrappers.cpp">
+      <Filter>modules\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -87,5 +90,13 @@
     <ClInclude Include="Audio_Wrapper.h">
       <Filter>modules\audio\headers</Filter>
     </ClInclude>
+    <ClInclude Include="Input_Wrappers.h">
+      <Filter>modules\input\headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Keyboard_Consts.inc">
+      <Filter>modules\input</Filter>
+    </None>
   </ItemGroup>
 </Project>

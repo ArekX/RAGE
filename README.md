@@ -165,6 +165,52 @@ RAGE::Events.register(RAGE::Events::KEY_PRESS, Proc.new({|key|
 RAGE::Events.useKeyCodeNames(true) # After this it will show a name (like "LEFT") instead of a number of the key which was pressed.
 ```
 
+* Input
+
+```ruby
+# Constants:
+# RAGE::Input::MOUSE_BTN1
+# Represents Left mouse click.
+
+# RAGE::Input::MOUSE_BTN2
+# Represents Right mouse click.
+
+# RAGE::Input::MOUSE_BTN3
+# Represents Middle mouse click.
+
+# RAGE::Input::KEY_UP
+# Represents Up key
+
+# RAGE::Input::KEY_DOWN
+# Represents Down key
+
+# RAGE::Input::KEY_LEFT
+# Represents Left key
+
+# RAGE::Input::KEY_RIGHT
+# Represents Right key
+
+# RAGE::Input.updateKeyboard()
+# Updates current keyboard state.
+
+# RAGE::Input.isKeyDown?(keycode)
+# Checks if keycode is pressed. Use this for repeating functions.
+# Example:
+RAGE::Input.updateKeyboard()
+puts "Is left pressed? " + RAGE::Input.isDown?(RAGE::Input::KEY_LEFT)
+
+# RAGE::Input.updateMouse()
+# Updates current mouse state.
+
+# RAGE::Input.isMouseDown?(button)
+# Checks if mouse button is pressed.
+# Example:
+RAGE::Input.updateMouse()
+puts "Left click? " + RAGE::Input.isMouseDown?(RAGE::Input::MOUSE_BTN1) # Returns true if clicked.
+
+# Joystick functions coming soon.
+```
+
 ** Classes
 
 * Bitmap

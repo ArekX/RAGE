@@ -19,11 +19,19 @@ class XPChar
 	 when "up"
 		@bit.drawRegion(@frm * @cw, @ch * 3, @cw, @ch, x, y)
 	 end
+   end
+   
+   def update
 	 @counter += 1
-	 if @counter > 50
-	 @frm = (@frm + 1) % 4
-	 @counter = 0
+	 if @counter > 25
+		@frm = (@frm + 1) % 4
+		@counter = 0
 	 end
+   end
+   
+   def reset
+     @couter = 0
+	 @frm = 0
    end
 end
 
@@ -41,28 +49,20 @@ png = RAGE::Bitmap.new
 png.load "pngtest.png"
 
 
+
 x,y = 0, 0
-speed = 5.5
+speed = 1
 i = 0
 
-RAGE::Events.register RAGE::Events::KEY_PRESS, Proc.new {|key|
-		if (key == 84)
-		  y -= speed
-		  facing = "up"
-		elsif (key == 85)
-		  y += speed
-		  facing = "down"
-		end
-		if (key == 82)
-		  x -= speed
-		  facing = "left"
-		elsif (key == 83)
-		  x += speed
-		  facing = "right"
-		end
-}
+
 	
 RAGE::Graphics.setBackgroundColor(14, 255, 14)
+
+puts "Left: " + RAGE::Input::KEY_LEFT.to_s
+
+RAGE::Events.register RAGE::Events::KEY_UP, Proc.new {
+   c.reset
+}
 
 loop do
     RAGE::Graphics.clear
@@ -72,7 +72,33 @@ loop do
 	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::Graphics::BITMAP_FLIP_VH)
     c.draw(x, y, facing)
 	png.draw 10, 10
-
+	RAGE::Input.updateKeyboard
+	RAGE::Input.updateMouse
+	
+	RAGE::Graphics.setTitle "X: #{RAGE::Input.getMouseX}, Y: #{RAGE::Input.getMouseY}"
+	RAGE::Graphics.setTitle("Click!") if RAGE::Input.isMouseDown?(RAGE::Input::MOUSE_BTN2)
+	
+	
+	if (RAGE::Input.isKeyDown?(84))
+		  y -= speed
+		  facing = "up"
+		  c.update
+		elsif (RAGE::Input.isKeyDown?(85))
+		  y += speed
+		  facing = "down"
+		  c.update
+		end
+		if (RAGE::Input.isKeyDown?(82))
+		  x -= speed
+		  facing = "left"
+		  c.update
+		elsif (RAGE::Input.isKeyDown?(83))
+		  x += speed
+		  facing = "right"
+		  c.update
+		end
+	
+	
 	RAGE::Graphics.update # Flips buffers
 	i += 1
 	sleep 0.001

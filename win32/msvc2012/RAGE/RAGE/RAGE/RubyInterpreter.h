@@ -17,6 +17,7 @@
 #include "Bitmap_Wrapper.h"
 #include "Events_Wrapper.h"
 #include "Audio_Wrapper.h"
+#include "Input_Wrappers.h"
 
 #define RFUNC RUBY_METHOD_FUNC
 

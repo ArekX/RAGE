@@ -78,7 +78,7 @@ namespace RAGE
 								                    rb_ary_entry(keyUpObserver, i));
 						}
 					}
-					
+
 					if (ev.type == ALLEGRO_EVENT_KEY_CHAR)
 					{
 						for (i = 0; i < RARRAY_LEN(keyPressObserver); i++)
@@ -168,15 +168,6 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE EventsWrapper::rb_is_pressed(VALUE self, VALUE keycode)
-		{
-			al_get_keyboard_state(&ks);
-			if (al_key_down(&ks, FIX2INT(keycode)))
-				return Qtrue;
-			else
-				return Qfalse;
-		}
-
 		VALUE EventsWrapper::rb_freeze_events(VALUE self)
 		{
 			stopThread = true;
@@ -239,7 +230,6 @@ namespace RAGE
 			rb_define_module_function(events, "clear", RFUNC(EventsWrapper::rb_clear_events), 1);
 			rb_define_module_function(events, "freeze", RFUNC(EventsWrapper::rb_freeze_events), 0);
 			rb_define_module_function(events, "unfreeze", RFUNC(EventsWrapper::rb_unfreeze_events), 0);
-			rb_define_module_function(events, "isDown", RFUNC(EventsWrapper::rb_is_pressed), 1);
 			// TODO: Add timer, joystick, mouse and more display events
 		}
 	}

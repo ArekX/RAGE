@@ -59,6 +59,7 @@ namespace RAGE
 				/* Load all function wrappers */
 				RAGE::Graphics::Graphics_Wrappers::load_wrappers();
 				RAGE::Events::EventsWrapper::load_wrappers();
+				RAGE::Input::InputWrappers::load_wrappers();
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
 				RAGE::Audio::AudioWrapper::load_ruby_class();
 
