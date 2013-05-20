@@ -44,6 +44,7 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_update(VALUE self)
 		{
+			
 			al_get_mouse_state(&ms);
 			return Qnil;
 		}

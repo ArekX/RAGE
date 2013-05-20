@@ -46,11 +46,13 @@
 #define HAVE_FCNTL_H 1
 #define HAVE_SYS_UTIME_H 1
 #define HAVE_FLOAT_H 1
+#define HAVE_TIME_H 1
 #define rb_pid_t int
 #define rb_gid_t int
 #define rb_uid_t int
 #define HAVE_STRUCT_STAT_ST_RDEV 1
 #define HAVE_ST_RDEV 1
+#define HAVE_STRUCT_TIMEVAL 1
 #define HAVE_STDINT_H 1
 #define HAVE_INT8_T 1
 #define HAVE_UINT8_T 1

@@ -107,6 +107,7 @@ namespace RAGE
 			if (TYPE(title) == T_STRING)
 			{
 				window_title = StringValueCStr(title);
+				rb_gc_force_recycle(title);
 				al_set_window_title(al_get_current_display(), window_title);
 				return Qtrue;
 			}

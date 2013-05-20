@@ -99,4 +99,7 @@
       <Filter>modules\input</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RAGE.rc" />
+  </ItemGroup>
 </Project>

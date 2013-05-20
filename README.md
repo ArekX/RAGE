@@ -3,7 +3,7 @@ RAGE
 
 Ruby Awesome Game Engine, a 2D game engine with Ruby language support.
 
-Using Ruby Version: 2.0.0
+Using Ruby Version: 2.0.0-p195
 
 Using Allegro Version: 5.0.8
 

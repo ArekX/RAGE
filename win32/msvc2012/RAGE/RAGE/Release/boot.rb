@@ -64,6 +64,10 @@ RAGE::Events.register RAGE::Events::KEY_UP, Proc.new {
    c.reset
 }
 
+
+
+
+
 loop do
     RAGE::Graphics.clear
 	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
