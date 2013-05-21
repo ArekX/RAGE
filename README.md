@@ -12,8 +12,7 @@ Downloads
 
 Current WIP: 
 
-https://www.dropbox.com/s/ogmbngyo6yvh3op/RAGE20052013-2.7z
-
+https://www.dropbox.com/s/hw8243yw1psvs0w/RAGE21052013.7z
 
 
 
@@ -21,6 +20,8 @@ Other WIPs:
 
 20.5.2013:
 https://www.dropbox.com/s/5vittsw96apoptr/RAGE20052013.7z
+
+https://www.dropbox.com/s/ogmbngyo6yvh3op/RAGE20052013-2.7z
 
 17.5.2013:
 https://www.dropbox.com/s/em9by8qnhdjf3gn/RAGE17052013.7z
@@ -416,7 +417,7 @@ timer = RAGE::Timer.new(0.5) # Timer which will increment counter every 1/2 seco
 # Example:
 timer = RAGE::Timer.new(0.5)
 timer.registerEvent(Proc.new{
-  puts "This will be printed every 1/2 of a second.
+  puts "This will be printed every 1/2 of a second."
 })
 RAGE::Events.registerTimer(timer)
 
@@ -427,7 +428,7 @@ RAGE::Events.registerTimer(timer)
 # Example:
 timer = RAGE::Timer.new(0.5)
 proc = Proc.new{
-  puts "This will be printed every 1/2 of a second.
+  puts "This will be printed every 1/2 of a second."
 }
 timer.registerEvent(proc)
 timer.unregisterEvent(proc) # Unregisters proc
@@ -439,11 +440,11 @@ RAGE::Events.registerTimer(timer)
 # Example:
 timer = RAGE::Timer.new(0.5)
 proc1 = Proc.new{
-  puts "This will be printed every 1/2 of a second.
+  puts "This will be printed every 1/2 of a second."
 }
 
 proc2 = Proc.new{
-  puts "This will be printed every 1/2 of a second too.
+  puts "This will be printed every 1/2 of a second too."
 }
 timer.registerEvent(proc1)
 timer.registerEvent(proc2)
