@@ -18,15 +18,9 @@
 #include "Events_Wrapper.h"
 #include "Audio_Wrapper.h"
 #include "Input_Wrappers.h"
+#include "TimerEvent_Wrapper.h"
 
-#define RFUNC RUBY_METHOD_FUNC
-
-#ifdef WIN32
-#define DS '\\'
-#define PRINTF(format, data) printf_s(format, data)
-#else
-#define PRINTF(format, data) printf(format, data)
-#endif
+#include "defines.h"
 
 namespace RAGE
 {

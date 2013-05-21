@@ -13,15 +13,19 @@ namespace RAGE
 			audio = NULL;
 			as = NULL;
 			inst = al_create_sample_instance(NULL);
+			disposed = false;
 		}
 
 		Audio::~Audio(void)
 		{
-			dispose();
+			if (!disposed)
+				dispose();
 		}
 
 		void Audio::load_sound(char* filename)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (audio != NULL)
 			{
 				al_set_sample(inst, NULL);
@@ -44,6 +48,8 @@ namespace RAGE
 
 		void Audio::load_stream(char* filename)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (as != NULL)
 				al_destroy_audio_stream(as);
 
@@ -54,6 +60,8 @@ namespace RAGE
 
 		void Audio::play()
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (!audio_stream && (audio == NULL))
 			{
 				rb_raise(rb_eException, "Cannot play audio. No audio loaded.");
@@ -77,6 +85,8 @@ namespace RAGE
 
 		void Audio::stop()
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (!audio_stream && (audio == NULL))
 			{
 				rb_raise(rb_eException, "Cannot stop audio. No audio loaded.");
@@ -114,6 +124,8 @@ namespace RAGE
 			inst = NULL;
 			audio = NULL;
 			as = NULL;
+
+			disposed = true;
 
 		}
 

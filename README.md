@@ -168,6 +168,39 @@ RAGE::Events.register(RAGE::Events::KEY_PRESS, Proc.new({|key|
   puts "You pressed keycode #{key.to_s}" # Shows which key was pressed as a number.
 }))
 RAGE::Events.useKeyCodeNames(true) # After this it will show a name (like "LEFT") instead of a number of the key which was pressed.
+
+# RAGE::Events.registerTimer(timer)
+# Registers new RAGE::Timer to event processing.
+# Example:
+timer = RAGE::Timer.new(1)
+timer.registerEvent(Proc.new{
+  puts "This will be executed every second."
+})
+RAGE::Events.registerTimer(timer)
+
+# RAGE::Events.registerTimer(timer)
+# Unregisters RAGE::Timer from event processing.
+# Example:
+timer = RAGE::Timer.new(1)
+timer.registerEvent(Proc.new{
+  puts "This will be executed every second."
+})
+RAGE::Events.registerTimer(timer)
+RAGE::Events.unregisterTimer(timer) # Timer events wont be executed.
+
+# RAGE::Events.clearTimers()
+# Unregisters all RAGE::Timer objects from event processing.
+# Example:
+timer = RAGE::Timer.new(1)
+timer2 = RAGE::Timer.new(0.5)
+proc = Proc.new{
+  puts "This will be executed."
+}
+timer.registerEvent(proc)
+timer2.registerEvent(proc)
+RAGE::Events.registerTimer(timer)
+RAGE::Events.registerTimer(timer2)
+RAGE::Events.clearTimers() # No timer events will be processed.
 ```
 
 * Input
@@ -365,6 +398,120 @@ bgm.load("bgm.ogg", RAGE::Sound::STREAM)
 bgm.play()
 bgm.stop() 
 bgm.dispose() # Disposes allocated audio resources
+
+```
+
+* Timer
+			
+```ruby
+
+# RAGE::Timer.new(seconds)
+# Creates new RAGE::Timer object which increments its internal counter each seconds (can be float value)
+# Example:
+timer = RAGE::Timer.new(0.5) # Timer which will increment counter every 1/2 second.
+
+# RAGE::Timer.registerEvent(proc)
+# Registers new Proc object to be called when Timer ticks number of seconds specified in it's constuctor.
+# Note: You need to register this timer to RAGE::Events in order for this event to execute.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.registerEvent(Proc.new{
+  puts "This will be printed every 1/2 of a second.
+})
+RAGE::Events.registerTimer(timer)
+
+
+# RAGE::Timer.unregisterEvent(proc)
+# Unregisters already registered Proc object.
+# Note: You need to register this timer to RAGE::Events in order for this event to execute.
+# Example:
+timer = RAGE::Timer.new(0.5)
+proc = Proc.new{
+  puts "This will be printed every 1/2 of a second.
+}
+timer.registerEvent(proc)
+timer.unregisterEvent(proc) # Unregisters proc
+RAGE::Events.registerTimer(timer)
+
+# RAGE::Timer.clearEvents()
+# Clears all registered events for the Timer.
+# Note: You need to register this timer to RAGE::Events in order for this event to execute.
+# Example:
+timer = RAGE::Timer.new(0.5)
+proc1 = Proc.new{
+  puts "This will be printed every 1/2 of a second.
+}
+
+proc2 = Proc.new{
+  puts "This will be printed every 1/2 of a second too.
+}
+timer.registerEvent(proc1)
+timer.registerEvent(proc2)
+timer.clear() # Removes both proc1 and proc2
+RAGE::Events.registerTimer(timer) 
+# Regardless if this is registered or not there are no events to execute so this wont accomplish anything 
+# until you do timer.registerEvent.
+
+# RAGE::Timer.start()
+# Starts ticking created timer.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start() # Starts timer.
+
+# RAGE::Timer.stop()
+# Starts created timer.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+timer.stop() # Stops timer.
+
+# RAGE::Timer.started?()
+# Checks whether timer has started.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+if timer.started?
+ puts "Timer is started!"
+end
+
+# RAGE::Timer.getCount()
+# Returns current count of the timer.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+puts "Current count is #{timer.getCount()}"
+
+# RAGE::Timer.setCount(amount)
+# Sets current count for the timer.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+puts "Current count is #{timer.getCount()}" # Prints Current count is 0
+timer.setCount(10)
+puts "Current count is #{timer.getCount()}" # Prints Current count is 10
+
+# RAGE::Timer.getSpeed()
+# Returns current speed of timer ticking
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+puts "Current speed is #{timer.getSpeed()}"
+
+# RAGE::Timer.setSpeed(seconds)
+# Sets new speed in seconds for timer.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+timer.setSpeed(0.01)
+puts "Current speed is #{timer.getSpeed()}"
+
+
+# RAGE::Timer.dispose()
+# Unregisters timer form RAGE::Events and destroys it.
+# Example:
+timer = RAGE::Timer.new(0.5)
+timer.start()
+timer.dispose() # After this no methods can be called.
 
 ```
 

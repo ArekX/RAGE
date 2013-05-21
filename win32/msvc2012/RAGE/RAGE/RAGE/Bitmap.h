@@ -11,6 +11,7 @@ namespace RAGE
 		public:
 			ALLEGRO_BITMAP* bitmap;
 			char* filename;
+			bool disposed;
 
 			Bitmap(void);
 			~Bitmap(void);

@@ -56,12 +56,15 @@ namespace RAGE
 				rb_define_module_function(rage, "getEnvVar", RFUNC(rb_get_env), 1);
 				rb_define_module_function(rage, "about", RFUNC(rb_rage_about), 0);
 
-				/* Load all function wrappers */
+				/* Load RAGE modules */
 				RAGE::Graphics::Graphics_Wrappers::load_wrappers();
 				RAGE::Events::EventsWrapper::load_wrappers();
 				RAGE::Input::InputWrappers::load_wrappers();
+
+				/* Load RAGE classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
 				RAGE::Audio::AudioWrapper::load_ruby_class();
+				RAGE::Events::TimerEventWrapper::load_ruby_class();
 
 				// TODO: Finish inserting wrappers here
 

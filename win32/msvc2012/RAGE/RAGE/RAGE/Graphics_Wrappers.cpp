@@ -23,6 +23,7 @@ namespace RAGE
 			rb_define_module_function(g, "getTarget", RFUNC(RAGE::Graphics::Graphics::rb_get_target), 0);
 			rb_define_module_function(g, "setClippingRect", RFUNC(RAGE::Graphics::Graphics::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(g, "resetClippingRect", RFUNC(RAGE::Graphics::Graphics::rb_graphics_reset_clipping_rect), 0);
+			// TODO: Check to see if there is more stuff needed for Graphics module.
 		}
 	}
 }

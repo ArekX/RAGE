@@ -82,7 +82,7 @@ namespace RAGE
 			VALUE audio = rb_define_module_under(rage, "Sound");
 			rb_define_const(audio, "STREAM", INT2FIX(RAGE_AUDIO_STREAM));
 			rb_define_const(audio, "SFX", INT2FIX(RAGE_AUDIO_SFX));
-			VALUE rb_rage_AudioClass = rb_define_class_under(rage, "Audio", rb_cObject);
+			rb_rage_AudioClass = rb_define_class_under(rage, "Audio", rb_cObject);
 
 			rb_define_alloc_func(rb_rage_AudioClass, AudioWrapper::rb_audio_alloc);
 
@@ -90,6 +90,7 @@ namespace RAGE
 			rb_define_method(rb_rage_AudioClass, "play", RFUNC(AudioWrapper::rb_play), 0);
 			rb_define_method(rb_rage_AudioClass, "stop", RFUNC(AudioWrapper::rb_stop), 0);
 			rb_define_method(rb_rage_AudioClass, "dispose", RFUNC(AudioWrapper::rb_dispose), 0);
+			// TODO: Finish Audio class, add position seeking, pause, other...
 		}
 
 		VALUE AudioWrapper::get_ruby_class()

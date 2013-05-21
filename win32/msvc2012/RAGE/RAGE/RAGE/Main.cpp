@@ -38,6 +38,8 @@ int main(int argc, char** argv)
 	g.fullscreen = false;
 	RAGE::Graphics::Graphics vg(g);
 
+	// TODO: Network class, PhysicsFS, Box2D, implement allegro 5.0.9 (at least)
+
 	/* Initialize and start Interpreter */
 	RAGE::Interpreter::Ruby ri(argc, argv);
 

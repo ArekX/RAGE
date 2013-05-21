@@ -158,6 +158,8 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "drawOpt", RFUNC(BitmapWrapper::rb_bitmap_draw2), 3);
 			rb_define_method(rb_rageBitmapClass, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region1), 6);
 			rb_define_method(rb_rageBitmapClass, "drawRegionOpt", RFUNC(BitmapWrapper::rb_bitmap_draw_region2), 7);
+			// TODO: Finish Bitmap class, add tinting, stretch and other stuff.
+			// TODO: Add RAGE::Draw module for text, primitives, color, font, stuff like that.
 		}
 
 		VALUE BitmapWrapper::get_ruby_class()

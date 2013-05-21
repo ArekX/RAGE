@@ -64,6 +64,12 @@
     <ClCompile Include="Input_Wrappers.cpp">
       <Filter>modules\input</Filter>
     </ClCompile>
+    <ClCompile Include="TimerEvent.cpp">
+      <Filter>modules\input</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerEvent_Wrapper.cpp">
+      <Filter>modules\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -92,6 +98,15 @@
     </ClInclude>
     <ClInclude Include="Input_Wrappers.h">
       <Filter>modules\input\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerEvent.h">
+      <Filter>modules\input\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerEvent_Wrapper.h">
+      <Filter>modules\input\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>app\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

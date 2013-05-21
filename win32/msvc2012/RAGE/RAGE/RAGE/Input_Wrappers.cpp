@@ -85,6 +85,8 @@ namespace RAGE
 			rb_define_module_function(input, "isMouseDown?", RFUNC(InputWrappers::rb_mouse_down), 1);
 			rb_define_module_function(input, "getMouseX", RFUNC(InputWrappers::rb_mouse_x), 0);
 			rb_define_module_function(input, "getMouseY", RFUNC(InputWrappers::rb_mouse_y), 0);
+
+			// TODO: Finish joystick (test it), finish keyboard constants, other stuff...
 		}
 	}
 }

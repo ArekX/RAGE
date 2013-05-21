@@ -18,10 +18,11 @@ namespace RAGE
 		VALUE keyUpObserver;
 		VALUE keyDownObserver;
 		VALUE keyPressObserver;
+		VALUE timerObservers;
 
 		void rb_raise_proc_error()
 		{
-			rb_raise(rb_eTypeError, "You can only pass instances of Proc object as an argument.");
+			rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR);
 		}
 
 
@@ -90,6 +91,16 @@ namespace RAGE
 
 							rb_proc_call_with_block(rb_ary_entry(keyPressObserver, i), 1, arg, 
 								                    rb_ary_entry(keyPressObserver, i));
+						}
+					}
+
+					if (ev.type == ALLEGRO_EVENT_TIMER)
+					{
+						TimerEvent *timer;
+						for (i = 0; i < RARRAY_LEN(timerObservers); i++)
+						{
+							Data_Get_Struct(rb_ary_entry(timerObservers, i), TimerEvent, timer);
+							timer->callback(&ev);
 						}
 					}
 				}
@@ -177,6 +188,7 @@ namespace RAGE
 		VALUE EventsWrapper::rb_unfreeze_events(VALUE self)
 		{
 			stopThread = false;
+			
 			rb_thread_run(eventsThread);
 			return Qtrue;
 		}
@@ -205,6 +217,55 @@ namespace RAGE
 			}
 		}
 
+		VALUE EventsWrapper::rb_register_timer(VALUE self, VALUE timer)
+		{
+			if (TYPE(rb_ary_includes(timerObservers, timer)) == T_FALSE) 
+			{ 		
+				if (rb_class_of(timer) != RAGE::Events::TimerEventWrapper::get_ruby_class())
+					rb_raise(rb_eTypeError, RAGE_RB_TIMER_ERROR); 
+				else 
+				{
+					TimerEvent *tm;
+					Data_Get_Struct(timer, TimerEvent, tm);
+					tm->register_to_queue(event_queue);
+					rb_ary_push(timerObservers, timer);
+				}
+			}
+
+			return Qnil;
+		}
+
+		VALUE EventsWrapper::rb_unregister_timer(VALUE self, VALUE timer)
+		{
+			if (TYPE(rb_ary_includes(timerObservers, timer)) == T_TRUE) 
+			{ 
+				
+				if (rb_class_of(timer) != RAGE::Events::TimerEventWrapper::get_ruby_class())
+					rb_raise(rb_eTypeError, RAGE_RB_TIMER_ERROR); 
+				else 
+				{
+					TimerEvent *tm;
+					Data_Get_Struct(timer, TimerEvent, tm);
+					tm->unregister_from_queue(event_queue);
+					rb_ary_delete(timerObservers, timer);
+				}
+			}
+
+			return Qnil;
+		}
+
+		VALUE EventsWrapper::rb_clear_timers(VALUE self)
+		{
+			TimerEvent *timer;
+			for (int i = 0; i < RARRAY_LEN(timerObservers); i++)
+			{
+				Data_Get_Struct(rb_ary_entry(timerObservers, i), TimerEvent, timer);
+				timer->unregister_from_queue(event_queue);
+			}
+			rb_ary_clear(timerObservers);
+			return Qtrue;
+		}
+
 		void EventsWrapper::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -213,20 +274,25 @@ namespace RAGE
 			rb_define_const(events, "KEY_DOWN", INT2FIX(RAGE_KEY_DOWN_EVENT));
 			rb_define_const(events, "KEY_PRESS", INT2FIX(RAGE_KEY_PRESS_EVENT));
 			rb_define_const(events, "ENGINE_CLOSE", INT2FIX(RAGE_ENGINE_CLOSE_EVENT));
-			
+
 			keyUpObserver = rb_ary_new();
 			keyDownObserver = rb_ary_new();
 			keyPressObserver = rb_ary_new();
 			engineCloseObserver = rb_ary_new();
+			timerObservers = rb_ary_new();
 			
 			rb_gc_register_address(&keyUpObserver);
 			rb_gc_register_address(&keyDownObserver);
 			rb_gc_register_address(&keyPressObserver);
 			rb_gc_register_address(&engineCloseObserver);
-			
+			rb_gc_register_address(&timerObservers);
+
 			rb_define_module_function(events, "useKeyCodeNames", RFUNC(EventsWrapper::rb_use_keycode_names), 1);
 			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 2);
 			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 2);
+			rb_define_module_function(events, "registerTimer", RFUNC(EventsWrapper::rb_register_timer), 1);
+			rb_define_module_function(events, "unregisterTimer", RFUNC(EventsWrapper::rb_unregister_timer), 1);
+			rb_define_module_function(events, "clearTimers", RFUNC(EventsWrapper::rb_clear_timers), 0);
 			rb_define_module_function(events, "clear", RFUNC(EventsWrapper::rb_clear_events), 1);
 			rb_define_module_function(events, "freeze", RFUNC(EventsWrapper::rb_freeze_events), 0);
 			rb_define_module_function(events, "unfreeze", RFUNC(EventsWrapper::rb_unfreeze_events), 0);

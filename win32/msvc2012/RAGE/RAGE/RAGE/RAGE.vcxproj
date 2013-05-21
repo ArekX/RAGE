@@ -96,17 +96,22 @@
     <ClCompile Include="Input_Wrappers.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RubyInterpreter.cpp" />
+    <ClCompile Include="TimerEvent.cpp" />
+    <ClCompile Include="TimerEvent_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
+    <ClInclude Include="defines.h" />
     <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Graphics_Wrappers.h" />
     <ClInclude Include="Input_Wrappers.h" />
     <ClInclude Include="RubyInterpreter.h" />
+    <ClInclude Include="TimerEvent.h" />
+    <ClInclude Include="TimerEvent_Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc" />

@@ -16,6 +16,7 @@ namespace RAGE
 			ALLEGRO_SAMPLE_INSTANCE *inst;
 			ALLEGRO_AUDIO_STREAM *as;
 			bool audio_stream;
+			bool disposed;
 
 			Audio(void);
 			~Audio(void);
