@@ -81,8 +81,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.8-monolith-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-md.lib;libogg-1.2.1-static-md.lib;libvorbis-1.3.2-static-md.lib;libvorbisfile-1.3.2-static-md.lib;openal-1.14-static-md.lib;zlib-1.2.5-static-md.lib;dumb-0.9.3-static-md.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.8-monolith-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-mt.lib;libogg-1.2.1-static-mt.lib;libvorbis-1.3.2-static-mt.lib;libvorbisfile-1.3.2-static-mt.lib;openal-1.14-static-mt.lib;zlib-1.2.5-static-mt.lib;dumb-0.9.3-static-mt.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

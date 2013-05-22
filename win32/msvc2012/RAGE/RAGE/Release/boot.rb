@@ -56,7 +56,7 @@ i = 0
 
 
 	
-RAGE::Graphics.setBackgroundColor(14, 255, 14)
+RAGE::Graphics.setBackgroundColor(120, 120, 14)
 
 puts "Left: " + RAGE::Input::KEY_LEFT.to_s
 
@@ -64,6 +64,14 @@ RAGE::Events.register RAGE::Events::KEY_UP, Proc.new {
    c.reset
 }
 
+tmr = RAGE::Timer.new(1)
+
+tmr.registerEvent Proc.new {
+  puts "Callback every 1 second."
+}
+
+RAGE::Events.registerTimer tmr
+tmr.start
 loop do
     RAGE::Graphics.clear
 	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
