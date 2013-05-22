@@ -7,6 +7,10 @@ Using Ruby Version: 2.0.0-p195
 
 Using Allegro Version: 5.0.8
 
+If you get missing dll error, you need to install Visual C++ Redistributable:
+
+http://www.microsoft.com/en-us/download/details.aspx?id=30679
+
 Downloads
 ====
 
