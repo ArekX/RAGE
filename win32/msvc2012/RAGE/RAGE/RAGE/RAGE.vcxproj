@@ -46,8 +46,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,7 +85,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.8-monolith-static-mt.lib;openal-1.14-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-mt.lib;libogg-1.2.1-static-mt.lib;libvorbis-1.3.2-static-mt.lib;libvorbisfile-1.3.2-static-mt.lib;zlib-1.2.5-static-mt.lib;dumb-0.9.3-static-mt.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.9-monolith-static-mt.lib;openal-1.14-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-mt.lib;libogg-1.2.1-static-mt.lib;libvorbis-1.3.2-static-mt.lib;libvorbisfile-1.3.2-static-mt.lib;zlib-1.2.5-static-mt.lib;dumb-0.9.3-static-mt.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -93,6 +93,7 @@
     <ClCompile Include="Audio_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
+    <ClCompile Include="Draw_Wrappers.cpp" />
     <ClCompile Include="Events_Wrapper.cpp" />
     <ClCompile Include="Event_Wrapper.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
     <ClInclude Include="defines.h" />
+    <ClInclude Include="Draw_Wrappers.h" />
     <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Event_Wrapper.h" />
     <ClInclude Include="Graphics_Wrappers.h" />

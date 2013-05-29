@@ -49,7 +49,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE GraphicsWrappers::rb_graphicsupdate(VALUE self)
+		VALUE GraphicsWrappers::rb_graphics_update(VALUE self)
 		{
 			al_flip_display();
 			return Qnil;
@@ -68,7 +68,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE GraphicsWrappers::rb_setTitle(VALUE self, VALUE title)
+		VALUE GraphicsWrappers::rb_set_title(VALUE self, VALUE title)
 		{
 			if (TYPE(title) == T_STRING)
 			{
@@ -79,7 +79,72 @@ namespace RAGE
 			return Qfalse;
 		}
 
-		VALUE GraphicsWrappers::rb_setVSync(VALUE self, VALUE val)
+		VALUE GraphicsWrappers::rb_get_title(VALUE self)
+		{		
+			return rb_str_new_cstr(window_title);
+		}
+
+		VALUE GraphicsWrappers::rb_set_blending_mode(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst)
+		{
+			int op, src, dst;
+
+			switch(FIX2INT(rop))
+			{
+				case RAGE_OP_ADD:
+					op = ALLEGRO_ADD;
+					break;
+				case RAGE_OP_SRC_MIN_DST:
+					op = ALLEGRO_SRC_MINUS_DEST;
+					break;
+				case RAGE_OP_DST_MIN_SRC:
+					op = ALLEGRO_DEST_MINUS_SRC;
+					break;
+				default:
+					op = ALLEGRO_ADD;
+			}
+
+			switch(FIX2INT(rsrc))
+			{
+				case RAGE_BLEND_ZERO:
+					src = ALLEGRO_ZERO;
+					break;
+				case RAGE_BLEND_ONE:
+					src = ALLEGRO_ONE;
+					break;
+				case RAGE_BLEND_ALPHA:
+					src = ALLEGRO_ALPHA;
+					break;
+				case RAGE_BLEND_INV_ALPHA:
+					src = ALLEGRO_INVERSE_ALPHA;
+					break;
+				default:
+					src = ALLEGRO_ONE;
+			}
+
+			switch(FIX2INT(rdst))
+			{
+				case RAGE_BLEND_ZERO:
+					dst = ALLEGRO_ZERO;
+					break;
+				case RAGE_BLEND_ONE:
+					dst = ALLEGRO_ONE;
+					break;
+				case RAGE_BLEND_ALPHA:
+					dst = ALLEGRO_ALPHA;
+					break;
+				case RAGE_BLEND_INV_ALPHA:
+					dst = ALLEGRO_INVERSE_ALPHA;
+					break;
+				default:
+					dst = ALLEGRO_INVERSE_ALPHA;
+			}
+
+			al_set_blender(op, src, dst);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_vsync(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
 			{
@@ -97,7 +162,7 @@ namespace RAGE
 			
 		}
 
-		VALUE GraphicsWrappers::rb_setFullscreen(VALUE self, VALUE val)
+		VALUE GraphicsWrappers::rb_set_fullscreen(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
 			{
@@ -114,7 +179,7 @@ namespace RAGE
 			return Qfalse;
 		}
 
-		VALUE GraphicsWrappers::rb_setWindowPosition(VALUE self, VALUE x, VALUE y)
+		VALUE GraphicsWrappers::rb_set_window_position(VALUE self, VALUE x, VALUE y)
 		{
 			if ((TYPE(x) == T_FIXNUM) && (TYPE(y) == T_FIXNUM))
 			{	
@@ -126,10 +191,11 @@ namespace RAGE
 			return Qfalse;
 		}
 
-		VALUE GraphicsWrappers::rb_cursorVisible(VALUE self, VALUE val)
+		VALUE GraphicsWrappers::rb_cursor_visible(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
 			{
+			
 				al_show_mouse_cursor(display);
 				return Qtrue;
 			}
@@ -141,25 +207,42 @@ namespace RAGE
 			return Qfalse;
 		}
 
+		VALUE GraphicsWrappers::rb_set_display_size(VALUE self, VALUE width, VALUE height)
+		{
+			al_resize_display(display, FIX2UINT(width), FIX2UINT(height));
+			return Qnil;
+		}
+
 		void GraphicsWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
 
+			rb_define_const(g, "ADD", INT2FIX(RAGE_OP_ADD));
+			rb_define_const(g, "DEST_MIN_SRC", INT2FIX(RAGE_OP_DST_MIN_SRC));
+			rb_define_const(g, "SRC_MIN_DEST",  INT2FIX(RAGE_OP_SRC_MIN_DST));
+
+			rb_define_const(g, "BLEND_ZERO", INT2FIX(RAGE_BLEND_ZERO));
+			rb_define_const(g, "BLEND_ONE", INT2FIX(RAGE_BLEND_ONE));
+			rb_define_const(g, "BLEND_ALPHA",  INT2FIX(RAGE_BLEND_ALPHA));
+			rb_define_const(g, "BLEND_INV_ALPHA",  INT2FIX(RAGE_BLEND_INV_ALPHA));
+
 			/* Define Module Functions */
-			rb_define_module_function(g, "setTitle", RFUNC(GraphicsWrappers::rb_setTitle), 1);
-			rb_define_module_function(g, "setVsync", RFUNC(GraphicsWrappers::rb_setVSync), 1);
-			rb_define_module_function(g, "setFullscreen", RFUNC(GraphicsWrappers::rb_setFullscreen), 1);
-			rb_define_module_function(g, "setWindowPosition", RFUNC(GraphicsWrappers::rb_setWindowPosition), 2);
-			rb_define_module_function(g, "cursorVisible", RFUNC(GraphicsWrappers::rb_cursorVisible), 1);
-			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphicsupdate), 0);
+			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
+			rb_define_module_function(g, "title", RFUNC(GraphicsWrappers::rb_get_title), 0);
+			rb_define_module_function(g, "setBlendingMode", RFUNC(GraphicsWrappers::rb_set_blending_mode), 3);
+			rb_define_module_function(g, "setVSync", RFUNC(GraphicsWrappers::rb_set_vsync), 1);
+			rb_define_module_function(g, "setFullscreen", RFUNC(GraphicsWrappers::rb_set_fullscreen), 1);
+			rb_define_module_function(g, "setCursorVisible", RFUNC(GraphicsWrappers::rb_cursor_visible), 1);
+			rb_define_module_function(g, "setWindowPosition", RFUNC(GraphicsWrappers::rb_set_window_position), 2);
+			rb_define_module_function(g, "setWindowSize", RFUNC(GraphicsWrappers::rb_set_display_size), 2);
+			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
 			rb_define_module_function(g, "clear", RFUNC(GraphicsWrappers::rb_graphics_clear), 0);
 			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 3);
 			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
 			rb_define_module_function(g, "setClippingRect", RFUNC(GraphicsWrappers::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(g, "resetClippingRect", RFUNC(GraphicsWrappers::rb_graphics_reset_clipping_rect), 0);
-			// TODO: Check to see if there is more stuff needed for Graphics module.
 		}
 
 		void GraphicsWrappers::initialize_graphics(GraphicsConfig cfg)

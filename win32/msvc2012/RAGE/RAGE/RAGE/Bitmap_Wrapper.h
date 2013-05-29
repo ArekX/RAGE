@@ -22,12 +22,24 @@ namespace RAGE
 			static void rb_bitmap_destroy(void *value);
 			static VALUE rb_bitmap_alloc(VALUE self);
 
+			static VALUE rb_set_scale_x(VALUE self, VALUE val);
+			static VALUE rb_set_scale_y(VALUE self, VALUE val);
+			static VALUE rb_set_center_x(VALUE self, VALUE val);
+			static VALUE rb_set_center_y(VALUE self, VALUE val);
+			static VALUE rb_set_angle(VALUE self, VALUE val);
+			static VALUE rb_set_flags(VALUE self, VALUE val);
+			static VALUE rb_set_tint(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+
+			static VALUE rb_get_scale_x(VALUE self);
+			static VALUE rb_get_scale_y(VALUE self);
+			static VALUE rb_get_center_x(VALUE self);
+			static VALUE rb_get_center_y(VALUE self);
+			static VALUE rb_get_angle(VALUE self);
+			static VALUE rb_get_flags(VALUE self);
+
 			/* Screen drawing algos */
-			static VALUE rb_bitmap_draw1(VALUE self, VALUE x, VALUE y);
-			static VALUE rb_bitmap_draw2(VALUE self, VALUE x, VALUE y, VALUE flags);
-			static VALUE rb_bitmap_draw_region1(VALUE self, VALUE sx, VALUE sy, VALUE sw, VALUE sh, VALUE dx, VALUE dy);
-			static VALUE rb_bitmap_draw_region2(VALUE self, VALUE sx, VALUE sy, VALUE sw, VALUE sh, VALUE dx, VALUE dy, 
-				                                VALUE flags);
+			static VALUE rb_bitmap_draw(VALUE self, VALUE x, VALUE y);
+			static VALUE rb_bitmap_draw_region(VALUE self, VALUE sx, VALUE sy, VALUE sw, VALUE sh, VALUE dx, VALUE dy);
 
 		public:
 			static void load_ruby_class();

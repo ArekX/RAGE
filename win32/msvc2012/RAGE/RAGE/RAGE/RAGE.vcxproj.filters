@@ -136,6 +136,9 @@
     <ClCompile Include="Sfx_Wrapper.cpp">
       <Filter>modules\audio\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="Draw_Wrappers.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -206,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="Sfx_Wrapper.h">
       <Filter>modules\audio\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw_Wrappers.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

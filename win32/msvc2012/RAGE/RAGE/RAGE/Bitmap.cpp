@@ -11,6 +11,14 @@ namespace RAGE
 			bitmap = NULL;
 			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 			disposed = false;
+
+			scale_x = 1;
+			scale_y = 1;
+			center_x = 0;
+			center_y = 0;
+			angle = 0;
+			flags = 0;
+			tint = al_map_rgb(255, 255, 255);
 		}
 
 		Bitmap::~Bitmap(void)
@@ -28,9 +36,7 @@ namespace RAGE
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
 
-			// FIXME: Set to memory bitmap if too big width.
 			bitmap = al_create_bitmap(width, height);
-			
 		}
 
 		void Bitmap::initialize(char* filename)
@@ -65,20 +71,118 @@ namespace RAGE
 				return 0;
 		}
 
-		void Bitmap::draw(float x, float y, int flags)
+		void Bitmap::draw(float x, float y)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (bitmap != NULL)
-				al_draw_bitmap(bitmap, x, y, flags);
+				al_draw_tinted_scaled_rotated_bitmap(bitmap, tint, center_x, center_y, 
+				                                     x, y, scale_x, scale_y, angle, flags);
 		}
 
-		void Bitmap::draw_region(float sx, float sy, float sw, float sh, float dx, float dy, int flags)
+		void Bitmap::draw_region(float sx, float sy, float sw, float sh, float dx, float dy)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (bitmap != NULL)
-				al_draw_bitmap_region(bitmap, sx, sy, sw, sh, dx, dy, flags);
+				al_draw_tinted_scaled_rotated_bitmap_region(bitmap, sx, sy, sw, sh, tint, center_x, 
+				                                            center_y, dx, dy, scale_x, scale_y, angle, flags);
+		}
+
+		void Bitmap::set_center_x(float cx)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			center_x = cx;
+		}
+
+		void Bitmap::set_center_y(float cy)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			center_y = cy;
+		}
+
+		float Bitmap::get_center_x()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return center_x;
+		}
+
+		float Bitmap::get_center_y()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return center_y;
+		}
+
+		void Bitmap::set_scale_x(float sx)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			scale_x = sx;
+		}
+
+		void Bitmap::set_scale_y(float sy)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			scale_y = sy;
+		}
+
+		float Bitmap::get_scale_x()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return scale_x;
+		}
+
+		float Bitmap::get_scale_y()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return scale_y;
+		}
+
+		void Bitmap::set_angle(float agl)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			angle = agl;
+		}
+
+		float Bitmap::get_angle()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return angle;
+		}
+
+		void Bitmap::set_flags(int sflags)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			flags = sflags;
+		}
+
+		void Bitmap::set_tint(ALLEGRO_COLOR cl)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			tint = cl;
+		}
+
+		ALLEGRO_COLOR Bitmap::get_tint()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, tint);
+
+			return tint;
+		}
+
+		int Bitmap::get_flags()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return flags;
 		}
 
 
@@ -107,6 +211,8 @@ namespace RAGE
 
 		void Bitmap::dispose()
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (al_get_target_bitmap() == bitmap)
 			{
 				rb_raise(rb_eException, "Cannot dispose current drawing target bitmap.");

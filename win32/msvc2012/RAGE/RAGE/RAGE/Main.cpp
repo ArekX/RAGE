@@ -1,5 +1,4 @@
-﻿#define ALLEGRO_STATICLINK
-#include <iostream>
+﻿#include <iostream>
 #include "RubyInterpreter.h"
 
 /**
@@ -34,11 +33,9 @@ int main(int argc, char** argv)
     //	     RAGE::Physics (Box2D) module,
 	//       RAGE::Draw module,
 	//       RAGE::Font class,
-	//		 RAGE::IniFile class,
-	//		 implement build of allegro 5.0.9 (at least)
+	//		 RAGE::IniFile class
 
 	// FIXME: Events_Wrapper - RAGE::JoyEvent classes all extending RAGE::Event class
-	//        RAGE::Bitmap - (1) needs finishing, tinted, rotated and scaled drawing, remove Opt versions and add setDrawingOption function to save drawing flags.
 	//        RAGE::Graphics - (2) add color conversion routines, display driver informations, blending config, more screen functions.
 	//        RAGE::Input - (3) needs finishing, joystick testing, joystick enumeration.
 	//        Go through the whole code and rb_gc_register_adress all strings created by rb_, and class symbols.
@@ -61,3 +58,4 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+

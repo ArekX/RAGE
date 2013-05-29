@@ -1,4 +1,5 @@
 #pragma once
+#define ALLEGRO_STATICLINK
 
 #include <iostream>
 #include <vector>
@@ -15,6 +16,7 @@
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
+#include "Draw_Wrappers.h"
 #include "Bitmap_Wrapper.h"
 #include "Events_Wrapper.h"
 #include "Input_Wrappers.h"

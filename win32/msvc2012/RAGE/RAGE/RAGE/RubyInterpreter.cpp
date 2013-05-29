@@ -25,7 +25,7 @@ namespace RAGE
 			PRINT("[Ruby Interpreter]\n");
 			ruby_show_version();
 			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
-			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\n\n", ALLEGRO_VERSION_STR);
+			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
 			return Qnil;
 		}
 
@@ -49,6 +49,7 @@ namespace RAGE
 				RAGE::Events::EventsWrapper::load_wrappers();
 				RAGE::Input::InputWrappers::load_wrappers();
 				RAGE::Audio::AudioWrappers::load_wrappers();
+				RAGE::Graphics::DrawWrappers::load_wrappers();
 
 				/* Load RAGE classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
