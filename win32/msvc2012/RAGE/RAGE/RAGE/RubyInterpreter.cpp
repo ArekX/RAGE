@@ -7,19 +7,6 @@ namespace RAGE
 {
 	namespace Interpreter
 	{
-
-			
-		static VALUE rb_draw_text(VALUE self, VALUE text)
-		{
-			
-			ALLEGRO_FONT* f = al_load_ttf_font("c:/other/acmesa.ttf", 16, 0);
-			ALLEGRO_USTR* u = al_ustr_new(StringValueCStr(text));
-			al_draw_ustr(f, al_map_rgb(255,255, 255), 10, 10, 0, u);
-			al_flip_display();
-	
-			return Qnil;
-		}
-
 		static VALUE rb_get_env(VALUE self, VALUE text)
 		{
 			#ifdef WIN32
@@ -34,9 +21,11 @@ namespace RAGE
 
 		static VALUE rb_rage_about(VALUE self)
 		{
-			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nRuby Version: ", RAGE_ENGINE_VERSION);
+			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION);
+			PRINT("[Ruby Interpreter]\n");
 			ruby_show_version();
-			PRINTF("Allegro Game Library Version: %s\n\n", ALLEGRO_VERSION_STR);
+			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
+			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\n\n", ALLEGRO_VERSION_STR);
 			return Qnil;
 		}
 
@@ -52,33 +41,57 @@ namespace RAGE
 				
 				/* Define Global Functions */
 				VALUE rage = rb_define_module("RAGE");
-				rb_define_global_function("drawText", RFUNC(rb_draw_text), 1);
 				rb_define_module_function(rage, "getEnvVar", RFUNC(rb_get_env), 1);
 				rb_define_module_function(rage, "about", RFUNC(rb_rage_about), 0);
 
 				/* Load RAGE modules */
-				RAGE::Graphics::Graphics_Wrappers::load_wrappers();
+				RAGE::Graphics::GraphicsWrappers::load_wrappers();
 				RAGE::Events::EventsWrapper::load_wrappers();
 				RAGE::Input::InputWrappers::load_wrappers();
+				RAGE::Audio::AudioWrappers::load_wrappers();
 
 				/* Load RAGE classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
-				RAGE::Audio::AudioWrapper::load_ruby_class();
+				RAGE::Audio::MusicWrapper::load_ruby_class();
+				RAGE::Audio::SfxWrapper::load_ruby_class();
+				RAGE::Events::EventWrapper::load_ruby_class();
 				RAGE::Events::TimerEventWrapper::load_ruby_class();
+				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
+				RAGE::Events::MouseEventWrapper::load_ruby_class();
+				RAGE::Events::ScreenEventWrapper::load_ruby_class();
 
 				// TODO: Finish inserting wrappers here
 
+				/// DEV
+				RAGE::Graphics::GraphicsConfig g;
+				g.width = 800;
+				g.height = 600;
+				g.fullscreen = false;
+				g.vsync = false;
+
 				/* Perform additional tasks */
-				RAGE::Events::EventsWrapper::create_threads();
+				RAGE::Events::EventsWrapper::init_queue();
+				RAGE::Audio::AudioWrappers::init_audio();
+				RAGE::Graphics::GraphicsWrappers::initialize_graphics(g);
+				RAGE::Events::EventsWrapper::run_event_thread();
 
 				/* Set search path to exe file */
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
 
-				/* Set RAGE Args */
+				/* Set Command line arguments */
 				rb_gv_set("$RARGV", rb_ary_new());
 				for (int i = 0; i < argc; i++)
 					rb_ary_push(rb_gv_get("$RARGV"), rb_str_new_cstr(argv[i]));
+				
+				#ifdef DEVELOPMENT_VERSION
+				
+				/* Set debug version vars: */
+				rb_gv_set("$DEBUG", Qtrue);
+
+				printf("You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n");
+				
+				#endif
 				
 				/* Load boot script */
 				VALUE bootfile = rb_str_new_cstr("boot.rb");

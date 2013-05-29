@@ -72,6 +72,27 @@ namespace RAGE
 				return -1;
 		}
 
+		int TimerEvent::get_proc_count()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			if (timer != NULL)
+				return RARRAY_LEN(timerObserver);
+			else
+				return -1;
+		}
+
+		void TimerEvent::run_procs()
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			for (int i = 0; i < RARRAY_LEN(timerObserver); i++)
+			{
+				rb_proc_call_with_block(rb_ary_entry(timerObserver, i), 0, NULL, 
+										rb_ary_entry(timerObserver, i));
+			}
+		}
+
 		void TimerEvent::set_count(int64_t count)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -152,12 +173,8 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (ev->timer.source == timer)
-				for (int i = 0; i < RARRAY_LEN(timerObserver); i++)
-				{
-					rb_proc_call_with_block(rb_ary_entry(timerObserver, i), 0, NULL, 
-													 rb_ary_entry(timerObserver, i));
-				}
+			if ((ev->type == ALLEGRO_EVENT_TIMER) && (ev->timer.source == timer))
+				run_procs();
 		}
 
 		TimerEvent::~TimerEvent(void)

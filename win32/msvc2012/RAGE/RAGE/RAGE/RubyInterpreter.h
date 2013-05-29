@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 #include <ruby.h>
@@ -16,11 +17,18 @@
 #include "Graphics_Wrappers.h"
 #include "Bitmap_Wrapper.h"
 #include "Events_Wrapper.h"
-#include "Audio_Wrapper.h"
 #include "Input_Wrappers.h"
 #include "TimerEvent_Wrapper.h"
+#include "Event_Wrapper.h"
+#include "KeyboardEvent_Wrapper.h"
+#include "MouseEvent_Wrapper.h"
+#include "ScreenEvent_Wrapper.h"
+#include "Audio_Wrapper.h"
+#include "Music_Wrapper.h"
+#include "Sfx_Wrapper.h"
 
 #include "defines.h"
+
 
 namespace RAGE
 {

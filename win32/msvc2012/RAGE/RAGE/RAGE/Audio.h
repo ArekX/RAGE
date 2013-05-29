@@ -6,27 +6,29 @@ namespace RAGE
 {
 	namespace Audio
 	{
-
-		class Audio
+		extern class Audio
 		{
-		
-		public:
-			ALLEGRO_SAMPLE *audio;
-			ALLEGRO_SAMPLE_ID audio_id;
-			ALLEGRO_SAMPLE_INSTANCE *inst;
-			ALLEGRO_AUDIO_STREAM *as;
-			bool audio_stream;
+		protected:
+			ALLEGRO_MIXER *mixer;
 			bool disposed;
-
-			Audio(void);
-			~Audio(void);
-
-			void load_sound(char* filename);
-			void load_stream(char* filename);
-			void play();
-			void stop();
-			void dispose();
+			bool is_loop;
+		public:
+			virtual void load(char* filename) = 0;
+			virtual void play() = 0;
+			virtual void pause() = 0;
+			virtual void stop() = 0;
+			virtual void set_pan(float pan) = 0;
+			virtual void set_speed(float speed) = 0;
+			virtual void set_gain(float gain) = 0;
+			virtual void set_loop(bool loop) = 0;
+			virtual float get_pan() = 0;
+			virtual float get_speed() = 0;
+			virtual float get_gain() = 0;
+			virtual bool get_loop() = 0;
+			virtual void dispose() = 0;
+			virtual bool is_disposed() {
+				return disposed;
+			};
 		};
-
 	}
 }

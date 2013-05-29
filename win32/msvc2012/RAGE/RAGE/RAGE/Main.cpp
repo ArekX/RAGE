@@ -1,13 +1,6 @@
 ﻿#define ALLEGRO_STATICLINK
 #include <iostream>
 #include "RubyInterpreter.h"
-#include "Graphics.h"
-
-using namespace std;
-
-static VALUE eval_wrap(VALUE arg) {
-	return rb_funcall(rb_cObject, rb_intern("eval"), 1, arg);
-}
 
 /**
  * Main Initialize Function
@@ -28,17 +21,30 @@ int main(int argc, char** argv)
 	al_install_audio();
 	al_init_acodec_addon();
 
-	/* Initialize events */
-	RAGE::Events::EventsWrapper::init_queue();
+	
 
-	/* Initialize graphics */
-	RAGE::Graphics::GraphicsConfig g;
-	g.width = 800;
-	g.height = 600;
-	g.fullscreen = false;
-	RAGE::Graphics::Graphics vg(g);
+	#ifdef DEVELOPMENT_VERSION
+	SetConsoleTitle(L"RAGE Development Console");
+	#endif
 
-	// TODO: Network class, PhysicsFS, Box2D, implement allegro 5.0.9 (at least)
+	/* FIXME: INI or ruby function loading of configuration? */
+
+	// TODO: RAGE::Network module, 
+	//       RAGE::FS (PhysicsFS) module, 
+    //	     RAGE::Physics (Box2D) module,
+	//       RAGE::Draw module,
+	//       RAGE::Font class,
+	//		 RAGE::IniFile class,
+	//		 implement build of allegro 5.0.9 (at least)
+
+	// FIXME: Events_Wrapper - RAGE::JoyEvent classes all extending RAGE::Event class
+	//        RAGE::Bitmap - (1) needs finishing, tinted, rotated and scaled drawing, remove Opt versions and add setDrawingOption function to save drawing flags.
+	//        RAGE::Graphics - (2) add color conversion routines, display driver informations, blending config, more screen functions.
+	//        RAGE::Input - (3) needs finishing, joystick testing, joystick enumeration.
+	//        Go through the whole code and rb_gc_register_adress all strings created by rb_, and class symbols.
+	// NOTE: All event classes need method testing.
+
+	// LATER: RM versions?
 
 	/* Initialize and start Interpreter */
 	RAGE::Interpreter::Ruby ri(argc, argv);
@@ -46,12 +52,11 @@ int main(int argc, char** argv)
 	/* Destroy event queue */
 	RAGE::Events::EventsWrapper::finalize_queue();
 
-	/* Uninstall input */
+	/* Close down allegro game system */
 	al_uninstall_mouse();
 	al_uninstall_keyboard();
 	al_uninstall_joystick();
-
-	/* Close down allegro game system */
+	al_uninstall_audio();
 	al_uninstall_system();
 
 	return 0;

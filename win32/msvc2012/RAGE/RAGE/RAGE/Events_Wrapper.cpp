@@ -1,196 +1,143 @@
 #include "Events_Wrapper.h"
 
-#define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise_proc_error(); else rb_ary_push(observer, proc);}
-#define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise_proc_error(); else rb_ary_delete(observer, proc);}
 
 namespace RAGE
 {
 	namespace Events
 	{
 		ALLEGRO_EVENT_QUEUE* event_queue;
-		ALLEGRO_KEYBOARD_STATE ks;
 
 		VALUE eventsThread;
 		bool  stopThread = false;
-		bool  useKeyCodeNames = false;
+		VALUE event_objects;
 
-		VALUE engineCloseObserver;
-		VALUE keyUpObserver;
-		VALUE keyDownObserver;
-		VALUE keyPressObserver;
-		VALUE timerObservers;
-
-		void rb_raise_proc_error()
-		{
-			rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR);
-		}
-
-
-		void* EventsWrapper::rb_update_events(void* ptr)
+		void* EventsWrapper::rb_update_event_objects(void* ptr)
 		{
 			ALLEGRO_EVENT ev;
-			VALUE arg[1];
-			register long i;
-			while(1)
+			register int i;
+			BaseEvent *evnt;
+			while(true)
 			{
 				if (stopThread)
 					rb_thread_stop();
 
 				if (al_get_next_event(event_queue, &ev))
 				{
-					if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+					for (i = 0; i < RARRAY_LEN(event_objects); i++)
 					{
-						if (RARRAY_LEN(engineCloseObserver) > 0)
-						{
-							for (i = 0; i < RARRAY_LEN(engineCloseObserver); i++)
-							{
-								rb_proc_call_with_block(rb_ary_entry(engineCloseObserver, i), 0, NULL, 
-														rb_ary_entry(engineCloseObserver, i));
-							}
-						}
-						else
-							rb_exit(0);
-					}
-					
-					if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
-					{
-						for (i = 0; i < RARRAY_LEN(keyDownObserver); i++)
-						{
-							if (useKeyCodeNames)
-								arg[0] = rb_str_new_cstr(al_keycode_to_name(ev.keyboard.keycode));
-							else
-								arg[0] = INT2FIX(ev.keyboard.keycode);
-
-							rb_proc_call_with_block(rb_ary_entry(keyDownObserver, i), 1, arg, 
-								                    rb_ary_entry(keyDownObserver, i));
-						}
-					}
-					
-					if (ev.type == ALLEGRO_EVENT_KEY_UP)
-					{
-						for (i = 0; i < RARRAY_LEN(keyUpObserver); i++)
-						{
-							if (useKeyCodeNames)
-								arg[0] = rb_str_new_cstr(al_keycode_to_name(ev.keyboard.keycode));
-							else
-								arg[0] = INT2FIX(ev.keyboard.keycode);
-
-							rb_proc_call_with_block(rb_ary_entry(keyUpObserver, i), 1, arg, 
-								                    rb_ary_entry(keyUpObserver, i));
-						}
-					}
-
-					if (ev.type == ALLEGRO_EVENT_KEY_CHAR)
-					{
-						for (i = 0; i < RARRAY_LEN(keyPressObserver); i++)
-						{
-							if (useKeyCodeNames)
-								arg[0] = rb_str_new_cstr(al_keycode_to_name(ev.keyboard.keycode));
-							else
-								arg[0] = INT2FIX(ev.keyboard.keycode);
-
-							rb_proc_call_with_block(rb_ary_entry(keyPressObserver, i), 1, arg, 
-								                    rb_ary_entry(keyPressObserver, i));
-						}
-					}
-
-					if (ev.type == ALLEGRO_EVENT_TIMER)
-					{
-						TimerEvent *timer;
-						for (i = 0; i < RARRAY_LEN(timerObservers); i++)
-						{
-							Data_Get_Struct(rb_ary_entry(timerObservers, i), TimerEvent, timer);
-							timer->callback(&ev);
-						}
+						Data_Get_Struct(rb_ary_entry(event_objects, i), BaseEvent, evnt);
+						evnt->callback(&ev);
 					}
 				}
-				rb_thread_schedule();	
+				else
+					rb_thread_schedule();
 			}
+
 			return NULL;
 		}
 
-		VALUE EventsWrapper::rb_register_event(VALUE self, VALUE event_type, VALUE proc)
+		VALUE EventsWrapper::rb_register_event(VALUE self, VALUE entry)
 		{
-			switch(FIX2INT(event_type))
+			if (TYPE(rb_ary_includes(event_objects, entry)) == T_FALSE)
 			{
-				case RAGE_KEY_UP_EVENT:
-					RAGE_REGISTER_EVENT(keyUpObserver, proc);
-					return Qtrue;
-				case RAGE_KEY_DOWN_EVENT:
-					RAGE_REGISTER_EVENT(keyDownObserver, proc);
-					return Qtrue;
-				case RAGE_KEY_PRESS_EVENT:
-					RAGE_REGISTER_EVENT(keyPressObserver, proc);
-					return Qtrue;
-				case RAGE_ENGINE_CLOSE_EVENT:
-					RAGE_REGISTER_EVENT(engineCloseObserver, proc);
-					return Qtrue;
-				default:
-					return Qfalse;
+				if (rb_class_get_superclass(rb_class_of(entry)) != EventWrapper::get_ruby_class())
+					rb_raise(rb_eArgError, RAGE_RB_EVENT_REG_ERR);
+				else
+				{
+					if (rb_class_of(entry) == TimerEventWrapper::get_ruby_class())
+					{
+						TimerEvent *tm;
+						Data_Get_Struct(entry, TimerEvent, tm);
+						tm->register_to_queue(event_queue);
+					}
+					rb_ary_push(event_objects, entry);
+				}
 			}
+			return Qnil;
 		}
 
-		VALUE EventsWrapper::rb_unregister_event(VALUE self, VALUE event_type, VALUE proc)
+		VALUE EventsWrapper::rb_unregister_event(VALUE self, VALUE entry)
 		{
-			switch(FIX2INT(event_type))
+			if (TYPE(rb_ary_includes(event_objects, entry)) == T_TRUE)
 			{
-				case RAGE_KEY_UP_EVENT:
-					RAGE_UNREGISTER_EVENT(keyUpObserver, proc);
-					return Qtrue;
-				case RAGE_KEY_DOWN_EVENT:
-					RAGE_UNREGISTER_EVENT(keyDownObserver, proc);
-					return Qtrue;
-				case RAGE_KEY_PRESS_EVENT:
-					RAGE_UNREGISTER_EVENT(keyPressObserver, proc);
-					return Qtrue;
-				case RAGE_ENGINE_CLOSE_EVENT:
-					RAGE_UNREGISTER_EVENT(engineCloseObserver, proc);
-					return Qtrue;
-				default:
-					return Qfalse;
+				if (rb_class_get_superclass(rb_class_of(entry)) != RAGE::Events::EventWrapper::get_ruby_class())
+					rb_raise(rb_eArgError, RAGE_RB_EVENT_REG_ERR);
+				else
+				{
+					if (rb_class_of(entry) == TimerEventWrapper::get_ruby_class())
+					{
+						TimerEvent *tm;
+						Data_Get_Struct(entry, TimerEvent, tm);
+						tm->unregister_from_queue(event_queue);
+					}
+					rb_ary_delete(event_objects, entry);
+				}
 			}
-			
+			return Qnil;
 		}
 
 		VALUE EventsWrapper::rb_clear_events(VALUE self, VALUE event_type)
 		{
+			VALUE klass, entry;
 			switch(FIX2INT(event_type))
 			{
-				case RAGE_KEY_UP_EVENT:
-					rb_ary_clear(keyUpObserver);
-					return Qtrue;
-				case RAGE_KEY_DOWN_EVENT:
-					rb_ary_clear(keyDownObserver);
-					return Qtrue;
-				case RAGE_KEY_PRESS_EVENT:
-					rb_ary_clear(keyPressObserver);
-					return Qtrue;
-				case RAGE_ENGINE_CLOSE_EVENT:
-					rb_ary_clear(engineCloseObserver);
-					return Qtrue;
-				default:
-					return Qfalse;
+				case RAGE_KEYBOARD_EVENT:
+					klass = RAGE::Events::KeyboardEventWrapper::get_ruby_class();
+					break;
+				case RAGE_MOUSE_EVENT:
+					klass = RAGE::Events::MouseEventWrapper::get_ruby_class();
+					break;
+				case RAGE_SCREEN_EVENT:
+					klass = RAGE::Events::ScreenEventWrapper::get_ruby_class();
+					break;
+				case RAGE_TIMER_EVENT:
+					klass = RAGE::Events::TimerEventWrapper::get_ruby_class();
+					break;
 			}
+
+			for (int i = 0; i < RARRAY_LEN(event_objects); i++)
+			{
+				entry = rb_ary_entry(event_objects, i);
+				if (rb_class_of(entry) == klass)
+				{
+					if (FIX2INT(event_type) == RAGE_TIMER_EVENT)
+					{
+						TimerEvent *tm;
+						Data_Get_Struct(entry, TimerEvent, tm);
+						tm->unregister_from_queue(event_queue);
+					}
+					rb_ary_delete(event_objects, entry);
+				}
+			}
+			return Qnil;
 		}
 
-		VALUE EventsWrapper::rb_use_keycode_names(VALUE self, VALUE val)
+		VALUE EventsWrapper::rb_clear_events2(VALUE self)
 		{
-			useKeyCodeNames = (TYPE(val) == T_TRUE);
+			for (int i = 0; i < RARRAY_LEN(event_objects); i++)
+			{
+				if (rb_class_of(rb_ary_entry(event_objects, i)) == RAGE::Events::TimerEventWrapper::get_ruby_class())
+				{
+					TimerEvent *tm;
+					Data_Get_Struct(rb_ary_entry(event_objects, i), TimerEvent, tm);
+					tm->unregister_from_queue(event_queue);
+				}
+			}
+			rb_ary_clear(event_objects);
 			return Qnil;
 		}
 
 		VALUE EventsWrapper::rb_freeze_events(VALUE self)
 		{
 			stopThread = true;
-			return Qtrue;
+			return Qnil;
 		}
 
 		VALUE EventsWrapper::rb_unfreeze_events(VALUE self)
 		{
 			stopThread = false;
-			
 			rb_thread_run(eventsThread);
-			return Qtrue;
+			return Qnil;
 		}
 
 		ALLEGRO_EVENT_QUEUE* EventsWrapper::get_queue()
@@ -201,12 +148,13 @@ namespace RAGE
 		void EventsWrapper::init_queue()
 		{
 			event_queue = al_create_event_queue();
-			al_register_event_source(event_queue, al_get_keyboard_event_source());		
+			al_register_event_source(event_queue, al_get_keyboard_event_source());
+			al_register_event_source(event_queue, al_get_mouse_event_source());
 		}
 
-		void EventsWrapper::create_threads()
+		void EventsWrapper::run_event_thread()
 		{
-			eventsThread = rb_thread_create(RFUNC(EventsWrapper::rb_update_events), al_get_current_display());
+			eventsThread = rb_thread_create(RFUNC(EventsWrapper::rb_update_event_objects), NULL);
 		}
 
 		void EventsWrapper::finalize_queue()
@@ -217,86 +165,61 @@ namespace RAGE
 			}
 		}
 
-		VALUE EventsWrapper::rb_register_timer(VALUE self, VALUE timer)
+		VALUE EventsWrapper::rb_process_keyboard(VALUE self, VALUE val)
 		{
-			if (TYPE(rb_ary_includes(timerObservers, timer)) == T_FALSE) 
-			{ 		
-				if (rb_class_of(timer) != RAGE::Events::TimerEventWrapper::get_ruby_class())
-					rb_raise(rb_eTypeError, RAGE_RB_TIMER_ERROR); 
-				else 
-				{
-					TimerEvent *tm;
-					Data_Get_Struct(timer, TimerEvent, tm);
-					tm->register_to_queue(event_queue);
-					rb_ary_push(timerObservers, timer);
-				}
-			}
-
+			if (TYPE(val) == T_TRUE)
+				al_register_event_source(event_queue, al_get_keyboard_event_source());
+			else if (TYPE(val) == T_FALSE)
+				al_unregister_event_source(event_queue, al_get_keyboard_event_source());
 			return Qnil;
 		}
 
-		VALUE EventsWrapper::rb_unregister_timer(VALUE self, VALUE timer)
+		VALUE EventsWrapper::rb_process_mouse(VALUE self, VALUE val)
 		{
-			if (TYPE(rb_ary_includes(timerObservers, timer)) == T_TRUE) 
-			{ 
-				
-				if (rb_class_of(timer) != RAGE::Events::TimerEventWrapper::get_ruby_class())
-					rb_raise(rb_eTypeError, RAGE_RB_TIMER_ERROR); 
-				else 
-				{
-					TimerEvent *tm;
-					Data_Get_Struct(timer, TimerEvent, tm);
-					tm->unregister_from_queue(event_queue);
-					rb_ary_delete(timerObservers, timer);
-				}
-			}
-
+			if (TYPE(val) == T_TRUE)
+				al_register_event_source(event_queue, al_get_mouse_event_source());
+			else if (TYPE(val) == T_FALSE)
+				al_unregister_event_source(event_queue, al_get_mouse_event_source());
 			return Qnil;
 		}
 
-		VALUE EventsWrapper::rb_clear_timers(VALUE self)
+		VALUE EventsWrapper::rb_process_joystick(VALUE self, VALUE val)
 		{
-			TimerEvent *timer;
-			for (int i = 0; i < RARRAY_LEN(timerObservers); i++)
-			{
-				Data_Get_Struct(rb_ary_entry(timerObservers, i), TimerEvent, timer);
-				timer->unregister_from_queue(event_queue);
-			}
-			rb_ary_clear(timerObservers);
-			return Qtrue;
+			if (TYPE(val) == T_TRUE)
+				al_register_event_source(event_queue, al_get_joystick_event_source());
+			else if (TYPE(val) == T_FALSE)
+				al_unregister_event_source(event_queue, al_get_joystick_event_source());
+			return Qnil;
+		}
+
+		VALUE EventsWrapper::rb_process_display(VALUE self, VALUE val)
+		{
+			if (TYPE(val) == T_TRUE)
+				al_register_event_source(event_queue, al_get_display_event_source(RAGE::Graphics::GraphicsWrappers::get_display()));
+			else if (TYPE(val) == T_FALSE)
+				al_unregister_event_source(event_queue, al_get_display_event_source(RAGE::Graphics::GraphicsWrappers::get_display()));
+			return Qnil;
 		}
 
 		void EventsWrapper::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE events = rb_define_module_under(rage, "Events");
-			rb_define_const(events, "KEY_UP", INT2FIX(RAGE_KEY_UP_EVENT));
-			rb_define_const(events, "KEY_DOWN", INT2FIX(RAGE_KEY_DOWN_EVENT));
-			rb_define_const(events, "KEY_PRESS", INT2FIX(RAGE_KEY_PRESS_EVENT));
-			rb_define_const(events, "ENGINE_CLOSE", INT2FIX(RAGE_ENGINE_CLOSE_EVENT));
 
-			keyUpObserver = rb_ary_new();
-			keyDownObserver = rb_ary_new();
-			keyPressObserver = rb_ary_new();
-			engineCloseObserver = rb_ary_new();
-			timerObservers = rb_ary_new();
-			
-			rb_gc_register_address(&keyUpObserver);
-			rb_gc_register_address(&keyDownObserver);
-			rb_gc_register_address(&keyPressObserver);
-			rb_gc_register_address(&engineCloseObserver);
-			rb_gc_register_address(&timerObservers);
+			event_objects = rb_ary_new();
+			rb_gc_register_address(&event_objects);
 
-			rb_define_module_function(events, "useKeyCodeNames", RFUNC(EventsWrapper::rb_use_keycode_names), 1);
-			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 2);
-			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 2);
-			rb_define_module_function(events, "registerTimer", RFUNC(EventsWrapper::rb_register_timer), 1);
-			rb_define_module_function(events, "unregisterTimer", RFUNC(EventsWrapper::rb_unregister_timer), 1);
-			rb_define_module_function(events, "clearTimers", RFUNC(EventsWrapper::rb_clear_timers), 0);
+			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 1);
+			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 1);
+			rb_define_module_function(events, "processKeyboard", RFUNC(EventsWrapper::rb_process_keyboard), 1);
+			rb_define_module_function(events, "processMouse", RFUNC(EventsWrapper::rb_process_mouse), 1);
+			rb_define_module_function(events, "processJoystick", RFUNC(EventsWrapper::rb_process_joystick), 1);
+			rb_define_module_function(events, "processScreen", RFUNC(EventsWrapper::rb_process_display), 1);
 			rb_define_module_function(events, "clear", RFUNC(EventsWrapper::rb_clear_events), 1);
+			rb_define_module_function(events, "clearAll", RFUNC(EventsWrapper::rb_clear_events2), 0);
 			rb_define_module_function(events, "freeze", RFUNC(EventsWrapper::rb_freeze_events), 0);
 			rb_define_module_function(events, "unfreeze", RFUNC(EventsWrapper::rb_unfreeze_events), 0);
-			// TODO: Add timer, joystick, mouse and more display events
+			// TODO: Add joystick
 		}
 	}
 }

@@ -67,7 +67,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -75,41 +75,65 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.8-monolith-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-mt.lib;libogg-1.2.1-static-mt.lib;libvorbis-1.3.2-static-mt.lib;libvorbisfile-1.3.2-static-mt.lib;openal-1.14-static-mt.lib;zlib-1.2.5-static-mt.lib;dumb-0.9.3-static-mt.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;msvcr110-ruby200-static.lib;allegro-5.0.8-monolith-static-mt.lib;openal-1.14-static-mt.lib;freetype-2.4.8-static-mt.lib;libFLAC-1.2.1-static-mt.lib;libogg-1.2.1-static-mt.lib;libvorbis-1.3.2-static-mt.lib;libvorbisfile-1.3.2-static-mt.lib;zlib-1.2.5-static-mt.lib;dumb-0.9.3-static-mt.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Audio_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
     <ClCompile Include="Events_Wrapper.cpp" />
-    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Event_Wrapper.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="Input_Wrappers.cpp" />
+    <ClCompile Include="KeyboardEvent.cpp" />
+    <ClCompile Include="KeyboardEvent_Wrapper.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MouseEvent.cpp" />
+    <ClCompile Include="MouseEvent_Wrapper.cpp" />
+    <ClCompile Include="Music.cpp" />
+    <ClCompile Include="Music_Wrapper.cpp" />
     <ClCompile Include="RubyInterpreter.cpp" />
+    <ClCompile Include="ScreenEvent.cpp" />
+    <ClCompile Include="ScreenEvent_Wrapper.cpp" />
+    <ClCompile Include="Sfx.cpp" />
+    <ClCompile Include="Sfx_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
+    <ClInclude Include="BaseEvent.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Events_Wrapper.h" />
-    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Event_Wrapper.h" />
     <ClInclude Include="Graphics_Wrappers.h" />
     <ClInclude Include="Input_Wrappers.h" />
+    <ClInclude Include="KeyboardEvent.h" />
+    <ClInclude Include="KeyboardEvent_Wrapper.h" />
+    <ClInclude Include="MouseEvent.h" />
+    <ClInclude Include="MouseEvent_Wrapper.h" />
+    <ClInclude Include="Music.h" />
+    <ClInclude Include="Music_Wrapper.h" />
     <ClInclude Include="RubyInterpreter.h" />
+    <ClInclude Include="ScreenEvent.h" />
+    <ClInclude Include="ScreenEvent_Wrapper.h" />
+    <ClInclude Include="Sfx.h" />
+    <ClInclude Include="Sfx_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
   </ItemGroup>

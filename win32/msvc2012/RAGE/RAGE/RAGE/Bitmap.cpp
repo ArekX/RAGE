@@ -100,6 +100,11 @@ namespace RAGE
 			bitmap = al_clone_bitmap(src->bitmap);
 		}
 
+		bool Bitmap::is_disposed()
+		{
+			return disposed;
+		}
+
 		void Bitmap::dispose()
 		{
 			if (al_get_target_bitmap() == bitmap)

@@ -137,6 +137,14 @@ namespace RAGE
 			return Qtrue;
 		}
 
+		VALUE BitmapWrapper::rb_disposed(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			return bmp->is_disposed() ? Qtrue : Qfalse;
+		}
+
 		void BitmapWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -145,8 +153,8 @@ namespace RAGE
 			rb_define_const(g, "BITMAP_FLIP_V", INT2FIX(2));
 			rb_define_const(g, "BITMAP_FLIP_VH", INT2FIX(3));
 			rb_rageBitmapClass = rb_define_class_under(rage, "Bitmap", rb_cObject);
-
 			rb_define_alloc_func(rb_rageBitmapClass, BitmapWrapper::rb_bitmap_alloc);
+
 			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
 			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), 1);
 			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);
@@ -154,12 +162,12 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
 			rb_define_method(rb_rageBitmapClass, "clone", RFUNC(BitmapWrapper::rb_clone), 0);
 			rb_define_method(rb_rageBitmapClass, "dispose", RFUNC(BitmapWrapper::rb_dispose), 0);
+			rb_define_method(rb_rageBitmapClass, "disposed?", RFUNC(BitmapWrapper::rb_disposed), 0);
 			rb_define_method(rb_rageBitmapClass, "draw", RFUNC(BitmapWrapper::rb_bitmap_draw1), 2);
 			rb_define_method(rb_rageBitmapClass, "drawOpt", RFUNC(BitmapWrapper::rb_bitmap_draw2), 3);
 			rb_define_method(rb_rageBitmapClass, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region1), 6);
 			rb_define_method(rb_rageBitmapClass, "drawRegionOpt", RFUNC(BitmapWrapper::rb_bitmap_draw_region2), 7);
 			// TODO: Finish Bitmap class, add tinting, stretch and other stuff.
-			// TODO: Add RAGE::Draw module for text, primitives, color, font, stuff like that.
 		}
 
 		VALUE BitmapWrapper::get_ruby_class()

@@ -26,11 +26,50 @@
     <Filter Include="modules\input">
       <UniqueIdentifier>{3efef4bd-3334-4907-a586-e0dd5d3bf082}</UniqueIdentifier>
     </Filter>
-    <Filter Include="modules\input\headers">
-      <UniqueIdentifier>{0d692b15-2510-4f2d-893c-cadcacc55da3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="modules\audio\headers">
       <UniqueIdentifier>{9c9e85d9-fc50-4bbd-9851-09133df19306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\events">
+      <UniqueIdentifier>{5e903764-ffd4-4bd1-bc38-25be4bda74e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\events\headers">
+      <UniqueIdentifier>{6df13a55-db0e-4e18-83b4-b03736fbaec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\filesystem">
+      <UniqueIdentifier>{e8f305b7-6656-458d-9139-bde10efdfd97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\filesystem\headers">
+      <UniqueIdentifier>{c4c4a9b3-8c10-4035-bc7d-13264fc52885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics">
+      <UniqueIdentifier>{72ee5b92-6a44-4cc9-a41d-499b8b89bcfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics\headers">
+      <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\audio\wrappers">
+      <UniqueIdentifier>{60d45574-0fbf-4c1d-a4a4-fb4271c9b209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\audio\wrappers\headers">
+      <UniqueIdentifier>{fc8433ac-91b4-40c4-ad35-94d423146885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\events\wrappers">
+      <UniqueIdentifier>{98d8c794-c969-4019-b18c-ffb94ccf035f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\events\wrappers\headers">
+      <UniqueIdentifier>{cdc31dc7-2f6f-4a1b-82cf-bd273fe6dd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\input\wrappers">
+      <UniqueIdentifier>{9b68abfe-2986-4b8d-87ff-2810daa6df86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\input\wrappers\headers">
+      <UniqueIdentifier>{0d692b15-2510-4f2d-893c-cadcacc55da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\graphics\wrappers">
+      <UniqueIdentifier>{4e374f3b-a93c-49fd-a17f-5fb6d0e71364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\graphics\wrappers\headers">
+      <UniqueIdentifier>{892dfe94-4bcd-4ee3-b868-9deac3891b92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,73 +79,133 @@
     <ClCompile Include="RubyInterpreter.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>modules\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics_Wrappers.cpp">
-      <Filter>modules\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap_Wrapper.cpp">
-      <Filter>modules\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap.cpp">
       <Filter>modules\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Events_Wrapper.cpp">
-      <Filter>modules\input</Filter>
+    <ClCompile Include="TimerEvent.cpp">
+      <Filter>modules\events</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>modules\audio</Filter>
+    <ClCompile Include="KeyboardEvent.cpp">
+      <Filter>modules\events</Filter>
     </ClCompile>
     <ClCompile Include="Audio_Wrapper.cpp">
-      <Filter>modules\audio</Filter>
+      <Filter>modules\audio\wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="Input_Wrappers.cpp">
-      <Filter>modules\input</Filter>
+    <ClCompile Include="Event_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="TimerEvent.cpp">
-      <Filter>modules\input</Filter>
+    <ClCompile Include="Events_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardEvent_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
     </ClCompile>
     <ClCompile Include="TimerEvent_Wrapper.cpp">
-      <Filter>modules\input</Filter>
+      <Filter>modules\events\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Input_Wrappers.cpp">
+      <Filter>modules\input\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_Wrappers.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseEvent.cpp">
+      <Filter>modules\events</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseEvent_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenEvent.cpp">
+      <Filter>modules\events</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenEvent_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>modules\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Sfx.cpp">
+      <Filter>modules\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Music_Wrapper.cpp">
+      <Filter>modules\audio\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Sfx_Wrapper.cpp">
+      <Filter>modules\audio\wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics.h">
-      <Filter>modules\graphics\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics_Wrappers.h">
-      <Filter>modules\graphics\headers</Filter>
-    </ClInclude>
     <ClInclude Include="RubyInterpreter.h">
       <Filter>app\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap_Wrapper.h">
-      <Filter>modules\graphics\headers</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap.h">
       <Filter>modules\graphics\headers</Filter>
     </ClInclude>
-    <ClInclude Include="Events_Wrapper.h">
-      <Filter>modules\input\headers</Filter>
-    </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>modules\audio\headers</Filter>
     </ClInclude>
-    <ClInclude Include="Audio_Wrapper.h">
-      <Filter>modules\audio\headers</Filter>
-    </ClInclude>
     <ClInclude Include="Input_Wrappers.h">
-      <Filter>modules\input\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerEvent.h">
-      <Filter>modules\input\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerEvent_Wrapper.h">
-      <Filter>modules\input\headers</Filter>
+      <Filter>modules\input\wrappers\headers</Filter>
     </ClInclude>
     <ClInclude Include="defines.h">
       <Filter>app\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio_Wrapper.h">
+      <Filter>modules\audio\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Events_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Event_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerEvent_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Wrappers.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEvent_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvent_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenEvent_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>modules\audio\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sfx.h">
+      <Filter>modules\audio\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Music_Wrapper.h">
+      <Filter>modules\audio\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sfx_Wrapper.h">
+      <Filter>modules\audio\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

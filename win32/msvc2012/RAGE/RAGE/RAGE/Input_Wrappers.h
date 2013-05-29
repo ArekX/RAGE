@@ -6,6 +6,8 @@
 #define RAGE_MOUSE_BUTTON_2 2
 #define RAGE_MOUSE_BUTTON_3 4
 
+#define RDEF_KEY(name, keycode) rb_define_const(input, name, INT2FIX(keycode));
+
 namespace RAGE
 {
 	namespace Input
