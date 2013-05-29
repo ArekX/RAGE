@@ -40,51 +40,56 @@ begin
 c = XPChar.new("chao.png")
 facing = "down"
 
-RAGE.about()
-
 bit = RAGE::Bitmap.new
 bit.load "test.bmp"
 
 png = RAGE::Bitmap.new
 png.load "pngtest.png"
 
-
-
 x,y = 0, 0
 speed = 1
 i = 0
 
+if $DEBUGS
+  puts "DEBUG VERSION!!!"
+end
+
+aud = RAGE::Sfx.new
+aud.load "bgm.ogg"
+aud.play
 
 	
 RAGE::Graphics.setBackgroundColor(120, 120, 14)
 
-puts "Left: " + RAGE::Input::KEY_LEFT.to_s
+ev = RAGE::KeyEvent.new
+me = RAGE::MouseEvent.new
 
-RAGE::Events.register RAGE::Events::KEY_UP, Proc.new {
-   c.reset
+#  unsigned int buttons, int x, int y, int wheel)
+me.register 8, Proc.new{|buttons, x, y, wheel|
+   puts "X: #{x}, Y: #{y}"
 }
 
-tmr = RAGE::Timer.new(1)
-
-tmr.registerEvent Proc.new {
-  puts "Callback every 1 second."
+ev.register 1, Proc.new{|key|
+  puts "Key: #{key}"
 }
 
-RAGE::Events.registerTimer tmr
-tmr.start
+screen = RAGE::ScreenEvent.new
+screen.register RAGE::Events::SCREEN_CLOSE, Proc.new{
+  Kernel::exit(0)
+}
+
+RAGE::Events.register(screen)
+
 loop do
-    RAGE::Graphics.clear
+        RAGE::Graphics.clear
 	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
 	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 30, RAGE::Graphics::BITMAP_FLIP_H)
 	bit.drawRegionOpt(100 * i, 0, 100, 95, 30, 150, RAGE::Graphics::BITMAP_FLIP_V)
 	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::Graphics::BITMAP_FLIP_VH)
-    c.draw(x, y, facing)
-	png.draw 10, 10
+        c.draw(x, y, facing)
+	png.draw 10 , 10
 	RAGE::Input.updateKeyboard
 	RAGE::Input.updateMouse
-	
-	RAGE::Graphics.setTitle "X: #{RAGE::Input.getMouseX}, Y: #{RAGE::Input.getMouseY}"
-	RAGE::Graphics.setTitle("Click!") if RAGE::Input.isMouseDown?(RAGE::Input::MOUSE_BTN2)
 	
 	
 	if (RAGE::Input.isKeyDown?(84))
@@ -122,4 +127,5 @@ rescue Exception => e
 		puts "Backtrace:\n\t #{e.backtrace[0].to_s}\n\n"
 		gets
 	end
+
 end
