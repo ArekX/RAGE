@@ -10,8 +10,13 @@ namespace RAGE
 		class DrawWrappers
 		{
 		private:
-			static VALUE draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE color, VALUE thickness);
-			static VALUE map_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+			static VALUE draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
+			static VALUE draw_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
+			static VALUE draw_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2);
+			static VALUE draw_pixel(VALUE self, VALUE x, VALUE y);
+			static VALUE draw_pixel_c(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
+			static VALUE set_line_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+			static VALUE set_line_color_f(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
 		public:
 			static void load_wrappers();
 		};
