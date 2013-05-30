@@ -50,6 +50,27 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE DrawWrappers::draw_ellipse(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
+		{
+			float cx = (NUM2DBL(x1) + NUM2DBL(x2)) / 2; 
+			float cy = (NUM2DBL(y1) + NUM2DBL(y2)) / 2;
+			float rx = NUM2DBL(x1) + NUM2DBL(x2) - cx;
+			float ry = NUM2DBL(y1) + NUM2DBL(y2) - cy;
+			al_draw_ellipse(cx, cy, rx, ry, color, NUM2DBL(thickness));
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::draw_ellipse2(VALUE self, VALUE cx, VALUE cy, VALUE rx, VALUE ry, VALUE thickness)
+		{
+			al_draw_ellipse(NUM2DBL(cx), NUM2DBL(cy), NUM2DBL(rx), NUM2DBL(ry), color, NUM2DBL(thickness));
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::draw_filled_ellipse(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2)
+		{
+		}
+
 		void DrawWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -58,6 +79,8 @@ namespace RAGE
 			rb_define_module_function(draw, "line", RFUNC(DrawWrappers::draw_line), 5);
 			rb_define_module_function(draw, "rectangle", RFUNC(DrawWrappers::draw_rectangle), 5);
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::draw_filled_rectangle), 5);
+			rb_define_module_function(draw, "ellipse", RFUNC(DrawWrappers::draw_ellipse), 5);
+			rb_define_module_function(draw, "ellipseM", RFUNC(DrawWrappers::draw_ellipse2), 5);
 			rb_define_module_function(draw, "pixel", RFUNC(DrawWrappers::draw_pixel), 2);
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::draw_pixel_c), 6);
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::set_line_color), 4);

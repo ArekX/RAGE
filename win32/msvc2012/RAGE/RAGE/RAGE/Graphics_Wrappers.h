@@ -42,6 +42,7 @@ namespace RAGE
 			static VALUE rb_set_target(VALUE self, VALUE bitmap);
 			static VALUE rb_get_target(VALUE self);
 			static VALUE rb_set_display_size(VALUE self, VALUE width, VALUE height);
+			static VALUE rb_get_time(VALUE self);
 		public:
 			static void load_wrappers();
 			static void initialize_graphics(GraphicsConfig cfg);

@@ -213,6 +213,11 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE GraphicsWrappers::rb_get_time(VALUE self)
+		{
+			return DBL2NUM(al_get_time());
+		}
+
 		void GraphicsWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -241,6 +246,7 @@ namespace RAGE
 			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 3);
 			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
+			rb_define_module_function(g, "getTime", RFUNC(GraphicsWrappers::rb_get_time), 0);
 			rb_define_module_function(g, "setClippingRect", RFUNC(GraphicsWrappers::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(g, "resetClippingRect", RFUNC(GraphicsWrappers::rb_graphics_reset_clipping_rect), 0);
 		}
