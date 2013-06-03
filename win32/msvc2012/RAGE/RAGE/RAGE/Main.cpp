@@ -31,9 +31,8 @@ int main(int argc, char** argv)
 	// TODO: RAGE::Network module, 
 	//       RAGE::FS (PhysicsFS) module, 
     //	     RAGE::Physics (Box2D) module,
-	//       RAGE::Draw module,
-	//       RAGE::Font class,
-	//		 RAGE::IniFile class
+	//       RAGE::Draw module, needs some work done but almost ready for first beta.
+	//       RAGE::Font class, you create it and then set it to RAGE::Draw class - easier multiple font settings.
 
 	// FIXME: Events_Wrapper - RAGE::JoyEvent classes all extending RAGE::Event class
 	//        RAGE::Graphics - (2) add color conversion routines, display driver informations, blending config, more screen functions.

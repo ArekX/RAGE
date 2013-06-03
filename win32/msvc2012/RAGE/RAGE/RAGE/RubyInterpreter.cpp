@@ -60,6 +60,7 @@ namespace RAGE
 				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
 				RAGE::Events::MouseEventWrapper::load_ruby_class();
 				RAGE::Events::ScreenEventWrapper::load_ruby_class();
+				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
 
 				// TODO: Finish inserting wrappers here
 

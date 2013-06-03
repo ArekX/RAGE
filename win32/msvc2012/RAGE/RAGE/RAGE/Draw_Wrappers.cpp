@@ -7,6 +7,8 @@ namespace RAGE
 	{
 
 		ALLEGRO_COLOR color;
+		ALLEGRO_FONT* font;
+		ALLEGRO_USTR *str;
 
 		VALUE DrawWrappers::draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
 		{
@@ -57,7 +59,7 @@ namespace RAGE
 			float rx = NUM2DBL(x1) + NUM2DBL(x2) - cx;
 			float ry = NUM2DBL(y1) + NUM2DBL(y2) - cy;
 			al_draw_ellipse(cx, cy, rx, ry, color, NUM2DBL(thickness));
-
+			
 			return Qnil;
 		}
 
@@ -71,11 +73,34 @@ namespace RAGE
 		{
 		}
 
+		VALUE DrawWrappers::draw_text(VALUE self, VALUE x, VALUE y, VALUE text)
+		{
+			al_ustr_assign_cstr(str, StringValueCStr(text));
+			al_draw_ustr(font, color, NUM2DBL(x), NUM2DBL(y), 0, str);
+			return Qnil;
+		}
+
+
+		VALUE DrawWrappers::set_font(VALUE self, VALUE name, VALUE size)
+		{
+			VALUE fname = rb_find_file(name);
+			if (TYPE(fname) != T_STRING)
+			{
+				
+				rb_raise(rb_eArgError, "Font '%s' not found.", StringValueCStr(name));
+				return Qfalse;
+			}
+			
+			font = al_load_font(StringValueCStr(fname), FIX2UINT(size), 0);
+
+			return Qnil;
+		}
+
 		void DrawWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE draw = rb_define_module_under(rage, "Draw");
-
+			
 			rb_define_module_function(draw, "line", RFUNC(DrawWrappers::draw_line), 5);
 			rb_define_module_function(draw, "rectangle", RFUNC(DrawWrappers::draw_rectangle), 5);
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::draw_filled_rectangle), 5);
@@ -85,6 +110,10 @@ namespace RAGE
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::draw_pixel_c), 6);
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::set_line_color), 4);
 			rb_define_module_function(draw, "setColorF", RFUNC(DrawWrappers::set_line_color_f), 4);
+			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::set_font), 2);
+			rb_define_module_function(draw, "text", RFUNC(DrawWrappers::draw_text), 3);
+
+			str = al_ustr_new("");
 		}
 	}
 }

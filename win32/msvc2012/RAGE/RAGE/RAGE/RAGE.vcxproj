@@ -97,6 +97,8 @@
     <ClCompile Include="Events_Wrapper.cpp" />
     <ClCompile Include="Event_Wrapper.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
+    <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="IniFile_Wrapper.cpp" />
     <ClCompile Include="Input_Wrappers.cpp" />
     <ClCompile Include="KeyboardEvent.cpp" />
     <ClCompile Include="KeyboardEvent_Wrapper.cpp" />
@@ -124,6 +126,8 @@
     <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Event_Wrapper.h" />
     <ClInclude Include="Graphics_Wrappers.h" />
+    <ClInclude Include="IniFile.h" />
+    <ClInclude Include="IniFile_Wrapper.h" />
     <ClInclude Include="Input_Wrappers.h" />
     <ClInclude Include="KeyboardEvent.h" />
     <ClInclude Include="KeyboardEvent_Wrapper.h" />
@@ -131,6 +135,7 @@
     <ClInclude Include="MouseEvent_Wrapper.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Music_Wrapper.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RubyInterpreter.h" />
     <ClInclude Include="ScreenEvent.h" />
     <ClInclude Include="ScreenEvent_Wrapper.h" />
@@ -144,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RAGE.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="rage.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

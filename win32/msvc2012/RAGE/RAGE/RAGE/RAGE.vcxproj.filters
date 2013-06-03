@@ -71,6 +71,12 @@
     <Filter Include="modules\graphics\wrappers\headers">
       <UniqueIdentifier>{892dfe94-4bcd-4ee3-b868-9deac3891b92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\filesystem\wrappers">
+      <UniqueIdentifier>{b5d1ffbd-4352-4dfe-a5f3-9018f5f13c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\filesystem\wrappers\headers">
+      <UniqueIdentifier>{6abb159f-af50-4283-86f4-9b0a2f207734}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -138,6 +144,12 @@
     </ClCompile>
     <ClCompile Include="Draw_Wrappers.cpp">
       <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="IniFile.cpp">
+      <Filter>modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IniFile_Wrapper.cpp">
+      <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +225,13 @@
     <ClInclude Include="Draw_Wrappers.h">
       <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
+    <ClInclude Include="IniFile.h">
+      <Filter>modules\filesystem\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="IniFile_Wrapper.h">
+      <Filter>modules\filesystem\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc">
@@ -221,5 +240,8 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RAGE.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="rage.ico" />
   </ItemGroup>
 </Project>

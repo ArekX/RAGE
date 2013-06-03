@@ -28,6 +28,7 @@
 #include "Audio_Wrapper.h"
 #include "Music_Wrapper.h"
 #include "Sfx_Wrapper.h"
+#include "IniFile_Wrapper.h"
 
 #include "defines.h"
 

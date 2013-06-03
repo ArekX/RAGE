@@ -77,7 +77,7 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_repeat(VALUE self, VALUE button)
 		{
-			if (ms.buttons == FIX2INT(button))
+			if (al_mouse_button_down(&ms, FIX2INT(button)))
 				return Qtrue;
 			else
 				return Qfalse;
@@ -85,7 +85,8 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_down(VALUE self, VALUE button)
 		{
-			if ((ms.buttons == FIX2INT(button)) && !(ms_down.buttons == FIX2INT(button)))
+			
+			if (al_mouse_button_down(&ms, FIX2INT(button)) && !al_mouse_button_down(&ms_down, FIX2INT(button)))
 			{
 				ms_down = ms;
 				return Qtrue;
@@ -99,14 +100,14 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_up(VALUE self, VALUE button)
 		{
-			if (!(ms.buttons == FIX2INT(button)) && (ms_down.buttons == FIX2INT(button)))
+			if (!al_mouse_button_down(&ms, FIX2INT(button)) && al_mouse_button_down(&ms_up, FIX2INT(button)))
 			{
-				ms_down = ms;
+				ms_up = ms;
 				return Qtrue;
 			}
 			else
 			{
-				ms_down = ms;
+				ms_up = ms;
 				return Qfalse;
 			}
 		}
