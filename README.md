@@ -2,7 +2,10 @@ RAGE
 ====
 
 Welcome to R.A.G.E. - Ruby Awesome Game Engine, written in C++ using Ruby language and Allegro Game Library.
-You can make all kinds of 2D games using RAGE engine. Enjoy!
+You can make all kinds of 2D games using RAGE engine.
+
+You use Ruby, an Interpreter language to handle all game logic, most of the heavy lifting is done by the engine itself
+so you can concentrate more on making awesome games. Enjoy!
 
 Using Ruby Version: 2.0.0-p195
 
