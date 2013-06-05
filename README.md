@@ -1,13 +1,14 @@
 RAGE
 ====
 
-Ruby Awesome Game Engine, a 2D game engine with Ruby language support.
+Welcome to R.A.G.E. - Ruby Awesome Game Engine, written in C++ using Ruby language and Allegro Game Library.
+You can make all kinds of 2D games using RAGE engine. Enjoy!
 
 Using Ruby Version: 2.0.0-p195
 
 Using Allegro Version: 5.0.9
 
-WIP
+WIP/Beta
 ====
 
 Current: 
