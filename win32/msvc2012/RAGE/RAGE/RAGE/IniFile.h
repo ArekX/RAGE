@@ -9,9 +9,9 @@ namespace RAGE
 		class IniFile
 		{
 		private:
-			bool disposed;
 			ALLEGRO_CONFIG *ini;
 		public:
+			bool disposed;
 			IniFile(void);
 			void create_new(void);
 			void load(char *filename);

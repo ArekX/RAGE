@@ -18,6 +18,7 @@ namespace RAGE
 			static VALUE rb_get(VALUE self, VALUE section, VALUE key);
 			static VALUE rb_set(VALUE self, VALUE section, VALUE key, VALUE val);
 			static VALUE rb_dispose(VALUE self);
+			static VALUE rb_disposed(VALUE self);
 		public:
 			static void load_ruby_class();
 			static VALUE get_ruby_class();

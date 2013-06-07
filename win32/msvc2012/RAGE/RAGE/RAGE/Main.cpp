@@ -33,14 +33,15 @@ int main(int argc, char** argv)
     //	     RAGE::Physics (Box2D) module,
 	//       RAGE::Draw module, needs some work done but almost ready for first beta.
 	//       RAGE::Font class, you create it and then set it to RAGE::Draw class - easier multiple font settings.
+	//       RAGE::Color class - Do it nao!
 
 	// FIXME: Events_Wrapper - RAGE::JoyEvent classes all extending RAGE::Event class
-	//        RAGE::Graphics - (2) add color conversion routines, display driver informations, blending config, more screen functions.
+	//        RAGE::Graphics - (2) add color conversion routines, display driver informations.
 	//        RAGE::Input - (3) needs finishing, joystick testing, joystick enumeration.
-	//        Go through the whole code and rb_gc_register_adress all strings created by rb_, and class symbols.
+	//
 	// NOTE: All event classes need method testing.
 
-	// LATER: RM versions?
+	// LATER: RM versions? Or adjust scripts towards RAGE?
 
 	/* Initialize and start Interpreter */
 	RAGE::Interpreter::Ruby ri(argc, argv);

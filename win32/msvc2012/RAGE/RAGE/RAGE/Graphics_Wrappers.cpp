@@ -88,56 +88,9 @@ namespace RAGE
 		{
 			int op, src, dst;
 
-			switch(FIX2INT(rop))
-			{
-				case RAGE_OP_ADD:
-					op = ALLEGRO_ADD;
-					break;
-				case RAGE_OP_SRC_MIN_DST:
-					op = ALLEGRO_SRC_MINUS_DEST;
-					break;
-				case RAGE_OP_DST_MIN_SRC:
-					op = ALLEGRO_DEST_MINUS_SRC;
-					break;
-				default:
-					op = ALLEGRO_ADD;
-			}
-
-			switch(FIX2INT(rsrc))
-			{
-				case RAGE_BLEND_ZERO:
-					src = ALLEGRO_ZERO;
-					break;
-				case RAGE_BLEND_ONE:
-					src = ALLEGRO_ONE;
-					break;
-				case RAGE_BLEND_ALPHA:
-					src = ALLEGRO_ALPHA;
-					break;
-				case RAGE_BLEND_INV_ALPHA:
-					src = ALLEGRO_INVERSE_ALPHA;
-					break;
-				default:
-					src = ALLEGRO_ONE;
-			}
-
-			switch(FIX2INT(rdst))
-			{
-				case RAGE_BLEND_ZERO:
-					dst = ALLEGRO_ZERO;
-					break;
-				case RAGE_BLEND_ONE:
-					dst = ALLEGRO_ONE;
-					break;
-				case RAGE_BLEND_ALPHA:
-					dst = ALLEGRO_ALPHA;
-					break;
-				case RAGE_BLEND_INV_ALPHA:
-					dst = ALLEGRO_INVERSE_ALPHA;
-					break;
-				default:
-					dst = ALLEGRO_INVERSE_ALPHA;
-			}
+			RAGE_SET_BLENDING_OP(rop, op, ALLEGRO_ADD);
+			RAGE_SET_BLENDING(rsrc, src, ALLEGRO_ONE);
+			RAGE_SET_BLENDING(rdst, dst, ALLEGRO_INVERSE_ALPHA);
 
 			al_set_blender(op, src, dst);
 
@@ -218,6 +171,71 @@ namespace RAGE
 			return DBL2NUM(al_get_time());
 		}
 
+		VALUE GraphicsWrappers::rb_get_pos_x(VALUE self)
+		{
+			int x;
+
+			al_get_window_position(display, &x, NULL);
+
+			return INT2FIX(x);
+		}
+
+		VALUE GraphicsWrappers::rb_get_pos_y(VALUE self)
+		{
+			int y;
+
+			al_get_window_position(display, NULL, &y);
+
+			return INT2FIX(y);
+		}
+
+		VALUE GraphicsWrappers::rb_get_screen_w(VALUE self)
+		{
+			return INT2FIX(al_get_display_width(display));
+		}
+
+		VALUE GraphicsWrappers::rb_get_screen_h(VALUE self)
+		{
+			return INT2FIX(al_get_display_height(display));
+		}
+
+		VALUE GraphicsWrappers::rb_set_icon(VALUE self, VALUE icon_bitmap)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(icon_bitmap, Bitmap, bmp);
+
+			al_set_display_icon(display, bmp->bitmap);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_inhibit_screen_saver(VALUE self, VALUE val)
+		{
+			if (TYPE(val) == T_TRUE)
+				al_inhibit_screensaver(true);
+			else if (TYPE(val) == T_FALSE)
+				al_inhibit_screensaver(false);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_blending_mode_alpha(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst, VALUE aop, VALUE asrc, VALUE adst)
+		{
+			int op, src, dst, alop, alsrc, aldst;
+
+			RAGE_SET_BLENDING_OP(rop, op, ALLEGRO_ADD);
+			RAGE_SET_BLENDING(rsrc, src, ALLEGRO_ONE);
+			RAGE_SET_BLENDING(rdst, dst, ALLEGRO_INVERSE_ALPHA);
+
+			RAGE_SET_BLENDING_OP(aop, alop, ALLEGRO_ADD);
+			RAGE_SET_BLENDING(asrc, alsrc, ALLEGRO_ONE);
+			RAGE_SET_BLENDING(adst, aldst, ALLEGRO_INVERSE_ALPHA);
+
+			al_set_separate_blender(op, src, dst, alop, alsrc, aldst);
+
+			return Qnil;
+		}
+
 		void GraphicsWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -236,11 +254,21 @@ namespace RAGE
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
 			rb_define_module_function(g, "title", RFUNC(GraphicsWrappers::rb_get_title), 0);
 			rb_define_module_function(g, "setBlendingMode", RFUNC(GraphicsWrappers::rb_set_blending_mode), 3);
+			rb_define_module_function(g, "setBlendingModeAlpha", RFUNC(GraphicsWrappers::rb_set_blending_mode_alpha), 6);
 			rb_define_module_function(g, "setVSync", RFUNC(GraphicsWrappers::rb_set_vsync), 1);
 			rb_define_module_function(g, "setFullscreen", RFUNC(GraphicsWrappers::rb_set_fullscreen), 1);
 			rb_define_module_function(g, "setCursorVisible", RFUNC(GraphicsWrappers::rb_cursor_visible), 1);
 			rb_define_module_function(g, "setWindowPosition", RFUNC(GraphicsWrappers::rb_set_window_position), 2);
 			rb_define_module_function(g, "setWindowSize", RFUNC(GraphicsWrappers::rb_set_display_size), 2);
+			rb_define_module_function(g, "setIcon", RFUNC(GraphicsWrappers::rb_set_icon), 1);
+			
+			rb_define_module_function(g, "positionX", RFUNC(GraphicsWrappers::rb_get_pos_x), 0);
+			rb_define_module_function(g, "positionY", RFUNC(GraphicsWrappers::rb_get_pos_y), 0);
+			rb_define_module_function(g, "screenWidth", RFUNC(GraphicsWrappers::rb_get_screen_w), 0);
+			rb_define_module_function(g, "screenHeight", RFUNC(GraphicsWrappers::rb_get_screen_h), 0);
+			
+			rb_define_module_function(g, "inhibitScreenSaver", RFUNC(GraphicsWrappers::rb_inhibit_screen_saver), 1);
+
 			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
 			rb_define_module_function(g, "clear", RFUNC(GraphicsWrappers::rb_graphics_clear), 0);
 			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 3);
@@ -283,8 +311,6 @@ namespace RAGE
 			al_set_window_title(display, window_title);
 			al_set_window_position(display, window_x, window_y);
 			al_flip_display();
-			// TODO: Resource manager for bitmaps. When display is destroyed they are turned into memory bitmaps. 
-			//       Need to reload them.
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 		}
 

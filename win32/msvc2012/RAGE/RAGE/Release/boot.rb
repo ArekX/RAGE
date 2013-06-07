@@ -46,18 +46,20 @@ bit.load "test.bmp"
 png = RAGE::Bitmap.new
 png.load "pngtest.png"
 
+
+RAGE::Draw.setFont "acmesa.ttf", 48
+
 x,y = 0, 0
 speed = 1
 i = 0
 
+RAGE.about
+
+
+
 if $DEBUGS
   puts "DEBUG VERSION!!!"
 end
-
-aud = RAGE::Sfx.new
-aud.load "bgm.ogg"
-aud.play
-
 	
 RAGE::Graphics.setBackgroundColor(120, 120, 14)
 
@@ -78,34 +80,65 @@ screen.register RAGE::Events::SCREEN_CLOSE, Proc.new{
   Kernel::exit(0)
 }
 
-RAGE::Events.register(screen)
+keyb = RAGE::KeyEvent.new
+keyb.register RAGE::Events::KEY_UP, Proc.new {|key|
+  Kernel::exit(0) if key == RAGE::Input::KEY_ESC
+}
 
+RAGE::Events.register(screen)
+RAGE::Events.register(keyb)
+RAGE::Graphics.title = "Miskoooo!"
+
+bit.scaleX = 2
+bit.scaleY = 2
+bit.flip = RAGE::Graphics::FLIP_VH
+
+dAngle = 1 * Math::PI / 180
+RAGE::Graphics.setCursorVisible false
+
+RAGE::Draw.setColorF 1.0, 1.0, 1.0, 1.0
+oldtime = RAGE::Graphics.getTime
 loop do
+
+	
         RAGE::Graphics.clear
 	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 30, RAGE::Graphics::BITMAP_FLIP_H)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 30, 150, RAGE::Graphics::BITMAP_FLIP_V)
-	bit.drawRegionOpt(100 * i, 0, 100, 95, 150, 150, RAGE::Graphics::BITMAP_FLIP_VH)
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 80 )
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 130 )
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 180 )
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 230 )
+	bit.drawRegion(100 * i, 0, 100, 95, 30 , 280 )
+	bit.drawRegion(100 * i, 0, 100, 95, 150 , 280 )
         c.draw(x, y, facing)
-	png.draw 10 , 10
+	RAGE::Draw.text 50, 50, "Misko misko test!"
+	png.draw 120 , 110
+	RAGE::Draw.line(10, 10, 100, 100, 5)
+	RAGE::Draw.ellipse(50, 50, RAGE::Input.getMouseX, RAGE::Input.getMouseY, 4)
 	RAGE::Input.updateKeyboard
 	RAGE::Input.updateMouse
 	
+	puts "Key up check works!" if RAGE::Input.keyUp?(RAGE::Input::KEY_A)
 	
-	if (RAGE::Input.isKeyDown?(84))
+
+	puts "Mouse Repeat works" if RAGE::Input.mouseRepeat?(RAGE::Input::MOUSE_BTN1)
+	puts "Mouse Down works" if RAGE::Input.mouseDown?(RAGE::Input::MOUSE_BTN1)
+	puts "Mouse Up works" if RAGE::Input.mouseUp?(RAGE::Input::MOUSE_BTN1)
+
+	
+	if (RAGE::Input.keyRepeat?(84))
 		  y -= speed
 		  facing = "up"
 		  c.update
-		elsif (RAGE::Input.isKeyDown?(85))
+		elsif (RAGE::Input.keyRepeat?(85))
 		  y += speed
 		  facing = "down"
 		  c.update
 		end
-		if (RAGE::Input.isKeyDown?(82))
+		if (RAGE::Input.keyRepeat?(82))
 		  x -= speed
 		  facing = "left"
 		  c.update
-		elsif (RAGE::Input.isKeyDown?(83))
+		elsif (RAGE::Input.keyRepeat?(83))
 		  x += speed
 		  facing = "right"
 		  c.update

@@ -24,7 +24,17 @@ namespace RAGE
 			Bitmap(void);
 			~Bitmap(void);
 			void initialize(int width, int height);
+			void initialize_sub(ALLEGRO_BITMAP* parent, int x, int y, int width, int height);
 			void initialize(char* filename);
+
+			void lock();
+			void lock_region(int x, int y, int w, int h);
+			void unlock();
+
+			void set_pixel(int x, int y, ALLEGRO_COLOR color);
+			void set_blended_pixel(int x, int y, ALLEGRO_COLOR color);
+			ALLEGRO_COLOR get_pixel(int x, int y);
+			
 			int get_width();
 			int get_height();
 			void draw(float x, float y);
@@ -46,7 +56,18 @@ namespace RAGE
 			float get_angle();
 
 			void set_tint(ALLEGRO_COLOR cl);
-			ALLEGRO_COLOR get_tint();
+
+			void set_tint_alpha(float alpha);
+			float get_tint_alpha();
+
+			void set_tint_red(float red);
+			float get_tint_red();
+
+			void set_tint_green(float green);
+			float get_tint_green();
+
+			void set_tint_blue(float blue);
+			float get_tint_blue();
 
 			bool save(char* filename);
 			void assign(Bitmap* src);

@@ -12,6 +12,7 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_create(VALUE self, VALUE width, VALUE height);
+			static VALUE rb_create_sub(VALUE self, VALUE parent, VALUE x, VALUE y, VALUE width, VALUE height);
 			static VALUE rb_load_f(VALUE self, VALUE filename);
 			static VALUE rb_save_f(VALUE self, VALUE filename);
 			static VALUE rb_get_width(VALUE self);
@@ -37,7 +38,26 @@ namespace RAGE
 			static VALUE rb_get_angle(VALUE self);
 			static VALUE rb_get_flags(VALUE self);
 
-			/* Screen drawing algos */
+			static VALUE rb_get_alpha(VALUE self);
+			static VALUE rb_get_red(VALUE self);
+			static VALUE rb_get_green(VALUE self);
+			static VALUE rb_get_blue(VALUE self);
+
+			static VALUE rb_set_alpha(VALUE self, VALUE val);
+			static VALUE rb_set_red(VALUE self, VALUE val);
+			static VALUE rb_set_green(VALUE self, VALUE val);
+			static VALUE rb_set_blue(VALUE self, VALUE val);
+
+			static VALUE rb_recreate(VALUE self);
+
+			static VALUE rb_bitmap_lock(VALUE self);
+			static VALUE rb_bitmap_lock_region(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
+			static VALUE rb_bitmap_unlock(VALUE self);
+
+			static VALUE rb_bitmap_get_pixel(VALUE self, VALUE color, VALUE x, VALUE y);
+			static VALUE rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b);
+			static VALUE rb_bitmap_set_blended_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
+
 			static VALUE rb_bitmap_draw(VALUE self, VALUE x, VALUE y);
 			static VALUE rb_bitmap_draw_region(VALUE self, VALUE sx, VALUE sy, VALUE sw, VALUE sh, VALUE dx, VALUE dy);
 

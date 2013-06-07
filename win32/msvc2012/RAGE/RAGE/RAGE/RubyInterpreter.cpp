@@ -1,6 +1,6 @@
 #include "RubyInterpreter.h"
 
-#define RAGE_ENGINE_VERSION "0.0.1-alpha"
+
 
 
 namespace RAGE

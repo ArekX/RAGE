@@ -30,6 +30,7 @@ namespace RAGE
 			static VALUE rb_set_title(VALUE self, VALUE title);
 			static VALUE rb_get_title(VALUE self);
 			static VALUE rb_set_blending_mode(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst);
+			static VALUE rb_set_blending_mode_alpha(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst, VALUE aop, VALUE asrc, VALUE adst);
 			static VALUE rb_set_vsync(VALUE self, VALUE val);
 			static VALUE rb_set_fullscreen(VALUE self, VALUE val);
 			static VALUE rb_set_window_position(VALUE self, VALUE x, VALUE y);
@@ -43,6 +44,14 @@ namespace RAGE
 			static VALUE rb_get_target(VALUE self);
 			static VALUE rb_set_display_size(VALUE self, VALUE width, VALUE height);
 			static VALUE rb_get_time(VALUE self);
+
+			static VALUE rb_get_pos_x(VALUE self);
+			static VALUE rb_get_pos_y(VALUE self);
+			static VALUE rb_get_screen_w(VALUE self);
+			static VALUE rb_get_screen_h(VALUE self);
+
+			static VALUE rb_set_icon(VALUE self, VALUE icon_bitmap);
+			static VALUE rb_inhibit_screen_saver(VALUE self, VALUE val);
 		public:
 			static void load_wrappers();
 			static void initialize_graphics(GraphicsConfig cfg);

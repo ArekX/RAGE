@@ -39,6 +39,16 @@ namespace RAGE
 			bitmap = al_create_bitmap(width, height);
 		}
 
+		void Bitmap::initialize_sub(ALLEGRO_BITMAP* parent, int x, int y, int width, int height)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (bitmap != NULL) 
+				al_destroy_bitmap(bitmap);
+
+			bitmap = al_create_sub_bitmap(parent, x, y, width, height);
+		}
+
 		void Bitmap::initialize(char* filename)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -49,6 +59,48 @@ namespace RAGE
 			this->filename = filename;
 			
 			bitmap = al_load_bitmap(filename);
+		}
+
+		void Bitmap::lock()
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			al_lock_bitmap(bitmap, al_get_bitmap_format(bitmap), ALLEGRO_LOCK_READWRITE);
+		}
+
+		void Bitmap::lock_region(int x, int y, int w, int h)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			al_lock_bitmap_region(bitmap, x, y, w, h, al_get_bitmap_format(bitmap), ALLEGRO_LOCK_READWRITE);
+		}
+
+		void Bitmap::unlock()
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			al_unlock_bitmap(bitmap);
+		}
+
+		void Bitmap::set_pixel(int x, int y, ALLEGRO_COLOR color)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			al_put_pixel(x, y, color);
+		}
+
+		void Bitmap::set_blended_pixel(int x, int y, ALLEGRO_COLOR color)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			al_put_blended_pixel(x, y, color);
+		}
+
+		ALLEGRO_COLOR Bitmap::get_pixel(int x, int y)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, al_map_rgb(0, 0, 0));
+
+			al_get_pixel(bitmap, x, y);
 		}
 
 		int Bitmap::get_width()
@@ -167,16 +219,68 @@ namespace RAGE
 		void Bitmap::set_tint(ALLEGRO_COLOR cl)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
-
 			tint = cl;
 		}
 
-		ALLEGRO_COLOR Bitmap::get_tint()
+		void Bitmap::set_tint_alpha(float alpha)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, tint);
+			RAGE_CHECK_DISPOSED(disposed);
 
-			return tint;
+			tint.a = alpha;
 		}
+
+		float Bitmap::get_tint_alpha()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return tint.a;
+		}
+
+
+		void Bitmap::set_tint_red(float red)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			tint.r = red;
+		}
+
+		float Bitmap::get_tint_red()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return tint.r;
+		}
+
+
+		void Bitmap::set_tint_green(float green)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			tint.g = green;
+		}
+
+		float Bitmap::get_tint_green()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return tint.g;
+		}
+
+
+		void Bitmap::set_tint_blue(float blue)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			tint.b = blue;
+		}
+
+		float Bitmap::get_tint_blue()
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return tint.b;
+		}
+
 
 		int Bitmap::get_flags()
 		{
@@ -213,9 +317,16 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+
+
 			if (al_get_target_bitmap() == bitmap)
 			{
 				rb_raise(rb_eException, "Cannot dispose current drawing target bitmap.");
+				return;
+			}
+			else if (al_is_bitmap_locked(bitmap))
+			{
+				rb_raise(rb_eException, "Cannot dispose locked bitmap. Unlock this bitmap first.");
 				return;
 			}
 
@@ -229,25 +340,16 @@ namespace RAGE
 
 		void Bitmap::recreate_video_bitmap()
 		{
-			if (bitmap != NULL)
+			if (bitmap != NULL && !(al_get_target_bitmap() == bitmap))
 			{
-				int oldflags = al_get_new_bitmap_flags();
-				int oldformat = al_get_new_bitmap_format();
-			
+				
 				al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 				al_set_new_bitmap_format(al_get_bitmap_format(bitmap));
-			
-				ALLEGRO_BITMAP *new_video = al_create_bitmap(al_get_bitmap_width(bitmap), al_get_bitmap_height(bitmap));
-				ALLEGRO_BITMAP* oldtarget = al_get_target_bitmap();
-				al_set_target_bitmap(new_video);
-				al_draw_bitmap(bitmap, 0, 0, 0);
-				al_destroy_bitmap(bitmap);
 
-				al_set_target_bitmap(oldtarget);
-				al_set_new_bitmap_flags(oldflags);
-				al_set_new_bitmap_format(oldformat);
-			
-				bitmap = new_video;
+				ALLEGRO_BITMAP *new_bitmap = al_clone_bitmap(bitmap);
+
+				al_destroy_bitmap(bitmap);
+				bitmap = new_bitmap;
 			}
 		}
 	}

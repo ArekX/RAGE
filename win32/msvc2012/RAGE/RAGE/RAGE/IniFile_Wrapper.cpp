@@ -48,6 +48,8 @@ namespace RAGE
 			IniFile *ini;
 			Data_Get_Struct(self, IniFile, ini);
 			ini->save(StringValueCStr(filename));
+
+			return Qnil;
 		}
 
 		VALUE IniFileWrapper::rb_get(VALUE self, VALUE section, VALUE key)
@@ -70,6 +72,16 @@ namespace RAGE
 			IniFile *ini;
 			Data_Get_Struct(self, IniFile, ini);
 			ini->dispose();
+
+			return Qnil;
+		}
+
+		VALUE IniFileWrapper::rb_disposed(VALUE self)
+		{
+			IniFile *ini;
+			Data_Get_Struct(self, IniFile, ini);
+			
+			return (ini->disposed) ? Qtrue : Qfalse;
 		}
 
 		void IniFileWrapper::load_ruby_class()
@@ -85,6 +97,7 @@ namespace RAGE
 			rb_define_method(rb_rageIniFileClass, "get", RFUNC(IniFileWrapper::rb_get), 2);
 			rb_define_method(rb_rageIniFileClass, "set", RFUNC(IniFileWrapper::rb_set), 3);
 			rb_define_method(rb_rageIniFileClass, "dispose", RFUNC(IniFileWrapper::rb_dispose), 0);
+			rb_define_method(rb_rageIniFileClass, "disposed?", RFUNC(IniFileWrapper::rb_disposed), 0);
 		}
 
 		VALUE IniFileWrapper::get_ruby_class()

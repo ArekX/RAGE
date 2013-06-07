@@ -30,6 +30,7 @@ namespace RAGE
 			}
 			else
 			{
+				ks_down = ks;
 				return Qfalse;
 			}
 		}
@@ -137,15 +138,15 @@ namespace RAGE
 			rb_define_module_function(input, "keyDown?", RFUNC(InputWrappers::rb_key_is_down), 1);
 			rb_define_module_function(input, "keyUp?", RFUNC(InputWrappers::rb_key_is_up), 1);
 			rb_define_module_function(input, "keyRepeat?", RFUNC(InputWrappers::rb_key_is_repeat), 1);
-			rb_define_module_function(input, "updateJoystick", RFUNC(InputWrappers::rb_joystick_update), 1);
-			rb_define_module_function(input, "getMaxJoysticks", RFUNC(InputWrappers::rb_joystick_max), 0);
+			//rb_define_module_function(input, "updateJoystick", RFUNC(InputWrappers::rb_joystick_update), 1);
+			//rb_define_module_function(input, "getMaxJoysticks", RFUNC(InputWrappers::rb_joystick_max), 0);
 			rb_define_module_function(input, "mouseDown?", RFUNC(InputWrappers::rb_mouse_down), 1);
 			rb_define_module_function(input, "mouseUp?", RFUNC(InputWrappers::rb_mouse_up), 1);
 			rb_define_module_function(input, "mouseRepeat?", RFUNC(InputWrappers::rb_mouse_repeat), 1);
 			rb_define_module_function(input, "getMouseX", RFUNC(InputWrappers::rb_mouse_x), 0);
 			rb_define_module_function(input, "getMouseY", RFUNC(InputWrappers::rb_mouse_y), 0);
-
-			// TODO: Finish joystick (test it), finish keyboard constants, other stuff...
+			
+			// TODO: Finish joystick (test it), other stuff...
 		}
 	}
 }

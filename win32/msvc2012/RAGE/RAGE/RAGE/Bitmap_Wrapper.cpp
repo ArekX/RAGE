@@ -179,7 +179,7 @@ namespace RAGE
 			
 			Data_Get_Struct(self, Bitmap, bmp);
 
-			bmp->set_tint(al_map_rgba(FIX2UINT(r), FIX2UINT(g), FIX2UINT(b), FIX2UINT(a)));
+			bmp->set_tint(al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)));
 
 			return Qnil;
 		}
@@ -245,10 +245,171 @@ namespace RAGE
 			return bmp->is_disposed() ? Qtrue : Qfalse;
 		}
 
+		VALUE BitmapWrapper::rb_get_alpha(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			return DBL2NUM(bmp->get_tint_alpha());
+		}
+
+		VALUE BitmapWrapper::rb_get_red(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			return DBL2NUM(bmp->get_tint_red());
+		}
+
+		VALUE BitmapWrapper::rb_get_green(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			return DBL2NUM(bmp->get_tint_green());
+		}
+
+		VALUE BitmapWrapper::rb_get_blue(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			return DBL2NUM(bmp->get_tint_blue());
+		}
+
+		VALUE BitmapWrapper::rb_set_alpha(VALUE self, VALUE val)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_tint_alpha(NUM2DBL(val));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_set_red(VALUE self, VALUE val)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_tint_red(NUM2DBL(val));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_set_green(VALUE self, VALUE val)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_tint_green(NUM2DBL(val));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_set_blue(VALUE self, VALUE val)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_tint_blue(NUM2DBL(val));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_recreate(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->recreate_video_bitmap();
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_create_sub(VALUE self, VALUE parent, VALUE x, VALUE y, VALUE width, VALUE height)
+		{
+			Bitmap *bmp, *parent_bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			if (rb_class_of(parent) != rb_rageBitmapClass)
+			{
+				rb_raise(rb_eArgError, "Parent argument must be an instance of RAGE::Bitmap.");
+				return Qnil;
+			}
+
+			Data_Get_Struct(parent, Bitmap, parent_bmp);
+
+			bmp->initialize_sub(parent_bmp->bitmap, FIX2INT(x), FIX2INT(y), FIX2INT(width), FIX2INT(height));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_lock(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->lock();
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_lock_region(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->lock_region(FIX2INT(x), FIX2INT(y), FIX2INT(w), FIX2INT(h));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_unlock(VALUE self)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->unlock();
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_get_pixel(VALUE self, VALUE color, VALUE x, VALUE y)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			// FIXME: Gets data struct from RAGE::Color in color value and puts new pixel info in it.
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_pixel(FIX2INT(x), FIX2INT(y), al_map_rgb_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b)));
+
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_set_blended_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a)
+		{
+			Bitmap *bmp;
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			bmp->set_blended_pixel(FIX2INT(x), FIX2INT(y), al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)));
+
+			return Qnil;
+		}
+
 		void BitmapWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
+
 			rb_define_const(g, "FLIP_H", INT2FIX(1));
 			rb_define_const(g, "FLIP_V", INT2FIX(2));
 			rb_define_const(g, "FLIP_VH", INT2FIX(3));
@@ -258,6 +419,8 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
 			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), 1);
 			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);
+			rb_define_method(rb_rageBitmapClass, "createSub", RFUNC(BitmapWrapper::rb_create_sub), 5);
+			rb_define_method(rb_rageBitmapClass, "recreate", RFUNC(BitmapWrapper::rb_recreate), 0);
 			rb_define_method(rb_rageBitmapClass, "width", RFUNC(BitmapWrapper::rb_get_width), 0);
 			rb_define_method(rb_rageBitmapClass, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
 			rb_define_method(rb_rageBitmapClass, "centerX=", RFUNC(BitmapWrapper::rb_set_center_x), 1);
@@ -273,6 +436,22 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "angle", RFUNC(BitmapWrapper::rb_get_angle), 0);
 			rb_define_method(rb_rageBitmapClass, "flip", RFUNC(BitmapWrapper::rb_get_flags), 0);
 			rb_define_method(rb_rageBitmapClass, "setTint", RFUNC(BitmapWrapper::rb_set_tint), 4);
+			rb_define_method(rb_rageBitmapClass, "alpha=", RFUNC(BitmapWrapper::rb_set_alpha), 1);
+			rb_define_method(rb_rageBitmapClass, "red=", RFUNC(BitmapWrapper::rb_set_red), 1);
+			rb_define_method(rb_rageBitmapClass, "green=", RFUNC(BitmapWrapper::rb_set_green), 1);
+			rb_define_method(rb_rageBitmapClass, "blue=", RFUNC(BitmapWrapper::rb_set_blue), 1);
+			rb_define_method(rb_rageBitmapClass, "alpha", RFUNC(BitmapWrapper::rb_get_alpha), 0);
+			rb_define_method(rb_rageBitmapClass, "red", RFUNC(BitmapWrapper::rb_get_red), 0);
+			rb_define_method(rb_rageBitmapClass, "green", RFUNC(BitmapWrapper::rb_get_green), 0);
+			rb_define_method(rb_rageBitmapClass, "blue", RFUNC(BitmapWrapper::rb_get_blue), 0);
+
+			rb_define_method(rb_rageBitmapClass, "lock", RFUNC(BitmapWrapper::rb_bitmap_lock), 0);
+			rb_define_method(rb_rageBitmapClass, "lockRegion", RFUNC(BitmapWrapper::rb_bitmap_lock_region), 4);
+			rb_define_method(rb_rageBitmapClass, "unlock", RFUNC(BitmapWrapper::rb_bitmap_unlock), 0);
+			rb_define_method(rb_rageBitmapClass, "setPixel", RFUNC(BitmapWrapper::rb_bitmap_set_pixel), 5);
+			rb_define_method(rb_rageBitmapClass, "blendPixel", RFUNC(BitmapWrapper::rb_bitmap_set_blended_pixel), 6);
+			rb_define_method(rb_rageBitmapClass, "getPixel", RFUNC(BitmapWrapper::rb_bitmap_get_pixel), 3);
+
 			rb_define_method(rb_rageBitmapClass, "clone", RFUNC(BitmapWrapper::rb_clone), 0);
 			rb_define_method(rb_rageBitmapClass, "dispose", RFUNC(BitmapWrapper::rb_dispose), 0);
 			rb_define_method(rb_rageBitmapClass, "disposed?", RFUNC(BitmapWrapper::rb_disposed), 0);
