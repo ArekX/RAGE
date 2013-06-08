@@ -1,5 +1,5 @@
 #pragma once
-#define ALLEGRO_STATICLINK
+#include "defines.h"
 
 #include <iostream>
 #include <vector>
@@ -29,9 +29,6 @@
 #include "Music_Wrapper.h"
 #include "Sfx_Wrapper.h"
 #include "IniFile_Wrapper.h"
-
-#include "defines.h"
-
 
 namespace RAGE
 {

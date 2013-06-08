@@ -1,8 +1,6 @@
 #include "RubyInterpreter.h"
 
 
-
-
 namespace RAGE
 {
 	namespace Interpreter
