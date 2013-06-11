@@ -16,7 +16,7 @@ namespace RAGE
 				bmp->initialize(FIX2UINT(width), FIX2UINT(height));
 			}
 			else
-				rb_raise(rb_eTypeError, "Width and Height values need to be Fixnum.");
+				rb_raise(rb_eTypeError, RAGE_BITMAP_ERROR);
 			
 			
 			return self;
@@ -66,7 +66,7 @@ namespace RAGE
 			if (TYPE(fname) != T_STRING)
 			{
 				
-				rb_raise(rb_eArgError, "File '%s' not found.", StringValueCStr(filename));
+				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 			
@@ -334,7 +334,7 @@ namespace RAGE
 
 			if (rb_class_of(parent) != rb_rageBitmapClass)
 			{
-				rb_raise(rb_eArgError, "Parent argument must be an instance of RAGE::Bitmap.");
+				rb_raise(rb_eArgError, RAGE_BITMAP_PARENT_ERROR);
 				return Qnil;
 			}
 

@@ -21,7 +21,14 @@ extern "C" {
 #endif
 #endif
 
-#include RUBY_CONF
+#if _MSC_VER == 1600
+#include "config-10.h"
+#endif
+
+#if _MSC_VER == 1700
+#include "config.h"
+#endif
+
 #ifdef RUBY_EXTCONF_H
 #include RUBY_EXTCONF_H
 #endif

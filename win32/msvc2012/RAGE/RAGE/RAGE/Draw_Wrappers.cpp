@@ -96,7 +96,7 @@ namespace RAGE
 			if (TYPE(fname) != T_STRING)
 			{
 				
-				rb_raise(rb_eArgError, "Font '%s' not found.", StringValueCStr(name));
+				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(name));
 				return Qfalse;
 			}
 			

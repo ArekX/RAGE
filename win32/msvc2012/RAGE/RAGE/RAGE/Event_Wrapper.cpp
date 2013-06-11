@@ -8,7 +8,7 @@ namespace RAGE
 
 		VALUE EventWrapper::rb_err(VALUE self)
 		{
-			rb_raise(rb_eException, "Cannot call methods from abstract RAGE::Event class.");
+			rb_raise(rb_eException, RAGE_EVENT_ERROR);
 			return Qnil;
 		}
 

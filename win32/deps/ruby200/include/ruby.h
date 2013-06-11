@@ -26,6 +26,7 @@
 #define HAVE_RUBY_UTIL_H        1
 #define HAVE_RUBY_VERSION_H     1
 #define HAVE_RUBY_VM_H          1
+#define RUBY_SOCKET_H           1
 #ifdef _WIN32
 #define HAVE_RUBY_WIN32_H       1
 #endif

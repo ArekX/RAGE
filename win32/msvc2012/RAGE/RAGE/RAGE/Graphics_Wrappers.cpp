@@ -289,15 +289,16 @@ namespace RAGE
 				al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE);
 
 			if (cfg.fullscreen == true)
-				al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN);
 			
-			window_title = "RAGE Game";
-			al_set_new_display_flags(ALLEGRO_OPENGL);
+			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
+
+			window_title = cfg.name;
 			display = al_create_display(cfg.width, cfg.height);
 			al_get_window_position(display, &window_x, &window_y);
 			al_set_window_title(display, window_title);
-			al_set_target_backbuffer(display); 
 			al_flip_display();
+
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 		}
 

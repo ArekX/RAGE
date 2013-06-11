@@ -13,7 +13,6 @@ namespace RAGE
 
 		void MouseEventWrapper::rb_mouse_event_destroy(void *value)
 		{
-			//((MouseEvent*)value)->~MouseEvent();
 			free((MouseEvent*)value);
 		}
 

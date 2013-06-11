@@ -16,6 +16,8 @@ namespace RAGE
 
 		typedef struct 
 		{
+		  char *name;
+		  char *version;
 		  int width;
 		  int height;
 		  bool vsync;

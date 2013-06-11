@@ -22,7 +22,7 @@ namespace RAGE
 			if (TYPE(fname) != T_STRING)
 			{
 				
-				rb_raise(rb_eArgError, "File '%s' not found.", StringValueCStr(filename));
+				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 			

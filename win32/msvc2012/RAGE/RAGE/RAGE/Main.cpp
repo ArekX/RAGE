@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include "RubyInterpreter.h"
+﻿#include "RubyInterpreter.h"
 
 /**
  * Main Initialize Function

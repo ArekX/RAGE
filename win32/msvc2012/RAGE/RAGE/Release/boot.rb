@@ -37,6 +37,8 @@ end
 
 begin
 
+RAGE.require "req.rb"
+
 c = XPChar.new("chao.png")
 facing = "down"
 
@@ -57,7 +59,7 @@ RAGE.about
 
 
 
-if $DEBUGS
+if $DEBUG
   puts "DEBUG VERSION!!!"
 end
 	
@@ -87,16 +89,13 @@ keyb.register RAGE::Events::KEY_UP, Proc.new {|key|
 
 RAGE::Events.register(screen)
 RAGE::Events.register(keyb)
-RAGE::Graphics.title = "Miskoooo!"
 
 bit.scaleX = 2
 bit.scaleY = 2
 bit.flip = RAGE::Graphics::FLIP_VH
 
 dAngle = 1 * Math::PI / 180
-RAGE::Graphics.setCursorVisible false
 
-RAGE::Draw.setColorF 1.0, 1.0, 1.0, 1.0
 oldtime = RAGE::Graphics.getTime
 loop do
 

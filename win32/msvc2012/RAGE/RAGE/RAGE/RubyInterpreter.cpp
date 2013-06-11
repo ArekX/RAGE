@@ -5,6 +5,9 @@ namespace RAGE
 {
 	namespace Interpreter
 	{
+		bool configured = false;
+		RAGE::Graphics::GraphicsConfig gConfig;
+
 		static VALUE rb_get_env(VALUE self, VALUE text)
 		{
 			#ifdef WIN32
@@ -27,10 +30,101 @@ namespace RAGE
 			return Qnil;
 		}
 
-		Ruby::Ruby(int argc, char** argv)
+		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
 		{
+			VALUE fname = rb_find_file(filename);
+
+			// TODO: This will need revision when PhysicsFS comes, to check both in allegro and ruby path. 
+			// -- Refactor this check-and-find into a function.
+
+			if (TYPE(fname) != T_STRING)
+			{
+				
+				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
+				return Qfalse;
+			}
+
+			ALLEGRO_FILE *afile = al_fopen(StringValueCStr(fname), "rb");
+			char *data = new char[al_fsize(afile) + 1];
+			char buffer[2048];
+			int64_t pos = 0;
+			int i, error = 0;
+			
+			size_t read_bytes = al_fread(afile, buffer, 2048);
+
+			while(read_bytes != 0)
+			{
+				for (i = 0; i < read_bytes; i++)
+					data[pos++] = buffer[i];
+
+				read_bytes = al_fread(afile, buffer, 2048);
+			}
+
+			data[al_fsize(afile)] = 0;
+
+			al_fclose(afile);
+
+			rb_eval_string_protect(data, &error);
+			
+			if (error)
+			{
+					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
+					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
+					
+					printf_s(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
+					getc(stdin);
+			}
+
+			return Qnil;
+		}
+
+		static VALUE rb_rage_configure(VALUE self, VALUE name, VALUE version, VALUE width, VALUE height, VALUE fullscreen, VALUE vsync)
+		{
+			if (!configured)
+			{
+				gConfig.name = StringValueCStr(name);
+				gConfig.version = StringValueCStr(version);
+				gConfig.width = FIX2UINT(width);
+				gConfig.height = FIX2UINT(height);
+				gConfig.fullscreen = (TYPE(fullscreen) == T_TRUE);
+				gConfig.vsync = (TYPE(vsync) == T_TRUE);
+				configured = true;
+
+				if (strcmp(StringValueCStr(version), RAGE_ENGINE_VERSION) != 0)
+					PRINT(RAGE_RB_INCOMPATIBLE);
+
+				return Qtrue;
+			}
+
+			return Qfalse;
+		}
+
+		static void load_protect(char* filename)
+		{
+			VALUE str = rb_str_new_cstr(filename);
+			ruby_set_script_name(str);
 			int error;
 
+			// TODO: This will need revision when PhysicsFS comes, to check both in allegro and ruby path. 
+			// -- Refactor this check-and-find into a function.
+
+			rb_gc_register_address(&str);
+			rb_load_protect(str, 1, &error);
+
+			if (error)
+			{
+					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
+					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
+					
+					printf_s(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
+					getc(stdin);
+
+					exit(0);
+			}
+		}
+
+		Ruby::Ruby(int argc, char** argv)
+		{
 			/* Initialize Ruby Interpreter */
 			ruby_sysinit(&argc, &argv);
 			{
@@ -40,7 +134,9 @@ namespace RAGE
 				/* Define Global Functions */
 				VALUE rage = rb_define_module("RAGE");
 				rb_define_module_function(rage, "getEnvVar", RFUNC(rb_get_env), 1);
+				rb_define_module_function(rage, "require", RFUNC(rb_rage_require_wrapper), 1);
 				rb_define_module_function(rage, "about", RFUNC(rb_rage_about), 0);
+				rb_define_module_function(rage, "configure", RFUNC(rb_rage_configure), 6);
 
 				/* Load RAGE modules */
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
@@ -62,19 +158,6 @@ namespace RAGE
 
 				// TODO: Finish inserting wrappers here
 
-				/// DEV
-				RAGE::Graphics::GraphicsConfig g;
-				g.width = 800;
-				g.height = 600;
-				g.fullscreen = false;
-				g.vsync = false;
-
-				/* Perform additional tasks */
-				RAGE::Events::EventsWrapper::init_queue();
-				RAGE::Audio::AudioWrappers::init_audio();
-				RAGE::Graphics::GraphicsWrappers::initialize_graphics(g);
-				RAGE::Events::EventsWrapper::run_event_thread();
-
 				/* Set search path to exe file */
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
@@ -86,29 +169,26 @@ namespace RAGE
 				
 				#ifdef DEVELOPMENT_VERSION
 				
-				/* Set debug version vars: */
+				/* Set debug vars */
 				rb_gv_set("$DEBUG", Qtrue);
 
-				printf("You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n");
+				printf(RAGE_DEV_TEXT);
 				
 				#endif
+
+				/* Load config script */
+				load_protect("conf.rb");
 				
+
+				/* Perform additional tasks */
+				RAGE::Events::EventsWrapper::init_queue();
+				RAGE::Audio::AudioWrappers::init_audio();
+				RAGE::Graphics::GraphicsWrappers::initialize_graphics(gConfig);
+				RAGE::Events::EventsWrapper::run_event_thread();
+
+
 				/* Load boot script */
-				VALUE bootfile = rb_str_new_cstr("boot.rb");
-				ruby_set_script_name(bootfile);
-				rb_load_protect(bootfile, 1, &error);
-
-
-				/* In case of error show it - do not exit the application */
-				if (error)
-				{
-						VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
-						VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
-					
-						printf_s("Script Error!\n\t%s: %s\n", StringValueCStr(klass), StringValueCStr(lasterr));
-						getc(stdin);
-				}
-
+				load_protect("boot.rb");
 			}
 		}
 

@@ -22,7 +22,6 @@ namespace RAGE
 
 		void TimerEventWrapper::rb_timer_destroy(void *value)
 		{
-			//((TimerEvent*)value)->~TimerEvent();
 			free((TimerEvent*)value);
 		}
 

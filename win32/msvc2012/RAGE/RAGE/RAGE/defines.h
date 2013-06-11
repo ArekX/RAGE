@@ -1,7 +1,6 @@
 #define ALLEGRO_STATICLINK
 
 #if _MSC_VER == 1700
-#define RUBY_CONF "ruby/config.h"
 #pragma comment(lib, "msvcr110-ruby200-static.lib")
 #pragma comment(lib, "allegro-5.0.9-monolith-static-mt.lib")
 #pragma comment(lib, "openal-1.14-static-mt.lib")
@@ -16,7 +15,6 @@
 
 #if _MSC_VER == 1600
 #define PSAPI_VERSION 1
-#define RUBY_CONF "ruby/config-10.h"
 #pragma comment(lib, "msvcr100-ruby200-static.lib")
 #pragma comment(lib, "allegro-5.0.9-monolith-static-mt-10.lib")
 #pragma comment(lib, "openal-1.14-static-mt-10.lib")
@@ -42,7 +40,14 @@
 #define PRINT(data) printf(data)
 #endif
 
+/* Errors */
 #define RAGE_RB_PROC_ERROR "You can only pass instances of Proc object as an argument."
+#define RAGE_RB_INCOMPATIBLE "This game may be incompatible with this version of RAGE.\n\n"
+#define RAGE_RB_SCRIPT_ERROR "Script Error!\n\t%s: %s\n"
+#define RAGE_RB_FILE_MISSING_ERROR "File '%s' not found."
+#define RAGE_EVENT_ERROR "Cannot call methods from abstract RAGE::Event class."
+#define RAGE_BITMAP_ERROR "Width and Height values need to be Fixnum."
+#define RAGE_BITMAP_PARENT_ERROR "Parent argument must be an instance of RAGE::Bitmap."
 
 #define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_push(observer, proc);}
 #define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_delete(observer, proc);}
@@ -50,6 +55,8 @@
 #define RAGE_SET_BLENDING_OP(check, op, def) switch(FIX2INT(check)) { case RAGE_OP_ADD: op = ALLEGRO_ADD; break; case RAGE_OP_SRC_MIN_DST: op = ALLEGRO_SRC_MINUS_DEST; break; case RAGE_OP_DST_MIN_SRC: op = ALLEGRO_DEST_MINUS_SRC; break; default: op = def;}
 #define RAGE_SET_BLENDING(check, set, def) switch(FIX2INT(check)) {case RAGE_BLEND_ZERO:set = ALLEGRO_ZERO;break;case RAGE_BLEND_ONE:src = ALLEGRO_ONE;break;case RAGE_BLEND_ALPHA:set = ALLEGRO_ALPHA;break;case RAGE_BLEND_INV_ALPHA: set = ALLEGRO_INVERSE_ALPHA; break;default:set = def;}
 
-#define RAGE_ENGINE_VERSION "0.0.1-beta/wip 08-Jun-2013"
+#define RAGE_ENGINE_VERSION "0.0.1-beta/wip 11-06-2013"
+
+#define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
 
 #define DEVELOPMENT_VERSION 1

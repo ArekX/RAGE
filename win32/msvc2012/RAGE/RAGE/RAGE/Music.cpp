@@ -6,7 +6,6 @@ namespace RAGE
 	{
 
 		Music::Music(ALLEGRO_MIXER *mx)
-		//	: Audio(mx)
 		{
 			mixer = mx;
 			disposed = false;

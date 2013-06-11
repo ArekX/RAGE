@@ -231,7 +231,6 @@
     <ClInclude Include="IniFile_Wrapper.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc">

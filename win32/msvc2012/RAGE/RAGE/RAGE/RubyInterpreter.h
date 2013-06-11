@@ -43,8 +43,6 @@ namespace RAGE
 		public:
 			Ruby(int argc, char** argv);
 			~Ruby(void);
-			static void Ruby::init_queue();
-			static ALLEGRO_EVENT_QUEUE* get_queue();
 		};
 	}
 }

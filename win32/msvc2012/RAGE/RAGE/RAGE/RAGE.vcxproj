@@ -135,7 +135,6 @@
     <ClInclude Include="MouseEvent_Wrapper.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Music_Wrapper.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RubyInterpreter.h" />
     <ClInclude Include="ScreenEvent.h" />
     <ClInclude Include="ScreenEvent_Wrapper.h" />
