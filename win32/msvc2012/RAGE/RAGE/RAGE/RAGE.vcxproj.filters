@@ -151,6 +151,18 @@
     <ClCompile Include="IniFile_Wrapper.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Color_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Font_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -230,6 +242,18 @@
     </ClInclude>
     <ClInclude Include="IniFile_Wrapper.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Color_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Font_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>modules\graphics\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,158 +1,124 @@
-class XPChar
-   def initialize(filename)
-     @bit = RAGE::Bitmap.new
-	 @bit.load(filename)
-	 @frm = 0
-	 @cw = @bit.width / 4
-	 @ch = @bit.height / 4
-	 @counter = 0
-   end
-   
-   def draw(x, y, facing)
-     case facing
-	 when "down"
-		@bit.drawRegion(@frm * @cw, 0, @cw, @ch, x, y)
-	 when "left"
-		@bit.drawRegion(@frm * @cw, @ch, @cw, @ch, x, y)
-	 when "right"
-		@bit.drawRegion(@frm * @cw, @ch * 2, @cw, @ch, x, y)
-	 when "up"
-		@bit.drawRegion(@frm * @cw, @ch * 3, @cw, @ch, x, y)
-	 end
-   end
-   
-   def update
-	 @counter += 1
-	 if @counter > 25
-		@frm = (@frm + 1) % 4
-		@counter = 0
-	 end
-   end
-   
-   def reset
-     @couter = 0
-	 @frm = 0
-   end
-end
-
 begin
-
-RAGE.require "req.rb"
-
-c = XPChar.new("chao.png")
-facing = "down"
-
-bit = RAGE::Bitmap.new
-bit.load "test.bmp"
-
-png = RAGE::Bitmap.new
-png.load "pngtest.png"
-
-
-RAGE::Draw.setFont "acmesa.ttf", 48
-
-x,y = 0, 0
-speed = 1
-i = 0
-
-RAGE.about
-
-
-
-if $DEBUG
-  puts "DEBUG VERSION!!!"
-end
+	RAGE.about
 	
-RAGE::Graphics.setBackgroundColor(120, 120, 14)
-
-ev = RAGE::KeyEvent.new
-me = RAGE::MouseEvent.new
-
-#  unsigned int buttons, int x, int y, int wheel)
-me.register 8, Proc.new{|buttons, x, y, wheel|
-   puts "X: #{x}, Y: #{y}"
-}
-
-ev.register 1, Proc.new{|key|
-  puts "Key: #{key}"
-}
-
-screen = RAGE::ScreenEvent.new
-screen.register RAGE::Events::SCREEN_CLOSE, Proc.new{
-  Kernel::exit(0)
-}
-
-keyb = RAGE::KeyEvent.new
-keyb.register RAGE::Events::KEY_UP, Proc.new {|key|
-  Kernel::exit(0) if key == RAGE::Input::KEY_ESC
-}
-
-RAGE::Events.register(screen)
-RAGE::Events.register(keyb)
-
-bit.scaleX = 2
-bit.scaleY = 2
-bit.flip = RAGE::Graphics::FLIP_VH
-
-dAngle = 1 * Math::PI / 180
-
-oldtime = RAGE::Graphics.getTime
-loop do
-
 	
-        RAGE::Graphics.clear
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 30 )
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 80 )
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 130 )
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 180 )
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 230 )
-	bit.drawRegion(100 * i, 0, 100, 95, 30 , 280 )
-	bit.drawRegion(100 * i, 0, 100, 95, 150 , 280 )
-        c.draw(x, y, facing)
-	RAGE::Draw.text 50, 50, "Misko misko test!"
-	png.draw 120 , 110
-	RAGE::Draw.line(10, 10, 100, 100, 5)
-	RAGE::Draw.ellipse(50, 50, RAGE::Input.getMouseX, RAGE::Input.getMouseY, 4)
-	RAGE::Input.updateKeyboard
-	RAGE::Input.updateMouse
+	m = RAGE::Bitmap.new
 	
-	puts "Key up check works!" if RAGE::Input.keyUp?(RAGE::Input::KEY_A)
+	
+	font = RAGE::Font.new
+	font.load "acmesa.ttf", 120
+	RAGE::Draw.setFont(font)
+	
+	
+	cl = RAGE::Color.new
+	cl.setName("blue")
+	
+	
+	RAGE::Draw.setColorO(cl)
+	
+	str = "Hello World from RAGE!"
+
+	#width = font.textWidth str
+	#height = font.textHeight
+	#RAGE::Draw.setFont(font)
+	
+	w = font.textWidth str
+	h = font.textHeight
+	
+	m.create w, h
+	
+	
+	RAGE::Graphics.setTarget(m)
+	
+	RAGE::Draw.text(0, 0, str)
+	
+	RAGE::Graphics.setTarget(nil)
+	
+	screen = RAGE::ScreenEvent.new
+	screen.register RAGE::Events::SCREEN_CLOSE, Proc.new{
+		Kernel::exit(0)
+	}
+	RAGE::Events.register screen
+	
+	scrBit = RAGE::Graphics.getTarget
+	
+	screenW = scrBit.width
+	screenH = scrBit.height
+	
+	m.centerX = m.width / 2
+	m.centerY = m.height / 2
+	
+	RAGE::Graphics.setBlendingMode RAGE::Graphics::ADD, RAGE::Graphics::BLEND_ALPHA, RAGE::Graphics::BLEND_INV_ALPHA
+	
+	rot = 0
+	anim = 0
+	
+	updown = false
+	
+	x, y = 0, 0
+	
+	ltime = RAGE::Graphics.getTime
+	dt = 0
+
+	m.setTint(255, 255, 255, 100)
+	d = RAGE::Bitmap.new
+	d.load "icon.png"
+	RAGE::Graphics.setIcon(d)
 	
 
-	puts "Mouse Repeat works" if RAGE::Input.mouseRepeat?(RAGE::Input::MOUSE_BTN1)
-	puts "Mouse Down works" if RAGE::Input.mouseDown?(RAGE::Input::MOUSE_BTN1)
-	puts "Mouse Up works" if RAGE::Input.mouseUp?(RAGE::Input::MOUSE_BTN1)
-
+	d.scaleX = 6.25
+	d.scaleY = 4.6875
+	d.alpha = 0.2
 	
-	if (RAGE::Input.keyRepeat?(84))
-		  y -= speed
-		  facing = "up"
-		  c.update
-		elsif (RAGE::Input.keyRepeat?(85))
-		  y += speed
-		  facing = "down"
-		  c.update
+	loop do
+		RAGE::Graphics.clear
+		d.draw(0, 0)
+		dt = RAGE::Graphics.getTime - ltime
+		ltime = RAGE::Graphics.getTime
+
+
+		m.scaleX = anim
+		m.scaleY = anim
+		
+		if anim < 5 && !updown
+			anim += 0.005
+			updown = true if anim > 4
 		end
-		if (RAGE::Input.keyRepeat?(82))
-		  x -= speed
-		  facing = "left"
-		  c.update
-		elsif (RAGE::Input.keyRepeat?(83))
-		  x += speed
-		  facing = "right"
-		  c.update
+		
+		if anim >= 0 && updown
+			anim -= 0.005
+			updown = false if anim < 0
 		end
+		  
+		
+		m.alpha = 0.2
+		m.draw(screenW / 2 - m.width / 2 + 200 + x + 2 * Math.cos(rot), screenH / 2 - m.height / 2 + y + 80 * Math.sin(rot))
+		m.alpha = 0.3
+		m.draw(screenW / 2 - m.width / 2 + 200 + x + 2 * Math.cos(rot), screenH / 2 - m.height / 2 + y + 60 * Math.sin(rot))
+		m.alpha = 0.5
+		m.draw(screenW / 2 - m.width / 2 + 200 + x + 2 * Math.cos(rot), screenH / 2 - m.height / 2 + y + 40 * Math.sin(rot))
+		m.alpha = 0.9
+		m.draw(screenW / 2 - m.width / 2 + 200 + x + 2 * Math.cos(rot), screenH / 2 - m.height / 2 + y + 20 * Math.sin(rot))
+		rot = (rot + (1 * dt) * Math::PI / 180) % (2 * Math::PI)
+		
+		m.angle = (m.angle + (50 * dt) * Math::PI / 180) % (2 * Math::PI)
+		
+		y += (100 * dt) if RAGE::Input.keyRepeat?(RAGE::Input::KEY_DOWN)
+		y -= (100 * dt) if RAGE::Input.keyRepeat?(RAGE::Input::KEY_UP)
+		x += (100 * dt) if RAGE::Input.keyRepeat?(RAGE::Input::KEY_RIGHT)
+		x -= (100 * dt) if RAGE::Input.keyRepeat?(RAGE::Input::KEY_LEFT)
+		
+		break if RAGE::Input.keyRepeat?(RAGE::Input::KEY_ESC)
+
+		if RAGE::Input.keyRepeat?(RAGE::Input::KEY_ALT) && RAGE::Input.keyDown?(RAGE::Input::KEY_ENTER)
+			RAGE::Graphics.setFullscreen(true) 
+			m.recreate
+		end
+
+		RAGE::Input.updateKeyboard
+		RAGE::Graphics.update
+	end
 	
-	
-	RAGE::Graphics.update # Flips buffers
-	i += 1
-	sleep 0.001
-	i = 0 if i >= 9
-
-
-
-end
-
 rescue Exception => e  
 	unless e.message == "exit"
 		puts "\n\nBoot.rb Error:\n\t\n" + e.message

@@ -7,8 +7,8 @@ namespace RAGE
 	{
 
 		ALLEGRO_COLOR color;
-		ALLEGRO_FONT* font;
 		ALLEGRO_USTR *str;
+		ALLEGRO_FONT *fnt;
 
 		VALUE DrawWrappers::draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
 		{
@@ -85,24 +85,56 @@ namespace RAGE
 		VALUE DrawWrappers::draw_text(VALUE self, VALUE x, VALUE y, VALUE text)
 		{
 			al_ustr_assign_cstr(str, StringValueCStr(text));
-			al_draw_ustr(font, color, NUM2DBL(x), NUM2DBL(y), 0, str);
+			al_draw_ustr(fnt, color, NUM2DBL(x), NUM2DBL(y), 0, str);
 			return Qnil;
 		}
 
-
-		VALUE DrawWrappers::set_font(VALUE self, VALUE name, VALUE size)
+		VALUE DrawWrappers::draw_justified_text(VALUE self, VALUE x, VALUE y, VALUE width, VALUE diff, VALUE text)
 		{
-			VALUE fname = rb_find_file(name);
-			if (TYPE(fname) != T_STRING)
-			{
-				
-				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(name));
-				return Qfalse;
-			}
+			al_ustr_assign_cstr(str, StringValueCStr(text));
 			
-			font = al_load_font(StringValueCStr(fname), FIX2UINT(size), 0);
+			al_draw_justified_ustr(fnt, color, NUM2DBL(x), NUM2DBL(x) + NUM2DBL(width), NUM2DBL(y), NUM2DBL(diff), 0, str);
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::set_font(VALUE self, VALUE sfont)
+		{			
+			if (rb_class_of(sfont) != RAGE::Graphics::FontWrapper::get_ruby_class())
+			{
+				rb_raise(rb_eArgError, RAGE_FONT_ERROR);
+				return Qnil;
+			}
+
+			Font *dfnt;
+			Data_Get_Struct(sfont, Font, dfnt);
+
+			if (dfnt->font != NULL)
+				fnt = dfnt->font;
 
 			return Qnil;
+		}
+
+		VALUE DrawWrappers::set_color_o(VALUE self, VALUE scolor)
+		{
+			if (rb_class_of(scolor) != RAGE::Graphics::ColorWrapper::get_ruby_class())
+			{
+				rb_raise(rb_eArgError, RAGE_COLOR_ERROR);
+				return Qnil;
+			}
+
+			Color *cl;
+			Data_Get_Struct(scolor, Color, cl);
+
+			color = cl->color;
+
+			return Qnil;
+		}
+
+		void DrawWrappers::init()
+		{
+			
+			str = al_ustr_new("");
+			fnt = al_create_builtin_font();
 		}
 
 		void DrawWrappers::load_wrappers()
@@ -120,10 +152,10 @@ namespace RAGE
 			rb_define_module_function(draw, "pixel", RFUNC(DrawWrappers::draw_pixel), 2);
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::draw_pixel_c), 6);
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::set_color), 4);
-			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::set_font), 2);
+			rb_define_module_function(draw, "setColorO", RFUNC(DrawWrappers::set_color_o), 1);
+			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::set_font), 1);
 			rb_define_module_function(draw, "text", RFUNC(DrawWrappers::draw_text), 3);
-
-			str = al_ustr_new("");
+			rb_define_module_function(draw, "justifyText", RFUNC(DrawWrappers::draw_justified_text), 5);
 		}
 	}
 }

@@ -21,9 +21,12 @@ namespace RAGE
 			static VALUE draw_filled_ellipse2(VALUE self, VALUE cx, VALUE cy, VALUE rx, VALUE ry);
 			static VALUE draw_ellipse2(VALUE self, VALUE cx, VALUE cy, VALUE rx, VALUE ry, VALUE thickness);
 			static VALUE draw_text(VALUE self, VALUE x, VALUE y, VALUE text);
+			static VALUE draw_justified_text(VALUE self, VALUE x, VALUE y, VALUE width, VALUE diff, VALUE text);
 			static VALUE set_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
-			static VALUE set_font(VALUE self, VALUE name, VALUE size);
+			static VALUE set_color_o(VALUE self, VALUE scolor);
+			static VALUE set_font(VALUE self, VALUE sfont);
 		public:
+			static void init();
 			static void load_wrappers();
 		};
 

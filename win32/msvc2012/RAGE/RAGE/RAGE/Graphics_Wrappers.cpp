@@ -22,6 +22,13 @@ namespace RAGE
 			{
 				Bitmap* bmp;
 				Data_Get_Struct(bitmap, Bitmap, bmp);
+
+				if (bmp->bitmap == NULL)
+				{
+					rb_raise(rb_eException, RAGE_BITMAP_NOT_CREATED_ERROR);
+					return Qnil;
+				}
+
 				al_set_target_bitmap(bmp->bitmap);
 			}
 

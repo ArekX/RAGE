@@ -48,6 +48,9 @@
 #define RAGE_EVENT_ERROR "Cannot call methods from abstract RAGE::Event class."
 #define RAGE_BITMAP_ERROR "Width and Height values need to be Fixnum."
 #define RAGE_BITMAP_PARENT_ERROR "Parent argument must be an instance of RAGE::Bitmap."
+#define RAGE_BITMAP_NOT_CREATED_ERROR "Cannot set nil bitmap as drawing target. Create or load a bitmap first."
+#define RAGE_COLOR_ERROR "Argument must be an instance of RAGE::Color class."
+#define RAGE_FONT_ERROR "Argument must be an instance of RAGE::Font class."
 
 #define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_push(observer, proc);}
 #define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_delete(observer, proc);}
@@ -55,8 +58,6 @@
 #define RAGE_SET_BLENDING_OP(check, op, def) switch(FIX2INT(check)) { case RAGE_OP_ADD: op = ALLEGRO_ADD; break; case RAGE_OP_SRC_MIN_DST: op = ALLEGRO_SRC_MINUS_DEST; break; case RAGE_OP_DST_MIN_SRC: op = ALLEGRO_DEST_MINUS_SRC; break; default: op = def;}
 #define RAGE_SET_BLENDING(check, set, def) switch(FIX2INT(check)) {case RAGE_BLEND_ZERO:set = ALLEGRO_ZERO;break;case RAGE_BLEND_ONE:src = ALLEGRO_ONE;break;case RAGE_BLEND_ALPHA:set = ALLEGRO_ALPHA;break;case RAGE_BLEND_INV_ALPHA: set = ALLEGRO_INVERSE_ALPHA; break;default:set = def;}
 
-#define RAGE_ENGINE_VERSION "0.0.1-beta/wip 11-06-2013"
+#define RAGE_ENGINE_VERSION "0.0.1-beta"
 
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
-
-#define DEVELOPMENT_VERSION 1

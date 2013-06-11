@@ -21,3 +21,9 @@
 *.idb
 *.pdb
 *.lib
+*.res
+*.manifest
+*.APS
+*.ini
+*.png
+*.ttf

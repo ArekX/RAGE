@@ -147,6 +147,8 @@ namespace RAGE
 
 				/* Load RAGE classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
+				RAGE::Graphics::FontWrapper::load_ruby_class();
+				RAGE::Graphics::ColorWrapper::load_ruby_class();
 				RAGE::Audio::MusicWrapper::load_ruby_class();
 				RAGE::Audio::SfxWrapper::load_ruby_class();
 				RAGE::Events::EventWrapper::load_ruby_class();
@@ -184,6 +186,7 @@ namespace RAGE
 				RAGE::Events::EventsWrapper::init_queue();
 				RAGE::Audio::AudioWrappers::init_audio();
 				RAGE::Graphics::GraphicsWrappers::initialize_graphics(gConfig);
+				RAGE::Graphics::DrawWrappers::init();
 				RAGE::Events::EventsWrapper::run_event_thread();
 
 

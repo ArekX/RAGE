@@ -5,10 +5,12 @@
 #include <vector>
 #include <ruby.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_color.h>
 #include <allegro5/allegro_opengl.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <ruby/encoding.h>
@@ -16,6 +18,8 @@
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
+#include "Font_Wrapper.h"
+#include "Color_Wrapper.h"
 #include "Draw_Wrappers.h"
 #include "Bitmap_Wrapper.h"
 #include "Events_Wrapper.h"

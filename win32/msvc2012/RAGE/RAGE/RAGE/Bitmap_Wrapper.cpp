@@ -380,8 +380,11 @@ namespace RAGE
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
 
-			// FIXME: Gets data struct from RAGE::Color in color value and puts new pixel info in it.
+			Color *cl;
+			Data_Get_Struct(color, Color, cl);
 
+			cl->color = bmp->get_pixel(FIX2INT(x), FIX2INT(y));
+			
 			return Qnil;
 		}
 
