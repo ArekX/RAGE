@@ -11,17 +11,16 @@ Using Ruby Version: 2.0.0-p195
 
 Using Allegro Version: 5.0.9
 
-WIP/Beta
+First Beta!
 ====
 
-Current: 
+Windows Vista/7/8:
 
-https://www.dropbox.com/s/b46mm2u06spwadj/RAGE04062013.7z
+https://www.dropbox.com/s/3isigag8dxn3e1w/RAGE001-beta.7z
 
+Windows Vista/7/8 and Windows XP:
 
-Previous:
-
-https://www.dropbox.com/s/vatxjysq9dfc3wm/RAGE29052013.7z
+https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 
 Examples
 ====
