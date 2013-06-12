@@ -32,9 +32,9 @@ https://www.dropbox.com/s/dq3s5m0osczr2ww/RAGETicTacToe.7z
 API
 ====
 
-Current API has been removed due to big changes.
+CHM Help API Documentation:
 
-New API will be available soon in CHM format.
+https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
 
 License
 ====
