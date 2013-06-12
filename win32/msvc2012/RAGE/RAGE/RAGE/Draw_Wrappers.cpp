@@ -147,8 +147,8 @@ namespace RAGE
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::draw_filled_rectangle), 4);
 			rb_define_module_function(draw, "ellipse", RFUNC(DrawWrappers::draw_ellipse), 5);
 			rb_define_module_function(draw, "ellipseM", RFUNC(DrawWrappers::draw_ellipse2), 5);
-			rb_define_module_function(draw, "fillEllipse", RFUNC(DrawWrappers::draw_filled_ellipse), 5);
-			rb_define_module_function(draw, "fillEllipseM", RFUNC(DrawWrappers::draw_filled_ellipse2), 5);
+			rb_define_module_function(draw, "fillEllipse", RFUNC(DrawWrappers::draw_filled_ellipse), 4);
+			rb_define_module_function(draw, "fillEllipseM", RFUNC(DrawWrappers::draw_filled_ellipse2), 4);
 			rb_define_module_function(draw, "pixel", RFUNC(DrawWrappers::draw_pixel), 2);
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::draw_pixel_c), 6);
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::set_color), 4);

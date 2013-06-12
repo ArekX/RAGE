@@ -11,6 +11,8 @@ namespace RAGE
 		
 		VALUE InputWrappers::rb_keyboard_update(VALUE self)
 		{
+			ks_up = ks;
+			ks_down = ks;
 			al_get_keyboard_state(&ks);
 			return Qnil;
 		}
@@ -25,12 +27,10 @@ namespace RAGE
 		{
 			if (al_key_down(&ks, FIX2INT(keycode)) && !al_key_down(&ks_down, FIX2INT(keycode)))
 			{
-				ks_down = ks;
 				return Qtrue;
 			}
 			else
 			{
-				ks_down = ks;
 				return Qfalse;
 			}
 		}
@@ -39,12 +39,10 @@ namespace RAGE
 		{
 			if (!al_key_down(&ks, FIX2INT(keycode)) && al_key_down(&ks_up, FIX2INT(keycode)))
 			{
-				ks_up = ks;
 				return Qtrue;
 			}
 			else
 			{
-				ks_up = ks;
 				return Qfalse;
 			}
 		}
@@ -72,6 +70,8 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_update(VALUE self)
 		{
+			ms_up = ms;
+			ms_down = ms;
 			al_get_mouse_state(&ms);
 			return Qnil;
 		}
@@ -89,12 +89,10 @@ namespace RAGE
 			
 			if (al_mouse_button_down(&ms, FIX2INT(button)) && !al_mouse_button_down(&ms_down, FIX2INT(button)))
 			{
-				ms_down = ms;
 				return Qtrue;
 			}
 			else
 			{
-				ms_down = ms;
 				return Qfalse;
 			}
 		}
@@ -103,12 +101,10 @@ namespace RAGE
 		{
 			if (!al_mouse_button_down(&ms, FIX2INT(button)) && al_mouse_button_down(&ms_up, FIX2INT(button)))
 			{
-				ms_up = ms;
 				return Qtrue;
 			}
 			else
 			{
-				ms_up = ms;
 				return Qfalse;
 			}
 		}

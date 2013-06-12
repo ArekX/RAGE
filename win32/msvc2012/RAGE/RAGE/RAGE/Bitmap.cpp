@@ -36,6 +36,8 @@ namespace RAGE
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
 
+			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
+
 			bitmap = al_create_bitmap(width, height);
 		}
 

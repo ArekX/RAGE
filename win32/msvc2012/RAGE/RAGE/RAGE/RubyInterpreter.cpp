@@ -83,7 +83,6 @@ namespace RAGE
 			if (!configured)
 			{
 				gConfig.name = StringValueCStr(name);
-				gConfig.version = StringValueCStr(version);
 				gConfig.width = FIX2UINT(width);
 				gConfig.height = FIX2UINT(height);
 				gConfig.fullscreen = (TYPE(fullscreen) == T_TRUE);
@@ -188,7 +187,6 @@ namespace RAGE
 				RAGE::Graphics::GraphicsWrappers::initialize_graphics(gConfig);
 				RAGE::Graphics::DrawWrappers::init();
 				RAGE::Events::EventsWrapper::run_event_thread();
-
 
 				/* Load boot script */
 				load_protect("boot.rb");
