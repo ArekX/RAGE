@@ -28,6 +28,7 @@ https://www.dropbox.com/s/dfr3xgn8ieblp4m/RAGE002-beta-xp-support.7z
 0.0.1 - beta:
 
 Windows Vista/7/8:
+
 https://www.dropbox.com/s/3isigag8dxn3e1w/RAGE001-beta.7z
 
 Windows Vista/7/8 and Windows XP:
