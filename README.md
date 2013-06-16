@@ -52,6 +52,10 @@ https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
 License
 ====
 
+Ruby License: http://www.ruby-lang.org/en/about/license.txt
+
+Allegro License: http://alleg.sourceforge.net/license.html
+
 RAGE is a copyright (c) 2013 Aleksandar Panic
 
 
@@ -74,17 +78,4 @@ freely, subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 
 
-4. Distribution of this software in binary form, including altered versions, either in commercial and free applications must be done according to original software's author's specified guidelines .
-
-
-Exception to this restriction can be made with a special permission from the author.
-
-
-
-
-Ruby License: 
-            http://www.ruby-lang.org/en/about/license.txt
-
-
-Allegro License: 
-            http://alleg.sourceforge.net/license.html
+4. Distribution of this software in binary form, including altered versions, either in commercial and free applications must be done according to original software's author's specified guidelines. Exception to this restriction can be made with a special permission from the author.
