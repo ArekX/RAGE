@@ -7,6 +7,7 @@ namespace RAGE
 		Font::Font(void)
 		{
 			disposed = false;
+			is_set = false;
 			font = al_create_builtin_font();
 		}
 

@@ -39,6 +39,7 @@ namespace RAGE
 			static VALUE rb_graphics_update(VALUE self);
 			static VALUE rb_graphics_clear(VALUE self);
 			static VALUE rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b);
+			static VALUE rb_graphics_set_background_color_object(VALUE self, VALUE color);
 			static VALUE rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
 			static VALUE rb_graphics_reset_clipping_rect(VALUE self);
 			static VALUE rb_set_target(VALUE self, VALUE bitmap);

@@ -13,6 +13,8 @@ namespace RAGE
 			static VALUE draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
 			static VALUE draw_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
 			static VALUE draw_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2);
+			static VALUE draw_rounded_rect(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry, VALUE thickness);
+			static VALUE draw_rounded_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry);
 			static VALUE draw_pixel(VALUE self, VALUE x, VALUE y);
 			static VALUE draw_pixel_c(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
 
@@ -26,6 +28,7 @@ namespace RAGE
 			static VALUE set_color_o(VALUE self, VALUE scolor);
 			static VALUE set_font(VALUE self, VALUE sfont);
 		public:
+			static void reset_font();
 			static void init();
 			static void load_wrappers();
 		};

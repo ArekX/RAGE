@@ -59,6 +59,9 @@ namespace RAGE
 			Font *fnt;
 			Data_Get_Struct(self, Font, fnt);
 
+			if (fnt->is_set)
+				DrawWrappers::reset_font();
+
 			fnt->dispose();
 
 			return Qnil;

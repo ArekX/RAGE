@@ -8,7 +8,8 @@ namespace RAGE
 
 		ALLEGRO_COLOR color;
 		ALLEGRO_USTR *str;
-		ALLEGRO_FONT *fnt;
+		ALLEGRO_FONT *fnt, *def_font;
+		Font *set_fnt = NULL;
 
 		VALUE DrawWrappers::draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
 		{
@@ -109,7 +110,15 @@ namespace RAGE
 			Data_Get_Struct(sfont, Font, dfnt);
 
 			if (dfnt->font != NULL)
+			{
+				if (set_fnt != NULL)
+					set_fnt->is_set = false;
+
 				fnt = dfnt->font;
+				dfnt->is_set = true;
+
+				set_fnt = dfnt;
+			}
 
 			return Qnil;
 		}
@@ -130,11 +139,29 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE DrawWrappers::draw_rounded_rect(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry, VALUE thickness)
+		{
+			al_draw_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color, NUM2DBL(thickness));
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::draw_rounded_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry)
+		{
+			al_draw_filled_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color);
+			return Qnil;
+		}
+
+		void DrawWrappers::reset_font()
+		{
+			fnt = def_font;
+		}
+
 		void DrawWrappers::init()
 		{
 			
 			str = al_ustr_new("");
-			fnt = al_create_builtin_font();
+			def_font = al_create_builtin_font();
+			fnt = def_font;
 		}
 
 		void DrawWrappers::load_wrappers()
@@ -145,6 +172,8 @@ namespace RAGE
 			rb_define_module_function(draw, "line", RFUNC(DrawWrappers::draw_line), 5);
 			rb_define_module_function(draw, "rectangle", RFUNC(DrawWrappers::draw_rectangle), 5);
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::draw_filled_rectangle), 4);
+			rb_define_module_function(draw, "roundRect", RFUNC(DrawWrappers::draw_rounded_rect), 7);
+			rb_define_module_function(draw, "fillRound", RFUNC(DrawWrappers::draw_rounded_filled_rectangle), 6);
 			rb_define_module_function(draw, "ellipse", RFUNC(DrawWrappers::draw_ellipse), 5);
 			rb_define_module_function(draw, "ellipseM", RFUNC(DrawWrappers::draw_ellipse2), 5);
 			rb_define_module_function(draw, "fillEllipse", RFUNC(DrawWrappers::draw_filled_ellipse), 4);

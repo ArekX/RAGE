@@ -71,7 +71,7 @@ namespace RAGE
 
 		VALUE GraphicsWrappers::rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b)
 		{
-			bg_color = al_map_rgb(FIX2INT(r), FIX2INT(g), FIX2INT(b));
+			bg_color = al_map_rgb_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b));
 			return Qnil;
 		}
 
@@ -243,6 +243,23 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE GraphicsWrappers::rb_graphics_set_background_color_object(VALUE self, VALUE color)
+		{
+			
+			if (rb_class_of(color) != RAGE::Graphics::ColorWrapper::get_ruby_class())
+			{
+				rb_raise(rb_eArgError, RAGE_COLOR_ERROR);
+				return Qnil;
+			}
+
+			Color *clr;
+			Data_Get_Struct(color, Color, clr);
+
+			bg_color = clr->color;
+			
+			return Qnil;
+		}
+
 		void GraphicsWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -256,7 +273,7 @@ namespace RAGE
 			rb_define_const(g, "BLEND_ONE", INT2FIX(RAGE_BLEND_ONE));
 			rb_define_const(g, "BLEND_ALPHA",  INT2FIX(RAGE_BLEND_ALPHA));
 			rb_define_const(g, "BLEND_INV_ALPHA",  INT2FIX(RAGE_BLEND_INV_ALPHA));
-
+			
 			/* Define Module Functions */
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
 			rb_define_module_function(g, "title", RFUNC(GraphicsWrappers::rb_get_title), 0);
@@ -279,6 +296,7 @@ namespace RAGE
 			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
 			rb_define_module_function(g, "clear", RFUNC(GraphicsWrappers::rb_graphics_clear), 0);
 			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 3);
+			rb_define_module_function(g, "setBackgroundColorO", RFUNC(GraphicsWrappers::rb_graphics_set_background_color_object), 1);
 			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
 			rb_define_module_function(g, "getTime", RFUNC(GraphicsWrappers::rb_get_time), 0);

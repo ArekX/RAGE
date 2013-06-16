@@ -10,6 +10,7 @@ namespace RAGE
 		{
 		public:
 			bool disposed;
+			bool is_set;
 			ALLEGRO_FONT *font;
 			Font(void);
 			void load_ttf_font(char *filename, int size);
