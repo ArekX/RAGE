@@ -38,7 +38,11 @@ https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 Examples
 ====
 
-RAGE Tic-Tac-Toe
+Minesweeper game example
+
+https://www.dropbox.com/s/ewtfkn90gxuyidz/RAGE-Minesweeper.7z
+
+Tic-Tac-Toe game example
 
 https://www.dropbox.com/s/dq3s5m0osczr2ww/RAGETicTacToe.7z
 
