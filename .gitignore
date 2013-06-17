@@ -22,8 +22,11 @@
 *.pdb
 *.lib
 *.res
+*.rb
 *.manifest
 *.APS
 *.ini
+*.chm
+*.txt
 *.png
 *.ttf

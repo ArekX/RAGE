@@ -69,9 +69,9 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE GraphicsWrappers::rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b)
+		VALUE GraphicsWrappers::rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
-			bg_color = al_map_rgb_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b));
+			bg_color = al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a));
 			return Qnil;
 		}
 
@@ -295,7 +295,7 @@ namespace RAGE
 
 			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
 			rb_define_module_function(g, "clear", RFUNC(GraphicsWrappers::rb_graphics_clear), 0);
-			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 3);
+			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 4);
 			rb_define_module_function(g, "setBackgroundColorO", RFUNC(GraphicsWrappers::rb_graphics_set_background_color_object), 1);
 			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
