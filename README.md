@@ -38,6 +38,10 @@ https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 Examples
 ====
 
+Snake game example
+
+https://www.dropbox.com/s/bq8hhj44anxohfu/RAGE-Snake.7z
+
 Minesweeper game example
 
 https://www.dropbox.com/s/ewtfkn90gxuyidz/RAGE-Minesweeper.7z
