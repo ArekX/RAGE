@@ -53,9 +53,13 @@ https://www.dropbox.com/s/dq3s5m0osczr2ww/RAGETicTacToe.7z
 API
 ====
 
-CHM Help API Documentation:
+RAGE CHM Help API Documentation:
 
 https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
+
+Ruby 2.0 Core API Documentation:
+
+https://www.dropbox.com/s/nfl2o4flpm8wadr/ruby20-core.chm
 
 License
 ====
