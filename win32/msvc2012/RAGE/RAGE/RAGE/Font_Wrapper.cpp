@@ -18,8 +18,7 @@ namespace RAGE
 		
 		VALUE FontWrapper::rb_load(VALUE self, VALUE font_name, VALUE size)
 		{
-			VALUE fname = rb_find_file(font_name);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(font_name) < 0)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
@@ -77,8 +76,7 @@ namespace RAGE
 
 		VALUE FontWrapper::rb_load_stretch(VALUE self, VALUE font_name, VALUE w, VALUE h)
 		{
-			VALUE fname = rb_find_file(font_name);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(font_name) < 0)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
@@ -93,8 +91,7 @@ namespace RAGE
 
 		VALUE FontWrapper::rb_load_flags(VALUE self, VALUE font_name, VALUE size, VALUE flags)
 		{
-			VALUE fname = rb_find_file(font_name);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(font_name) < 0)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
@@ -109,8 +106,7 @@ namespace RAGE
 
 		VALUE FontWrapper::rb_load_stretch_flags(VALUE self, VALUE font_name, VALUE w, VALUE h, VALUE flags)
 		{
-			VALUE fname = rb_find_file(font_name);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(font_name) < 0)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;

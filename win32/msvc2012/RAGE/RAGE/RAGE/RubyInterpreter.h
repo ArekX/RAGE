@@ -13,7 +13,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-#include <ruby/encoding.h>
+#include <allegro5/allegro_physfs.h>
+#include <physfs.h>
 #include <ruby/thread.h>
 
 /* Include Wrappers */
@@ -33,6 +34,7 @@
 #include "Music_Wrapper.h"
 #include "Sfx_Wrapper.h"
 #include "IniFile_Wrapper.h"
+#include "FS_Wrappers.h"
 
 namespace RAGE
 {
@@ -45,6 +47,7 @@ namespace RAGE
 			static VALUE rb_require_protect(VALUE filename);
 			
 		public:
+			static int file_exists(VALUE filename);
 			Ruby(int argc, char** argv);
 			~Ruby(void);
 		};

@@ -59,7 +59,7 @@ namespace RAGE
 				al_destroy_bitmap(bitmap);
 
 			this->filename = filename;
-			
+
 			bitmap = al_load_bitmap(filename);
 		}
 
@@ -297,6 +297,7 @@ namespace RAGE
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
 			this->filename = filename;
+
 			return al_save_bitmap(filename, bitmap);
 		}
 

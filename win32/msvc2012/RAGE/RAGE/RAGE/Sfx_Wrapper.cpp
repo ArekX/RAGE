@@ -18,8 +18,7 @@ namespace RAGE
 
 		VALUE SfxWrapper::rb_load(VALUE self, VALUE filename)
 		{
-			VALUE fname = rb_find_file(filename);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(filename) < 0)
 			{
 				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
@@ -29,7 +28,7 @@ namespace RAGE
 			Sfx *aud;
 			Data_Get_Struct(self, Sfx, aud);
 
-			aud->load(StringValueCStr(fname));
+			aud->load(StringValueCStr(filename));
 
 			return Qtrue;
 		}

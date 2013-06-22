@@ -33,11 +33,16 @@ int main(int argc, char** argv)
 
 	// LATER: RM versions? Or adjust scripts towards RAGE?
 
+	/*  Init PHYS_FS */
+	PHYSFS_init(argv[0]);
+
 	/* Initialize and start Interpreter */
 	RAGE::Interpreter::Ruby ri(argc, argv);
 
 	/* Destroy event queue */
 	RAGE::Events::EventsWrapper::finalize_queue();
+
+	PHYSFS_deinit();
 
 	/* Close down allegro game system */
 	al_uninstall_mouse();

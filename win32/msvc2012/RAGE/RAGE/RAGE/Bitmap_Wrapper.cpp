@@ -62,19 +62,19 @@ namespace RAGE
 
 		VALUE BitmapWrapper::rb_load_f(VALUE self, VALUE filename)
 		{
-			VALUE fname = rb_find_file(filename);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(filename) < 0)
 			{
 				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 			
-			
+
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
-
-			bmp->initialize(StringValueCStr(fname));
+			
+			bmp->initialize(StringValueCStr(filename));
+			
 			return Qtrue;
 		}
 

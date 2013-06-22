@@ -283,6 +283,7 @@
     <ClCompile Include="Event_Wrapper.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Font_Wrapper.cpp" />
+    <ClCompile Include="FS_Wrappers.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="IniFile.cpp" />
     <ClCompile Include="IniFile_Wrapper.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="Event_Wrapper.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Font_Wrapper.h" />
+    <ClInclude Include="FS_Wrappers.h" />
     <ClInclude Include="Graphics_Wrappers.h" />
     <ClInclude Include="IniFile.h" />
     <ClInclude Include="IniFile_Wrapper.h" />

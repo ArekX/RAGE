@@ -8,18 +8,6 @@ namespace RAGE
 		bool configured = false;
 		RAGE::Graphics::GraphicsConfig gConfig;
 
-		static VALUE rb_get_env(VALUE self, VALUE text)
-		{
-			#ifdef WIN32
-			char *env[1024];
-			size_t t = 1024;
-			_dupenv_s(env, &t, StringValueCStr(text));
-			return rb_str_new_cstr(env[0]);
-			#else
-			return rb_str_new_cstr(getenv(StringValueCStr(text)));
-			#endif
-		}
-
 		static VALUE rb_rage_about(VALUE self)
 		{
 			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION);
@@ -32,19 +20,22 @@ namespace RAGE
 
 		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
 		{
-			VALUE fname = rb_find_file(filename);
-
-			// TODO: This will need revision when PhysicsFS comes, to check both in allegro and ruby path. 
-			// -- Refactor this check-and-find into a function.
-
-			if (TYPE(fname) != T_STRING)
+			int file_status = Ruby::file_exists(filename);
+			ALLEGRO_FILE *afile;
+			if ((file_status < 0) || ((file_status == 2) && !RAGE::Filesystem::FSWrappers::is_physfs_on()))
 			{
-				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 
-			ALLEGRO_FILE *afile = al_fopen(StringValueCStr(fname), "rb");
+			if (file_status == 1)
+			{
+				VALUE fname = rb_find_file(filename);
+				afile = al_fopen(StringValueCStr(fname), "rb");
+			}
+			else
+				afile = al_fopen(StringValueCStr(filename), "rb");
+
 			char *data = new char[al_fsize(afile) + 1];
 			char buffer[2048];
 			int64_t pos = 0;
@@ -122,6 +113,26 @@ namespace RAGE
 			}
 		}
 
+		int Ruby::file_exists(VALUE filename)
+		{
+			/* Check Ruby search path */
+			VALUE fname = rb_find_file(filename);
+			int ret_val_rb = 1, ret_val_fs = 0;
+			if (TYPE(fname) != T_STRING)
+				ret_val_rb = 0;
+
+			/* Check PHYSFS search path */
+			if (PHYSFS_exists(StringValueCStr(filename)))
+				ret_val_fs = 2;
+			else
+				ret_val_fs = -2;
+
+			if (ret_val_rb == 0)
+				return ret_val_fs;
+			else
+				return 1;
+		}
+
 		Ruby::Ruby(int argc, char** argv)
 		{
 			/* Initialize Ruby Interpreter */
@@ -132,7 +143,6 @@ namespace RAGE
 				
 				/* Define Global Functions */
 				VALUE rage = rb_define_module("RAGE");
-				rb_define_module_function(rage, "getEnvVar", RFUNC(rb_get_env), 1);
 				rb_define_module_function(rage, "require", RFUNC(rb_rage_require_wrapper), 1);
 				rb_define_module_function(rage, "about", RFUNC(rb_rage_about), 0);
 				rb_define_module_function(rage, "configure", RFUNC(rb_rage_configure), 6);
@@ -156,12 +166,21 @@ namespace RAGE
 				RAGE::Events::MouseEventWrapper::load_ruby_class();
 				RAGE::Events::ScreenEventWrapper::load_ruby_class();
 				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
+				RAGE::Filesystem::FSWrappers::init_wrappers();
 
 				// TODO: Finish inserting wrappers here
 
 				/* Set search path to exe file */
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
+
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str()))
+				{
+					PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str(), "/", 0);
+					RAGE::Filesystem::FSWrappers::force_physfs_on();
+				}
+				else
+					PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).c_str(), "/", 0);
 
 				/* Set Command line arguments */
 				rb_gv_set("$RARGV", rb_ary_new());
@@ -178,8 +197,11 @@ namespace RAGE
 				#endif
 
 				/* Load config script */
-				load_protect("conf.rb");
-				
+
+				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr("conf.rb"));
+				else
+					load_protect("conf.rb");
 
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();
@@ -189,7 +211,10 @@ namespace RAGE
 				RAGE::Events::EventsWrapper::run_event_thread();
 
 				/* Load boot script */
-				load_protect("boot.rb");
+				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr("boot.rb"));
+				else
+					load_protect("boot.rb");
 			}
 		}
 

@@ -45,12 +45,15 @@
 #define RAGE_RB_INCOMPATIBLE "This game may be incompatible with this version of RAGE.\n\n"
 #define RAGE_RB_SCRIPT_ERROR "Script Error!\n\t%s: %s\n"
 #define RAGE_RB_FILE_MISSING_ERROR "File '%s' not found."
+#define RAGE_RB_PATH_MISSING_ERROR "Path '%s' not found."
 #define RAGE_EVENT_ERROR "Cannot call methods from abstract RAGE::Event class."
 #define RAGE_BITMAP_ERROR "Width and Height values need to be Fixnum."
 #define RAGE_BITMAP_PARENT_ERROR "Parent argument must be an instance of RAGE::Bitmap."
 #define RAGE_BITMAP_NOT_CREATED_ERROR "Cannot set nil bitmap as drawing target. Create or load a bitmap first."
 #define RAGE_COLOR_ERROR "Argument must be an instance of RAGE::Color class."
 #define RAGE_FONT_ERROR "Argument must be an instance of RAGE::Font class."
+#define RAGE_GAME_ERROR_BOOT "File 'boot.rb' cannot be in same folder as the file 'game.rage'"
+#define RAGE_GAME_ERROR_CONF "File 'conf.rb' cannot be in same folder as the file 'game.rage'"
 
 #define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_push(observer, proc);}
 #define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_delete(observer, proc);}

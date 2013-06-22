@@ -163,6 +163,9 @@
     <ClCompile Include="Font_Wrapper.cpp">
       <Filter>modules\graphics\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="FS_Wrappers.cpp">
+      <Filter>modules\filesystem\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -254,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FS_Wrappers.h">
+      <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

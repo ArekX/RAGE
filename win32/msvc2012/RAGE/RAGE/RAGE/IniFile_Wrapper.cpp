@@ -26,19 +26,17 @@ namespace RAGE
 
 		VALUE IniFileWrapper::rb_load(VALUE self, VALUE filename)
 		{
-			VALUE fname = rb_find_file(filename);
-			if (TYPE(fname) != T_STRING)
+			if (Interpreter::Ruby::file_exists(filename) < 0)
 			{
 				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 			
-			
 			IniFile *ini;
 			Data_Get_Struct(self, IniFile, ini);
 
-			ini->load(StringValueCStr(fname));
+			ini->load(StringValueCStr(filename));
 
 			return Qtrue;
 		}
@@ -91,7 +89,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rageIniFileClass, IniFileWrapper::rb_alloc);
 
-			rb_define_method(rb_rageIniFileClass, "create", RFUNC(IniFileWrapper::rb_create), 1);
+			rb_define_method(rb_rageIniFileClass, "create", RFUNC(IniFileWrapper::rb_create), 0);
 			rb_define_method(rb_rageIniFileClass, "load", RFUNC(IniFileWrapper::rb_load), 1);
 			rb_define_method(rb_rageIniFileClass, "save", RFUNC(IniFileWrapper::rb_save), 1);
 			rb_define_method(rb_rageIniFileClass, "get", RFUNC(IniFileWrapper::rb_get), 2);

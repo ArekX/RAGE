@@ -35,7 +35,7 @@ namespace RAGE
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (ini != NULL)
-				al_save_config_file(filename, ini);	
+					al_save_config_file(filename, ini);
 		}
 
 		const char* IniFile::get(char *section, char* key)
