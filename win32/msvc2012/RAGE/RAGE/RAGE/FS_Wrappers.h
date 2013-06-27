@@ -19,11 +19,19 @@ namespace RAGE
 			static VALUE rb_physfs_get_mounts(VALUE self);
 			static VALUE rb_physfs_enum_files(VALUE self, VALUE dir);
 			static VALUE rb_physfs_set_write_dir(VALUE self, VALUE dir);
-			static VALUE rb_physfs_get_write_dir(VALUE self, VALUE dir);
+			static VALUE rb_physfs_get_write_dir(VALUE self);
+			static VALUE rb_physfs_get_modified_time(VALUE self, VALUE filename);
+			static VALUE rb_physfs_file_exists(VALUE self, VALUE filename);
+			static VALUE rb_physfs_dir_exists(VALUE self, VALUE dirname);
+			static VALUE rb_get_mount_path(VALUE self, VALUE mount_dir);
+			static VALUE rb_physfs_make_dir(VALUE self, VALUE dirname);
+			static VALUE rb_physfs_get_dir_separator(VALUE self);
+			static VALUE rb_physfs_delete(VALUE self, VALUE path);
+			static VALUE rb_physfs_get_last_error(VALUE self);
 		public:
 			static bool is_physfs_on();
 			static void force_physfs_on();
-			static void init_wrappers();
+			static void load_wrappers();
 		};
 
 	}

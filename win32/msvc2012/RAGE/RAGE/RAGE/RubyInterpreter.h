@@ -16,6 +16,7 @@
 #include <allegro5/allegro_physfs.h>
 #include <physfs.h>
 #include <ruby/thread.h>
+#include <exts/dl/dl.h>
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"

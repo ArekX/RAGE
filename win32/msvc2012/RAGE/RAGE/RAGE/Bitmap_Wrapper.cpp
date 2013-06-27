@@ -388,12 +388,12 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE BitmapWrapper::rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b)
+		VALUE BitmapWrapper::rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
 
-			bmp->set_pixel(FIX2INT(x), FIX2INT(y), al_map_rgb_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b)));
+			bmp->set_pixel(FIX2INT(x), FIX2INT(y), al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)));
 
 			return Qnil;
 		}
@@ -451,7 +451,7 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "lock", RFUNC(BitmapWrapper::rb_bitmap_lock), 0);
 			rb_define_method(rb_rageBitmapClass, "lockRegion", RFUNC(BitmapWrapper::rb_bitmap_lock_region), 4);
 			rb_define_method(rb_rageBitmapClass, "unlock", RFUNC(BitmapWrapper::rb_bitmap_unlock), 0);
-			rb_define_method(rb_rageBitmapClass, "setPixel", RFUNC(BitmapWrapper::rb_bitmap_set_pixel), 5);
+			rb_define_method(rb_rageBitmapClass, "setPixel", RFUNC(BitmapWrapper::rb_bitmap_set_pixel), 6);
 			rb_define_method(rb_rageBitmapClass, "blendPixel", RFUNC(BitmapWrapper::rb_bitmap_set_blended_pixel), 6);
 			rb_define_method(rb_rageBitmapClass, "getPixel", RFUNC(BitmapWrapper::rb_bitmap_get_pixel), 3);
 

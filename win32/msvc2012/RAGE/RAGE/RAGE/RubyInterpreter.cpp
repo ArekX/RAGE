@@ -1,5 +1,10 @@
 #include "RubyInterpreter.h"
 
+extern "C"
+{
+	void Init_dl(void);
+	void Init_zlib(void);
+}
 
 namespace RAGE
 {
@@ -62,8 +67,9 @@ namespace RAGE
 					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
 					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
 					
-					printf_s(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
+					PRINT(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
 					getc(stdin);
+					exit(0);
 			}
 
 			return Qnil;
@@ -73,7 +79,10 @@ namespace RAGE
 		{
 			if (!configured)
 			{
-				gConfig.name = StringValueCStr(name);
+				
+				gConfig.name = new char[RSTRING_LEN(name)];
+				strcpy(gConfig.name, StringValueCStr(name));
+
 				gConfig.width = FIX2UINT(width);
 				gConfig.height = FIX2UINT(height);
 				gConfig.fullscreen = (TYPE(fullscreen) == T_TRUE);
@@ -94,9 +103,6 @@ namespace RAGE
 			VALUE str = rb_str_new_cstr(filename);
 			ruby_set_script_name(str);
 			int error;
-
-			// TODO: This will need revision when PhysicsFS comes, to check both in allegro and ruby path. 
-			// -- Refactor this check-and-find into a function.
 
 			rb_gc_register_address(&str);
 			rb_load_protect(str, 1, &error);
@@ -127,10 +133,21 @@ namespace RAGE
 			else
 				ret_val_fs = -2;
 
-			if (ret_val_rb == 0)
-				return ret_val_fs;
+			/* PHYSFS takes precedence if it's turned on */
+			if (RAGE::Filesystem::FSWrappers::is_physfs_on())
+			{
+				if (ret_val_fs > 0)
+					return ret_val_fs;
+				else
+					return ret_val_rb;
+			}
 			else
-				return 1;
+			{
+				if (ret_val_rb == 0)
+					return ret_val_fs;
+				else
+					return 1;
+			}
 		}
 
 		Ruby::Ruby(int argc, char** argv)
@@ -140,7 +157,10 @@ namespace RAGE
 			{
 				RUBY_INIT_STACK;
 				ruby_init();
-				
+
+				Init_dl();
+				Init_zlib();
+
 				/* Define Global Functions */
 				VALUE rage = rb_define_module("RAGE");
 				rb_define_module_function(rage, "require", RFUNC(rb_rage_require_wrapper), 1);
@@ -153,6 +173,7 @@ namespace RAGE
 				RAGE::Input::InputWrappers::load_wrappers();
 				RAGE::Audio::AudioWrappers::load_wrappers();
 				RAGE::Graphics::DrawWrappers::load_wrappers();
+				RAGE::Filesystem::FSWrappers::load_wrappers();
 
 				/* Load RAGE classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
@@ -166,21 +187,25 @@ namespace RAGE
 				RAGE::Events::MouseEventWrapper::load_ruby_class();
 				RAGE::Events::ScreenEventWrapper::load_ruby_class();
 				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
-				RAGE::Filesystem::FSWrappers::init_wrappers();
-
-				// TODO: Finish inserting wrappers here
 
 				/* Set search path to exe file */
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
 
-				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str()))
+				if (!PHYSFS_mount(str.c_str(), "/", 0))
 				{
-					PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str(), "/", 0);
-					RAGE::Filesystem::FSWrappers::force_physfs_on();
+					if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str()))
+					{
+						PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str(), "/", 0);
+						RAGE::Filesystem::FSWrappers::force_physfs_on();
+					}
+					else
+						PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).c_str(), "/", 0);
 				}
 				else
-					PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).c_str(), "/", 0);
+					RAGE::Filesystem::FSWrappers::force_physfs_on();
+
+				PHYSFS_setWriteDir(str.substr(0, str.find_last_of(DS) + 1).c_str());
 
 				/* Set Command line arguments */
 				rb_gv_set("$RARGV", rb_ary_new());

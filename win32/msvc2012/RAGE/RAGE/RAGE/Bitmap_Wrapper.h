@@ -55,7 +55,7 @@ namespace RAGE
 			static VALUE rb_bitmap_unlock(VALUE self);
 
 			static VALUE rb_bitmap_get_pixel(VALUE self, VALUE color, VALUE x, VALUE y);
-			static VALUE rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b);
+			static VALUE rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_bitmap_set_blended_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
 
 			static VALUE rb_bitmap_draw(VALUE self, VALUE x, VALUE y);

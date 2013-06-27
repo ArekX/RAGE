@@ -67,14 +67,16 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			al_lock_bitmap(bitmap, al_get_bitmap_format(bitmap), ALLEGRO_LOCK_READWRITE);
+			al_lock_bitmap(bitmap, ALLEGRO_PIXEL_FORMAT_ANY, 0);
+			al_set_target_bitmap(bitmap);
 		}
 
 		void Bitmap::lock_region(int x, int y, int w, int h)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			al_lock_bitmap_region(bitmap, x, y, w, h, al_get_bitmap_format(bitmap), ALLEGRO_LOCK_READWRITE);
+			al_lock_bitmap_region(bitmap, x, y, w, h, ALLEGRO_PIXEL_FORMAT_ANY, 0);
+			al_set_target_bitmap(bitmap);
 		}
 
 		void Bitmap::unlock()

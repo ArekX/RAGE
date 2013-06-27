@@ -273,6 +273,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-0.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-3.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-4.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-6.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-7.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-8.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cfunc.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cptr.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c" />
     <ClCompile Include="Audio_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
@@ -304,6 +319,8 @@
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="BaseEvent.h" />

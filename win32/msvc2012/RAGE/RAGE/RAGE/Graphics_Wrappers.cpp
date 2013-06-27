@@ -338,7 +338,7 @@ namespace RAGE
 			al_destroy_display(display);
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 			display = al_create_display(width, height);
-			al_set_window_title(display, "RAGE Game");
+			al_set_window_title(display, start_config.name);
 			al_set_window_position(display, window_x, window_y);
 			al_set_target_backbuffer(display);
 			al_flip_display();
