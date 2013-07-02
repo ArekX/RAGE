@@ -15,6 +15,7 @@ namespace RAGE
 		private:
 			 static VALUE rb_register_event(VALUE self, VALUE entry);
 			 static VALUE rb_unregister_event(VALUE self, VALUE entry);
+			 static VALUE rb_event_is_registered(VALUE self, VALUE entry);
 			 static VALUE rb_clear_events(VALUE self, VALUE event_type);
 			 static VALUE rb_clear_events2(VALUE self);
 			 static VALUE rb_freeze_events(VALUE self);

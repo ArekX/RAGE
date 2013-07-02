@@ -53,6 +53,7 @@ namespace RAGE
 			KeyboardEvent *key_event;
 			Data_Get_Struct(self, KeyboardEvent, key_event);
 			key_event->dispose();
+
 			return Qnil;
 		}
 

@@ -60,6 +60,7 @@ namespace RAGE
 			ScreenEvent *screen_event;
 			Data_Get_Struct(self, ScreenEvent, screen_event);
 			screen_event->dispose();
+
 			return Qnil;
 		}
 

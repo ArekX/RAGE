@@ -164,15 +164,6 @@ rb_dl_value2ptr(VALUE self, VALUE val)
 static void
 rb_dl_init_callbacks(VALUE dl)
 {
-/*    static const char cb[] = "dl/callback.so";
-
-    rb_autoload(dl, rb_intern_const("CdeclCallbackAddrs"), cb);
-    rb_autoload(dl, rb_intern_const("CdeclCallbackProcs"), cb);
-#ifdef FUNC_STDCALL
-    rb_autoload(dl, rb_intern_const("StdcallCallbackAddrs"), cb);
-    rb_autoload(dl, rb_intern_const("StdcallCallbackProcs"), cb);
-#endif*/
-
     Init_callback();
 }
 

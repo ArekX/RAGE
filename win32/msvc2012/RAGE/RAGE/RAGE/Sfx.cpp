@@ -34,6 +34,12 @@ namespace RAGE
 
 			spl = al_load_sample(filename);
 
+			if (spl == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SFX_LOAD_FAIL, filename);
+				return;
+			}
+
 			al_set_sample(inst, spl);
 		}
 		

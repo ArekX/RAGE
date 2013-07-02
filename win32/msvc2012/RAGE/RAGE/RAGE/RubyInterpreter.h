@@ -14,9 +14,11 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_physfs.h>
+#include <allegro5/platform/almsvc.h>
 #include <physfs.h>
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>
+#include <exts/socket/socketext.h>
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
@@ -49,6 +51,7 @@ namespace RAGE
 			
 		public:
 			static int file_exists(VALUE filename);
+			static char* Ruby::get_file_path(VALUE filename);
 			Ruby(int argc, char** argv);
 			~Ruby(void);
 		};

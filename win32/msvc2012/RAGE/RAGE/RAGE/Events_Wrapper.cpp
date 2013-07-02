@@ -148,8 +148,12 @@ namespace RAGE
 		void EventsWrapper::init_queue()
 		{
 			event_queue = al_create_event_queue();
-			al_register_event_source(event_queue, al_get_keyboard_event_source());
-			al_register_event_source(event_queue, al_get_mouse_event_source());
+
+			if (event_queue == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_EVENT_QUEUE_FAIL);
+				return;
+			}
 		}
 
 		void EventsWrapper::run_event_thread()
@@ -201,6 +205,13 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE EventsWrapper::rb_event_is_registered(VALUE self, VALUE entry)
+		{
+			if (TYPE(rb_ary_includes(event_objects, entry)) == T_TRUE)
+				return Qtrue;
+			return Qfalse;
+		}
+
 		void EventsWrapper::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -211,6 +222,7 @@ namespace RAGE
 
 			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 1);
 			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 1);
+			rb_define_module_function(events, "isRegistered?", RFUNC(EventsWrapper::rb_event_is_registered), 1);
 			rb_define_module_function(events, "processKeyboard", RFUNC(EventsWrapper::rb_process_keyboard), 1);
 			rb_define_module_function(events, "processMouse", RFUNC(EventsWrapper::rb_process_mouse), 1);
 			rb_define_module_function(events, "processJoystick", RFUNC(EventsWrapper::rb_process_joystick), 1);

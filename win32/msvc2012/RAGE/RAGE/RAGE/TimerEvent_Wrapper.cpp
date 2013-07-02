@@ -54,6 +54,7 @@ namespace RAGE
 			TimerEvent *tm;
 			Data_Get_Struct(self, TimerEvent, tm);
 			tm->dispose();
+
 			return Qnil;
 		}
 

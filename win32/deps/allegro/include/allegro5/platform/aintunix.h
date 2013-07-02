@@ -19,6 +19,7 @@
 #define __al_included_allegro5_aintunix_h
 
 #include "allegro5/path.h"
+#include "allegro5/internal/aintern_driver.h"
 
 /* Need right now for XKeyEvent --pw */
 #ifdef ALLEGRO_WITH_XWINDOWS
@@ -30,19 +31,6 @@ extern "C" {
 #endif
 
    AL_FUNC(ALLEGRO_PATH *, _al_unix_get_path, (int id));
-
-
-   /* Module support */
-   AL_FUNC(void, _unix_load_modules, (int system_driver_id));
-   AL_FUNC(void, _unix_unload_modules, (void));
-
-
-   /* Dynamic driver lists, for modules */
-   AL_VAR(_AL_DRIVER_INFO *, _unix_gfx_driver_list);
-   AL_VAR(_AL_DRIVER_INFO *, _unix_digi_driver_list);
-   AL_VAR(_AL_DRIVER_INFO *, _unix_midi_driver_list);
-   AL_FUNC(void, _unix_driver_lists_init, (void));
-   AL_FUNC(void, _unix_driver_lists_shutdown, (void));
 
 
 #ifdef __cplusplus

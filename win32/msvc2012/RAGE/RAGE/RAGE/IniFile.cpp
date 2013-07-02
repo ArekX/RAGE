@@ -18,6 +18,12 @@ namespace RAGE
 				al_destroy_config(ini);
 
 			ini = al_create_config();
+
+			if (ini == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_INI_CREATE_FAIL);
+				return;
+			}
 		}
 
 		void IniFile::load(char *filename)
@@ -28,6 +34,12 @@ namespace RAGE
 				al_destroy_config(ini);
 
 			ini = al_load_config_file(filename);
+
+			if (ini == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_INI_LOAD_FAIL, filename);
+				return;
+			}
 		}
 
 		void IniFile::save(char *filename)

@@ -60,6 +60,7 @@ namespace RAGE
 			MouseEvent *mouse_event;
 			Data_Get_Struct(self, MouseEvent, mouse_event);
 			mouse_event->dispose();
+
 			return Qnil;
 		}
 

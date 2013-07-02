@@ -93,13 +93,7 @@ namespace RAGE
 
 		VALUE GraphicsWrappers::rb_set_blending_mode(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst)
 		{
-			int op, src, dst;
-
-			RAGE_SET_BLENDING_OP(rop, op, ALLEGRO_ADD);
-			RAGE_SET_BLENDING(rsrc, src, ALLEGRO_ONE);
-			RAGE_SET_BLENDING(rdst, dst, ALLEGRO_INVERSE_ALPHA);
-
-			al_set_blender(op, src, dst);
+			al_set_blender(FIX2UINT(rop), FIX2UINT(rsrc), FIX2UINT(rdst));
 
 			return Qnil;
 		}
@@ -228,17 +222,7 @@ namespace RAGE
 
 		VALUE GraphicsWrappers::rb_set_blending_mode_alpha(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst, VALUE aop, VALUE asrc, VALUE adst)
 		{
-			int op, src, dst, alop, alsrc, aldst;
-
-			RAGE_SET_BLENDING_OP(rop, op, ALLEGRO_ADD);
-			RAGE_SET_BLENDING(rsrc, src, ALLEGRO_ONE);
-			RAGE_SET_BLENDING(rdst, dst, ALLEGRO_INVERSE_ALPHA);
-
-			RAGE_SET_BLENDING_OP(aop, alop, ALLEGRO_ADD);
-			RAGE_SET_BLENDING(asrc, alsrc, ALLEGRO_ONE);
-			RAGE_SET_BLENDING(adst, aldst, ALLEGRO_INVERSE_ALPHA);
-
-			al_set_separate_blender(op, src, dst, alop, alsrc, aldst);
+			al_set_separate_blender(FIX2UINT(rop), FIX2UINT(rsrc), FIX2UINT(rdst), FIX2UINT(aop), FIX2UINT(asrc), FIX2UINT(adst));
 
 			return Qnil;
 		}
@@ -265,15 +249,20 @@ namespace RAGE
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
 
-			rb_define_const(g, "ADD", INT2FIX(RAGE_OP_ADD));
-			rb_define_const(g, "DEST_MIN_SRC", INT2FIX(RAGE_OP_DST_MIN_SRC));
-			rb_define_const(g, "SRC_MIN_DEST",  INT2FIX(RAGE_OP_SRC_MIN_DST));
-
-			rb_define_const(g, "BLEND_ZERO", INT2FIX(RAGE_BLEND_ZERO));
-			rb_define_const(g, "BLEND_ONE", INT2FIX(RAGE_BLEND_ONE));
-			rb_define_const(g, "BLEND_ALPHA",  INT2FIX(RAGE_BLEND_ALPHA));
-			rb_define_const(g, "BLEND_INV_ALPHA",  INT2FIX(RAGE_BLEND_INV_ALPHA));
+			rb_define_const(g, "ADD", INT2FIX(ALLEGRO_ADD));
+			rb_define_const(g, "SRC_MIN_DEST",  INT2FIX(ALLEGRO_SRC_MINUS_DEST));
+			rb_define_const(g, "DEST_MIN_SRC", INT2FIX(ALLEGRO_DEST_MINUS_SRC));
 			
+			rb_define_const(g, "BLEND_ZERO", INT2FIX(ALLEGRO_ZERO));
+			rb_define_const(g, "BLEND_ONE", INT2FIX(ALLEGRO_ONE));
+			rb_define_const(g, "BLEND_ALPHA",  INT2FIX(ALLEGRO_ALPHA));
+			rb_define_const(g, "BLEND_INV_ALPHA",  INT2FIX(ALLEGRO_INVERSE_ALPHA));
+
+			rb_define_const(g, "BLEND_SRC_COLOR", INT2FIX(ALLEGRO_SRC_COLOR));
+			rb_define_const(g, "BLEND_DEST_COLOR", INT2FIX(ALLEGRO_DEST_COLOR));
+			rb_define_const(g, "BLEND_INV_SRC_COLOR",  INT2FIX(ALLEGRO_INVERSE_SRC_COLOR));
+			rb_define_const(g, "BLEND_INV_DEST_COLOR",  INT2FIX(ALLEGRO_INVERSE_DEST_COLOR));
+
 			/* Define Module Functions */
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
 			rb_define_module_function(g, "title", RFUNC(GraphicsWrappers::rb_get_title), 0);

@@ -35,6 +35,9 @@ namespace RAGE
 			void set_blended_pixel(int x, int y, ALLEGRO_COLOR color);
 			ALLEGRO_COLOR get_pixel(int x, int y);
 			
+			ALLEGRO_BITMAP* get_parent();
+			bool is_sub();
+
 			int get_width();
 			int get_height();
 			void draw(float x, float y);

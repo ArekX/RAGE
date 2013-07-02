@@ -23,6 +23,9 @@ namespace RAGE
 			static void rb_bitmap_destroy(void *value);
 			static VALUE rb_bitmap_alloc(VALUE self);
 
+			static VALUE rb_bitmap_is_sub(VALUE self);
+			static VALUE rb_bitmap_get_parent(VALUE self);
+
 			static VALUE rb_set_scale_x(VALUE self, VALUE val);
 			static VALUE rb_set_scale_y(VALUE self, VALUE val);
 			static VALUE rb_set_center_x(VALUE self, VALUE val);

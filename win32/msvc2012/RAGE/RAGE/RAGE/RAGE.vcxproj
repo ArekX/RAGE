@@ -330,6 +330,7 @@
     <ClInclude Include="Color_Wrapper.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Draw_Wrappers.h" />
+    <ClInclude Include="rage_errors.h" />
     <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Event_Wrapper.h" />
     <ClInclude Include="Font.h" />

@@ -24,6 +24,12 @@ namespace RAGE
 
 			audio = al_load_audio_stream(filename, 4, 2048);
 			
+			if (audio == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_MUSIC_LOAD_FAIL, filename);
+				return;
+			}
+
 			al_set_audio_stream_playing(audio, false);
 
 			al_attach_audio_stream_to_mixer(audio, mixer);

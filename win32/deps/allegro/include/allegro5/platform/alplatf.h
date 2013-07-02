@@ -10,6 +10,7 @@
 /* #undef ALLEGRO_GP2XWIZ */
 /* #undef ALLEGRO_IPHONE */
 /* #undef ALLEGRO_ANDROID */
+/* #undef ALLEGRO_RASPBERRYPI */
 /* #undef ALLEGRO_CFG_ALLOW_SSE */
 #define ALLEGRO_NO_ASM
 /* #undef ALLEGRO_CFG_NO_FPU */
@@ -21,6 +22,7 @@
 /* #undef ALLEGRO_CFG_HLSL_SHADERS */
 /* #undef ALLEGRO_CFG_CG_SHADERS */
 
+/* #undef ALLEGRO_CFG_OPENGLES */
 /* #undef ALLEGRO_CFG_NO_GLES2 */
 /* #undef ALLEGRO_CFG_ANDROID_LEGACY */
 

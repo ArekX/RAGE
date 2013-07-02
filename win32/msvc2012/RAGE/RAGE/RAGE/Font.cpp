@@ -19,6 +19,12 @@ namespace RAGE
 				al_destroy_font(font);
 
 			font = al_load_font(filename, size, 0);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
+				return;
+			}
 		}
 
 		void Font::load_ttf_font_stretch(char *filename, int w, int h)
@@ -39,6 +45,12 @@ namespace RAGE
 				al_destroy_font(font);
 
 			font = al_load_font(filename, size, flags);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
+				return;
+			}
 		}
 
 		void Font::load_ttf_font_stretch_f(char *filename, int w, int h, int flags)
@@ -49,6 +61,12 @@ namespace RAGE
 				al_destroy_font(font);
 
 			font = al_load_ttf_font_stretch(filename, w, h, flags);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
+				return;
+			}
 		}
 
 		int Font::get_text_width(ALLEGRO_USTR *text)

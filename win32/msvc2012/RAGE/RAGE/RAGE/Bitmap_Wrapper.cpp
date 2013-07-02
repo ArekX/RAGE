@@ -62,7 +62,8 @@ namespace RAGE
 
 		VALUE BitmapWrapper::rb_load_f(VALUE self, VALUE filename)
 		{
-			if (Interpreter::Ruby::file_exists(filename) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(filename);
+			if (absolute_file == NULL)
 			{
 				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
@@ -73,7 +74,7 @@ namespace RAGE
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
 			
-			bmp->initialize(StringValueCStr(filename));
+			bmp->initialize(absolute_file);
 			
 			return Qtrue;
 		}
@@ -105,6 +106,38 @@ namespace RAGE
 			bmp->draw_region(NUM2DBL(sx), NUM2DBL(sy), NUM2DBL(sw), NUM2DBL(sh), NUM2DBL(dx), NUM2DBL(dy));
 			 
 			return Qtrue;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_is_sub(VALUE self)
+		{
+			Bitmap *bmp;
+			
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			if (bmp->is_sub())
+				return Qtrue;
+			else
+				return Qfalse;
+		}
+
+		VALUE BitmapWrapper::rb_bitmap_get_parent(VALUE self)
+		{
+			Bitmap *bmp, *ret;
+			
+			Data_Get_Struct(self, Bitmap, bmp);
+
+			ALLEGRO_BITMAP *bit = bmp->get_parent();
+
+			if (bit == NULL)
+				return Qnil;
+
+			VALUE ret_bmp = new_ruby_class_instance();
+
+			Data_Get_Struct(ret_bmp, Bitmap, ret);
+
+			ret->bitmap = bit;
+
+			return ret_bmp;
 		}
 
 		VALUE BitmapWrapper::rb_set_scale_x(VALUE self, VALUE val)
@@ -424,6 +457,8 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);
 			rb_define_method(rb_rageBitmapClass, "createSub", RFUNC(BitmapWrapper::rb_create_sub), 5);
 			rb_define_method(rb_rageBitmapClass, "recreate", RFUNC(BitmapWrapper::rb_recreate), 0);
+			rb_define_method(rb_rageBitmapClass, "getParent", RFUNC(BitmapWrapper::rb_bitmap_get_parent), 0);
+			rb_define_method(rb_rageBitmapClass, "isSub?", RFUNC(BitmapWrapper::rb_bitmap_is_sub), 0);
 			rb_define_method(rb_rageBitmapClass, "width", RFUNC(BitmapWrapper::rb_get_width), 0);
 			rb_define_method(rb_rageBitmapClass, "height", RFUNC(BitmapWrapper::rb_get_height), 0);
 			rb_define_method(rb_rageBitmapClass, "centerX=", RFUNC(BitmapWrapper::rb_set_center_x), 1);

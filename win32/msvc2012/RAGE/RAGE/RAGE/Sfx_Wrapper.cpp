@@ -18,7 +18,8 @@ namespace RAGE
 
 		VALUE SfxWrapper::rb_load(VALUE self, VALUE filename)
 		{
-			if (Interpreter::Ruby::file_exists(filename) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(filename);
+			if (absolute_file == NULL)
 			{
 				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
@@ -28,7 +29,7 @@ namespace RAGE
 			Sfx *aud;
 			Data_Get_Struct(self, Sfx, aud);
 
-			aud->load(StringValueCStr(filename));
+			aud->load(absolute_file);
 
 			return Qtrue;
 		}

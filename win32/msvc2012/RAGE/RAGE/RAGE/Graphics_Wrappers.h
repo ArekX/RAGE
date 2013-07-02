@@ -1,14 +1,6 @@
 #pragma once
 #include "RubyInterpreter.h"
 
-#define RAGE_OP_ADD 1
-#define RAGE_OP_DST_MIN_SRC 2
-#define RAGE_OP_SRC_MIN_DST 3
-#define RAGE_BLEND_ZERO 4
-#define RAGE_BLEND_ONE 5
-#define RAGE_BLEND_ALPHA 6 
-#define RAGE_BLEND_INV_ALPHA 7
-
 namespace RAGE
 {
 	namespace Graphics

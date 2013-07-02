@@ -113,24 +113,6 @@ void _al_convert_bitmap_data(
 	int width, int height);
 void _al_convert_to_memory_bitmap(ALLEGRO_BITMAP *bitmap);
 void _al_convert_to_display_bitmap(ALLEGRO_BITMAP *bitmap);
-bool _al_format_has_alpha(int format);
-bool _al_pixel_format_is_real(int format);
-int _al_get_real_pixel_format(ALLEGRO_DISPLAY *display, int format);
-
-/* Memory bitmap blitting */
-void _al_draw_bitmap_region_memory(ALLEGRO_BITMAP *bitmap,
-   ALLEGRO_COLOR tint,
-   int sx, int sy, int sw, int sh, int dx, int dy, int flags);
-
-
-/* For blending memory bitmaps */
-typedef void (*ALLEGRO_MEMORY_BLENDER)(
-   ALLEGRO_COLOR *src_color,
-   ALLEGRO_COLOR *dest_color,
-   ALLEGRO_COLOR *result);
-
-void _al_blend_memory(ALLEGRO_COLOR *src_color, ALLEGRO_BITMAP *dest,
-   int dx, int dy, ALLEGRO_COLOR *result);
 
 #ifdef ALLEGRO_GP2XWIZ
 /* Optimized blitters */
@@ -145,9 +127,11 @@ void _al_draw_bitmap_region_optimized_rgba_4444_to_rgba_4444(
    ALLEGRO_BITMAP *dest, int dx, int dy, int flags);
 #endif
 
-bool _al_transform_is_translation(const ALLEGRO_TRANSFORM* trans,
-   float *dx, float *dy);
+/* Simple bitmap drawing */
+/* _al_put_pixel was inadvertently exported in 5.0.x releases. */
+AL_FUNC(void, _al_put_pixel, (ALLEGRO_BITMAP *bitmap, int x, int y, ALLEGRO_COLOR color));
 
+/* Bitmap I/O */
 void _al_init_iio_table(void);
 
 #ifdef __cplusplus

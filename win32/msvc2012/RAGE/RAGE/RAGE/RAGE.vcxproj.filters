@@ -80,14 +80,11 @@
     <Filter Include="app\ruby_ext">
       <UniqueIdentifier>{9e46a1ea-716d-4121-8d51-ad817947cad0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="app\ruby_ext\DL">
-      <UniqueIdentifier>{93837c94-0675-421f-bec6-c4abdad9a37e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\ruby_ext\DL\headers">
-      <UniqueIdentifier>{612d6d2b-8069-49fb-9288-575f08781fd3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="app\ruby_ext\Zlib">
       <UniqueIdentifier>{9abfd54b-a9a3-4cef-8136-4ff6eee51bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_ext\DL">
+      <UniqueIdentifier>{4c12998a-1b2e-46f7-adcf-b53ae8ce1901}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +175,12 @@
     <ClCompile Include="FS_Wrappers.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c">
+      <Filter>app\ruby_ext\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.c">
+      <Filter>app\ruby_ext\DL</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-0.c">
       <Filter>app\ruby_ext\DL</Filter>
     </ClCompile>
@@ -205,9 +208,6 @@
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-8.c">
       <Filter>app\ruby_ext\DL</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cfunc.c">
       <Filter>app\ruby_ext\DL</Filter>
     </ClCompile>
@@ -219,9 +219,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c">
       <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c">
-      <Filter>app\ruby_ext\Zlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,11 +315,14 @@
     <ClInclude Include="FS_Wrappers.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.h">
-      <Filter>app\ruby_ext\DL\headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h">
-      <Filter>app\ruby_ext\DL\headers</Filter>
+      <Filter>app\ruby_ext\DL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.h">
+      <Filter>app\ruby_ext\DL</Filter>
+    </ClInclude>
+    <ClInclude Include="rage_errors.h">
+      <Filter>app\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

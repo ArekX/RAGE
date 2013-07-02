@@ -29,28 +29,18 @@
 
 
 
-#if defined ALLEGRO_DJGPP
-   #include "allegro5/platform/aldjgpp.h"
-#elif defined ALLEGRO_WATCOM
+#if defined ALLEGRO_WATCOM
    #include "allegro5/platform/alwatcom.h"
 #elif defined ALLEGRO_MINGW32
    #include "allegro5/platform/almngw32.h"
-#elif defined ALLEGRO_DMC
-   #include "allegro5/platform/aldmc.h"
 #elif defined ALLEGRO_BCC32
    #include "allegro5/platform/albcc32.h"
 #elif defined ALLEGRO_MSVC
    #include "allegro5/platform/almsvc.h"
-#elif defined ALLEGRO_BEOS
-   #include "allegro5/platform/albecfg.h"
 #elif defined ALLEGRO_IPHONE
    #include "allegro5/platform/aliphonecfg.h"
 #elif defined ALLEGRO_MACOSX
    #include "allegro5/platform/alosxcfg.h"
-#elif defined ALLEGRO_QNX
-   #include "allegro5/platform/alqnxcfg.h"
-#elif defined ALLEGRO_GP2XWIZ
-   #include "allegro5/platform/alwizcfg.h"
 #elif defined ALLEGRO_UNIX
    #include "allegro5/platform/alucfg.h"
 #else
@@ -103,17 +93,6 @@
       #define INLINE          __inline__
    #endif
 
-   #if __GNUC__ >= 3
-      /* SET: According to gcc volatile is ignored for a return type.
-       * I think the code should just ensure that inportb is declared as an
-       * __asm__ __volatile__ macro. If that's the case the extra volatile
-       * doesn't have any sense.
-       */
-      #define RET_VOLATILE
-   #else
-      #define RET_VOLATILE    volatile
-   #endif
-
    #ifndef ZERO_SIZE_ARRAY
       #if __GNUC__ < 3
          #define ZERO_SIZE_ARRAY(type, name)  __extension__ type name[0]
@@ -132,16 +111,10 @@
 
    #ifdef __i386__
       #define ALLEGRO_I386
-      #ifndef ALLEGRO_NO_ASM
-         #define _AL_SINCOS(x, s, c)  __asm__ ("fsincos" : "=t" (c), "=u" (s) : "0" (x))
-      #endif
    #endif
 
    #ifdef __amd64__
       #define ALLEGRO_AMD64
-      #ifndef ALLEGRO_NO_ASM
-         #define _AL_SINCOS(x, s, c)  __asm__ ("fsincos" : "=t" (c), "=u" (s) : "0" (x))
-      #endif
    #endif
    
    #ifdef __arm__
@@ -174,36 +147,17 @@
 #endif
 
 
-/* use constructor functions, if supported */
-#ifdef ALLEGRO_USE_CONSTRUCTOR
-   #define CONSTRUCTOR_FUNCTION(func)              func __attribute__ ((constructor))
-   #define DESTRUCTOR_FUNCTION(func)               func __attribute__ ((destructor))
-#endif
-
-
 /* the rest of this file fills in some default definitions of language
  * features and helper functions, which are conditionalised so they will
  * only be included if none of the above headers defined custom versions.
  */
 
-#ifndef _AL_SINCOS
-   #define _AL_SINCOS(x, s, c)  do { (c) = cos(x); (s) = sin(x); } while (0)
-#endif
-
 #ifndef INLINE
    #define INLINE
 #endif
 
-#ifndef RET_VOLATILE
-   #define RET_VOLATILE   volatile
-#endif
-
 #ifndef ZERO_SIZE_ARRAY
    #define ZERO_SIZE_ARRAY(type, name)             type name[]
-#endif
-
-#ifndef AL_CONST
-   #define AL_CONST
 #endif
 
 #ifndef AL_VAR
@@ -261,33 +215,6 @@
 #endif
 
 
-/* fill in default filename behaviour */
-#ifndef ALLEGRO_LFN
-   #define ALLEGRO_LFN  1
-#endif
-
-#if (defined ALLEGRO_DOS) || (defined ALLEGRO_WINDOWS)
-   #define OTHER_PATH_SEPARATOR  '\\'
-   #define DEVICE_SEPARATOR      ':'
-#else
-   #define OTHER_PATH_SEPARATOR  '/'
-   #define DEVICE_SEPARATOR      '\0'
-#endif
-
-
-/* emulate the FA_* flags for platforms that don't already have them */
-#ifndef FA_RDONLY
-   #define FA_RDONLY       1
-   #define FA_HIDDEN       2
-   #define FA_SYSTEM       4
-   #define FA_LABEL        8
-   #define FA_DIREC        16
-   #define FA_ARCH         32
-#endif
-   #define FA_NONE         0
-   #define FA_ALL          (~FA_NONE)
-
-
 #ifdef __cplusplus
    extern "C" {
 #endif
@@ -336,12 +263,5 @@
 
 #ifdef __cplusplus
    }
-#endif
-
-
-/* parameters for the color conversion code */
-#if (defined ALLEGRO_WINDOWS) || (defined ALLEGRO_QNX)
-   #define ALLEGRO_COLORCONV_ALIGNED_WIDTH
-   #define ALLEGRO_NO_COLORCOPY
 #endif
 

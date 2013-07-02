@@ -18,15 +18,17 @@ namespace RAGE
 		
 		VALUE FontWrapper::rb_load(VALUE self, VALUE font_name, VALUE size)
 		{
-			if (Interpreter::Ruby::file_exists(font_name) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(font_name);
+			if (absolute_file == NULL)
 			{
+				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
 			}
 
 			Font *fnt;
 			Data_Get_Struct(self, Font, fnt);
-			fnt->load_ttf_font(StringValueCStr(font_name), FIX2INT(size));
+			fnt->load_ttf_font(absolute_file, FIX2INT(size));
 
 			return Qnil;
 		}
@@ -76,45 +78,51 @@ namespace RAGE
 
 		VALUE FontWrapper::rb_load_stretch(VALUE self, VALUE font_name, VALUE w, VALUE h)
 		{
-			if (Interpreter::Ruby::file_exists(font_name) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(font_name);
+			if (absolute_file == NULL)
 			{
+				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
 			}
 
 			Font *fnt;
 			Data_Get_Struct(self, Font, fnt);
-			fnt->load_ttf_font_stretch(StringValueCStr(font_name), FIX2INT(w), FIX2INT(h));
+			fnt->load_ttf_font_stretch(absolute_file, FIX2INT(w), FIX2INT(h));
 
 			return Qnil;
 		}
 
 		VALUE FontWrapper::rb_load_flags(VALUE self, VALUE font_name, VALUE size, VALUE flags)
 		{
-			if (Interpreter::Ruby::file_exists(font_name) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(font_name);
+			if (absolute_file == NULL)
 			{
+				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
 			}
 
 			Font *fnt;
 			Data_Get_Struct(self, Font, fnt);
-			fnt->load_ttf_font_f(StringValueCStr(font_name), FIX2INT(size), FIX2INT(flags));
+			fnt->load_ttf_font_f(absolute_file, FIX2INT(size), FIX2INT(flags));
 
 			return Qnil;
 		}
 
 		VALUE FontWrapper::rb_load_stretch_flags(VALUE self, VALUE font_name, VALUE w, VALUE h, VALUE flags)
 		{
-			if (Interpreter::Ruby::file_exists(font_name) < 0)
+			char *absolute_file = Interpreter::Ruby::get_file_path(font_name);
+			if (absolute_file == NULL)
 			{
+				
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(font_name));
 				return Qfalse;
 			}
 
 			Font *fnt;
 			Data_Get_Struct(self, Font, fnt);
-			fnt->load_ttf_font_stretch_f(StringValueCStr(font_name), FIX2INT(w), FIX2INT(h), FIX2INT(flags));
+			fnt->load_ttf_font_stretch_f(absolute_file, FIX2INT(w), FIX2INT(h), FIX2INT(flags));
 
 			return Qnil;
 		}

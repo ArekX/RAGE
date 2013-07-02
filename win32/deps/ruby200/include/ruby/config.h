@@ -136,7 +136,7 @@
 #define DLEXT ".so"
 #define EXECUTABLE_EXTS ".exe",".com",".cmd",".bat"
 #define RUBY_COREDLL "msvcr110"
-#define LIBRUBY_SO "msvcr110-ruby200-static.lib"
+#define LIBRUBY_SO "msvcr110-ruby200.dll"
 #if 0
 !if "msvcr110-ruby200"!="$(RUBY_SO_NAME)" || "i386-mswin32_110"!="$(ARCH)-$(PLATFORM)"
 config.h: nul

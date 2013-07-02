@@ -19,6 +19,12 @@ namespace RAGE
 			RAGE_CHECK_DISPOSED(disposed);
 
 			timer = al_create_timer(seconds);
+
+			if (timer == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_TIMER_FAIL);
+				return;
+			}
 		}
 
 		void TimerEvent::register_to_queue(ALLEGRO_EVENT_QUEUE *queue)

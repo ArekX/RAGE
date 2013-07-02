@@ -37,10 +37,8 @@
 #define ALLEGRO_I386
 #define ALLEGRO_LITTLE_ENDIAN
 #define ALLEGRO_GUESS_INTTYPES_OK
-#define ALLEGRO_MULTITHREADED
 
 #ifdef ALLEGRO_USE_CONSOLE
-   #define ALLEGRO_CONSOLE_OK
    #define ALLEGRO_NO_MAGIC_MAIN
 #endif
   
@@ -95,10 +93,6 @@
 #endif
 
 
-/* describe the asm syntax for this platform */
-#define ALLEGRO_ASM_PREFIX    "_"
-
-
 /* life would be so easy if compilers would all use the same names! */
 #if (!defined S_IRUSR)
    #define S_IRUSR   S_IREAD
@@ -110,5 +104,4 @@
 /* arrange for other headers to be included later on */
 #define ALLEGRO_EXTRA_HEADER     "allegro5/platform/alwin.h"
 #define ALLEGRO_INTERNAL_HEADER  "allegro5/platform/aintwin.h"
-#define ALLEGRO_ASMCAPA_HEADER   "obj/msvc/asmcapa.h"
 #define ALLEGRO_INTERNAL_THREAD_HEADER "allegro5/platform/aintwthr.h"

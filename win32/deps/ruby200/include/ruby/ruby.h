@@ -2,7 +2,7 @@
 
   ruby/ruby.h -
 
-  $Author: nobu $
+  $Author: nagachika $
   created at: Thu Jun 10 14:26:32 JST 1993
 
   Copyright (C) 1993-2008 Yukihiro Matsumoto
@@ -21,12 +21,10 @@ extern "C" {
 #endif
 #endif
 
-#if _MSC_VER == 1600
-#include "config-10.h"
-#endif
-
-#if _MSC_VER == 1700
-#include "config.h"
+#if _MSC_VER != 1700
+#include "ruby/config-10.h"
+#else
+#include "ruby/config.h"
 #endif
 
 #ifdef RUBY_EXTCONF_H
@@ -1351,6 +1349,7 @@ VALUE rb_funcall(VALUE, ID, int, ...);
 VALUE rb_funcall2(VALUE, ID, int, const VALUE*);
 VALUE rb_funcall3(VALUE, ID, int, const VALUE*);
 VALUE rb_funcall_passing_block(VALUE, ID, int, const VALUE*);
+VALUE rb_funcall_with_block(VALUE, ID, int, const VALUE*, VALUE);
 int rb_scan_args(int, const VALUE*, const char*, ...);
 VALUE rb_call_super(int, const VALUE*);
 

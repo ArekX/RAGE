@@ -80,8 +80,7 @@ namespace RAGE
 			if (!configured)
 			{
 				
-				gConfig.name = new char[RSTRING_LEN(name)];
-				strcpy(gConfig.name, StringValueCStr(name));
+				gConfig.name = StringValueCStr(name);
 
 				gConfig.width = FIX2UINT(width);
 				gConfig.height = FIX2UINT(height);
@@ -98,56 +97,76 @@ namespace RAGE
 			return Qfalse;
 		}
 
-		static void load_protect(char* filename)
+		static void load_protect(const char* filename)
 		{
-			VALUE str = rb_str_new_cstr(filename);
-			ruby_set_script_name(str);
-			int error;
+			VALUE fstring = rb_str_new_cstr(filename);
+			VALUE full_file = rb_find_file(fstring);
 
-			rb_gc_register_address(&str);
-			rb_load_protect(str, 1, &error);
+			if (TYPE(full_file) != T_STRING)
+			{
+				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, filename);
+				getc(stdin);
+				return;
+			}
+
+			ruby_set_script_name(fstring);
+			int error = 0;
+
+			rb_load_protect(full_file, 1, &error);
 
 			if (error)
 			{
 					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
 					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
 					
-					printf_s(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
+					PRINT(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
 					getc(stdin);
-
 					exit(0);
 			}
 		}
 
 		int Ruby::file_exists(VALUE filename)
 		{
-			/* Check Ruby search path */
-			VALUE fname = rb_find_file(filename);
-			int ret_val_rb = 1, ret_val_fs = 0;
-			if (TYPE(fname) != T_STRING)
-				ret_val_rb = 0;
 
-			/* Check PHYSFS search path */
-			if (PHYSFS_exists(StringValueCStr(filename)))
-				ret_val_fs = 2;
-			else
-				ret_val_fs = -2;
-
-			/* PHYSFS takes precedence if it's turned on */
 			if (RAGE::Filesystem::FSWrappers::is_physfs_on())
 			{
-				if (ret_val_fs > 0)
-					return ret_val_fs;
+				if (PHYSFS_exists(StringValueCStr(filename)))
+					return 2;
 				else
-					return ret_val_rb;
+					return -2;
 			}
+
+			/* Check Ruby search path */
+			VALUE fname = rb_find_file(filename);
+
+			rb_gc_register_address(&fname);
+
+			if (TYPE(fname) != T_STRING)
+				return -1;
 			else
+				return 1;
+		}
+
+		char* Ruby::get_file_path(VALUE filename)
+		{
+
+			if (RAGE::Filesystem::FSWrappers::is_physfs_on())
 			{
-				if (ret_val_rb == 0)
-					return ret_val_fs;
+				if (PHYSFS_exists(StringValueCStr(filename)))
+					return StringValueCStr(filename);
 				else
-					return 1;
+					return NULL;
 			}
+
+			/* Check Ruby search path */
+			VALUE fname = rb_find_file(filename);
+
+			rb_gc_register_address(&fname);
+
+			if (TYPE(fname) != T_STRING)
+				return NULL;
+			else
+				return StringValueCStr(fname);
 		}
 
 		Ruby::Ruby(int argc, char** argv)
@@ -158,6 +177,7 @@ namespace RAGE
 				RUBY_INIT_STACK;
 				ruby_init();
 
+				/* Initialize ruby extensions */
 				Init_dl();
 				Init_zlib();
 
@@ -194,40 +214,41 @@ namespace RAGE
 
 				if (!PHYSFS_mount(str.c_str(), "/", 0))
 				{
-					if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str()))
+					if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_GAME_FILE).c_str()))
 					{
-						PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).append("game.rage").c_str(), "/", 0);
+						PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_GAME_FILE).c_str(), "/", 0);
 						RAGE::Filesystem::FSWrappers::force_physfs_on();
 					}
 					else
+					{
 						PHYSFS_mount(str.substr(0, str.find_last_of(DS) + 1).c_str(), "/", 0);
+					}
 				}
 				else
 					RAGE::Filesystem::FSWrappers::force_physfs_on();
 
 				PHYSFS_setWriteDir(str.substr(0, str.find_last_of(DS) + 1).c_str());
-
+				
 				/* Set Command line arguments */
-				rb_gv_set("$RARGV", rb_ary_new());
+				rb_gv_set(RAGE_ARGS_VAR, rb_ary_new());
 				for (int i = 0; i < argc; i++)
-					rb_ary_push(rb_gv_get("$RARGV"), rb_str_new_cstr(argv[i]));
+					rb_ary_push(rb_gv_get(RAGE_ARGS_VAR), rb_str_new_cstr(argv[i]));
 				
 				#ifdef DEVELOPMENT_VERSION
 				
 				/* Set debug vars */
-				rb_gv_set("$DEBUG", Qtrue);
+				rb_gv_set(RAGE_DEBUG_GLOBAL_VAR, Qtrue);
 
-				printf(RAGE_DEV_TEXT);
+				PRINT(RAGE_DEV_TEXT);
 				
 				#endif
 
 				/* Load config script */
-
 				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr("conf.rb"));
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
 				else
-					load_protect("conf.rb");
-
+					load_protect(RAGE_CONF_SCRIPT);
+				
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();
 				RAGE::Audio::AudioWrappers::init_audio();
@@ -237,9 +258,9 @@ namespace RAGE
 
 				/* Load boot script */
 				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr("boot.rb"));
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
 				else
-					load_protect("boot.rb");
+					load_protect(RAGE_BOOT_SCRIPT);
 			}
 		}
 

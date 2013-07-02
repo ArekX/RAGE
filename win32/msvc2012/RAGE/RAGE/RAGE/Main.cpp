@@ -24,7 +24,6 @@ int main(int argc, char** argv)
 	#endif
 
 	// TODO: RAGE::Network module
-	//       RAGE::FS (PhysicsFS) module
     //	     RAGE::Physics (Box2D) module
 
 	// FIXME: Events_Wrapper - RAGE::JoyEvent class.

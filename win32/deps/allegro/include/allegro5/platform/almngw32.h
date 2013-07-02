@@ -36,11 +36,8 @@
 #define ALLEGRO_WINDOWS
 #define ALLEGRO_I386
 #define ALLEGRO_LITTLE_ENDIAN
-#define ALLEGRO_USE_CONSTRUCTOR
-#define ALLEGRO_MULTITHREADED
 
 #ifdef ALLEGRO_USE_CONSOLE
-   #define ALLEGRO_CONSOLE_OK
    #define ALLEGRO_NO_MAGIC_MAIN
 #endif
 
@@ -81,11 +78,7 @@
    #define ENUM_CURRENT_SETTINGS       ((DWORD)-1)
 #endif
 
-/* describe the asm syntax for this platform */
-#define ALLEGRO_ASM_PREFIX    "_"
-
 /* arrange for other headers to be included later on */
 #define ALLEGRO_EXTRA_HEADER     "allegro5/platform/alwin.h"
 #define ALLEGRO_INTERNAL_HEADER  "allegro5/platform/aintwin.h"
-#define ALLEGRO_ASMCAPA_HEADER   "obj/mingw32/asmcapa.h"
 #define ALLEGRO_INTERNAL_THREAD_HEADER "allegro5/platform/aintwthr.h"
