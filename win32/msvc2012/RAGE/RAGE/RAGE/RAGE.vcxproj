@@ -101,7 +101,7 @@
     <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -159,7 +159,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DEVELOPMENT_VERSION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;DEBUG;_CONSOLE;DEVELOPMENT_VERSION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DisableSpecificWarnings>
@@ -299,6 +299,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Font_Wrapper.cpp" />
     <ClCompile Include="FS_Wrappers.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="IniFile.cpp" />
     <ClCompile Include="IniFile_Wrapper.cpp" />
@@ -315,6 +316,7 @@
     <ClCompile Include="ScreenEvent_Wrapper.cpp" />
     <ClCompile Include="Sfx.cpp" />
     <ClCompile Include="Sfx_Wrapper.cpp" />
+    <ClCompile Include="Shader_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
   </ItemGroup>
@@ -330,6 +332,7 @@
     <ClInclude Include="Color_Wrapper.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Draw_Wrappers.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="rage_errors.h" />
     <ClInclude Include="Events_Wrapper.h" />
     <ClInclude Include="Event_Wrapper.h" />
@@ -351,6 +354,7 @@
     <ClInclude Include="ScreenEvent_Wrapper.h" />
     <ClInclude Include="Sfx.h" />
     <ClInclude Include="Sfx_Wrapper.h" />
+    <ClInclude Include="Shader_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
   </ItemGroup>

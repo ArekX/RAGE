@@ -15,10 +15,38 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_physfs.h>
 #include <allegro5/platform/almsvc.h>
+
+#ifdef WIN32
+#include <allegro5/allegro_windows.h>
+#endif
+
 #include <physfs.h>
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>
-#include <exts/socket/socketext.h>
+
+typedef struct {
+	char* name;
+	int width;
+	int height;
+	bool fullscreen;
+	bool vsync;
+	bool maximized_window;
+	bool use_rageBitmap;
+	bool use_rageMusic;
+	bool use_rageSfx;
+	bool use_rageIniFile;  
+	bool use_rageScreenEvent;
+	bool use_rageKeyEvent;
+	bool use_rageMouseEvent;
+	bool use_rageTimerEvent;
+	bool use_rageShader;
+	bool use_rageFont;
+	bool use_rageColor;
+	bool use_rageEvents;
+	bool use_rageFS;
+	bool use_rageDraw;
+	bool use_rageInput;
+} RAGEConfig;
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
@@ -26,6 +54,7 @@
 #include "Color_Wrapper.h"
 #include "Draw_Wrappers.h"
 #include "Bitmap_Wrapper.h"
+#include "Shader_Wrapper.h"
 #include "Events_Wrapper.h"
 #include "Input_Wrappers.h"
 #include "TimerEvent_Wrapper.h"
@@ -43,7 +72,6 @@ namespace RAGE
 {
 	namespace Interpreter
 	{
-
 		class Ruby
 		{
 		private:

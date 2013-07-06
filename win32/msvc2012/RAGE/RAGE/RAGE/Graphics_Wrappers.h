@@ -5,17 +5,6 @@ namespace RAGE
 {
 	namespace Graphics
 	{
-
-		typedef struct 
-		{
-		  char *name;
-		  int width;
-		  int height;
-		  bool vsync;
-		  bool fullscreen;
-		} GraphicsConfig;
-
-
 		class GraphicsWrappers
 		{
 
@@ -26,6 +15,7 @@ namespace RAGE
 			static VALUE rb_set_blending_mode_alpha(VALUE self, VALUE rop, VALUE rsrc, VALUE rdst, VALUE aop, VALUE asrc, VALUE adst);
 			static VALUE rb_set_vsync(VALUE self, VALUE val);
 			static VALUE rb_set_fullscreen(VALUE self, VALUE val);
+			static VALUE rb_set_fullscreen_window(VALUE self, VALUE val);
 			static VALUE rb_set_window_position(VALUE self, VALUE x, VALUE y);
 			static VALUE rb_cursor_visible(VALUE self, VALUE val);
 			static VALUE rb_graphics_update(VALUE self);
@@ -46,9 +36,22 @@ namespace RAGE
 
 			static VALUE rb_set_icon(VALUE self, VALUE icon_bitmap);
 			static VALUE rb_inhibit_screen_saver(VALUE self, VALUE val);
+
+			static VALUE rb_set_mouse_xy(VALUE self, VALUE x, VALUE y);
+			static VALUE rb_get_display_modes(VALUE self);
+
+			static VALUE rb_set_mouse_cursor(VALUE self, VALUE cursor_index);
+			static VALUE rb_set_mouse_bitmap(VALUE self, VALUE cursor_bitmap, VALUE focus_x, VALUE focus_y);
+
+			static VALUE rb_set_grab_mouse(VALUE self, VALUE val);
+
+			static VALUE rb_set_shader(VALUE self, VALUE shader);
+
+			static VALUE rb_get_glsl_version(VALUE self);
+			static VALUE rb_get_opengl_version(VALUE self);
 		public:
 			static void load_wrappers();
-			static void initialize_graphics(GraphicsConfig cfg);
+			static void initialize_graphics(RAGEConfig cfg);
 			static void recreate_display();
 			static ALLEGRO_DISPLAY* get_display();
 		};

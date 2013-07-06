@@ -91,9 +91,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="RubyInterpreter.cpp">
-      <Filter>app</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap.cpp">
       <Filter>modules\graphics</Filter>
     </ClCompile>
@@ -220,6 +217,15 @@
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c">
       <Filter>app\ruby_ext\DL</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="RubyInterpreter.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -323,6 +329,12 @@
     </ClInclude>
     <ClInclude Include="rage_errors.h">
       <Filter>app\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

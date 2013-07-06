@@ -11,7 +11,7 @@ namespace RAGE
 	namespace Interpreter
 	{
 		bool configured = false;
-		RAGE::Graphics::GraphicsConfig gConfig;
+		RAGEConfig gConfig;
 
 		static VALUE rb_rage_about(VALUE self)
 		{
@@ -21,6 +21,32 @@ namespace RAGE
 			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
 			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
 			return Qnil;
+		}
+
+		static void set_default_config()
+		{
+			gConfig.name = new char[10];
+			strcpy(gConfig.name, "RAGE Game");
+
+			gConfig.width = 640;
+			gConfig.height = 480;
+			gConfig.fullscreen = false;
+			gConfig.vsync = false;
+			gConfig.maximized_window = false;
+			gConfig.use_rageBitmap = true;
+			gConfig.use_rageSfx = true;
+			gConfig.use_rageIniFile = true;
+			gConfig.use_rageScreenEvent = true;
+			gConfig.use_rageTimerEvent = true;
+			gConfig.use_rageKeyEvent = true;
+			gConfig.use_rageMouseEvent = true;
+			gConfig.use_rageShader = true;
+			gConfig.use_rageFont = true;
+			gConfig.use_rageColor = true;
+			gConfig.use_rageEvents = true;
+			gConfig.use_rageFS = true;
+			gConfig.use_rageDraw = true;
+			gConfig.use_rageInput = true;			
 		}
 
 		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
@@ -62,34 +88,60 @@ namespace RAGE
 
 			rb_eval_string_protect(data, &error);
 			
-			if (error)
-			{
-					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
-					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
-					
-					PRINT(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
-					getc(stdin);
-					exit(0);
-			}
+			#ifdef DEVELOPMENT_VERSION
+			if (strcmp(StringValueCStr(filename), "boot.rb") == 0) 
+				PRINT(RAGE_DEV_END_TEXT);
+			#endif
 
 			return Qnil;
 		}
 
-		static VALUE rb_rage_configure(VALUE self, VALUE name, VALUE version, VALUE width, VALUE height, VALUE fullscreen, VALUE vsync)
+		static VALUE rb_rage_configure(VALUE self, VALUE config)
 		{
 			if (!configured)
 			{
-				
-				gConfig.name = StringValueCStr(name);
+				VALUE item = rb_hash_aref(config, rb_str_new2("name"));
+			
+				if (TYPE(item) != T_NIL)
+				{
+					gConfig.name = StringValueCStr(item);
+				}
+				else
+				{
+					gConfig.name = new char[10];
+					strcpy(gConfig.name, "RAGE Game");
+				}
 
-				gConfig.width = FIX2UINT(width);
-				gConfig.height = FIX2UINT(height);
-				gConfig.fullscreen = (TYPE(fullscreen) == T_TRUE);
-				gConfig.vsync = (TYPE(vsync) == T_TRUE);
+				CONFIG_SET(config, item, "width", gConfig.width, FIX2UINT(item), 640);
+				CONFIG_SET(config, item, "height", gConfig.height, FIX2UINT(item), 480);
+				CONFIG_SET(config, item, "fullscreen", gConfig.fullscreen, (TYPE(item) == T_TRUE), false);
+				CONFIG_SET(config, item, "vsync", gConfig.vsync, (TYPE(item) == T_TRUE), false);
+				CONFIG_SET(config, item, "maximizedWindow", gConfig.maximized_window, (TYPE(item) == T_TRUE), false);
+				CONFIG_SET(config, item, "RAGE::Bitmap", gConfig.use_rageBitmap, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Music", gConfig.use_rageMusic, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Sfx", gConfig.use_rageSfx, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::IniFile", gConfig.use_rageIniFile, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::ScreenEvent", gConfig.use_rageScreenEvent, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::KeyEvent", gConfig.use_rageKeyEvent, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::MouseEvent", gConfig.use_rageMouseEvent, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::TimerEvent", gConfig.use_rageTimerEvent, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Shader", gConfig.use_rageShader, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Font", gConfig.use_rageFont, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Color", gConfig.use_rageColor, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Events", gConfig.use_rageEvents, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::FS", gConfig.use_rageFS, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Draw", gConfig.use_rageDraw, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Input", gConfig.use_rageInput, (TYPE(item) == T_TRUE), true);
+				
 				configured = true;
 
-				if (strcmp(StringValueCStr(version), RAGE_ENGINE_VERSION) != 0)
-					PRINT(RAGE_RB_INCOMPATIBLE);
+				item = rb_hash_aref(config, rb_str_new2("version"));
+
+				if (TYPE(item) != T_NIL)
+				{
+					if (strcmp(StringValueCStr(item), RAGE_ENGINE_VERSION) != 0)
+						PRINT(RAGE_RB_INCOMPATIBLE);
+				}
 
 				return Qtrue;
 			}
@@ -104,7 +156,7 @@ namespace RAGE
 
 			if (TYPE(full_file) != T_STRING)
 			{
-				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, filename);
+				PRINT(RAGE_RB_FILE_MISSING_ERROR, filename);
 				getc(stdin);
 				return;
 			}
@@ -114,15 +166,10 @@ namespace RAGE
 
 			rb_load_protect(full_file, 1, &error);
 
-			if (error)
-			{
-					VALUE lasterr = rb_obj_as_string(rb_gv_get("$!"));
-					VALUE klass = rb_class_path(CLASS_OF(rb_gv_get("$!")));
-					
-					PRINT(RAGE_RB_SCRIPT_ERROR, StringValueCStr(klass), StringValueCStr(lasterr));
-					getc(stdin);
-					exit(0);
-			}
+			#ifdef DEVELOPMENT_VERSION
+			if (strcmp(filename, "boot.rb") == 0) 
+				PRINT(RAGE_DEV_END_TEXT);
+			#endif
 		}
 
 		int Ruby::file_exists(VALUE filename)
@@ -185,28 +232,7 @@ namespace RAGE
 				VALUE rage = rb_define_module("RAGE");
 				rb_define_module_function(rage, "require", RFUNC(rb_rage_require_wrapper), 1);
 				rb_define_module_function(rage, "about", RFUNC(rb_rage_about), 0);
-				rb_define_module_function(rage, "configure", RFUNC(rb_rage_configure), 6);
-
-				/* Load RAGE modules */
-				RAGE::Graphics::GraphicsWrappers::load_wrappers();
-				RAGE::Events::EventsWrapper::load_wrappers();
-				RAGE::Input::InputWrappers::load_wrappers();
-				RAGE::Audio::AudioWrappers::load_wrappers();
-				RAGE::Graphics::DrawWrappers::load_wrappers();
-				RAGE::Filesystem::FSWrappers::load_wrappers();
-
-				/* Load RAGE classes */
-				RAGE::Graphics::BitmapWrapper::load_ruby_class();
-				RAGE::Graphics::FontWrapper::load_ruby_class();
-				RAGE::Graphics::ColorWrapper::load_ruby_class();
-				RAGE::Audio::MusicWrapper::load_ruby_class();
-				RAGE::Audio::SfxWrapper::load_ruby_class();
-				RAGE::Events::EventWrapper::load_ruby_class();
-				RAGE::Events::TimerEventWrapper::load_ruby_class();
-				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
-				RAGE::Events::MouseEventWrapper::load_ruby_class();
-				RAGE::Events::ScreenEventWrapper::load_ruby_class();
-				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
+				rb_define_module_function(rage, "configure", RFUNC(rb_rage_configure), 1);
 
 				/* Set search path to exe file */
 				std::string str(*argv);
@@ -244,23 +270,69 @@ namespace RAGE
 				#endif
 
 				/* Load config script */
-				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
+				{
+					if (RAGE::Filesystem::FSWrappers::is_physfs_on())
+						rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
+					else
+						load_protect(RAGE_CONF_SCRIPT);
+				}
 				else
-					load_protect(RAGE_CONF_SCRIPT);
+					set_default_config();
+
+				/* Load RAGE modules */
+				RAGE::Graphics::GraphicsWrappers::load_wrappers();
+
+				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::load_wrappers();
+				if (gConfig.use_rageInput) RAGE::Input::InputWrappers::load_wrappers();
+				RAGE::Audio::AudioWrappers::load_wrappers();
+				RAGE::Graphics::DrawWrappers::load_wrappers();
+				if (gConfig.use_rageFS) RAGE::Filesystem::FSWrappers::load_wrappers();
+
+				/* Load RAGE classes */
+				if (gConfig.use_rageBitmap) RAGE::Graphics::BitmapWrapper::load_ruby_class();
+				if (gConfig.use_rageFont) RAGE::Graphics::FontWrapper::load_ruby_class();
+				if (gConfig.use_rageColor) RAGE::Graphics::ColorWrapper::load_ruby_class();
+				if (gConfig.use_rageShader) RAGE::Graphics::ShaderWrapper::load_ruby_class();
+				if (gConfig.use_rageMusic) RAGE::Audio::MusicWrapper::load_ruby_class();
+				if (gConfig.use_rageSfx) RAGE::Audio::SfxWrapper::load_ruby_class();
+				if (gConfig.use_rageTimerEvent || gConfig.use_rageKeyEvent || gConfig.use_rageMouseEvent || gConfig.use_rageScreenEvent) RAGE::Events::EventWrapper::load_ruby_class();
+				if (gConfig.use_rageTimerEvent) RAGE::Events::TimerEventWrapper::load_ruby_class();
+				if (gConfig.use_rageKeyEvent) RAGE::Events::KeyboardEventWrapper::load_ruby_class();
+				if (gConfig.use_rageMouseEvent) RAGE::Events::MouseEventWrapper::load_ruby_class();
+				if (gConfig.use_rageScreenEvent) RAGE::Events::ScreenEventWrapper::load_ruby_class();
+				if (gConfig.use_rageIniFile) RAGE::Filesystem::IniFileWrapper::load_ruby_class();
 				
 				/* Perform additional tasks */
-				RAGE::Events::EventsWrapper::init_queue();
-				RAGE::Audio::AudioWrappers::init_audio();
+				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::init_queue();
+				if (gConfig.use_rageMusic || gConfig.use_rageSfx) RAGE::Audio::AudioWrappers::init_audio();
+
 				RAGE::Graphics::GraphicsWrappers::initialize_graphics(gConfig);
-				RAGE::Graphics::DrawWrappers::init();
-				RAGE::Events::EventsWrapper::run_event_thread();
+				
+				if (gConfig.use_rageDraw) RAGE::Graphics::DrawWrappers::init();
+				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::run_event_thread();
 
 				/* Load boot script */
-				if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
+				{
+					if (RAGE::Filesystem::FSWrappers::is_physfs_on())
+						rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
+					else
+						load_protect(RAGE_BOOT_SCRIPT);
+				}
+				#ifdef DEVELOPMENT_VERSION
 				else
-					load_protect(RAGE_BOOT_SCRIPT);
+				{
+					#ifdef WIN32
+					MessageBox(al_get_win_window_handle(RAGE::Graphics::GraphicsWrappers::get_display()), RAGE_DEV_MESSAGE, L"RAGE Game Engine", MB_OK | MB_ICONINFORMATION);
+					#else
+					PRINT(RAGE_DEV_MESSAGE);
+					#endif
+					PRINT(RAGE_DEV_MESSAGE_EXIT);
+					getc(stdin);
+					
+				}
+				#endif
 			}
 		}
 

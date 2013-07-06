@@ -5,9 +5,13 @@ namespace RAGE
 	namespace Graphics
 	{
 		ALLEGRO_COLOR bg_color;
-		GraphicsConfig start_config;
+		RAGEConfig start_config;
 		ALLEGRO_DISPLAY *display;
+		ALLEGRO_MOUSE_CURSOR *mouse_bitmap_cursor = NULL;
+		Shader *active_shader = NULL;
 
+		int mouse_focus_x = 0;
+		int mouse_focus_y = 0;
 		int window_x;
 		int window_y;
 		char* window_title;
@@ -244,6 +248,140 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE GraphicsWrappers::rb_set_mouse_xy(VALUE self, VALUE x, VALUE y)
+		{
+			if (al_set_mouse_xy(display, FIX2INT(x), FIX2INT(y)))
+				return Qtrue;
+
+			return Qfalse;
+		}
+
+		VALUE GraphicsWrappers::rb_get_display_modes(VALUE self)
+		{
+			VALUE return_array = rb_ary_new();
+
+			VALUE one_ary;
+			ALLEGRO_DISPLAY_MODE dm;
+
+		    int max_modes = al_get_num_display_modes();
+
+			for (int i = 0; i < max_modes; i++)
+			{
+				al_get_display_mode(i, &dm);
+				one_ary = rb_ary_new();
+
+				rb_ary_push(one_ary, UINT2NUM(dm.width));
+				rb_ary_push(one_ary, UINT2NUM(dm.height));
+				rb_ary_push(one_ary, UINT2NUM(dm.refresh_rate));
+				rb_ary_push(one_ary, UINT2NUM(dm.format));
+
+				rb_gc_register_address(&one_ary);
+
+				rb_ary_push(return_array, one_ary);
+			}
+
+			rb_gc_register_address(&return_array);
+
+			return return_array;
+		}
+
+		VALUE GraphicsWrappers::rb_set_mouse_cursor(VALUE self, VALUE cursor_index)
+		{
+			int c_index = FIX2INT(cursor_index);
+
+			if (c_index != -1)
+				al_set_system_mouse_cursor(display, (ALLEGRO_SYSTEM_MOUSE_CURSOR)c_index);
+			else if ((c_index == -1) && (mouse_bitmap_cursor != NULL))
+				al_set_mouse_cursor(display, mouse_bitmap_cursor);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_mouse_bitmap(VALUE self, VALUE cursor_bitmap, VALUE focus_x, VALUE focus_y)
+		{
+			Bitmap *bmp;
+
+			Data_Get_Struct(cursor_bitmap, Bitmap, bmp);
+
+			if (mouse_bitmap_cursor != NULL)
+				al_destroy_mouse_cursor(mouse_bitmap_cursor);
+
+			mouse_bitmap_cursor = al_create_mouse_cursor(bmp->bitmap, NUM2UINT(focus_x), NUM2UINT(focus_y));
+
+			if (mouse_bitmap_cursor == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_MOUSE_CURSOR_CREATE_FAIL);
+			}
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_grab_mouse(VALUE self, VALUE val)
+		{
+			if (TYPE(val) == T_TRUE)
+				al_grab_mouse(display);
+			else if (TYPE(val) == T_TRUE)
+				al_ungrab_mouse();
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_shader(VALUE self, VALUE shader)
+		{
+			if (active_shader != NULL)
+				active_shader->is_active = false;
+
+			if (TYPE(shader) == T_NIL)
+			{
+				glUseProgramObjectARB(0);
+				return Qnil;
+			}
+
+			Shader *sh;
+
+			Data_Get_Struct(shader, Shader, sh);
+
+			if (sh->code_added)
+			{
+				glUseProgramObjectARB(sh->glsl_shader_program);
+				sh->is_active = true;
+
+				active_shader = sh;
+			}
+			else
+				rb_raise(rb_eException, RAGE_ERROR_SHADER_CODE_NOT_ADDED);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_set_fullscreen_window(VALUE self, VALUE val)
+		{
+			if (TYPE(val) == T_TRUE)
+			{
+				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN_WINDOW);
+				recreate_display();
+				return Qtrue;
+			}
+			else if (TYPE(val) == T_FALSE)
+			{
+				al_set_new_display_flags(al_get_new_display_flags() & 0xDFF);
+				recreate_display();
+				return Qtrue;
+			}
+			return Qfalse;
+		}
+
+		VALUE GraphicsWrappers::rb_get_glsl_version(VALUE self)
+		{
+			
+			return rb_str_new2((char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+		}
+
+		VALUE GraphicsWrappers::rb_get_opengl_version(VALUE self)
+		{
+			return rb_str_new2((char*)glGetString(GL_VERSION));
+		}
+
 		void GraphicsWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -262,6 +400,29 @@ namespace RAGE
 			rb_define_const(g, "BLEND_DEST_COLOR", INT2FIX(ALLEGRO_DEST_COLOR));
 			rb_define_const(g, "BLEND_INV_SRC_COLOR",  INT2FIX(ALLEGRO_INVERSE_SRC_COLOR));
 			rb_define_const(g, "BLEND_INV_DEST_COLOR",  INT2FIX(ALLEGRO_INVERSE_DEST_COLOR));
+
+			/* Mouse cursor type defintions */
+			rb_define_const(g, "MOUSE_NONE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_NONE));
+			rb_define_const(g, "MOUSE_DEFAULT", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT));
+			rb_define_const(g, "MOUSE_ARROW", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_ARROW));
+			rb_define_const(g, "MOUSE_ALT_SELECT", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT));
+			rb_define_const(g, "MOUSE_BUSY", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_BUSY));
+			rb_define_const(g, "MOUSE_EDIT", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT));
+			rb_define_const(g, "MOUSE_LINK", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_LINK));
+			rb_define_const(g, "MOUSE_MOVE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_MOVE));
+			rb_define_const(g, "MOUSE_PRECISION", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_PRECISION));
+			rb_define_const(g, "MOUSE_PROGRESS", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_PROGRESS));
+			rb_define_const(g, "MOUSE_QUESTION", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_QUESTION));
+			rb_define_const(g, "MOUSE_RESIZE_E", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_E));
+			rb_define_const(g, "MOUSE_RESIZE_N", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_N));
+			rb_define_const(g, "MOUSE_RESIZE_NE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NE));
+			rb_define_const(g, "MOUSE_RESIZE_NW", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NW));
+			rb_define_const(g, "MOUSE_RESIZE_S", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_S));
+			rb_define_const(g, "MOUSE_RESIZE_SE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_SE));
+			rb_define_const(g, "MOUSE_RESIZE_SW", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_SW));
+			rb_define_const(g, "MOUSE_RESIZE_W", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_W));
+			rb_define_const(g, "MOUSE_UNAVAILABLE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_UNAVAILABLE));
+			rb_define_const(g, "MOUSE_BITMAP", INT2FIX(RAGE_MOUSE_BITMAP_CURSOR_INDEX));
 
 			/* Define Module Functions */
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
@@ -291,22 +452,38 @@ namespace RAGE
 			rb_define_module_function(g, "getTime", RFUNC(GraphicsWrappers::rb_get_time), 0);
 			rb_define_module_function(g, "setClippingRect", RFUNC(GraphicsWrappers::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(g, "resetClippingRect", RFUNC(GraphicsWrappers::rb_graphics_reset_clipping_rect), 0);
+
+			rb_define_module_function(g, "getDisplayModes", RFUNC(GraphicsWrappers::rb_get_display_modes), 0);
+			rb_define_module_function(g, "setMousePosition", RFUNC(GraphicsWrappers::rb_set_mouse_xy), 2);
+			rb_define_module_function(g, "setMouseCursor", RFUNC(GraphicsWrappers::rb_set_mouse_cursor), 1);
+			rb_define_module_function(g, "setMouseBitmap", RFUNC(GraphicsWrappers::rb_set_mouse_bitmap), 3);
+			rb_define_module_function(g, "setMouseGrab", RFUNC(GraphicsWrappers::rb_set_grab_mouse), 1);
+
+			rb_define_module_function(g, "setShader", RFUNC(GraphicsWrappers::rb_set_shader), 1);
+
+			rb_define_module_function(g, "setMaximizedWindow", RFUNC(GraphicsWrappers::rb_set_fullscreen_window), 1);
+			
+			rb_define_module_function(g, "getOpenGLVersion", RFUNC(GraphicsWrappers::rb_get_opengl_version), 0);
+			rb_define_module_function(g, "getGLSLVersion", RFUNC(GraphicsWrappers::rb_get_glsl_version), 0);
 		}
 
-		void GraphicsWrappers::initialize_graphics(GraphicsConfig cfg)
+		void GraphicsWrappers::initialize_graphics(RAGEConfig cfg)
 		{
 			start_config = cfg;
 
 			al_set_new_display_flags(ALLEGRO_OPENGL);
 
-			if (cfg.vsync == true)
+			if (cfg.vsync)
 				al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
 			else
 				al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE);
 
-			if (cfg.fullscreen == true)
+			if (cfg.fullscreen && !cfg.maximized_window)
 				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN);
 			
+			if (cfg.maximized_window)
+				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN_WINDOW);
+
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 
 			window_title = cfg.name;
@@ -316,6 +493,7 @@ namespace RAGE
 			al_set_target_backbuffer(display);
 			al_flip_display();
 
+			if (cfg.use_rageEvents)
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 		}
 
@@ -323,7 +501,10 @@ namespace RAGE
 		{
 			int width = al_get_display_width(display);
 			int height = al_get_display_height(display);
+
+			if (start_config.use_rageEvents)
 			al_unregister_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
+			
 			al_destroy_display(display);
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 			display = al_create_display(width, height);
@@ -331,6 +512,8 @@ namespace RAGE
 			al_set_window_position(display, window_x, window_y);
 			al_set_target_backbuffer(display);
 			al_flip_display();
+
+			if (start_config.use_rageEvents)
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 		}
 
