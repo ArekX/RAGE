@@ -48,6 +48,8 @@
 #define RAGE_GAME_FILE "game.rage"
 
 #define RAGE_MOUSE_BITMAP_CURSOR_INDEX -1
+#define RAGE_FRAGMENT_SHADER 1
+#define RAGE_VERTEX_SHADER 2
 
 #define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_push(observer, proc);}
 #define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_delete(observer, proc);}

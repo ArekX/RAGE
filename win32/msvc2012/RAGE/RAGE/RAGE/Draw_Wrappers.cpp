@@ -43,7 +43,7 @@ namespace RAGE
 
 		VALUE DrawWrappers::set_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
-			color = al_map_rgba_f(FIX2INT(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)); 
+			color = al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)); 
 			return Qnil;
 		}
 
@@ -151,6 +151,51 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE DrawWrappers::draw_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE start, VALUE end, VALUE type)
+		{
+			VertexArray *va;
+			Data_Get_Struct(vertex_array, VertexArray, va);
+
+			if (TYPE(texture) != T_NIL)
+			{
+				Bitmap *bmp;
+				Data_Get_Struct(texture, Bitmap, bmp);
+
+				return INT2FIX(al_draw_prim(va->ary, NULL, bmp->bitmap, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+			}
+
+			return INT2FIX(al_draw_prim(va->ary, NULL, NULL, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+		}	
+
+		VALUE DrawWrappers::draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type)
+		{
+			if (TYPE(indices_array) != T_ARRAY)
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_INDICES_NOT_ARRAY);
+				return Qnil;
+			}
+
+			VertexArray *va;
+			Data_Get_Struct(vertex_array, VertexArray, va);
+			
+			int *indices = new int[RARRAY_LEN(indices_array)];
+
+			for (int i = 0; i < RARRAY_LEN(indices_array); i++)
+					indices[i] = FIX2INT(rb_ary_entry(indices_array, i));
+
+			if (TYPE(texture) != T_NIL)
+			{
+				Bitmap *bmp;
+				Data_Get_Struct(texture, Bitmap, bmp);
+
+				return INT2FIX(al_draw_indexed_prim(va->ary, NULL, bmp->bitmap, indices, FIX2INT(indices_num), FIX2INT(type)));
+			}
+
+			return INT2FIX(al_draw_indexed_prim(va->ary, NULL, NULL, indices, FIX2INT(indices_num), FIX2INT(type)));
+
+			delete[] indices;
+		}
+
 		void DrawWrappers::reset_font()
 		{
 			fnt = def_font;
@@ -169,6 +214,14 @@ namespace RAGE
 			VALUE rage = rb_define_module("RAGE");
 			VALUE draw = rb_define_module_under(rage, "Draw");
 			
+			rb_define_const(draw, "PRIM_POINT_LIST", INT2FIX(ALLEGRO_PRIM_POINT_LIST));
+			rb_define_const(draw, "PRIM_LINE_LIST", INT2FIX(ALLEGRO_PRIM_LINE_LIST));
+			rb_define_const(draw, "PRIM_LINE_STRIP", INT2FIX(ALLEGRO_PRIM_LINE_STRIP));
+			rb_define_const(draw, "PRIM_LINE_LOOP", INT2FIX(ALLEGRO_PRIM_LINE_LOOP));
+			rb_define_const(draw, "PRIM_TRIANGLE_LIST", INT2FIX(ALLEGRO_PRIM_TRIANGLE_LIST));
+			rb_define_const(draw, "PRIM_TRIANGLE_STRIP", INT2FIX(ALLEGRO_PRIM_TRIANGLE_STRIP));
+			rb_define_const(draw, "PRIM_TRIANGLE_FAN", INT2FIX(ALLEGRO_PRIM_TRIANGLE_FAN));
+
 			rb_define_module_function(draw, "line", RFUNC(DrawWrappers::draw_line), 5);
 			rb_define_module_function(draw, "rectangle", RFUNC(DrawWrappers::draw_rectangle), 5);
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::draw_filled_rectangle), 4);
@@ -178,6 +231,8 @@ namespace RAGE
 			rb_define_module_function(draw, "ellipseM", RFUNC(DrawWrappers::draw_ellipse2), 5);
 			rb_define_module_function(draw, "fillEllipse", RFUNC(DrawWrappers::draw_filled_ellipse), 4);
 			rb_define_module_function(draw, "fillEllipseM", RFUNC(DrawWrappers::draw_filled_ellipse2), 4);
+			rb_define_module_function(draw, "prim", RFUNC(DrawWrappers::draw_vertex), 5);
+			rb_define_module_function(draw, "indexedPrim", RFUNC(DrawWrappers::draw_indexed_vertex), 5);
 			rb_define_module_function(draw, "pixel", RFUNC(DrawWrappers::draw_pixel), 2);
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::draw_pixel_c), 6);
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::set_color), 4);

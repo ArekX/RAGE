@@ -86,6 +86,9 @@
     <Filter Include="app\ruby_ext\DL">
       <UniqueIdentifier>{4c12998a-1b2e-46f7-adcf-b53ae8ce1901}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\input\headers">
+      <UniqueIdentifier>{a96aa3b6-2582-4cfc-b40f-281c5cfafe2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -226,6 +229,24 @@
     <ClCompile Include="RubyInterpreter.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="JoyEvent.cpp">
+      <Filter>modules\events</Filter>
+    </ClCompile>
+    <ClCompile Include="Joystick.cpp">
+      <Filter>modules\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Joystick_Wrapper.cpp">
+      <Filter>modules\input\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="JoyEvent_Wrapper.cpp">
+      <Filter>modules\events\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -336,6 +357,25 @@
     <ClInclude Include="Shader_Wrapper.h">
       <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
+    <ClInclude Include="JoyEvent.h">
+      <Filter>modules\events\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Joystick.h">
+      <Filter>modules\input\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Joystick_Wrapper.h">
+      <Filter>modules\input\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="JoyEvent_Wrapper.h">
+      <Filter>modules\events\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc">

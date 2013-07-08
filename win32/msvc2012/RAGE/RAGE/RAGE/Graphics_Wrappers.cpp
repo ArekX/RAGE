@@ -83,7 +83,9 @@ namespace RAGE
 		{
 			if (TYPE(title) == T_STRING)
 			{
-				window_title = StringValueCStr(title);
+				delete[] window_title;
+				window_title = new char[RSTRING_LENINT(title)];
+				strcpy(window_title, StringValueCStr(title));
 				al_set_window_title(display, window_title);
 				return Qtrue;
 			}
@@ -424,6 +426,10 @@ namespace RAGE
 			rb_define_const(g, "MOUSE_UNAVAILABLE", INT2FIX(ALLEGRO_SYSTEM_MOUSE_CURSOR_UNAVAILABLE));
 			rb_define_const(g, "MOUSE_BITMAP", INT2FIX(RAGE_MOUSE_BITMAP_CURSOR_INDEX));
 
+			/* GLSL shader type defintions */
+			rb_define_const(g, "FRAGMENT_SHADER", INT2FIX(RAGE_FRAGMENT_SHADER));
+			rb_define_const(g, "VERTEX_SHADER", INT2FIX(RAGE_VERTEX_SHADER));
+
 			/* Define Module Functions */
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
 			rb_define_module_function(g, "title", RFUNC(GraphicsWrappers::rb_get_title), 0);
@@ -489,7 +495,7 @@ namespace RAGE
 			window_title = cfg.name;
 			display = al_create_display(cfg.width, cfg.height);
 			al_get_window_position(display, &window_x, &window_y);
-			al_set_window_title(display, window_title);
+			al_set_window_title(display, cfg.name);
 			al_set_target_backbuffer(display);
 			al_flip_display();
 
@@ -508,7 +514,7 @@ namespace RAGE
 			al_destroy_display(display);
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 			display = al_create_display(width, height);
-			al_set_window_title(display, start_config.name);
+			al_set_window_title(display, window_title);
 			al_set_window_position(display, window_x, window_y);
 			al_set_target_backbuffer(display);
 			al_flip_display();

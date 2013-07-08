@@ -1,212 +1,88 @@
-require "util.rb"
-$: << "ext"
-
 begin
-fonts = Dir.glob(ENV["SystemRoot"].gsub("\\", "/") + "/Fonts/*.ttf")
 
-# Print about information
-RAGE.about()
+va = RAGE::VertexArray.new
+color = RAGE::Color.new
+color.setRGBA(1, 1, 1, 1)
 
-positions = [
-  [ 0, 0, 0],
-  [ 0, 0, 0],
-  [ 0, 0, 0]
-]
+bmp = RAGE::Bitmap.new
+bmp.load("data/mysha.pcx")
 
-score_x = 0
-score_o = 0
+sX = RAGE::Graphics.screenWidth / 3
+eX = RAGE::Graphics.screenWidth - RAGE::Graphics.screenWidth / 3
 
-bitmap_draws = []
+va.push(sX, 0, 2, sX, 0, color)
+va.push(eX, 0, 2, eX, 0, color)
+va.push(0, RAGE::Graphics.screenHeight, 0, 0, RAGE::Graphics.screenHeight, color)
+va.push(RAGE::Graphics.screenWidth, RAGE::Graphics.screenHeight, 0, RAGE::Graphics.screenWidth, RAGE::Graphics.screenHeight, color)
 
-# Load bitmaps
-title, imgX, imgO, board = RAGE::Bitmap.new, RAGE::Bitmap.new, RAGE::Bitmap.new, RAGE::Bitmap.new
-winx, wino, tied = RAGE::Bitmap.new, RAGE::Bitmap.new, RAGE::Bitmap.new
+va2 = RAGE::VertexArray.new
 
-title.load "data/rage.png"
-imgX.load "data/x.png"
-imgO.load "data/o.png"
-board.load "data/board.png"
-
-winx.load "data/xwin.png"
-wino.load "data/owin.png"
-tied.load "data/tied.png"
-
-newgame = SpinButton.new 10, 10, "data/new.png"
-
-trgt = RAGE::Graphics.getTarget()
-
-w, h = trgt.width, trgt.height
-
-bgm = RAGE::Music.new
-bgm.load "data/bgm.ogg"
-bgm.play
+va2.push(eX, 0, 0, eX, 0, color)
+va2.push(eX, RAGE::Graphics.screenHeight / 2, 0, eX, RAGE::Graphics.screenHeight / 2, color)
+va2.push(RAGE::Graphics.screenWidth, RAGE::Graphics.screenHeight, 0, RAGE::Graphics.screenWidth, RAGE::Graphics.screenHeight, color)
+va2.push(RAGE::Graphics.screenWidth, 0, 0, RAGE::Graphics.screenWidth, 0, color)
 
 
-bgm2 = RAGE::Music.new
-bgm.load "data/vv.ogg"
-bgm.play
+va3 = RAGE::VertexArray.new
 
+va3.push(0, 0, 0, 0, 0, color)
+va3.push(0, RAGE::Graphics.screenHeight, 0, 0, RAGE::Graphics.screenHeight, color)
+va3.push(sX, 0, 0, sX, 0, color)
+va3.push(sX, RAGE::Graphics.screenHeight / 2, 0, sX, RAGE::Graphics.screenHeight / 2, color)
 
-brdtop    = title.height + 40
-brdleft   = w / 2 - board.width / 2
-brdright  = brdleft + board.width
-brdbottom = brdtop + board.height
+angle = 0;
 
-RAGE::Graphics.title = "RAGE::Tic-Tac-Toe [ X Wins: #{score_x}, O Wins: #{score_o} ]"
+glsl = RAGE::Shader.new(RAGE::Graphics::FRAGMENT_SHADER, "
+ uniform sampler2D tex;
+ uniform float r;
+ uniform float g;
+ uniform float b;
+ varying vec4 varying_color;
+ varying vec2 tc;
+ void main()
+ {
 
-angle = 0
-itensity = 1
+   vec4 tmp = texture2D(tex, tc);
 
-puts "Welcome to Tic-Tac-Toe example game"
-puts "Press UP to spin XO more."
-puts "Press DOWN to spin XO less."
-puts "Press S to reset.\n\n"
-
-keyEv = RAGE::KeyEvent.new
-
-keyEv.register RAGE::Events::KEY_PRESS, Proc.new {|key|
-  if key == RAGE::Input::KEY_UP
-    itensity += 0.2
-  elsif key == RAGE::Input::KEY_DOWN
-    itensity -= 0.2 if itensity > 0
-  elsif key == RAGE::Input::KEY_S
-    itensity = 0
-  end
-}
-
-closeEv = RAGE::ScreenEvent.new
-closeEv.register RAGE::Events::SCREEN_CLOSE, Proc.new {
-   Kernel::exit(0)
-}
-
-RAGE::Events.register keyEv
-RAGE::Events.register closeEv
-
-RAGE::Events.processKeyboard(true)
-RAGE::Events.processMouse(true)
-
-turn = (rand(100) > 50) ? "O" : "X"
-turns = 0
-puts "A game of Tic-Tac-Toe has begun!\n\nFirst goes #{turn}\n\n"
-
-won = false
-
-message_anim_x = 0
-
-glsl1 = RAGE::Shader.new("
-void main()
-{
-  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-}
+   tmp.r = r;
+   tmp.g = 1.0 - r;
+   tmp.b *= 1.2;
+   if ((int(tc.y) % 3 == 0) && (int(tc.x) % 3 == 0))
+    tmp.b = 0;
+   gl_FragColor = tmp;
+ }
 ")
 
-glsl2 = RAGE::Shader.new("
-void main()
-{
-  gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-}
-")
-
+ r = 0
 loop do
   RAGE::Graphics.clear
-  
-  RAGE::Graphics.setShader(glsl1)
 
-  x, y = RAGE::Input.getMouseX, RAGE::Input.getMouseY
+  RAGE::Graphics.setShader(glsl)
 
-  newgame.drawUpdate(x, y)
   
-  if RAGE::Input.mouseDown?(RAGE::Input::MOUSE_BTN1)
-    if newgame.checkclick(x, y)
-       turn = (rand(100) > 50) ? "O" : "X"
-     puts "\n\nA new game of Tic-Tac-Toe has begun!\n\nFirst goes #{turn}\n\n"
-     won = false
-     for i in 0..2
-       for j in 0..2
-         positions[i][j] = 0
-       end
-     end
-     bitmap_draws.clear
-     turns = 0
-     message_anim_x = 0
-     sleep 0.2
-     bgm.stop
-     bgm.play
-    end
-  end
+  glsl.setFloat("r", r)
+  glsl.setFloat("g", 1)
+  glsl.setFloat("b", 1)
+
+  r = (r + 0.02) % 1
+
+  RAGE::Draw.prim(va, bmp, 0, va.size, RAGE::Draw::PRIM_TRIANGLE_FAN)
+  RAGE::Draw.prim(va2, bmp, 0, va2.size, RAGE::Draw::PRIM_TRIANGLE_FAN)
+  RAGE::Draw.indexedPrim(va3, bmp, [0, 1, 2, 3], 4, RAGE::Draw::PRIM_TRIANGLE_FAN)
   
-  title.draw(w / 2 - title.width / 2, 20)
-  RAGE::Graphics.setShader(glsl2)
-  board.draw(brdleft, brdtop)
-  
-  if RAGE::Input.mouseRepeat?(RAGE::Input::MOUSE_BTN1) && !won
-    
-    if ((x >= brdleft) && (x <= brdright)) || ((y >= brdleft) && (y <= brdbottom))
-      
-      # Get indexes
-      sx, sy = ((x - brdleft).abs / 150).floor, ((y - brdtop).abs / 150).floor
-      
-      sx = [sx, 2].min
-      sy = [sy, 2].min
-      
-      # Fill position if not yet filled
-      if positions[sy][sx] == 0
-        puts "#{turn} takes #{sx}, #{sy}!"
-        positions[sy][sx] = turn
-        draw_image = ((turn == "X") ? imgX : imgO)
-        bitmap_draws << [ draw_image, sx * 150 + brdleft + draw_image.width / 2, sy * 150 + brdtop + draw_image.height / 2 ]
-        won = checkwinner(positions, turn)
-        turns += 1
-        
-        # Check winner
-        if won 
-        puts "Winner! #{turn}!"
-        score_x += 1 if turn == "X"
-        score_o += 1 if turn == "O"
-        RAGE::Graphics.title = "RAGE::Tic-Tac-Toe [ X Wins: #{score_x}, O Wins: #{score_o} ]"
-        puts "Current Statistics:\nX - #{score_x} wins.\nO - #{score_o} wins.\n\n"
-        else
-          if turns >= 9
-          puts "Tied!"
-        else
-          turn = (turn == "X") ? "O" : "X";
-        end
-        end
-      end
-    end
-  end
-  
-  bitmap_draws.each{|entry|
-     entry[0].draw(entry[1] + itensity * Math.cos(angle), entry[2] + itensity * Math.sin(angle))
-  }
-  
-  angle = (angle + 1) % 180
-  
-  message = tied if turns >= 9
-  message = winx if won && turn == "X"
-  message = wino if won && turn == "O"
-  
-  if won || (turns >= 9)
-    message.drawRegion(0, 0, message_anim_x, message.height, 0, trgt.height / 2 - message.height / 2)
-    if message_anim_x < message.width
-      message_anim_x += 5
-      else
-      message_anim_x = message.width
-    end
-  end
-  
+  angle = (angle + 8) % 360
+
+  #va.setX(0, sX + 25 * Math.cos(angle * Math::PI / 180))
+  #va.setX(1, eX + 25 * Math.cos(angle * Math::PI / 180))
+  RAGE::Input.updateKeyboard()
+  break if RAGE::Input.keyDown?(RAGE::Input::KEY_ESCAPE)
+
   RAGE::Graphics.setShader(nil)
 
-  RAGE::Input.updateMouse
   RAGE::Graphics.update
-  
-  sleep 0.001
 end
 
-rescue Exception => e  
-  unless e.message == "exit"
-    puts "\n\nError:\n\t\n" + e.message
-    puts "Backtrace:\n\t #{e.backtrace[0].to_s}\n\n"
-    gets
-  end
+rescue Exception => e
+   puts e.message
+   gets
 end

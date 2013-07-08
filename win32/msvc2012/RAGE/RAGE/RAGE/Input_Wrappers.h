@@ -19,8 +19,6 @@ namespace RAGE
 			static VALUE rb_key_is_up(VALUE self, VALUE keycode);
 			static VALUE rb_key_is_repeat(VALUE self, VALUE keycode);
 			static VALUE rb_keyboard_update(VALUE self);
-			static VALUE rb_joystick_down(VALUE self, VALUE button);
-			static VALUE rb_joystick_update(VALUE self, VALUE joystick_num);
 			static VALUE rb_joystick_max(VALUE self);
 			static VALUE rb_mouse_update(VALUE self);
 			static VALUE rb_mouse_down(VALUE self, VALUE button);
@@ -28,6 +26,7 @@ namespace RAGE
 			static VALUE rb_mouse_repeat(VALUE self, VALUE button);
 			static VALUE rb_mouse_x(VALUE self);
 			static VALUE rb_mouse_y(VALUE self);
+			static VALUE rb_reconfigure_joysticks(VALUE self);
 		public:
 			static void load_wrappers();
 		};

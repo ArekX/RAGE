@@ -5,27 +5,19 @@ namespace RAGE
 {
 	namespace Input
 	{
-		ALLEGRO_KEYBOARD_STATE ks_up, ks_down, ks;
-		ALLEGRO_JOYSTICK_STATE js;
-		ALLEGRO_MOUSE_STATE ms_down, ms_up, ms;
+		ALLEGRO_KEYBOARD_STATE ks_old, ks;
+		ALLEGRO_MOUSE_STATE ms_old, ms;
 		
 		VALUE InputWrappers::rb_keyboard_update(VALUE self)
 		{
-			ks_up = ks;
-			ks_down = ks;
+			ks_old = ks;
 			al_get_keyboard_state(&ks);
-			return Qnil;
-		}
-
-		VALUE InputWrappers::rb_joystick_update(VALUE self, VALUE joystick_num)
-		{
-			al_get_joystick_state(al_get_joystick(FIX2INT(joystick_num)), &js);
 			return Qnil;
 		}
 
 		VALUE InputWrappers::rb_key_is_down(VALUE self, VALUE keycode)
 		{
-			if (al_key_down(&ks, FIX2INT(keycode)) && !al_key_down(&ks_down, FIX2INT(keycode)))
+			if (al_key_down(&ks, FIX2INT(keycode)) && !al_key_down(&ks_old, FIX2INT(keycode)))
 			{
 				return Qtrue;
 			}
@@ -37,7 +29,7 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_key_is_up(VALUE self, VALUE keycode)
 		{
-			if (!al_key_down(&ks, FIX2INT(keycode)) && al_key_down(&ks_up, FIX2INT(keycode)))
+			if (!al_key_down(&ks, FIX2INT(keycode)) && al_key_down(&ks_old, FIX2INT(keycode)))
 			{
 				return Qtrue;
 			}
@@ -55,14 +47,6 @@ namespace RAGE
 				return Qfalse;
 		}
 
-		VALUE InputWrappers::rb_joystick_down(VALUE self, VALUE button)
-		{
-			if (*(js.button) == FIX2INT(button))
-				return Qtrue;
-			else
-				return Qfalse;
-		}
-
 		VALUE InputWrappers::rb_joystick_max(VALUE self)
 		{
 			return INT2FIX(al_get_num_joysticks());
@@ -70,8 +54,7 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_update(VALUE self)
 		{
-			ms_up = ms;
-			ms_down = ms;
+			ms_old = ms;
 			al_get_mouse_state(&ms);
 			return Qnil;
 		}
@@ -87,7 +70,7 @@ namespace RAGE
 		VALUE InputWrappers::rb_mouse_down(VALUE self, VALUE button)
 		{
 			
-			if (al_mouse_button_down(&ms, FIX2INT(button)) && !al_mouse_button_down(&ms_down, FIX2INT(button)))
+			if (al_mouse_button_down(&ms, FIX2INT(button)) && !al_mouse_button_down(&ms_old, FIX2INT(button)))
 			{
 				return Qtrue;
 			}
@@ -99,7 +82,7 @@ namespace RAGE
 
 		VALUE InputWrappers::rb_mouse_up(VALUE self, VALUE button)
 		{
-			if (!al_mouse_button_down(&ms, FIX2INT(button)) && al_mouse_button_down(&ms_up, FIX2INT(button)))
+			if (!al_mouse_button_down(&ms, FIX2INT(button)) && al_mouse_button_down(&ms_old, FIX2INT(button)))
 			{
 				return Qtrue;
 			}
@@ -119,6 +102,11 @@ namespace RAGE
 			return INT2FIX(ms.y);
 		}
 
+		VALUE InputWrappers::rb_reconfigure_joysticks(VALUE self)
+		{
+			return (al_reconfigure_joysticks() == true) ? Qtrue : Qfalse;
+		}
+
 		void InputWrappers::load_wrappers()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -134,15 +122,14 @@ namespace RAGE
 			rb_define_module_function(input, "keyDown?", RFUNC(InputWrappers::rb_key_is_down), 1);
 			rb_define_module_function(input, "keyUp?", RFUNC(InputWrappers::rb_key_is_up), 1);
 			rb_define_module_function(input, "keyRepeat?", RFUNC(InputWrappers::rb_key_is_repeat), 1);
-			//rb_define_module_function(input, "updateJoystick", RFUNC(InputWrappers::rb_joystick_update), 1);
-			//rb_define_module_function(input, "getMaxJoysticks", RFUNC(InputWrappers::rb_joystick_max), 0);
 			rb_define_module_function(input, "mouseDown?", RFUNC(InputWrappers::rb_mouse_down), 1);
 			rb_define_module_function(input, "mouseUp?", RFUNC(InputWrappers::rb_mouse_up), 1);
 			rb_define_module_function(input, "mouseRepeat?", RFUNC(InputWrappers::rb_mouse_repeat), 1);
 			rb_define_module_function(input, "getMouseX", RFUNC(InputWrappers::rb_mouse_x), 0);
 			rb_define_module_function(input, "getMouseY", RFUNC(InputWrappers::rb_mouse_y), 0);
-			
-			// TODO: Finish joystick (test it), other stuff...
+			rb_define_module_function(input, "reconfigureJoysticks", RFUNC(InputWrappers::rb_reconfigure_joysticks), 0);
+			rb_define_module_function(input, "getMaxJoysticks", RFUNC(InputWrappers::rb_joystick_max), 0);
+
 		}
 	}
 }

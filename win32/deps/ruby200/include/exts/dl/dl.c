@@ -161,12 +161,6 @@ rb_dl_value2ptr(VALUE self, VALUE val)
     return PTR2NUM((void*)val);
 }
 
-static void
-rb_dl_init_callbacks(VALUE dl)
-{
-    Init_callback();
-}
-
 
 void Init_dl(void)
 {
@@ -251,7 +245,7 @@ void Init_dl(void)
      */
     rb_define_const(rb_mDL, "DLSTACK_SIZE", INT2NUM(DLSTACK_SIZE));
 
-    rb_dl_init_callbacks(rb_mDL);
+    Init_callback(rb_mDL);
 
     /* Document-const: RTLD_GLOBAL
      *

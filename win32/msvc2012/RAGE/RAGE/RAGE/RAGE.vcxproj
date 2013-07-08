@@ -101,7 +101,7 @@
     <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -173,6 +173,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
@@ -299,6 +300,10 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Font_Wrapper.cpp" />
     <ClCompile Include="FS_Wrappers.cpp" />
+    <ClCompile Include="JoyEvent.cpp" />
+    <ClCompile Include="JoyEvent_Wrapper.cpp" />
+    <ClCompile Include="Joystick.cpp" />
+    <ClCompile Include="Joystick_Wrapper.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="IniFile.cpp" />
@@ -319,6 +324,8 @@
     <ClCompile Include="Shader_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="VertexArray_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h" />
@@ -332,6 +339,11 @@
     <ClInclude Include="Color_Wrapper.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Draw_Wrappers.h" />
+    <ClInclude Include="JoyEvent.h" />
+    <ClInclude Include="JoyEvent_Wrapper.h" />
+    <ClInclude Include="Joystick.h" />
+    <ClInclude Include="Joystick_Wrapper.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="rage_errors.h" />
     <ClInclude Include="Events_Wrapper.h" />
@@ -357,6 +369,8 @@
     <ClInclude Include="Shader_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
+    <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="VertexArray_Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc" />

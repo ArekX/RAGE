@@ -39,13 +39,18 @@ typedef struct {
 	bool use_rageKeyEvent;
 	bool use_rageMouseEvent;
 	bool use_rageTimerEvent;
+	bool use_rageJoyEvent;
+	bool use_rageVertexArray;
 	bool use_rageShader;
 	bool use_rageFont;
 	bool use_rageColor;
+	bool use_rageJoystick;
 	bool use_rageEvents;
 	bool use_rageFS;
 	bool use_rageDraw;
 	bool use_rageInput;
+	bool use_rageRubyDL;
+	bool use_rageRubyZlib;
 } RAGEConfig;
 
 /* Include Wrappers */
@@ -62,11 +67,14 @@ typedef struct {
 #include "KeyboardEvent_Wrapper.h"
 #include "MouseEvent_Wrapper.h"
 #include "ScreenEvent_Wrapper.h"
+#include "JoyEvent_Wrapper.h"
 #include "Audio_Wrapper.h"
 #include "Music_Wrapper.h"
 #include "Sfx_Wrapper.h"
 #include "IniFile_Wrapper.h"
 #include "FS_Wrappers.h"
+#include "Joystick_Wrapper.h"
+#include "VertexArray_Wrapper.h"
 
 namespace RAGE
 {

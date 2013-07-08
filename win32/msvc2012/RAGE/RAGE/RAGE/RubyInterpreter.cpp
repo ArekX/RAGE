@@ -1,4 +1,5 @@
 #include "RubyInterpreter.h"
+#include <exts/dl/ruby_ext_dl_rb_data.h>
 
 extern "C"
 {
@@ -12,6 +13,14 @@ namespace RAGE
 	{
 		bool configured = false;
 		RAGEConfig gConfig;
+
+		static void load_extension_rb_data()
+		{
+			int error = 0;
+
+			rb_eval_string_protect(ruby_dl_extension_rb_data, &error);
+			if (error) PRINT(RAGE_ERROR_DL_EXT_RB_DATA_FAILED);
+		}
 
 		static VALUE rb_rage_about(VALUE self)
 		{
@@ -40,13 +49,18 @@ namespace RAGE
 			gConfig.use_rageTimerEvent = true;
 			gConfig.use_rageKeyEvent = true;
 			gConfig.use_rageMouseEvent = true;
+			gConfig.use_rageJoyEvent = true;
+			gConfig.use_rageVertexArray = true;
 			gConfig.use_rageShader = true;
 			gConfig.use_rageFont = true;
 			gConfig.use_rageColor = true;
+			gConfig.use_rageJoystick = true;
 			gConfig.use_rageEvents = true;
 			gConfig.use_rageFS = true;
 			gConfig.use_rageDraw = true;
 			gConfig.use_rageInput = true;			
+			gConfig.use_rageRubyDL = true;
+			gConfig.use_rageRubyZlib = true;
 		}
 
 		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
@@ -89,7 +103,7 @@ namespace RAGE
 			rb_eval_string_protect(data, &error);
 			
 			#ifdef DEVELOPMENT_VERSION
-			if (strcmp(StringValueCStr(filename), "boot.rb") == 0) 
+			if (strcmp(StringValueCStr(filename), "boot.rb") == 0)
 				PRINT(RAGE_DEV_END_TEXT);
 			#endif
 
@@ -104,7 +118,8 @@ namespace RAGE
 			
 				if (TYPE(item) != T_NIL)
 				{
-					gConfig.name = StringValueCStr(item);
+					gConfig.name = new char[RSTRING_LENINT(item)];
+					strcpy(gConfig.name, StringValueCStr(item));
 				}
 				else
 				{
@@ -125,14 +140,19 @@ namespace RAGE
 			    CONFIG_SET(config, item, "RAGE::KeyEvent", gConfig.use_rageKeyEvent, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::MouseEvent", gConfig.use_rageMouseEvent, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::TimerEvent", gConfig.use_rageTimerEvent, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Shader", gConfig.use_rageShader, (TYPE(item) == T_TRUE), true);
+				CONFIG_SET(config, item, "RAGE::JoyEvent", gConfig.use_rageJoyEvent, (TYPE(item) == T_TRUE), true);
+				CONFIG_SET(config, item, "RAGE::VertexArray", gConfig.use_rageVertexArray, (TYPE(item) == T_TRUE), true);
+				CONFIG_SET(config, item, "RAGE::Shader", gConfig.use_rageShader, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::Font", gConfig.use_rageFont, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::Color", gConfig.use_rageColor, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Events", gConfig.use_rageEvents, (TYPE(item) == T_TRUE), true);
+			    CONFIG_SET(config, item, "RAGE::Joystick", gConfig.use_rageJoystick, (TYPE(item) == T_TRUE), true);
+				CONFIG_SET(config, item, "RAGE::Events", gConfig.use_rageEvents, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::FS", gConfig.use_rageFS, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::Draw", gConfig.use_rageDraw, (TYPE(item) == T_TRUE), true);
 			    CONFIG_SET(config, item, "RAGE::Input", gConfig.use_rageInput, (TYPE(item) == T_TRUE), true);
-				
+				CONFIG_SET(config, item, "DL", gConfig.use_rageRubyDL, (TYPE(item) == T_TRUE), true);
+				CONFIG_SET(config, item, "Zlib", gConfig.use_rageRubyZlib, (TYPE(item) == T_TRUE), true);
+
 				configured = true;
 
 				item = rb_hash_aref(config, rb_str_new2("version"));
@@ -224,10 +244,6 @@ namespace RAGE
 				RUBY_INIT_STACK;
 				ruby_init();
 
-				/* Initialize ruby extensions */
-				Init_dl();
-				Init_zlib();
-
 				/* Define Global Functions */
 				VALUE rage = rb_define_module("RAGE");
 				rb_define_module_function(rage, "require", RFUNC(rb_rage_require_wrapper), 1);
@@ -277,8 +293,18 @@ namespace RAGE
 					else
 						load_protect(RAGE_CONF_SCRIPT);
 				}
-				else
+				
+				if (!configured)
 					set_default_config();
+
+				/* Initialize ruby extensions */				
+				if (gConfig.use_rageRubyZlib) Init_zlib();
+
+				if (gConfig.use_rageRubyDL)
+				{
+					Init_dl();
+					load_extension_rb_data();
+				}
 
 				/* Load RAGE modules */
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
@@ -296,13 +322,20 @@ namespace RAGE
 				if (gConfig.use_rageShader) RAGE::Graphics::ShaderWrapper::load_ruby_class();
 				if (gConfig.use_rageMusic) RAGE::Audio::MusicWrapper::load_ruby_class();
 				if (gConfig.use_rageSfx) RAGE::Audio::SfxWrapper::load_ruby_class();
-				if (gConfig.use_rageTimerEvent || gConfig.use_rageKeyEvent || gConfig.use_rageMouseEvent || gConfig.use_rageScreenEvent) RAGE::Events::EventWrapper::load_ruby_class();
+
+				if (gConfig.use_rageTimerEvent || gConfig.use_rageJoyEvent || gConfig.use_rageKeyEvent || 
+					gConfig.use_rageMouseEvent || gConfig.use_rageScreenEvent) 
+						RAGE::Events::EventWrapper::load_ruby_class();
+
 				if (gConfig.use_rageTimerEvent) RAGE::Events::TimerEventWrapper::load_ruby_class();
+				if (gConfig.use_rageJoyEvent) RAGE::Events::JoyEventWrapper::load_ruby_class();
 				if (gConfig.use_rageKeyEvent) RAGE::Events::KeyboardEventWrapper::load_ruby_class();
 				if (gConfig.use_rageMouseEvent) RAGE::Events::MouseEventWrapper::load_ruby_class();
 				if (gConfig.use_rageScreenEvent) RAGE::Events::ScreenEventWrapper::load_ruby_class();
 				if (gConfig.use_rageIniFile) RAGE::Filesystem::IniFileWrapper::load_ruby_class();
-				
+				if (gConfig.use_rageJoystick) RAGE::Input::JoystickWrapper::load_ruby_class();
+				if (gConfig.use_rageVertexArray) RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
+
 				/* Perform additional tasks */
 				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::init_queue();
 				if (gConfig.use_rageMusic || gConfig.use_rageSfx) RAGE::Audio::AudioWrappers::init_audio();
@@ -313,7 +346,7 @@ namespace RAGE
 				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::run_event_thread();
 
 				/* Load boot script */
-				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
 				{
 					if (RAGE::Filesystem::FSWrappers::is_physfs_on())
 						rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));

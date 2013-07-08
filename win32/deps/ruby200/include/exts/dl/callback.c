@@ -19,10 +19,10 @@ void rb_dl_init_callbacks_6();
 void rb_dl_init_callbacks_7();
 void rb_dl_init_callbacks_8();
 void
-Init_callback(void)
+Init_callback(VALUE dl)
 {
     VALUE tmp;
-    VALUE rb_mDL = rb_path2class("DL");
+    VALUE rb_mDL = dl;
 
     rb_dl_cb_call = rb_intern("call");
 

@@ -16,13 +16,13 @@ namespace RAGE
 			free((Shader*)value);
 		}
 
-		VALUE ShaderWrapper::rb_initialize(VALUE self, VALUE code)
+		VALUE ShaderWrapper::rb_initialize(VALUE self, VALUE type, VALUE code)
 		{
 			Shader *sh;
 
 			Data_Get_Struct(self, Shader, sh);
 
-			sh->set_code(StringValueCStr(code));
+			sh->set_code(FIX2INT(type), StringValueCStr(code));
 
 			return Qnil;
 		}
@@ -81,6 +81,17 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE ShaderWrapper::rb_attach_shader(VALUE self, VALUE shader)
+		{
+			Shader *sh_self, *sh_shader;
+			Data_Get_Struct(self, Shader, sh_self);
+			Data_Get_Struct(self, Shader, sh_shader);
+
+			sh_self->attach_shader(sh_shader);
+
+			return Qnil;
+		}
+
 		void ShaderWrapper::load_ruby_class()
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -89,10 +100,11 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rageShaderClass, ShaderWrapper::rb_alloc);
 
-			rb_define_method(rb_rageShaderClass, "initialize", RFUNC(ShaderWrapper::rb_initialize), 1);
+			rb_define_method(rb_rageShaderClass, "initialize", RFUNC(ShaderWrapper::rb_initialize), 2);
 			rb_define_method(rb_rageShaderClass, "bindBitmap", RFUNC(ShaderWrapper::rb_bind_texture), 2);
 			rb_define_method(rb_rageShaderClass, "setFloat", RFUNC(ShaderWrapper::rb_set_float), 2);
 			rb_define_method(rb_rageShaderClass, "setInt", RFUNC(ShaderWrapper::rb_set_int), 2);
+			rb_define_method(rb_rageShaderClass, "attachShader", RFUNC(ShaderWrapper::rb_attach_shader), 1);
 			rb_define_method(rb_rageShaderClass, "dispose", RFUNC(ShaderWrapper::rb_dispose), 0);
 			rb_define_method(rb_rageShaderClass, "disposed?", RFUNC(ShaderWrapper::rb_is_disposed), 0);
 		}

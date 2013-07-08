@@ -25,6 +25,8 @@ namespace RAGE
 			static VALUE draw_text(VALUE self, VALUE x, VALUE y, VALUE text);
 			static VALUE draw_justified_text(VALUE self, VALUE x, VALUE y, VALUE width, VALUE diff, VALUE text);
 			static VALUE set_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+			static VALUE draw_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE start, VALUE end, VALUE type);
+			static VALUE draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type);
 			static VALUE set_color_o(VALUE self, VALUE scolor);
 			static VALUE set_font(VALUE self, VALUE sfont);
 		public:
