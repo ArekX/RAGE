@@ -7,21 +7,22 @@ You can make all kinds of 2D games using RAGE engine.
 You use Ruby, an Interpreter language to handle all game logic, most of the heavy lifting is done by the engine itself
 so you can concentrate more on making awesome games. Enjoy!
 
-0.0.3-beta (coming soon):
-
 Using Ruby Version: 2.0.0-p247
 
 Using Allegro Version: 5.0.10
 
-
-0.0.2-beta:
-
-Using Ruby Version: 2.0.0-p195
-
-Using Allegro Version: 5.0.9
-
 Releases
 ====
+
+0.0.3-beta:
+
+Windows Vista/7/8 Version:
+
+https://www.dropbox.com/s/vhfs0eiqvbt9mh2/RAGE003-beta.7z
+
+Windows XP/Vista/7/8 Version:
+
+https://www.dropbox.com/s/uwfp02ifliio7q3/RAGE003-beta-xp-support.7z
 
 0.0.2 - beta:
 
@@ -62,7 +63,7 @@ https://www.dropbox.com/s/dq3s5m0osczr2ww/RAGETicTacToe.7z
 API
 ====
 
-RAGE CHM Help API Documentation:
+RAGE CHM Help API Documentation (for 0.0.2-beta, some things missing for 0.0.3-beta):
 
 https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
 
