@@ -48,28 +48,32 @@ https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 Examples
 ====
 
-Snake game example
+Snake game example (0.0.2-beta)
 
 https://www.dropbox.com/s/bq8hhj44anxohfu/RAGE-Snake.7z
 
-Minesweeper game example
+Minesweeper game example (0.0.2-beta)
 
 https://www.dropbox.com/s/ewtfkn90gxuyidz/RAGE-Minesweeper.7z
 
-Tic-Tac-Toe game example
+Tic-Tac-Toe game example (0.0.2-beta)
 
 https://www.dropbox.com/s/dq3s5m0osczr2ww/RAGETicTacToe.7z
 
 API
 ====
 
-RAGE CHM Help API Documentation (for 0.0.2-beta, some things missing for 0.0.3-beta):
+RAGE CHM Help API Documentation:
 
-https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
+https://www.dropbox.com/s/upgbx7mixhtuyz3/RAGE%20Documentation.7z
 
 Ruby 2.0 Core API Documentation:
 
 https://www.dropbox.com/s/nfl2o4flpm8wadr/ruby20-core.chm
+
+RAGE CHM Help API Documentation (0.0.2-beta):
+
+https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
 
 License
 ====
