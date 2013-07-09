@@ -67,6 +67,10 @@ RAGE CHM Help API Documentation:
 
 https://www.dropbox.com/s/upgbx7mixhtuyz3/RAGE%20Documentation.7z
 
+Online API documentation:
+
+http://www.rage2d.co/rage-doc/
+
 Ruby 2.0 Core API Documentation:
 
 https://www.dropbox.com/s/nfl2o4flpm8wadr/ruby20-core.chm
