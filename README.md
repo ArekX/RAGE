@@ -48,6 +48,10 @@ https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 Examples
 ====
 
+Pixel Effects example (0.0.3-beta)
+
+https://www.dropbox.com/s/p7nk41m08w67v5v/RAGE003-beta-fragment-shader-example.7z
+
 Snake game example (0.0.2-beta)
 
 https://www.dropbox.com/s/bq8hhj44anxohfu/RAGE-Snake.7z
