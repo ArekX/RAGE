@@ -49,11 +49,17 @@ namespace RAGE
 
 			static VALUE rb_get_glsl_version(VALUE self);
 			static VALUE rb_get_opengl_version(VALUE self);
+
+			static VALUE rb_get_blending_mode(VALUE self);
+			static VALUE rb_get_blending_mode_alpha(VALUE self);
+			static VALUE rb_hold_bitmap_drawing(VALUE self, VALUE val);
+			static VALUE rb_is_bitmap_drawing_held(VALUE self);
 		public:
-			static void load_wrappers();
+			static void load_wrappers(void);
 			static void initialize_graphics(RAGEConfig cfg);
-			static void recreate_display();
-			static ALLEGRO_DISPLAY* get_display();
+			static void recreate_display(void);
+			static void set_screen_processing(ALLEGRO_EVENT_QUEUE *queue, bool process_screen);
+			static ALLEGRO_DISPLAY* get_display(void);
 		};
 
 	}

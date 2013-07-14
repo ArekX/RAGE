@@ -92,10 +92,15 @@ namespace RAGE
 			return Qnil;
 		}
 
-		void ShaderWrapper::load_ruby_class()
+		void ShaderWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			
+			VALUE g = rb_define_module_under(rage, "Graphics");
+
+			rb_define_const(g, "FRAGMENT_SHADER", INT2FIX(RAGE_FRAGMENT_SHADER));
+			rb_define_const(g, "VERTEX_SHADER", INT2FIX(RAGE_VERTEX_SHADER));
+
 			rb_rageShaderClass = rb_define_class_under(rage, "Shader", rb_cObject);
 
 			rb_define_alloc_func(rb_rageShaderClass, ShaderWrapper::rb_alloc);
@@ -109,12 +114,12 @@ namespace RAGE
 			rb_define_method(rb_rageShaderClass, "disposed?", RFUNC(ShaderWrapper::rb_is_disposed), 0);
 		}
 
-		VALUE ShaderWrapper::get_ruby_class()
+		VALUE ShaderWrapper::get_ruby_class(void)
 		{
 			return rb_rageShaderClass;
 		}
 
-		VALUE ShaderWrapper::new_ruby_class_instance()
+		VALUE ShaderWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageShaderClass);
 		}

@@ -30,9 +30,9 @@ namespace RAGE
 			static VALUE set_color_o(VALUE self, VALUE scolor);
 			static VALUE set_font(VALUE self, VALUE sfont);
 		public:
-			static void reset_font();
-			static void init();
-			static void load_wrappers();
+			static void reset_font(void);
+			static void init(void);
+			static void load_wrappers(void);
 		};
 
 	}

@@ -21,7 +21,6 @@ namespace RAGE
 			VALUE screen_focus_observer;
 			VALUE screen_lost_observer;
 			VALUE screen_resize_observer;
-			bool disposed;
 		public:
 			ScreenEvent(void);
 			void register_proc(int type, VALUE proc);
@@ -30,7 +29,8 @@ namespace RAGE
 			void clear_procs(int type);
 			void call_procs(int type);
 			void callback(ALLEGRO_EVENT *ev);
-			void dispose();
+			void gc_mark(void);
+			void dispose(void);
 			~ScreenEvent(void);
 		};
 

@@ -64,13 +64,13 @@ namespace RAGE
 				return Qfalse;
 		}
 
-		void FSWrappers::force_physfs_on()
+		void FSWrappers::force_physfs_on(void)
 		{
 			physfs_on = true;
 			al_set_physfs_file_interface();
 		}
 
-		bool FSWrappers::is_physfs_on()
+		bool FSWrappers::is_physfs_on(void)
 		{
 			return physfs_on;
 		}
@@ -183,7 +183,7 @@ namespace RAGE
 			return rb_str_new_cstr(PHYSFS_getLastError());
 		}
 
-		void FSWrappers::load_wrappers()
+		void FSWrappers::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE fs = rb_define_module_under(rage, "FS");
@@ -203,7 +203,7 @@ namespace RAGE
 			rb_define_module_function(fs, "fileExists?", RFUNC(FSWrappers::rb_physfs_file_exists), 1);
 			rb_define_module_function(fs, "dirExists?", RFUNC(FSWrappers::rb_physfs_dir_exists), 1);
 			rb_define_module_function(fs, "mkDir", RFUNC(FSWrappers::rb_physfs_make_dir), 1);
-			rb_define_module_function(fs, "getDirSep", RFUNC(FSWrappers::rb_physfs_get_dir_separator), 0);
+			rb_define_module_function(fs, "dirSep", RFUNC(FSWrappers::rb_physfs_get_dir_separator), 0);
 			rb_define_module_function(fs, "delete", RFUNC(FSWrappers::rb_physfs_delete), 1);
 			rb_define_module_function(fs, "lastError", RFUNC(FSWrappers::rb_physfs_get_last_error), 0);
 		}

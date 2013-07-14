@@ -151,7 +151,15 @@ namespace RAGE
 			}
 		}
 
-		void ScreenEvent::dispose()
+		void ScreenEvent::gc_mark(void)
+		{
+			rb_gc_mark(screen_close_observer);
+			rb_gc_mark(screen_focus_observer);
+			rb_gc_mark(screen_lost_observer);
+			rb_gc_mark(screen_resize_observer);
+		}
+
+		void ScreenEvent::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -159,6 +167,11 @@ namespace RAGE
 			rb_ary_clear(screen_focus_observer);
 			rb_ary_clear(screen_lost_observer);
 			rb_ary_clear(screen_resize_observer);
+
+			rb_gc_force_recycle(screen_close_observer);
+			rb_gc_force_recycle(screen_focus_observer);
+			rb_gc_force_recycle(screen_lost_observer);
+			rb_gc_force_recycle(screen_resize_observer);
 
 			disposed = true;
 		}

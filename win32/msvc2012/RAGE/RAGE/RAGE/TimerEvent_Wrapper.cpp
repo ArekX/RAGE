@@ -9,7 +9,12 @@ namespace RAGE
 		VALUE TimerEventWrapper::rb_timer_alloc(VALUE self)
 		{
 			
-			return Data_Wrap_Struct(self, 0, TimerEventWrapper::rb_timer_destroy, new TimerEvent());
+			return Data_Wrap_Struct(self, TimerEventWrapper::rb_timer_gc_mark, TimerEventWrapper::rb_timer_destroy, new TimerEvent());
+		}
+
+		void TimerEventWrapper::rb_timer_gc_mark(void *value)
+		{
+			((TimerEvent*)value)->gc_mark();
 		}
 
 		VALUE TimerEventWrapper::rb_timer_initialize(VALUE self, VALUE seconds)
@@ -53,6 +58,9 @@ namespace RAGE
 		{
 			TimerEvent *tm;
 			Data_Get_Struct(self, TimerEvent, tm);
+
+			EventsWrapper::unregister_event(self);
+
 			tm->dispose();
 
 			return Qnil;
@@ -142,10 +150,10 @@ namespace RAGE
 			TimerEvent *tm;
 			Data_Get_Struct(self, TimerEvent, tm);
 			
-			return tm->is_disposed() ? Qtrue : Qfalse;
+			return tm->disposed ? Qtrue : Qfalse;
 		}
 
-		void TimerEventWrapper::load_ruby_class()
+		void TimerEventWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_TimerClass = rb_define_class_under(rage, "TimerEvent", EventWrapper::get_ruby_class());
@@ -171,12 +179,12 @@ namespace RAGE
 			rb_define_method(rb_rage_TimerClass, "disposed?", RFUNC(TimerEventWrapper::rb_timer_disposed), 0);
 		}
 
-		VALUE TimerEventWrapper::get_ruby_class()
+		VALUE TimerEventWrapper::get_ruby_class(void)
 		{
 			return rb_rage_TimerClass;
 		}
 
-		VALUE TimerEventWrapper::new_ruby_class_instance()
+		VALUE TimerEventWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_TimerClass);
 		}

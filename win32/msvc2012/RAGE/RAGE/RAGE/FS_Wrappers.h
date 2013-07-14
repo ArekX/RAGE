@@ -29,9 +29,9 @@ namespace RAGE
 			static VALUE rb_physfs_delete(VALUE self, VALUE path);
 			static VALUE rb_physfs_get_last_error(VALUE self);
 		public:
-			static bool is_physfs_on();
-			static void force_physfs_on();
-			static void load_wrappers();
+			static bool is_physfs_on(void);
+			static void force_physfs_on(void);
+			static void load_wrappers(void);
 		};
 
 	}

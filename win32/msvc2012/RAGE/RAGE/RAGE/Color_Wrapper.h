@@ -30,9 +30,9 @@ namespace RAGE
 			static VALUE rb_get_a(VALUE self);
 			static VALUE rb_set_a(VALUE self, VALUE val);
 		public:
-			static void load_ruby_class();
-			static VALUE get_ruby_class();
-			static VALUE new_ruby_class_instance();
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
 	}
 }

@@ -8,7 +8,12 @@ namespace RAGE
 
 		VALUE ScreenEventWrapper::rb_screen_event_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, ScreenEventWrapper::rb_screen_event_destroy, new ScreenEvent());
+			return Data_Wrap_Struct(self, ScreenEventWrapper::rb_screen_event_gc_mark, ScreenEventWrapper::rb_screen_event_destroy, new ScreenEvent());
+		}
+
+		void ScreenEventWrapper::rb_screen_event_gc_mark(void *value)
+		{
+			((ScreenEvent*)value)->gc_mark();
 		}
 
 		void ScreenEventWrapper::rb_screen_event_destroy(void *value)
@@ -59,6 +64,9 @@ namespace RAGE
 		{
 			ScreenEvent *screen_event;
 			Data_Get_Struct(self, ScreenEvent, screen_event);
+
+			EventsWrapper::unregister_event(self);
+
 			screen_event->dispose();
 
 			return Qnil;
@@ -69,10 +77,10 @@ namespace RAGE
 			ScreenEvent *screen_event;
 			Data_Get_Struct(self, ScreenEvent, screen_event);
 			
-			return screen_event->is_disposed() ? Qtrue : Qfalse;
+			return screen_event->disposed ? Qtrue : Qfalse;
 		}
 
-		void ScreenEventWrapper::load_ruby_class()
+		void ScreenEventWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_ScreenEventClass = rb_define_class_under(rage, "ScreenEvent", EventWrapper::get_ruby_class());
@@ -95,12 +103,12 @@ namespace RAGE
 			rb_define_method(rb_rage_ScreenEventClass, "disposed?", RFUNC(ScreenEventWrapper::rb_disposed), 0);
 		}
 
-		VALUE ScreenEventWrapper::get_ruby_class()
+		VALUE ScreenEventWrapper::get_ruby_class(void)
 		{
 			return rb_rage_ScreenEventClass;
 		}
 
-		VALUE ScreenEventWrapper::new_ruby_class_instance()
+		VALUE ScreenEventWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_ScreenEventClass);
 		}

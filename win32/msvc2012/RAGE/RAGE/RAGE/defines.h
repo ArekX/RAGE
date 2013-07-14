@@ -48,12 +48,11 @@
 #define RAGE_GAME_FILE "game.rage"
 
 #define RAGE_MOUSE_BITMAP_CURSOR_INDEX -1
-#define RAGE_FRAGMENT_SHADER 1
-#define RAGE_VERTEX_SHADER 2
 
 #define RAGE_REGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_FALSE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_push(observer, proc);}
 #define RAGE_UNREGISTER_EVENT(observer, proc) if (TYPE(rb_ary_includes(observer, proc)) == T_TRUE) { if (rb_class_of(proc) != rb_cProc) rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); else rb_ary_delete(observer, proc);}
 #define CONFIG_SET(sconfig, sitem, scstr, sset, sval, sdefval) item = rb_hash_aref(sconfig, rb_str_new2(scstr)); if (TYPE(sitem) != T_NIL) { sset = sval; } else { sset = sdefval; }
+#define RDEF_KEY(name, keycode) rb_define_const(input, name, INT2FIX(keycode));
 
 #define RAGE_ENGINE_VERSION "0.0.3-beta"
 
@@ -64,3 +63,5 @@
 #define RAGE_DEV_MESSAGE L"Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
 #define RAGE_DEV_MESSAGE_EXIT "\n\nPress any key to close this engine."
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
+
+#pragma warning (disable: 4200 4244 4305 4800 4049)

@@ -33,6 +33,7 @@ namespace RAGE
 			static VALUE rb_set_angle(VALUE self, VALUE val);
 			static VALUE rb_set_flags(VALUE self, VALUE val);
 			static VALUE rb_set_tint(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+			static VALUE rb_set_tint_o(VALUE self, VALUE color);
 
 			static VALUE rb_get_scale_x(VALUE self);
 			static VALUE rb_get_scale_y(VALUE self);
@@ -65,9 +66,9 @@ namespace RAGE
 			static VALUE rb_bitmap_draw_region(VALUE self, VALUE sx, VALUE sy, VALUE sw, VALUE sh, VALUE dx, VALUE dy);
 
 		public:
-			static void load_ruby_class();
-			static VALUE get_ruby_class();
-			static VALUE new_ruby_class_instance();
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
 	}
 }

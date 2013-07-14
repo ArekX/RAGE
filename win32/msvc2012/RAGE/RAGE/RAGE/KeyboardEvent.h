@@ -31,7 +31,8 @@ namespace RAGE
 			void clear_procs(int type);
 			void call_procs(int type, int keycode);
 			void callback(ALLEGRO_EVENT *ev);
-			void dispose();
+			void gc_mark(void);
+			void dispose(void);
 			~KeyboardEvent(void);
 		};
 

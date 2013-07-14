@@ -126,16 +126,20 @@ namespace RAGE
 			
 			Data_Get_Struct(self, Bitmap, bmp);
 
-			ALLEGRO_BITMAP *bit = bmp->get_parent();
-
-			if (bit == NULL)
-				return Qnil;
-
 			VALUE ret_bmp = new_ruby_class_instance();
-
+			
 			Data_Get_Struct(ret_bmp, Bitmap, ret);
+			
+			ret->assign_parent(bmp);
 
-			ret->bitmap = bit;
+			if (ret->bitmap == NULL)
+			{
+				ret->dispose();
+				
+				rb_gc_register_address(&ret_bmp);
+
+				return Qnil;
+			}
 
 			return ret_bmp;
 		}
@@ -275,7 +279,7 @@ namespace RAGE
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
 
-			return bmp->is_disposed() ? Qtrue : Qfalse;
+			return bmp->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE BitmapWrapper::rb_get_alpha(VALUE self)
@@ -441,7 +445,20 @@ namespace RAGE
 			return Qnil;
 		}
 
-		void BitmapWrapper::load_ruby_class()
+		VALUE BitmapWrapper::rb_set_tint_o(VALUE self, VALUE color)
+		{
+			Color *cl;
+			Bitmap *bmp;
+
+			Data_Get_Struct(self, Bitmap, bmp);
+			Data_Get_Struct(color, Color, cl);
+
+			bmp->set_tint(cl->color);
+
+			return Qnil;
+		}
+
+		void BitmapWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
@@ -474,6 +491,7 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "angle", RFUNC(BitmapWrapper::rb_get_angle), 0);
 			rb_define_method(rb_rageBitmapClass, "flip", RFUNC(BitmapWrapper::rb_get_flags), 0);
 			rb_define_method(rb_rageBitmapClass, "setTint", RFUNC(BitmapWrapper::rb_set_tint), 4);
+			rb_define_method(rb_rageBitmapClass, "setTintO", RFUNC(BitmapWrapper::rb_set_tint_o), 1);
 			rb_define_method(rb_rageBitmapClass, "alpha=", RFUNC(BitmapWrapper::rb_set_alpha), 1);
 			rb_define_method(rb_rageBitmapClass, "red=", RFUNC(BitmapWrapper::rb_set_red), 1);
 			rb_define_method(rb_rageBitmapClass, "green=", RFUNC(BitmapWrapper::rb_set_green), 1);
@@ -497,12 +515,12 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "drawRegion", RFUNC(BitmapWrapper::rb_bitmap_draw_region), 6);
 		}
 
-		VALUE BitmapWrapper::get_ruby_class()
+		VALUE BitmapWrapper::get_ruby_class(void)
 		{
 			return rb_rageBitmapClass;
 		}
 
-		VALUE BitmapWrapper::new_ruby_class_instance()
+		VALUE BitmapWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageBitmapClass);
 		}

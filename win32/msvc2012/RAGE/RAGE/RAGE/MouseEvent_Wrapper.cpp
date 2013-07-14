@@ -8,7 +8,12 @@ namespace RAGE
 
 		VALUE MouseEventWrapper::rb_mouse_event_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, MouseEventWrapper::rb_mouse_event_destroy, new MouseEvent());
+			return Data_Wrap_Struct(self, MouseEventWrapper::rb_mouse_event_gc_mark, MouseEventWrapper::rb_mouse_event_destroy, new MouseEvent());
+		}
+
+		void MouseEventWrapper::rb_mouse_event_gc_mark(void *value)
+		{
+			((MouseEvent*)value)->gc_mark();
 		}
 
 		void MouseEventWrapper::rb_mouse_event_destroy(void *value)
@@ -59,6 +64,9 @@ namespace RAGE
 		{
 			MouseEvent *mouse_event;
 			Data_Get_Struct(self, MouseEvent, mouse_event);
+
+			EventsWrapper::unregister_event(self);
+
 			mouse_event->dispose();
 
 			return Qnil;
@@ -69,10 +77,10 @@ namespace RAGE
 			MouseEvent *mouse_event;
 			Data_Get_Struct(self, MouseEvent, mouse_event);
 			
-			return mouse_event->is_disposed() ? Qtrue : Qfalse;
+			return mouse_event->disposed ? Qtrue : Qfalse;
 		}
 
-		void MouseEventWrapper::load_ruby_class()
+		void MouseEventWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_MouseEventClass = rb_define_class_under(rage, "MouseEvent", EventWrapper::get_ruby_class());
@@ -96,12 +104,12 @@ namespace RAGE
 			rb_define_method(rb_rage_MouseEventClass, "disposed?", RFUNC(MouseEventWrapper::rb_disposed), 0);
 		}
 
-		VALUE MouseEventWrapper::get_ruby_class()
+		VALUE MouseEventWrapper::get_ruby_class(void)
 		{
 			return rb_rage_MouseEventClass;
 		}
 
-		VALUE MouseEventWrapper::new_ruby_class_instance()
+		VALUE MouseEventWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_MouseEventClass);
 		}

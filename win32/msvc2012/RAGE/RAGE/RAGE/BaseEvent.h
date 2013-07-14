@@ -3,13 +3,8 @@
 
 extern class BaseEvent
 {
-protected:
-	bool disposed;
 public:
+	bool disposed;
 	virtual void callback(ALLEGRO_EVENT *ev) = 0;
-
-	bool is_disposed() {
-	   return disposed;	
-	};
 };
 

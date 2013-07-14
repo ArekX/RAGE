@@ -8,7 +8,12 @@ namespace RAGE
 
 		VALUE KeyboardEventWrapper::rb_key_event_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, KeyboardEventWrapper::rb_key_event_destroy, new KeyboardEvent());
+			return Data_Wrap_Struct(self, KeyboardEventWrapper::rb_key_event_mark, KeyboardEventWrapper::rb_key_event_destroy, new KeyboardEvent());
+		}
+
+		void KeyboardEventWrapper::rb_key_event_mark(void *value)
+		{
+			((KeyboardEvent*)value)->gc_mark();
 		}
 
 		void KeyboardEventWrapper::rb_key_event_destroy(void *value)
@@ -52,6 +57,9 @@ namespace RAGE
 		{
 			KeyboardEvent *key_event;
 			Data_Get_Struct(self, KeyboardEvent, key_event);
+
+			EventsWrapper::unregister_event(self);
+
 			key_event->dispose();
 
 			return Qnil;
@@ -62,7 +70,7 @@ namespace RAGE
 			KeyboardEvent *key_event;
 			Data_Get_Struct(self, KeyboardEvent, key_event);
 			
-			return key_event->is_disposed() ? Qtrue : Qfalse;
+			return key_event->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE KeyboardEventWrapper::rb_get_proc_count(VALUE self, VALUE event_type)
@@ -88,7 +96,7 @@ namespace RAGE
 			return Qtrue;
 		}
 
-		void KeyboardEventWrapper::load_ruby_class()
+		void KeyboardEventWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_KeyEventClass = rb_define_class_under(rage, "KeyEvent", EventWrapper::get_ruby_class());
@@ -112,12 +120,12 @@ namespace RAGE
 			rb_define_method(rb_rage_KeyEventClass, "disposed?", RFUNC(KeyboardEventWrapper::rb_disposed), 0);
 		}
 
-		VALUE KeyboardEventWrapper::get_ruby_class()
+		VALUE KeyboardEventWrapper::get_ruby_class(void)
 		{
 			return rb_rage_KeyEventClass;
 		}
 
-		VALUE KeyboardEventWrapper::new_ruby_class_instance()
+		VALUE KeyboardEventWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_KeyEventClass);
 		}

@@ -162,7 +162,7 @@ namespace RAGE
 			Sfx *aud;
 			Data_Get_Struct(self, Sfx, aud);
 
-			return aud->get_loop() ? Qtrue : Qfalse;
+			return aud->is_loop ? Qtrue : Qfalse;
 		}
 
 		VALUE SfxWrapper::rb_disposed(VALUE self)
@@ -170,7 +170,7 @@ namespace RAGE
 			Sfx *aud;
 			Data_Get_Struct(self, Sfx, aud);
 			
-			return aud->is_disposed() ? Qtrue : Qfalse;
+			return aud->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE SfxWrapper::rb_dispose(VALUE self)
@@ -183,7 +183,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-		void SfxWrapper::load_ruby_class()
+		void SfxWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_SfxClass = rb_define_class_under(rage, "Sfx", rb_cObject);
@@ -209,12 +209,12 @@ namespace RAGE
 			rb_define_method(rb_rage_SfxClass, "dispose", RFUNC(SfxWrapper::rb_dispose), 0);
 		}
 
-		VALUE SfxWrapper::get_ruby_class()
+		VALUE SfxWrapper::get_ruby_class(void)
 		{
 			return rb_rage_SfxClass;
 		}
 
-		VALUE SfxWrapper::new_ruby_class_instance()
+		VALUE SfxWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_SfxClass);
 		}

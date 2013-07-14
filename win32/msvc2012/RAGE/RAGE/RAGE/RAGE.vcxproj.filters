@@ -247,6 +247,9 @@
     <ClCompile Include="VertexArray_Wrapper.cpp">
       <Filter>modules\graphics\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEngine.cpp">
+      <Filter>modules\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -375,7 +378,9 @@
     <ClInclude Include="VertexArray_Wrapper.h">
       <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="ParticleEngine.h">
+      <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc">

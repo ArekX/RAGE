@@ -191,7 +191,7 @@ namespace RAGE
 			return clr->disposed ? Qtrue : Qfalse;
 		}
 
-		void ColorWrapper::load_ruby_class()
+		void ColorWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rageColorClass = rb_define_class_under(rage, "Color", rb_cObject);
@@ -217,12 +217,12 @@ namespace RAGE
 			rb_define_method(rb_rageColorClass, "disposed?", RFUNC(ColorWrapper::rb_disposed), 0);
 		}
 
-		VALUE ColorWrapper::get_ruby_class()
+		VALUE ColorWrapper::get_ruby_class(void)
 		{
 			return rb_rageColorClass;
 		}
 
-		VALUE ColorWrapper::new_ruby_class_instance()
+		VALUE ColorWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageColorClass);
 		}

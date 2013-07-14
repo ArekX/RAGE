@@ -107,7 +107,7 @@ namespace RAGE
 			return (al_reconfigure_joysticks() == true) ? Qtrue : Qfalse;
 		}
 
-		void InputWrappers::load_wrappers()
+		void InputWrappers::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE input = rb_define_module_under(rage, "Input");

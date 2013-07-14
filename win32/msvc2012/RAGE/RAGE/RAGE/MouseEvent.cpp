@@ -182,7 +182,21 @@ namespace RAGE
 				run_procs(&mouse_leave_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
 		}
 
-		void MouseEvent::dispose()
+		void MouseEvent::gc_mark(void)
+		{
+			rb_gc_mark(mouse_down_observer);
+			rb_gc_mark(mouse_up_observer);
+			rb_gc_mark(mouse_move_observer);
+			rb_gc_mark(mouse_enter_observer);
+			rb_gc_mark(mouse_leave_observer);
+
+			rb_gc_mark(mouse_args[0]);
+			rb_gc_mark(mouse_args[1]);
+			rb_gc_mark(mouse_args[2]);
+			rb_gc_mark(mouse_args[3]);
+		}
+
+		void MouseEvent::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -191,6 +205,17 @@ namespace RAGE
 			rb_ary_clear(mouse_move_observer);
 			rb_ary_clear(mouse_enter_observer);
 			rb_ary_clear(mouse_leave_observer);
+
+			rb_gc_force_recycle(mouse_down_observer);
+			rb_gc_force_recycle(mouse_up_observer);
+			rb_gc_force_recycle(mouse_move_observer);
+			rb_gc_force_recycle(mouse_enter_observer);
+			rb_gc_force_recycle(mouse_leave_observer);
+
+			rb_gc_force_recycle(mouse_args[0]);
+			rb_gc_force_recycle(mouse_args[1]);
+			rb_gc_force_recycle(mouse_args[2]);
+			rb_gc_force_recycle(mouse_args[3]);
 
 			disposed = true;
 		}

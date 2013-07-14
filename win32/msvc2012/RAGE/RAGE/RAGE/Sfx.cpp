@@ -43,21 +43,21 @@ namespace RAGE
 			al_set_sample(inst, spl);
 		}
 		
-		void Sfx::play()
+		void Sfx::play(void)
 		{ 
 			RAGE_CHECK_DISPOSED(disposed);
 
 			al_set_sample_instance_playing(inst, true);
 		}
 		
-		void Sfx::pause()
+		void Sfx::pause(void)
 		{ 
 			RAGE_CHECK_DISPOSED(disposed);
 
 			al_set_sample_instance_playing(inst, false);
 		}
 		
-		void Sfx::stop()
+		void Sfx::stop(void)
 		{ 
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -97,35 +97,35 @@ namespace RAGE
 			is_loop = loop;
 		}
 		
-		float Sfx::get_pan()
+		float Sfx::get_pan(void)
 		{ 
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
 			return al_get_sample_instance_pan(inst);
 		}
 		
-		float Sfx::get_speed()
+		float Sfx::get_speed(void)
 		{ 
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
 			return al_get_sample_instance_speed(inst); 
 		}
 		
-		float Sfx::get_gain()
+		float Sfx::get_gain(void)
 		{ 
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
 			return al_get_sample_instance_gain(inst); 
 		}
 		
-		unsigned int Sfx::get_length()
+		unsigned int Sfx::get_length(void)
 		{ 
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
 			return al_get_sample_instance_length(inst);
 		}
 		
-		unsigned int Sfx::get_pos()
+		unsigned int Sfx::get_pos(void)
 		{ 
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
@@ -139,14 +139,7 @@ namespace RAGE
 			al_set_sample_instance_position(inst, pos);
 		}
 
-		bool Sfx::get_loop()
-		{
-			RAGE_CHECK_DISPOSED_RET(disposed, false);
-
-			return is_loop; 
-		}
-
-		void Sfx::dispose()
+		void Sfx::dispose(void)
 		{ 
 			RAGE_CHECK_DISPOSED(disposed);
 

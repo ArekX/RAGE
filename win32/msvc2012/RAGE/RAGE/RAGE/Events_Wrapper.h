@@ -3,9 +3,6 @@
 #include "TimerEvent.h"
 #include "BaseEvent.h"
 
-#define RAGE_RB_TIMER_ERROR "You can only pass instances of RAGE::Timer object as an argument."
-#define RAGE_RB_EVENT_REG_ERR "You can register only instances of RAGE::Event objects."
-
 namespace RAGE
 {
 	namespace Events
@@ -26,12 +23,13 @@ namespace RAGE
 			 static VALUE rb_process_display(VALUE self, VALUE val);
 			 static void* rb_update_event_objects(void* ptr);
 		public:
-			static ALLEGRO_EVENT_QUEUE* get_queue();
-			static bool get_use_keycode_names();
-			static void init_queue();
-			static void finalize_queue();
-			static void load_wrappers();
-			static void run_event_thread();
+			static ALLEGRO_EVENT_QUEUE* get_queue(void);
+			static void unregister_event(VALUE ev);
+			static bool get_use_keycode_names(void);
+			static void init_queue(void);
+			static void finalize_queue(void);
+			static void load_wrappers(void);
+			static void run_event_thread(void);
 		};
 	}
 }

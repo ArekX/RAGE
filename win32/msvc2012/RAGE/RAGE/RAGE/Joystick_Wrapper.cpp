@@ -161,7 +161,7 @@ namespace RAGE
 			return (joy->disposed) ? Qtrue : Qfalse;
 		}
 
-		void JoystickWrapper::load_ruby_class() 
+		void JoystickWrapper::load_ruby_class(void) 
 		{
 			VALUE rage = rb_define_module("RAGE");
 
@@ -188,12 +188,12 @@ namespace RAGE
 
 		}
 
-		VALUE JoystickWrapper::get_ruby_class() 
+		VALUE JoystickWrapper::get_ruby_class(void) 
 		{
 			return rb_rage_JoystickClass;
 		}
 
-		VALUE JoystickWrapper::new_ruby_class_instance()
+		VALUE JoystickWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(1, FIX2UINT(0), rb_rage_JoystickClass);
 		}

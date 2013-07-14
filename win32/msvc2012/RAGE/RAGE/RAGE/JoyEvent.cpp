@@ -186,7 +186,18 @@ namespace RAGE
 				run_axis_procs(ev->joystick.stick, ev->joystick.axis, ev->joystick.pos);
 		}
 
-		void JoyEvent::dispose()
+		void JoyEvent::gc_mark(void)
+		{
+			rb_gc_mark(joy_up_observer);
+			rb_gc_mark(joy_down_observer);
+			rb_gc_mark(joy_axis_observer);
+			rb_gc_mark(joy_reconf_observer);
+			rb_gc_mark(vals[0]);
+			rb_gc_mark(vals[1]);
+			rb_gc_mark(vals[2]);
+		}
+
+		void JoyEvent::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -194,6 +205,14 @@ namespace RAGE
 			rb_ary_clear(joy_down_observer);
 			rb_ary_clear(joy_axis_observer);
 			rb_ary_clear(joy_reconf_observer);
+
+			rb_gc_force_recycle(joy_up_observer);
+			rb_gc_force_recycle(joy_down_observer);
+			rb_gc_force_recycle(joy_axis_observer);
+			rb_gc_force_recycle(joy_reconf_observer);
+			rb_gc_force_recycle(vals[0]);
+			rb_gc_force_recycle(vals[1]);
+			rb_gc_force_recycle(vals[2]);
 
 			disposed = true;
 		}

@@ -3,6 +3,8 @@
 #include "RubyInterpreter.h"
 
 #define SHADER_LEN 1
+#define RAGE_FRAGMENT_SHADER 1
+#define RAGE_VERTEX_SHADER 2
 
 namespace RAGE
 {

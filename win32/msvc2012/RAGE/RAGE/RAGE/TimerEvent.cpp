@@ -7,8 +7,8 @@ namespace RAGE
 
 		TimerEvent::TimerEvent()
 		{
-			timerObserver = rb_ary_new();
-			rb_gc_register_address(&timerObserver);
+			timer_observer = rb_ary_new();
+			rb_gc_register_address(&timer_observer);
 			disposed = false;
 			timer_queue = NULL;
 			timer = NULL;
@@ -45,14 +45,14 @@ namespace RAGE
 			timer_queue = NULL;
 		}
 
-		void TimerEvent::clear()
+		void TimerEvent::clear(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			rb_ary_clear(timerObserver);
+			rb_ary_clear(timer_observer);
 		}
 
-		void TimerEvent::start()
+		void TimerEvent::start(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -60,7 +60,7 @@ namespace RAGE
 				al_start_timer(timer);
 		}
 
-		void TimerEvent::stop()
+		void TimerEvent::stop(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -68,7 +68,7 @@ namespace RAGE
 				al_stop_timer(timer);
 		}
 
-		int64_t TimerEvent::get_count()
+		int64_t TimerEvent::get_count(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -78,24 +78,24 @@ namespace RAGE
 				return -1;
 		}
 
-		int TimerEvent::get_proc_count()
+		int TimerEvent::get_proc_count(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			if (timer != NULL)
-				return RARRAY_LEN(timerObserver);
+				return RARRAY_LEN(timer_observer);
 			else
 				return -1;
 		}
 
-		void TimerEvent::run_procs()
+		void TimerEvent::run_procs(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			for (int i = 0; i < RARRAY_LEN(timerObserver); i++)
+			for (int i = 0; i < RARRAY_LEN(timer_observer); i++)
 			{
-				rb_proc_call_with_block(rb_ary_entry(timerObserver, i), 0, NULL, 
-										rb_ary_entry(timerObserver, i));
+				rb_proc_call_with_block(rb_ary_entry(timer_observer, i), 0, NULL, 
+										rb_ary_entry(timer_observer, i));
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace RAGE
 				al_set_timer_speed(timer, speed);
 		}
 
-		double TimerEvent::get_speed()
+		double TimerEvent::get_speed(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -125,7 +125,7 @@ namespace RAGE
 				return 0;
 		}
 
-		bool TimerEvent::started()
+		bool TimerEvent::started(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
@@ -135,7 +135,7 @@ namespace RAGE
 				return false;
 		}
 
-		void TimerEvent::dispose()
+		void TimerEvent::dispose(void)
 		{
 			if (timer_queue != NULL)
 				al_unregister_event_source(timer_queue, al_get_timer_event_source(timer));
@@ -143,8 +143,8 @@ namespace RAGE
 			if (timer != NULL)
 				al_destroy_timer(timer);
 
-			rb_ary_clear(timerObserver);
-			rb_gc_force_recycle(timerObserver);
+			rb_ary_clear(timer_observer);
+			rb_gc_force_recycle(timer_observer);
 
 			disposed = true;
 		}
@@ -153,12 +153,12 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (TYPE(rb_ary_includes(timerObserver, proc)) == T_FALSE) 
+			if (TYPE(rb_ary_includes(timer_observer, proc)) == T_FALSE) 
 			{ 
 				if (rb_class_of(proc) != rb_cProc) 
 					rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); 
 				else 
-					rb_ary_push(timerObserver, proc);
+					rb_ary_push(timer_observer, proc);
 			}
 		}
 
@@ -166,13 +166,18 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (TYPE(rb_ary_includes(timerObserver, proc)) == T_TRUE) 
+			if (TYPE(rb_ary_includes(timer_observer, proc)) == T_TRUE) 
 			{ 
 				if (rb_class_of(proc) != rb_cProc) 
 					rb_raise(rb_eTypeError, RAGE_RB_PROC_ERROR); 
 				else
-					rb_ary_delete(timerObserver, proc);
+					rb_ary_delete(timer_observer, proc);
 			}
+		}
+
+		void TimerEvent::gc_mark(void)
+		{
+			rb_gc_mark(timer_observer);
 		}
 
 		void TimerEvent::callback(ALLEGRO_EVENT *ev)

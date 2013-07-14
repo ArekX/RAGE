@@ -14,6 +14,7 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_screen_event_alloc(VALUE self);
+			static void rb_screen_event_gc_mark(void *value);
 			static void rb_screen_event_destroy(void *value);
 			static VALUE rb_register(VALUE self, VALUE event_type, VALUE proc);
 			static VALUE rb_unregister(VALUE self, VALUE event_type, VALUE proc);
@@ -23,9 +24,9 @@ namespace RAGE
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:
-			static void load_ruby_class();
-			static VALUE get_ruby_class();
-			static VALUE new_ruby_class_instance();
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
 
 	}

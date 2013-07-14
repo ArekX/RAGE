@@ -8,7 +8,12 @@ namespace RAGE
 
 		VALUE JoyEventWrapper::rb_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, JoyEventWrapper::rb_destroy, new JoyEvent());
+			return Data_Wrap_Struct(self, JoyEventWrapper::rb_mark, JoyEventWrapper::rb_destroy, new JoyEvent());
+		}
+
+		void JoyEventWrapper::rb_mark(void *ptr)
+		{
+			((JoyEvent*)ptr)->gc_mark();
 		}
 
 		void JoyEventWrapper::rb_destroy(void *value)
@@ -52,6 +57,9 @@ namespace RAGE
 		{
 			JoyEvent *joy_event;
 			Data_Get_Struct(self, JoyEvent, joy_event);
+
+			EventsWrapper::unregister_event(self);
+
 			joy_event->dispose();
 
 			return Qnil;
@@ -62,7 +70,7 @@ namespace RAGE
 			JoyEvent *joy_event;
 			Data_Get_Struct(self, JoyEvent, joy_event);
 			
-			return joy_event->is_disposed() ? Qtrue : Qfalse;
+			return joy_event->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE JoyEventWrapper::rb_get_proc_count(VALUE self, VALUE event_type)
@@ -115,7 +123,7 @@ namespace RAGE
 			return joy_event->is_joystick(joy->joy) ? Qtrue : Qfalse;
 		}
 
-		void JoyEventWrapper::load_ruby_class()
+		void JoyEventWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_JoyEventClass = rb_define_class_under(rage, "JoyEvent", EventWrapper::get_ruby_class());
@@ -142,12 +150,12 @@ namespace RAGE
 			rb_define_method(rb_rage_JoyEventClass, "disposed?", RFUNC(JoyEventWrapper::rb_disposed), 0);
 		}
 
-		VALUE JoyEventWrapper::get_ruby_class()
+		VALUE JoyEventWrapper::get_ruby_class(void)
 		{
 			return rb_rage_JoyEventClass;
 		}
 
-		VALUE JoyEventWrapper::new_ruby_class_instance()
+		VALUE JoyEventWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_JoyEventClass);
 		}

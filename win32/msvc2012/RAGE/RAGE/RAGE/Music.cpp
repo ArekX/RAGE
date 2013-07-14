@@ -14,8 +14,6 @@ namespace RAGE
 
 		Music::~Music(void)
 		{
-			if (!disposed)
-				dispose();
 		}
 
 		void Music::load(char* filename)
@@ -35,21 +33,21 @@ namespace RAGE
 			al_attach_audio_stream_to_mixer(audio, mixer);
 		}
 
-		void Music::play()
+		void Music::play(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			al_set_audio_stream_playing(audio, true);
 		}
 
-		void Music::pause()
+		void Music::pause(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			al_set_audio_stream_playing(audio, false);
 		}
 
-		void Music::stop()
+		void Music::stop(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -90,42 +88,35 @@ namespace RAGE
 			is_loop = loop;
 		}
 
-		float Music::get_pan()
+		float Music::get_pan(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return al_get_audio_stream_pan(audio);
 		}
 
-		float Music::get_speed()
+		float Music::get_speed(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return al_get_audio_stream_speed(audio);
 		}
 
-		float Music::get_gain()
+		float Music::get_gain(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return al_get_audio_stream_gain(audio);
 		}
 
-		bool Music::get_loop()
-		{
-			RAGE_CHECK_DISPOSED_RET(disposed, false);
-
-			return is_loop;
-		}
-
-		double Music::get_length_secs()
+		double Music::get_length_secs(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return al_get_audio_stream_length_secs(audio);
 		}
 
-		double Music::get_pos_secs()
+		double Music::get_pos_secs(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -139,7 +130,7 @@ namespace RAGE
 			al_seek_audio_stream_secs(audio, pos);
 		}
 
-		void Music::dispose()
+		void Music::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 

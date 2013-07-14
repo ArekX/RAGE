@@ -196,12 +196,12 @@ namespace RAGE
 			delete[] indices;
 		}
 
-		void DrawWrappers::reset_font()
+		void DrawWrappers::reset_font(void)
 		{
 			fnt = def_font;
 		}
 
-		void DrawWrappers::init()
+		void DrawWrappers::init(void)
 		{
 			
 			str = al_ustr_new("");
@@ -209,7 +209,7 @@ namespace RAGE
 			fnt = def_font;
 		}
 
-		void DrawWrappers::load_wrappers()
+		void DrawWrappers::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE draw = rb_define_module_under(rage, "Draw");

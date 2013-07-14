@@ -24,7 +24,6 @@ namespace RAGE
 			VALUE mouse_enter_observer;
 			VALUE mouse_leave_observer;
 			VALUE mouse_move_observer;
-			bool disposed;
 		public:
 			MouseEvent(void);
 			void register_proc(int type, VALUE proc);
@@ -33,7 +32,8 @@ namespace RAGE
 			void clear_procs(int type);
 			void call_procs(int type, unsigned int buttons, int x, int y, int wheel);
 			void callback(ALLEGRO_EVENT *ev);
-			void dispose();
+			void gc_mark(void);
+			void dispose(void);
 			~MouseEvent(void);
 		};
 	}

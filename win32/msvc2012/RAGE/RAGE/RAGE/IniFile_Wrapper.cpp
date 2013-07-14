@@ -84,7 +84,7 @@ namespace RAGE
 			return (ini->disposed) ? Qtrue : Qfalse;
 		}
 
-		void IniFileWrapper::load_ruby_class()
+		void IniFileWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rageIniFileClass = rb_define_class_under(rage, "IniFile", rb_cObject);
@@ -100,12 +100,12 @@ namespace RAGE
 			rb_define_method(rb_rageIniFileClass, "disposed?", RFUNC(IniFileWrapper::rb_disposed), 0);
 		}
 
-		VALUE IniFileWrapper::get_ruby_class()
+		VALUE IniFileWrapper::get_ruby_class(void)
 		{
 			return rb_rageIniFileClass;
 		}
 
-		VALUE IniFileWrapper::new_ruby_class_instance()
+		VALUE IniFileWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageIniFileClass);
 		}

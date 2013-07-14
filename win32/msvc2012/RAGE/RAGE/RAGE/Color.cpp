@@ -59,7 +59,7 @@ namespace RAGE
 			color = al_color_yuv(y, u, v);
 		}
 
-		void Color::dispose()
+		void Color::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 

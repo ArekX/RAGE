@@ -162,7 +162,7 @@ namespace RAGE
 			Music *aud;
 			Data_Get_Struct(self, Music, aud);
 
-			return aud->get_loop() ? Qtrue : Qfalse;
+			return aud->is_loop ? Qtrue : Qfalse;
 		}
 
 		VALUE MusicWrapper::rb_disposed(VALUE self)
@@ -170,7 +170,7 @@ namespace RAGE
 			Music *aud;
 			Data_Get_Struct(self, Music, aud);
 			
-			return aud->is_disposed() ? Qtrue : Qfalse;
+			return aud->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE MusicWrapper::rb_dispose(VALUE self)
@@ -183,7 +183,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-		void MusicWrapper::load_ruby_class()
+		void MusicWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_MusicClass = rb_define_class_under(rage, "Music", rb_cObject);
@@ -208,12 +208,12 @@ namespace RAGE
 			rb_define_method(rb_rage_MusicClass, "dispose", RFUNC(MusicWrapper::rb_dispose), 0);
 		}
 
-		VALUE MusicWrapper::get_ruby_class()
+		VALUE MusicWrapper::get_ruby_class(void)
 		{
 			return rb_rage_MusicClass;
 		}
 
-		VALUE MusicWrapper::new_ruby_class_instance()
+		VALUE MusicWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rage_MusicClass);
 		}

@@ -142,13 +142,26 @@ namespace RAGE
 				run_procs(&key_char_observer, RAGE_EVENTS_KEY_CHAR, (unichar) ? &ev->keyboard.unichar : &ev->keyboard.keycode);
 		}
 
-		void KeyboardEvent::dispose()
+		void KeyboardEvent::gc_mark(void)
+		{
+			rb_gc_mark(key_char_observer);
+			rb_gc_mark(key_up_observer);
+			rb_gc_mark(key_down_observer);
+			rb_gc_mark(key);
+		}
+
+		void KeyboardEvent::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			rb_ary_clear(key_char_observer);
 			rb_ary_clear(key_up_observer);
 			rb_ary_clear(key_down_observer);
+
+			rb_gc_force_recycle(key_char_observer);
+			rb_gc_force_recycle(key_up_observer);
+			rb_gc_force_recycle(key_down_observer);
+			rb_gc_force_recycle(key);
 
 			disposed = true;
 		}

@@ -8,9 +8,9 @@ namespace RAGE
 		class AudioWrappers
 		{
 		public:
-			static void init_audio();
-			static ALLEGRO_MIXER* get_mixer();
-			static void load_wrappers();
+			static void init_audio(void);
+			static ALLEGRO_MIXER* get_mixer(void);
+			static void load_wrappers(void);
 		};
 	}
 }

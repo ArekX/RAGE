@@ -79,7 +79,7 @@ namespace RAGE
 			return al_get_ustr_width(font, text);
 		}
 
-		int Font::get_text_line_length()
+		int Font::get_text_line_length(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -89,7 +89,7 @@ namespace RAGE
 			return al_get_font_line_height(font);
 		}
 
-		void Font::dispose()
+		void Font::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 

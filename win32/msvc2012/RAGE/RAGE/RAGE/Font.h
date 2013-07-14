@@ -18,8 +18,8 @@ namespace RAGE
 			void load_ttf_font_f(char *filename, int size, int flags);
 			void load_ttf_font_stretch_f(char *filename, int w, int h, int flags);
 			int get_text_width(ALLEGRO_USTR *text);
-			int get_text_line_length();
-			void dispose();
+			int get_text_line_length(void);
+			void dispose(void);
 			~Font(void);
 		};
 	}

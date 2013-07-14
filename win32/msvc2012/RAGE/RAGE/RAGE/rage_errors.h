@@ -31,3 +31,7 @@
 #define RAGE_ERROR_DL_EXT_RB_DATA_FAILED "DL/Win32API extension RB class data failed to parse."
 #define RAGE_ERROR_CANNOT_CREATE_VOICE "RAGE Error: Failed to allocate audio voice. Audio functions will not work.\n"
 #define RAGE_ERROR_CANNOT_CREATE_MIXER "RAGE Error: Failed to allocate audio mixer. Audio functions will not work.\n"
+#define RAGE_RB_TIMER_ERROR "You can only pass instances of RAGE::Timer object as an argument."
+#define RAGE_RB_EVENT_REG_ERR "You can register only instances of RAGE::Event objects."
+#define RAGE_ERROR_CANNOT_DISPOSE_DRAWING_TARGET "Cannot dispose current drawing target bitmap."
+#define RAGE_ERROR_CANNOT_DISPOSE_LOCKED_BITMAP "Cannot dispose locked bitmap. Unlock this bitmap first."

@@ -37,7 +37,8 @@ namespace RAGE
 			void call_procs_axis(int stick_num, int axis_num, float axis_pos);
 			void call_procs_reconfigured(void);
 			void callback(ALLEGRO_EVENT *ev);
-			void dispose();
+			void gc_mark(void);
+			void dispose(void);
 			~JoyEvent(void);
 		};
 

@@ -81,7 +81,7 @@ namespace RAGE
 			}
 		}
 
-		void Bitmap::lock()
+		void Bitmap::lock(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -95,7 +95,7 @@ namespace RAGE
 			al_lock_bitmap_region(bitmap, x, y, w, h, ALLEGRO_PIXEL_FORMAT_ANY, 0);
 		}
 
-		void Bitmap::unlock()
+		void Bitmap::unlock(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -116,14 +116,14 @@ namespace RAGE
 			al_put_blended_pixel(x, y, color);
 		}
 
-		bool Bitmap::is_sub()
+		bool Bitmap::is_sub(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
 			return al_is_sub_bitmap(bitmap);
 		}
 
-		ALLEGRO_BITMAP* Bitmap::get_parent()
+		ALLEGRO_BITMAP* Bitmap::get_parent(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
 
@@ -137,7 +137,7 @@ namespace RAGE
 			al_get_pixel(bitmap, x, y);
 		}
 
-		int Bitmap::get_width()
+		int Bitmap::get_width(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -147,7 +147,7 @@ namespace RAGE
 				return 0;
 		}
 
-		int Bitmap::get_height()
+		int Bitmap::get_height(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
@@ -187,14 +187,14 @@ namespace RAGE
 			center_y = cy;
 		}
 
-		float Bitmap::get_center_x()
+		float Bitmap::get_center_x(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return center_x;
 		}
 
-		float Bitmap::get_center_y()
+		float Bitmap::get_center_y(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -215,14 +215,14 @@ namespace RAGE
 			scale_y = sy;
 		}
 
-		float Bitmap::get_scale_x()
+		float Bitmap::get_scale_x(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
 			return scale_x;
 		}
 
-		float Bitmap::get_scale_y()
+		float Bitmap::get_scale_y(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -236,7 +236,7 @@ namespace RAGE
 			angle = agl;
 		}
 
-		float Bitmap::get_angle()
+		float Bitmap::get_angle(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -263,7 +263,7 @@ namespace RAGE
 			tint.a = alpha;
 		}
 
-		float Bitmap::get_tint_alpha()
+		float Bitmap::get_tint_alpha(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -278,7 +278,7 @@ namespace RAGE
 			tint.r = red;
 		}
 
-		float Bitmap::get_tint_red()
+		float Bitmap::get_tint_red(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -293,7 +293,7 @@ namespace RAGE
 			tint.g = green;
 		}
 
-		float Bitmap::get_tint_green()
+		float Bitmap::get_tint_green(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -308,7 +308,7 @@ namespace RAGE
 			tint.b = blue;
 		}
 
-		float Bitmap::get_tint_blue()
+		float Bitmap::get_tint_blue(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -316,7 +316,7 @@ namespace RAGE
 		}
 
 
-		int Bitmap::get_flags()
+		int Bitmap::get_flags(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -343,12 +343,17 @@ namespace RAGE
 			bitmap = al_clone_bitmap(src->bitmap);
 		}
 
-		bool Bitmap::is_disposed()
+		void Bitmap::assign_parent(Bitmap* src)
 		{
-			return disposed;
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (bitmap != NULL) 
+				al_destroy_bitmap(bitmap);
+
+			bitmap = al_clone_bitmap(al_get_parent_bitmap(src->bitmap));
 		}
 
-		void Bitmap::dispose()
+		void Bitmap::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -356,12 +361,12 @@ namespace RAGE
 
 			if (al_get_target_bitmap() == bitmap)
 			{
-				rb_raise(rb_eException, "Cannot dispose current drawing target bitmap.");
+				rb_raise(rb_eException, RAGE_ERROR_CANNOT_DISPOSE_DRAWING_TARGET);
 				return;
 			}
 			else if (al_is_bitmap_locked(bitmap))
 			{
-				rb_raise(rb_eException, "Cannot dispose locked bitmap. Unlock this bitmap first.");
+				rb_raise(rb_eException, RAGE_ERROR_CANNOT_DISPOSE_LOCKED_BITMAP);
 				return;
 			}
 
@@ -373,7 +378,7 @@ namespace RAGE
 			disposed = true;
 		}
 
-		void Bitmap::recreate_video_bitmap()
+		void Bitmap::recreate_video_bitmap(void)
 		{
 			if (bitmap != NULL && !(al_get_target_bitmap() == bitmap))
 			{

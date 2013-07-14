@@ -64,7 +64,7 @@ namespace RAGE
 			al_set_config_value(ini, section, key, value);
 		}
 
-		void IniFile::dispose()
+		void IniFile::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 

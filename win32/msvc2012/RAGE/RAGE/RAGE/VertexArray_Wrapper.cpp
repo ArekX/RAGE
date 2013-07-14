@@ -269,7 +269,7 @@ namespace RAGE
 			return (va->disposed) ? Qtrue : Qfalse;
 		}
 
-		void VertexArrayWrapper::load_ruby_class()
+		void VertexArrayWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 
@@ -304,12 +304,12 @@ namespace RAGE
 			rb_define_method(rb_rageVertexArrayClass, "disposed?", RFUNC(VertexArrayWrapper::rb_is_disposed), 0);
 		}
 
-		VALUE VertexArrayWrapper::get_ruby_class()
+		VALUE VertexArrayWrapper::get_ruby_class(void)
 		{
 			return rb_rageVertexArrayClass;
 		}
 
-		VALUE VertexArrayWrapper::new_ruby_class_instance()
+		VALUE VertexArrayWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageVertexArrayClass);
 		}

@@ -93,6 +93,9 @@ namespace RAGE
 				case RAGE_TIMER_EVENT:
 					klass = RAGE::Events::TimerEventWrapper::get_ruby_class();
 					break;
+				case RAGE_JOYSTICK_EVENT:
+					klass = RAGE::Events::JoyEventWrapper::get_ruby_class();
+					break;
 			}
 
 			for (int i = 0; i < RARRAY_LEN(event_objects); i++)
@@ -145,9 +148,10 @@ namespace RAGE
 			return event_queue;
 		}
 
-		void EventsWrapper::init_queue()
+		void EventsWrapper::init_queue(void)
 		{
 			event_queue = al_create_event_queue();
+			event_objects = rb_ary_new();
 
 			if (event_queue == NULL)
 			{
@@ -156,12 +160,12 @@ namespace RAGE
 			}
 		}
 
-		void EventsWrapper::run_event_thread()
+		void EventsWrapper::run_event_thread(void)
 		{
 			eventsThread = rb_thread_create(RFUNC(EventsWrapper::rb_update_event_objects), NULL);
 		}
 
-		void EventsWrapper::finalize_queue()
+		void EventsWrapper::finalize_queue(void)
 		{
 			if (event_queue != NULL)
 			{
@@ -199,9 +203,10 @@ namespace RAGE
 		VALUE EventsWrapper::rb_process_display(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
-				al_register_event_source(event_queue, al_get_display_event_source(RAGE::Graphics::GraphicsWrappers::get_display()));
+				RAGE::Graphics::GraphicsWrappers::set_screen_processing(event_queue, true);
 			else if (TYPE(val) == T_FALSE)
-				al_unregister_event_source(event_queue, al_get_display_event_source(RAGE::Graphics::GraphicsWrappers::get_display()));
+				RAGE::Graphics::GraphicsWrappers::set_screen_processing(event_queue, false);
+
 			return Qnil;
 		}
 
@@ -212,13 +217,10 @@ namespace RAGE
 			return Qfalse;
 		}
 
-		void EventsWrapper::load_wrappers()
+		void EventsWrapper::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 			VALUE events = rb_define_module_under(rage, "Events");
-
-			event_objects = rb_ary_new();
-			rb_gc_register_address(&event_objects);
 
 			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 1);
 			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 1);
@@ -231,7 +233,11 @@ namespace RAGE
 			rb_define_module_function(events, "clearAll", RFUNC(EventsWrapper::rb_clear_events2), 0);
 			rb_define_module_function(events, "freeze", RFUNC(EventsWrapper::rb_freeze_events), 0);
 			rb_define_module_function(events, "unfreeze", RFUNC(EventsWrapper::rb_unfreeze_events), 0);
-			// TODO: Add joystick
+		}
+
+		void EventsWrapper::unregister_event(VALUE ev)
+		{
+			rb_unregister_event(Qnil, ev);
 		}
 	}
 }

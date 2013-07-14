@@ -13,6 +13,7 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_key_event_alloc(VALUE self);
+			static void rb_key_event_mark(void *value);
 			static void rb_key_event_destroy(void *value);
 			static VALUE rb_use_keycode_names(VALUE self, VALUE val);
 			static VALUE rb_use_typed_char(VALUE self, VALUE val);
@@ -24,9 +25,9 @@ namespace RAGE
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:
-			static void load_ruby_class();
-			static VALUE get_ruby_class();
-			static VALUE new_ruby_class_instance();
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
 	}
 }

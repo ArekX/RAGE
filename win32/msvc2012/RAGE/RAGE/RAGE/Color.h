@@ -19,7 +19,7 @@ namespace RAGE
 			void from_yuv(float y, float u, float v);
 			void from_html(char *html);
 			void from_name(char *name);
-			void dispose();
+			void dispose(void);
 			~Color(void);
 		};
 	}

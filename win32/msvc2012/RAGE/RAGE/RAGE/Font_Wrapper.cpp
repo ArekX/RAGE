@@ -127,7 +127,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-		void FontWrapper::load_ruby_class()
+		void FontWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
 
@@ -149,12 +149,12 @@ namespace RAGE
 			rb_define_method(rb_rageFontClass, "disposed?", RFUNC(FontWrapper::rb_disposed), 0);
 		}
 
-		VALUE FontWrapper::get_ruby_class()
+		VALUE FontWrapper::get_ruby_class(void)
 		{
 			return rb_rageFontClass;
 		}
 
-		VALUE FontWrapper::new_ruby_class_instance()
+		VALUE FontWrapper::new_ruby_class_instance(void)
 		{
 			return rb_class_new_instance(0, NULL, rb_rageFontClass);
 		}
