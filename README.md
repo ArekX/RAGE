@@ -16,13 +16,7 @@ Releases
 
 0.0.3-beta:
 
-Windows Vista/7/8 Version:
-
-https://www.dropbox.com/s/vhfs0eiqvbt9mh2/RAGE003-beta.7z
-
-Windows XP/Vista/7/8 Version:
-
-https://www.dropbox.com/s/uwfp02ifliio7q3/RAGE003-beta-xp-support.7z
+Go to [Releases page](https://github.com/ArekX/RAGE/releases)
 
 0.0.2 - beta:
 
