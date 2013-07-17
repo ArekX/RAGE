@@ -250,6 +250,9 @@
     <ClCompile Include="ParticleEngine.cpp">
       <Filter>modules\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEngine_Wrapper.cpp">
+      <Filter>modules\graphics\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -380,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="ParticleEngine.h">
       <Filter>modules\graphics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEngine_Wrapper.h">
+      <Filter>modules\graphics\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

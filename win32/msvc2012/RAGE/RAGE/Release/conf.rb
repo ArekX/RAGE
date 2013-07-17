@@ -1,6 +1,6 @@
 begin
 config = {
-  "name"               => "Game Name",
+  "name"               => "RAGE 0.0.3 - Fragment Shader Example",
   "version"            => "0.0.3-beta",
   "width"              => 800,
   "height"             => 600,

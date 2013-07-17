@@ -357,8 +357,6 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-
-
 			if (al_get_target_bitmap() == bitmap)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_CANNOT_DISPOSE_DRAWING_TARGET);

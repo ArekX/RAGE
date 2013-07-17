@@ -1,6 +1,5 @@
 #define RAGE_RB_PROC_ERROR "You can only pass instances of Proc object as an argument."
 #define RAGE_RB_INCOMPATIBLE "This game may be incompatible with this version of RAGE.\n\n"
-#define RAGE_RB_SCRIPT_ERROR "Script Error!\n\t%s: %s\n"
 #define RAGE_RB_FILE_MISSING_ERROR "File '%s' not found."
 #define RAGE_RB_PATH_MISSING_ERROR "Path '%s' not found."
 #define RAGE_EVENT_ERROR "Cannot call methods from abstract RAGE::Event class."
@@ -9,7 +8,7 @@
 #define RAGE_BITMAP_NOT_CREATED_ERROR "Cannot set nil bitmap as drawing target. Create or load a bitmap first."
 #define RAGE_COLOR_ERROR "Argument must be an instance of RAGE::Color class."
 #define RAGE_FONT_ERROR "Argument must be an instance of RAGE::Font class."
-
+#define RAGE_ERROR_DISPOSED_OBJECT "Cannot call methods or properties of disposed objects."
 #define RAGE_ERROR_MUSIC_LOAD_FAIL "Music file '%s' failed to load."
 #define RAGE_ERROR_SFX_LOAD_FAIL "Sfx file '%s' failed to load."
 #define RAGE_ERROR_EVENT_QUEUE_FAIL "Failed to initialize event queue."

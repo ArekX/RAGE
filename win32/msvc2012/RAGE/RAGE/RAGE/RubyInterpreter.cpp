@@ -345,6 +345,9 @@ namespace RAGE
 				if (gConfig.use_rageDraw) RAGE::Graphics::DrawWrappers::init();
 				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::run_event_thread();
 
+				/* Particle Engine Loading - Needs fixing */
+				RAGE::Graphics::ParticleEngineWrapper::load_ruby_class();
+
 				/* Load boot script */
 				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
 				{

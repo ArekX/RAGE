@@ -28,6 +28,8 @@ namespace RAGE
 				va->initialize(FIX2INT(args[0]));
 			else
 				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_TOO_MANY_ARGS);
+
+			return self;
 		}
 
 		VALUE VertexArrayWrapper::rb_change(VALUE self, VALUE index, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color)

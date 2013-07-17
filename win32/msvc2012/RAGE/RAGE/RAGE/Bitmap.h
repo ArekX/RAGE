@@ -21,7 +21,6 @@ namespace RAGE
 		public:
 			ALLEGRO_BITMAP* bitmap;
 			bool disposed;
-
 			Bitmap(void);
 			~Bitmap(void);
 			void initialize(int width, int height);

@@ -165,6 +165,7 @@
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -305,6 +306,7 @@
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Joystick_Wrapper.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
+    <ClCompile Include="ParticleEngine_Wrapper.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="IniFile.cpp" />
@@ -345,6 +347,7 @@
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Joystick_Wrapper.h" />
     <ClInclude Include="ParticleEngine.h" />
+    <ClInclude Include="ParticleEngine_Wrapper.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="rage_errors.h" />
     <ClInclude Include="Events_Wrapper.h" />

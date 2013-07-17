@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 
 	/*
 		[ RAGE 1.0.0, stable version ]
+		- RAGE_CHECK_DISPOSED on all properties.
 		- Audio will not be initialized if it is not needed.
 		- RAGE::Audio::Mixer - class for creating sound mixers
 		- RAGE::Audio::Voice - class for creating voices
@@ -49,14 +50,7 @@ int main(int argc, char** argv)
 		- RAGE.require - should hold a list of loaded files, not to load them again.
 		- Documentation needs to be written in Markdown
 		- Add optional arguments to constructors of color, font, bitmap, music, sfx, inifile, ...
-		- Add Particle Effects functionality - RAGE::ParticleEngine
-			- RAGE::ParticleEngine.new(particleImage, amount, particleType)
-			- RAGE::ParticleEngine.image
-			- RAGE::ParticleEngine.amount
-			- RAGE::ParticleEngine.particleType
-			- RAGE::ParticleEngine.update()
-			- RAGE::ParticleEngine.draw(x, y)
-			- ...more functionality...
+		- Add Particle Effects functionality - RAGE::ParticleEngine - almost done check it
 		- Add Socket functionality - RAGE::Net module.
 			- RAGE::Net::TCP
 			- RAGE::Net::UDP
@@ -77,6 +71,7 @@ int main(int argc, char** argv)
 		- RAGE::Font.textHeight() should return - al_get_font_ascent()
 		- RAGE::Color.clone()
 		- RAGE::Font.createBuiltin()
+		- RAGE.reqiore - keep list of loaded files and dont load them again.
 		- fixup  config checking, make so that when load wrappers or load ruby class is called that it is checked then! And try to make a copy of config hash so that everyone can check (ie lose some dependency on ruby interpreter)
 		- all event classes should have - isRegistered?
 		- add more passing to GLSL - refer http://nehe.gamedev.net/article/glsl_an_introduction/25007/

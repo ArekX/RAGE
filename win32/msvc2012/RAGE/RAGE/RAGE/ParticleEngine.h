@@ -2,9 +2,13 @@
 
 #include "RubyInterpreter.h"
 
-#define REMOVE_FROM_ARY(ary, ary_type, ary_len, indx) if (indx >= ary_len) return; if (indx != (ary_len - 1)) { for(uint64_t i = indx; i < ary_len - 1; i++) ary[i] = ary[i + 1];} ary = (ary_type*)al_realloc(ary, sizeof(ary_type) * --ary_len);
-#define ADD_TO_FRAME(frame_ary, ary_len, frame_type, ary_frame_data, frame_data, ary_next_frame_speed) frame_ary = (frame_type*)al_realloc(frame_ary, sizeof(frame_type) * (ary_len + 1)); frame_ary[ary_len].ary_frame_data = frame_data; frame_ary[ary_len++].next_frame_speed = ary_next_frame_speed;
-#define MAX_PARTICLES 1024
+#define RAGE_POINT_EMITTER 0
+#define RAGE_LINE_EMITTER 1
+#define RAGE_RECT_EMITTER 2
+#define RAGE_CIRCLE_EMITTER 3
+#define RAGE_RING_EMITTER 4
+
+#define calc_particle_frame(particle, base, frame, index) particle.base + frame.data[particle.index].from_data + frame.data[particle.index].to_data * abs(particle.current_frame - frame.data[particle.index].frame_start_time) / frame.data[particle.index].frame_start_time
 
 namespace RAGE
 {
@@ -14,183 +18,169 @@ namespace RAGE
 		{
 			float x;
 			float y;
+			float center_x;
+			float center_y;
+			float delay;
 			float life;
+			float current_frame;
+			float frame_velocity;
 			float scale_x;
 			float scale_y;
 			float tr_angle;
-			float spin_angle;
-			float angle_add;
-			float velocity_add;
-			float spin_velocity_add;
-			float life_add;
-			float r_add;
-			float g_add;
-			float b_add;
-			float a_add;
-			float scale_x_add;
-			float scale_y_add;
+			float rot_angle;
+			float velocity;
+			bool visible;
+			ALLEGRO_COLOR color;
+
+			/* For frames */
+			float base_tr_angle;
+			float base_scale_x;
+			float base_scale_y;
+			float base_velocity;
+			float base_center_x;
+			float base_center_y;
+			float base_rot_angle;
+
+			float time;
+
+			ALLEGRO_COLOR base_color;
+			int *current_frame_indices;
 		} Particle;
 
 		typedef struct {
-			ALLEGRO_COLOR color;
-			float next_frame_speed;
-		} EmitterColorFrame;
-
-		typedef struct {
-			float angle;
-			float next_frame_speed;
-		} EmitterAngleFrame;
-
-		typedef struct {
-			float angle_velocity;
-			float next_frame_speed;
-		} EmitterAngleVelocityFrame;
-
-		typedef struct {
-			float velocity;
-			float next_frame_speed;
-		} EmitterVelocityFrame;
-
-		typedef struct {
 			float scale_x;
-			float next_frame_speed;
-		} EmitterScaleXFrame;
+			float scale_y;
+			float tr_angle;
+			float rot_angle;
+			float velocity;
+			float center_x;
+			float center_y;
+			float tint_r;
+			float tint_g;
+			float tint_b;
+			float tint_a;
+			float duration;
+		} EmitterFrameData;
 
 		typedef struct {
-			float scale_y;
-			float next_frame_speed;
-		} EmitterScaleYFrame;
-
-		typedef enum {
-			Point,
-			Line,
-			Rectangle,
-			Circle,
-			Ring
-		} EmitterType;
-
-		typedef enum {
-			Add,
-			Normal,
-			Multiply,
-			Black,
-			White,
-			Mask
-		} EmitterBlendType;
-
-		typedef enum {
-			Set,
-			Mix
-		} EmitterColorMode;
-
-		typedef enum {
-			Color,
-			Angle,
-			AngleVelocity,
-			Velocity,
-			ScaleX,
-			ScaleY
-		} EmitterFrameType;
+			EmitterFrameData *data;
+			int data_len;
+		} EmitterFrameLayer;
 
 		class ParticleEngine
 		{
 		private:
-			EmitterColorFrame *color_frames;
-			EmitterAngleFrame *angle_frames;
-			EmitterAngleVelocityFrame *angle_velocity_frames;
-			EmitterVelocityFrame *velocity_frames;
-			EmitterScaleXFrame *scale_x_frames;
-			EmitterScaleYFrame *scale_y_frames;
 			Particle *particles;
-		public:
-			uint64_t color_frames_len;
-			uint64_t angle_frames_len;
-			uint64_t angle_velocity_frames_len;
-			uint64_t velocity_frames_len;
-			uint64_t scale_x_frames_len;
-			uint64_t scale_y_frames_len;
-			uint64_t particles_len;
-			float line_emitter_width;
-			bool line_emmiter_two_side;
-			float rectangle_emitter_width;
-			float rectangle_emitter_height;
-			float circle_emitter_radius;
-			float ring_emitter_inner_radius;
-			float ring_emitter_outer_radius;
-			bool disposed;
-			bool loop;
-			EmitterType type;
-			EmitterBlendType blend_type;
-			EmitterColorMode color_mode;
-			int frame_width;
-			int frame_height;
-			float current_frame;
-			float total_frames;
-			float emitter_x;
-			float emitter_y;
-			float emitter_spread;
-			float emitter_angle;
-			float emitter_duration;
-			float angle_add_max;
-			float velocity_add_max;
-			float spin_velocity_add_max;
-			float life_add_max;
-			float r_add_max;
-			float g_add_max;
-			float b_add_max;
-			float a_add_max;
-			float scale_x_add_max;
-			float scale_y_add_max;
 			ALLEGRO_BITMAP *particle_tex;
+			uint64_t particles_len;
+			EmitterFrameLayer *frame_layers;
+			int em_type;
+			int frame_layers_len;
+			float em_x;
+			float em_y;
+			float p_region_x;
+			float p_region_y;
+			int p_region_width;
+			int p_region_height;
+			float em_spread;
+			float em_angle;
+
+			// Needz get set methods... :/
+			float em_particle_life;
+			float em_particle_life_add;
+			float em_particle_appear_velocity;
+			float em_particle_velocity;
+			float em_particle_velocity_add;
+			float em_particle_frame_velocity;
+			float em_particle_frame_velocity_add;
+			float em_particle_rot_angle;
+			float em_particle_rot_angle_add;
+			float em_particle_scale_x;
+			float em_particle_scale_x_add;
+			float em_particle_scale_y;
+			float em_particle_scale_y_add;
+			float em_particle_center_x;
+			float em_particle_center_x_add;
+			float em_particle_center_y;
+			float em_particle_center_y_add;
+			float em_particle_tr_angle_change;
+			float em_particle_delay;
+			float em_particle_delay_add;
+			float em_particle_tint_r;
+			float em_particle_tint_r_add;
+			float em_particle_tint_g;
+			float em_particle_tint_g_add;
+			float em_particle_tint_b;
+			float em_particle_tint_b_add;
+			float em_particle_tint_a;
+			float em_particle_tint_a_add;
+			// end
+
+			float em_line_width;
+			float em_rect_width;
+			float em_rect_height;
+			float em_circle_inner_radius;
+			float em_circle_outer_radius;
+			float em_particle_ox;
+			float em_particle_oy;
+			int em_blend_op;
+			int em_blend_src;
+			int em_blend_dst;
+			int em_blend_aop;
+			int em_blend_asrc;
+			int em_blend_adst;
+			int em_blend_rop;
+			int em_blend_rsrc;
+			int em_blend_rdst;
+			int em_blend_raop;
+			int em_blend_rasrc;
+			int em_blend_radst;
+			bool em_use_blending;
+			bool em_loop;
+			void set_particle(Particle *pa);
+		public:			
+			bool disposed;
 			ParticleEngine(void);
-			void initialize(ALLEGRO_BITMAP* particle, int emitter_count, float emitter_duration, float emitter_direction, float emitter_spread, EmitterType type);
+			void initialize(ALLEGRO_BITMAP* particle, uint64_t emitter_count, float emitter_duration, bool emitter_loop, float x, float y);
+			void emit(void);
 			void update(float dt);
-			void draw();
-			void draw(float x, float y);
-			void increase_particles(int amount);
-			void decrease_particles(int amount);
-			void calculate_next_particle(float* last_particle_x, float* last_particle_y);
+			void draw(void);
+			void set_emitter_position(float x, float y);
+			void set_particle_tex(ALLEGRO_BITMAP* new_tex);
+			void set_particle_region(float x, float y, int width, int height, bool set_center);
 
-			void set_next_frame_speed(EmitterFrameType type, uint64_t index, float speed); 
-			float get_next_frame_speed(EmitterFrameType type, uint64_t index);
+			/* Frame animation operations */
+			void set_frame_layers(int amount);
+			void add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float tint_r, float tint_g, float tint_b, float tint_a);
+			void remove_frame_from_layer(int layer_index, int frame_index);
+			void clear_frames_from_layer(int layer_index);
 
-			void set_angle_frame(uint64_t index, float angle);
-			void set_angle_velocity_frame(uint64_t index, float angle_velocity);
-			void set_velocity_frame(uint64_t index, float velocity);
-			void set_scale_x_frame(uint64_t index, float scale_x);
-			void set_scale_y_frame(uint64_t index, float scale_y);
-			void set_color_frame(uint64_t index, ALLEGRO_COLOR color);
+			/* Set Ops */
+			void set_emitter_blend_alpha(int op, int src, int dst, int aop, int asrc, int adst);
+			void set_emitter_blend(int op, int src, int dst);
+			void set_use_blending(bool use_blending);
+			void set_particle_coords(float ox, float oy);
+			void set_emitter_line_width(float new_width);
+			void set_emitter_rectangle_width(float new_width);
+			void set_emitter_rectangle_height(float new_height);
+			void set_emitter_inner_circle_radius(float new_radius);
+			void set_emitter_outer_circle_radius(float new_radius);
+			void set_loop(bool loop);
+			void set_angle(float angle);
+			void set_spread(float spread);
+			void set_type(int type);
+			void set_particles_num(uint64_t new_num);
 
-			float get_angle_frame(uint64_t index);
-			float get_angle_velocity_frame(uint64_t index);
-			float get_velocity_frame(uint64_t index);
-			float get_scale_x_frame(uint64_t index);
-			float get_scale_y_frame(uint64_t index);
-			ALLEGRO_COLOR get_color_frame(uint64_t index);
-
-			void add_angle_frame(float angle, float next_frame_speed);
-			void add_angle_velocity_frame(float angle_velocity, float next_frame_speed);
-			void add_velocity_frame(float velocity, float next_frame_speed);
-			void add_scale_x_frame(float scale_x, float next_frame_speed);
-			void add_scale_y_frame(float scale_y, float next_frame_speed);
-			void add_color_frame(ALLEGRO_COLOR color, float next_frame_speed);
-
-			void remove_angle_frame(uint64_t index);
-			void remove_angle_velocity_frame(uint64_t index);
-			void remove_velocity_frame(uint64_t index);
-			void remove_scale_x_frame(uint64_t index);
-			void remove_scale_y_frame(uint64_t index);
-			void remove_color_frame(uint64_t index);
-
-			void clear_angle_frames(void);
-			void clear_angle_velocity_frames(void);
-			void clear_velocity_frames(void);
-			void clear_scale_x_frames(void);
-			void clear_scale_y_frames(void);
-			void clear_color_frames(void);
+			/* Get Ops */
+			uint64_t get_particles_num(void);
+			float get_emitter_line_width(void);
+			float get_emitter_rectangle_width(void);
+			float get_emitter_rectangle_height(void);
+			float get_emitter_inner_circle_radius(void);
+			float get_emitter_outer_circle_radius(void);
+			bool get_use_blending(void);
 
 			void dispose(void);
-
 			~ParticleEngine(void);
 		};
 	}

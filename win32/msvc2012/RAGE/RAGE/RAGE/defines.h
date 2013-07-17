@@ -28,8 +28,8 @@
 #endif
 
 #define RFUNC RUBY_METHOD_FUNC
-#define RAGE_CHECK_DISPOSED(disposed_var) if (disposed_var) { rb_raise(rb_eException, "Cannot call methods of disposed objects."); return; }
-#define RAGE_CHECK_DISPOSED_RET(disposed_var, ret) if (disposed_var) { rb_raise(rb_eException, "Cannot call methods of disposed objects."); return ret; }
+#define RAGE_CHECK_DISPOSED(disposed_var) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return; }
+#define RAGE_CHECK_DISPOSED_RET(disposed_var, ret) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return ret; }
 
 #ifdef WIN32
 #define DS '\\'
@@ -64,4 +64,4 @@
 #define RAGE_DEV_MESSAGE_EXIT "\n\nPress any key to close this engine."
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
 
-#pragma warning (disable: 4200 4244 4305 4800 4049)
+#define random_float() (float)rand() / RAND_MAX
