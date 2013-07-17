@@ -16,7 +16,7 @@ Releases
 
 0.0.3-beta:
 
-Go to [Releases page](https://github.com/ArekX/RAGE/releases)
+Go to [Releases page](https://github.com/ArekX/RAGE/releases/tag/003beta)
 
 0.0.2 - beta:
 
