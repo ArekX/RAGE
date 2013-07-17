@@ -89,6 +89,12 @@
     <Filter Include="modules\input\headers">
       <UniqueIdentifier>{a96aa3b6-2582-4cfc-b40f-281c5cfafe2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\logic">
+      <UniqueIdentifier>{c67ebd8f-1b77-472a-a3ed-24bb457a5242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\logic\headers">
+      <UniqueIdentifier>{f7b099a1-5d99-4001-9307-9a69728ac84a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -253,6 +259,9 @@
     <ClCompile Include="ParticleEngine_Wrapper.cpp">
       <Filter>modules\graphics\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="Logic_Wrappers.cpp">
+      <Filter>modules\logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -386,6 +395,9 @@
     </ClInclude>
     <ClInclude Include="ParticleEngine_Wrapper.h">
       <Filter>modules\graphics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic_Wrappers.h">
+      <Filter>modules\logic\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

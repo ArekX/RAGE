@@ -42,6 +42,7 @@ namespace RAGE
 			static VALUE rb_set_use_blending(VALUE self, VALUE val);
 			static VALUE rb_get_use_blending(VALUE self);
 			static VALUE rb_add_to_frame_layer(VALUE self, VALUE index, VALUE duration, VALUE scale_x, VALUE scale_y, VALUE tr_angle, VALUE rot_angle, VALUE velocity, VALUE center_x, VALUE center_y, VALUE tint_r, VALUE tint_g, VALUE tint_b, VALUE tint_a);
+			static VALUE rb_box_collision(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:

@@ -86,7 +86,7 @@ namespace RAGE
 			if (font == NULL)
 				return 0;
 
-			return al_get_font_line_height(font);
+			return al_get_font_ascent(font);
 		}
 
 		void Font::dispose(void)

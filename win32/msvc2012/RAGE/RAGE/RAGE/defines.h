@@ -65,3 +65,7 @@
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
 
 #define random_float() (float)rand() / RAND_MAX
+#define polar_radius(px, py) sqrt(px * px + py * py)
+#define polar_angle(px, py) atan2(py, px)
+#define rotated_x(px, py, rad_angle) sqrt(px * px + py * py) * sin(atan2(py, px) + rad_angle)
+#define rotated_y(px, py, rad_angle) sqrt(px * px + py * py) * cos(atan2(py, px) + rad_angle)

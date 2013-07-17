@@ -305,6 +305,7 @@
     <ClCompile Include="JoyEvent_Wrapper.cpp" />
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Joystick_Wrapper.cpp" />
+    <ClCompile Include="Logic_Wrappers.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="JoyEvent_Wrapper.h" />
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Joystick_Wrapper.h" />
+    <ClInclude Include="Logic_Wrappers.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
     <ClInclude Include="Shader.h" />

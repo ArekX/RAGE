@@ -326,6 +326,14 @@ namespace RAGE
 			return pe->get_use_blending() ? Qtrue : Qfalse;
 		}
 
+		VALUE ParticleEngineWrapper::rb_box_collision(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
+		{
+			ParticleEngine *pe;
+			Data_Get_Struct(self, ParticleEngine, pe);
+
+			return pe->box_collision(NUM2DBL(x), NUM2DBL(y), NUM2DBL(w), NUM2DBL(h)) ? Qtrue : Qfalse;
+		}
+
 		void ParticleEngineWrapper::load_ruby_class(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -371,6 +379,7 @@ namespace RAGE
 			rb_define_method(rb_rageParticleEngineClass, "maxParticles", RFUNC(ParticleEngineWrapper::rb_get_particle_num), 0);
 			rb_define_method(rb_rageParticleEngineClass, "setFrameLayers", RFUNC(ParticleEngineWrapper::rb_set_frame_layers), 1);
 			rb_define_method(rb_rageParticleEngineClass, "addFrameToLayer", RFUNC(ParticleEngineWrapper::rb_add_to_frame_layer), 13);
+			rb_define_method(rb_rageParticleEngineClass, "inCollision?", RFUNC(ParticleEngineWrapper::rb_box_collision), 4);
 			
 			rb_define_method(rb_rageParticleEngineClass, "dispose", RFUNC(ParticleEngineWrapper::rb_dispose), 0);
 			rb_define_method(rb_rageParticleEngineClass, "disposed?", RFUNC(ParticleEngineWrapper::rb_disposed), 0);

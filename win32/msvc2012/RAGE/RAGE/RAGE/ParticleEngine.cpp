@@ -74,6 +74,11 @@ namespace RAGE
 			em_blend_adst = 0;
 
 			em_use_blending = false;
+
+			em_burst_emit = false;
+
+			em_particle_x_add = 0;
+			em_particle_y_add = 0;
 		}
 
 
@@ -108,6 +113,8 @@ namespace RAGE
 			em_particle_life = emitter_duration / 2;
 			em_particle_life_add = emitter_duration / 2;
 
+			em_burst_amount = 30;
+
 			emit();
 		}
 
@@ -138,6 +145,8 @@ namespace RAGE
 				}
 				else
 				{
+					if ((particles[i].visible == false) && em_burst_emit && (i >= em_burst_amount)) continue; 
+
 					particles[i].visible = true;
 					particles[i].x = particles[i].x + particles[i].velocity * sin(particles[i].tr_angle) * dt;
 					particles[i].y = particles[i].y + particles[i].velocity * cos(particles[i].tr_angle) * dt;
@@ -223,6 +232,7 @@ namespace RAGE
 						set_particle(&particles[i]);
 						
 				}
+				
 			}
 		}
 
@@ -268,6 +278,8 @@ namespace RAGE
 		
 		void ParticleEngine::set_emitter_position(float x, float y)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			em_x = x;
 			em_y = y;
 		}
@@ -300,6 +312,9 @@ namespace RAGE
 				pa->x = em_x + size * sin(2 * ALLEGRO_PI * random_float());
 				pa->y = em_y + size * cos(2 * ALLEGRO_PI * random_float());
 			}
+
+			pa->x += em_particle_x_add > 0 ? em_particle_x_add * random_float() : 0;
+			pa->y += em_particle_y_add > 0 ? em_particle_y_add * random_float() : 0;
 
 			pa->current_frame = 0;
 			pa->scale_x = em_particle_scale_x + em_particle_scale_x_add * random_float();
@@ -371,6 +386,8 @@ namespace RAGE
 
 		void ParticleEngine::set_frame_layers(int amount)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (amount < 0) amount = 0;
 
 			if ((frame_layers_len == 0) && (amount > 0))
@@ -426,6 +443,8 @@ namespace RAGE
 
 		void ParticleEngine::add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float tint_r, float tint_g, float tint_b, float tint_a)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (layer_index >= frame_layers_len) return;
 
 			if (frame_layers[layer_index].data_len == 0)
@@ -452,6 +471,8 @@ namespace RAGE
 
 		void ParticleEngine::remove_frame_from_layer(int layer_index, int frame_index)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (layer_index >= frame_layers_len) return;
 			if (frame_index >= frame_layers[layer_index].data_len) return;
 
@@ -464,11 +485,25 @@ namespace RAGE
 
 		void ParticleEngine::clear_frames_from_layer(int layer_index)
 		{
+			RAGE_CHECK_DISPOSED(disposed);
+
 			if (layer_index >= frame_layers_len) return;
 
 			frame_layers[layer_index].data_len = 0;
 
 			al_free(frame_layers[layer_index].data);
+		}
+
+		bool ParticleEngine::box_collision(float x, float y, float w, float h)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			for (uint64_t i = 0; i < particles_len; i++)
+			{
+				if (Logic::LogicWrappers::collision(x, y, w, h, particles[i].x, particles[i].y, p_region_width * particles[i].scale_x, p_region_height * particles[i].scale_y))
+					return true; 
+			}
+			return false;
 		}
 
 		/* Get/Set Ops */

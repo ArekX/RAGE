@@ -76,6 +76,7 @@ typedef struct {
 #include "Joystick_Wrapper.h"
 #include "VertexArray_Wrapper.h"
 #include "ParticleEngine_Wrapper.h"
+#include "Logic_Wrappers.h"
 
 namespace RAGE
 {

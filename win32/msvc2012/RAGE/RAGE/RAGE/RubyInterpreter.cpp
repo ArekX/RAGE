@@ -347,6 +347,7 @@ namespace RAGE
 
 				/* Particle Engine Loading - Needs fixing */
 				RAGE::Graphics::ParticleEngineWrapper::load_ruby_class();
+				RAGE::Logic::LogicWrappers::load_wrappers();
 
 				/* Load boot script */
 				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))

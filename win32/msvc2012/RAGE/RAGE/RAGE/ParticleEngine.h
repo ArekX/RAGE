@@ -71,9 +71,10 @@ namespace RAGE
 		{
 		private:
 			Particle *particles;
+			EmitterFrameLayer *frame_layers;
 			ALLEGRO_BITMAP *particle_tex;
 			uint64_t particles_len;
-			EmitterFrameLayer *frame_layers;
+			uint64_t em_burst_amount;
 			int em_type;
 			int frame_layers_len;
 			float em_x;
@@ -86,6 +87,7 @@ namespace RAGE
 			float em_angle;
 
 			// Needz get set methods... :/
+			
 			float em_particle_life;
 			float em_particle_life_add;
 			float em_particle_appear_velocity;
@@ -114,6 +116,8 @@ namespace RAGE
 			float em_particle_tint_b_add;
 			float em_particle_tint_a;
 			float em_particle_tint_a_add;
+			float em_particle_x_add;
+			float em_particle_y_add;
 			// end
 
 			float em_line_width;
@@ -137,6 +141,7 @@ namespace RAGE
 			int em_blend_radst;
 			bool em_use_blending;
 			bool em_loop;
+			bool em_burst_emit; // needz prop
 			void set_particle(Particle *pa);
 		public:			
 			bool disposed;
@@ -148,6 +153,8 @@ namespace RAGE
 			void set_emitter_position(float x, float y);
 			void set_particle_tex(ALLEGRO_BITMAP* new_tex);
 			void set_particle_region(float x, float y, int width, int height, bool set_center);
+
+			bool box_collision(float x, float y, float w, float h);
 
 			/* Frame animation operations */
 			void set_frame_layers(int amount);
