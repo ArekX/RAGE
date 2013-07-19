@@ -219,7 +219,8 @@ namespace RAGE
 
 		JoyEvent::~JoyEvent(void)
 		{
-
+			if (!disposed)
+				dispose();
 		}
 
 	}

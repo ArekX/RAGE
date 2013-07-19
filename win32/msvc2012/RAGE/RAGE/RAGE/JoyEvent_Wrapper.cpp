@@ -18,7 +18,7 @@ namespace RAGE
 
 		void JoyEventWrapper::rb_destroy(void *value)
 		{
-			free((JoyEvent*)value);
+			delete value;
 		}
 
 		VALUE JoyEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)

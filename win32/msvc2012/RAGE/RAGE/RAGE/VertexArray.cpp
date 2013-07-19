@@ -187,13 +187,16 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			al_free(ary);
+			if (ary_len > 0) 
+				al_free(ary);
 
 			disposed = true;
 		}
 
 		VertexArray::~VertexArray(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 
 	}

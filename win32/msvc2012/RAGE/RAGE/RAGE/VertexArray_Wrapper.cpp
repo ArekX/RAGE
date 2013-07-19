@@ -13,7 +13,7 @@ namespace RAGE
 
 		void VertexArrayWrapper::rb_destroy(void* ptr)
 		{
-			free((VertexArray*)ptr);
+			delete ptr;
 		}
 
 		VALUE VertexArrayWrapper::rb_initialize(int argc, VALUE *args, VALUE self)

@@ -13,7 +13,7 @@ namespace RAGE
 
 		void SfxWrapper::rb_sfx_free(void* ptr)
 		{
-			free((Sfx*)ptr);
+			delete ptr;
 		}
 
 		VALUE SfxWrapper::rb_load(VALUE self, VALUE filename)

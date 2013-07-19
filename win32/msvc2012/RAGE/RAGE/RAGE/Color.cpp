@@ -68,6 +68,8 @@ namespace RAGE
 
 		Color::~Color(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 	}
 }

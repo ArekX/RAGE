@@ -153,6 +153,8 @@ namespace RAGE
 			event_queue = al_create_event_queue();
 			event_objects = rb_ary_new();
 
+			rb_gc_register_address(&event_objects);
+
 			if (event_queue == NULL)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_EVENT_QUEUE_FAIL);

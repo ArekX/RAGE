@@ -140,6 +140,8 @@ namespace RAGE
 
 		Joystick::~Joystick(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 
 	}

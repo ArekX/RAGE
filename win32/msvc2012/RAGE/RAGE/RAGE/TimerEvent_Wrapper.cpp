@@ -27,7 +27,7 @@ namespace RAGE
 
 		void TimerEventWrapper::rb_timer_destroy(void *value)
 		{
-			free((TimerEvent*)value);
+			delete value;
 		}
 
 		VALUE TimerEventWrapper::rb_timer_register_proc(VALUE self, VALUE proc)

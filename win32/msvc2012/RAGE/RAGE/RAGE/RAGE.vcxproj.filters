@@ -44,9 +44,6 @@
     <Filter Include="modules\physics">
       <UniqueIdentifier>{72ee5b92-6a44-4cc9-a41d-499b8b89bcfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="modules\physics\headers">
-      <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
-    </Filter>
     <Filter Include="modules\audio\wrappers">
       <UniqueIdentifier>{60d45574-0fbf-4c1d-a4a4-fb4271c9b209}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,12 @@
     </Filter>
     <Filter Include="modules\logic\headers">
       <UniqueIdentifier>{f7b099a1-5d99-4001-9307-9a69728ac84a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics\box2d">
+      <UniqueIdentifier>{54841219-62e5-4e1a-8ffc-dc14d9641111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics\wrappers">
+      <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="Logic_Wrappers.h">
       <Filter>modules\logic\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="rage_config.h">
+      <Filter>app\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

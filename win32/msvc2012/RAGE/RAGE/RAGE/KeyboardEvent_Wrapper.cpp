@@ -18,7 +18,7 @@ namespace RAGE
 
 		void KeyboardEventWrapper::rb_key_event_destroy(void *value)
 		{
-			free((KeyboardEvent*)value);
+			delete value;
 		}
 
 		VALUE KeyboardEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)

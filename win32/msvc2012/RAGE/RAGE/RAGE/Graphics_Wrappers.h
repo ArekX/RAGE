@@ -19,11 +19,6 @@ namespace RAGE
 			static VALUE rb_set_window_position(VALUE self, VALUE x, VALUE y);
 			static VALUE rb_cursor_visible(VALUE self, VALUE val);
 			static VALUE rb_graphics_update(VALUE self);
-			static VALUE rb_graphics_clear(VALUE self);
-			static VALUE rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
-			static VALUE rb_graphics_set_background_color_object(VALUE self, VALUE color);
-			static VALUE rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
-			static VALUE rb_graphics_reset_clipping_rect(VALUE self);
 			static VALUE rb_set_target(VALUE self, VALUE bitmap);
 			static VALUE rb_get_target(VALUE self);
 			static VALUE rb_set_display_size(VALUE self, VALUE width, VALUE height);

@@ -101,6 +101,8 @@ namespace RAGE
 
 		Font::~Font(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 	}
 }

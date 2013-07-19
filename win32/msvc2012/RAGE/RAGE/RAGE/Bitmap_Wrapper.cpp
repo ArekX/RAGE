@@ -29,7 +29,7 @@ namespace RAGE
 
 		void BitmapWrapper::rb_bitmap_destroy(void *value)
 		{
-			free((Bitmap*)value);
+			delete value;
 		}
 
 		VALUE BitmapWrapper::rb_get_width(VALUE self)

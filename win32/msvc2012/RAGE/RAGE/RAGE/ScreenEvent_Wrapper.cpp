@@ -18,7 +18,7 @@ namespace RAGE
 
 		void ScreenEventWrapper::rb_screen_event_destroy(void *value)
 		{
-			free((ScreenEvent*)value);
+			delete value;
 		}
 
 		VALUE ScreenEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)

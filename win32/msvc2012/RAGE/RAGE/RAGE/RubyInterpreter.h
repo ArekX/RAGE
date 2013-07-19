@@ -15,14 +15,11 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_physfs.h>
 #include <allegro5/platform/almsvc.h>
-
-#ifdef WIN32
-#include <allegro5/allegro_windows.h>
-#endif
-
 #include <physfs.h>
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>
+
+#include "rage_config.h"
 
 typedef struct {
 	char* name;

@@ -14,6 +14,8 @@ namespace RAGE
 
 		Music::~Music(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 
 		void Music::load(char* filename)

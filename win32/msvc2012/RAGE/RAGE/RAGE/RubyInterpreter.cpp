@@ -254,7 +254,7 @@ namespace RAGE
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
 
-				if (!PHYSFS_mount(str.c_str(), "/", 0))
+				if (!PHYSFS_mount(argv[0], "/", 0))
 				{
 					if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_GAME_FILE).c_str()))
 					{
@@ -284,16 +284,13 @@ namespace RAGE
 				PRINT(RAGE_DEV_TEXT);
 				
 				#endif
-
-				/* Load config script */
-				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
-				{
-					if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-						rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
-					else
-						load_protect(RAGE_CONF_SCRIPT);
-				}
 				
+				/* Load config script */
+				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
+					load_protect(RAGE_CONF_SCRIPT);
+				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_CONF_SCRIPT))
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
+
 				if (!configured)
 					set_default_config();
 
@@ -350,13 +347,11 @@ namespace RAGE
 				RAGE::Logic::LogicWrappers::load_wrappers();
 
 				/* Load boot script */
-				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
-				{
-					if (RAGE::Filesystem::FSWrappers::is_physfs_on())
-						rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
-					else
-						load_protect(RAGE_BOOT_SCRIPT);
-				}
+				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
+					load_protect(RAGE_BOOT_SCRIPT);
+				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_BOOT_SCRIPT))
+					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
+
 				#ifdef DEVELOPMENT_VERSION
 				else
 				{

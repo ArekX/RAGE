@@ -13,7 +13,7 @@ namespace RAGE
 
 		void MusicWrapper::rb_music_free(void* ptr)
 		{
-			free((Music*)ptr);
+			al_free(ptr);
 		}
 
 		VALUE MusicWrapper::rb_load(VALUE self, VALUE filename)

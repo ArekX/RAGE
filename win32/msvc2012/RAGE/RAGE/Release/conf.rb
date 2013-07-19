@@ -1,6 +1,6 @@
 begin
 config = {
-  "name"               => "RAGE 0.0.3 - Fragment Shader Example",
+  "name"               => "RAGE 0.0.3 - Particle Engine Example",
   "version"            => "0.0.3-beta",
   "width"              => 800,
   "height"             => 600,

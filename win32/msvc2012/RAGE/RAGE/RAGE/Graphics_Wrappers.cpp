@@ -4,7 +4,6 @@ namespace RAGE
 {
 	namespace Graphics
 	{
-		ALLEGRO_COLOR bg_color;
 		RAGEConfig start_config;
 		ALLEGRO_DISPLAY *display;
 		ALLEGRO_MOUSE_CURSOR *mouse_bitmap_cursor = NULL;
@@ -14,7 +13,7 @@ namespace RAGE
 		int mouse_focus_y = 0;
 		int window_x;
 		int window_y;
-		char* window_title;
+		char window_title[255];
 		bool process_screen_events = false;
 
 		VALUE GraphicsWrappers::rb_set_target(VALUE self, VALUE bitmap)
@@ -49,34 +48,9 @@ namespace RAGE
 			return ret_bmp;
 		}
 
-		VALUE GraphicsWrappers::rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
-		{
-			al_set_clipping_rectangle(FIX2INT(x), FIX2INT(y), FIX2INT(w), FIX2INT(h));
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_graphics_reset_clipping_rect(VALUE self)
-		{
-			al_reset_clipping_rectangle();
-			return Qnil;
-		}
-
 		VALUE GraphicsWrappers::rb_graphics_update(VALUE self)
 		{
 			al_flip_display();
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_graphics_clear(VALUE self)
-		{
-			
-			al_clear_to_color(bg_color);
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_graphics_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
-		{
-			bg_color = al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a));
 			return Qnil;
 		}
 
@@ -84,9 +58,8 @@ namespace RAGE
 		{
 			if (TYPE(title) == T_STRING)
 			{
-				delete[] window_title;
-				window_title = new char[RSTRING_LENINT(title)];
 				strcpy(window_title, StringValueCStr(title));
+
 				al_set_window_title(display, window_title);
 				return Qtrue;
 			}
@@ -231,23 +204,6 @@ namespace RAGE
 		{
 			al_set_separate_blender(FIX2UINT(rop), FIX2UINT(rsrc), FIX2UINT(rdst), FIX2UINT(aop), FIX2UINT(asrc), FIX2UINT(adst));
 
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_graphics_set_background_color_object(VALUE self, VALUE color)
-		{
-			
-			if (rb_class_of(color) != RAGE::Graphics::ColorWrapper::get_ruby_class())
-			{
-				rb_raise(rb_eArgError, RAGE_COLOR_ERROR);
-				return Qnil;
-			}
-
-			Color *clr;
-			Data_Get_Struct(color, Color, clr);
-
-			bg_color = clr->color;
-			
 			return Qnil;
 		}
 
@@ -496,14 +452,9 @@ namespace RAGE
 			rb_define_module_function(g, "inhibitScreenSaver", RFUNC(GraphicsWrappers::rb_inhibit_screen_saver), 1);
 
 			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
-			rb_define_module_function(g, "clear", RFUNC(GraphicsWrappers::rb_graphics_clear), 0);
-			rb_define_module_function(g, "setBackgroundColor", RFUNC(GraphicsWrappers::rb_graphics_set_background_color), 4);
-			rb_define_module_function(g, "setBackgroundColorO", RFUNC(GraphicsWrappers::rb_graphics_set_background_color_object), 1);
 			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
 			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
 			rb_define_module_function(g, "getTime", RFUNC(GraphicsWrappers::rb_get_time), 0);
-			rb_define_module_function(g, "setClippingRect", RFUNC(GraphicsWrappers::rb_graphics_set_clipping_rect), 4);
-			rb_define_module_function(g, "resetClippingRect", RFUNC(GraphicsWrappers::rb_graphics_reset_clipping_rect), 0);
 
 			rb_define_module_function(g, "getDisplayModes", RFUNC(GraphicsWrappers::rb_get_display_modes), 0);
 			rb_define_module_function(g, "setMousePosition", RFUNC(GraphicsWrappers::rb_set_mouse_xy), 2);
@@ -554,7 +505,7 @@ namespace RAGE
 
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 
-			window_title = cfg.name;
+			strcpy(window_title, cfg.name);
 			display = al_create_display(cfg.width, cfg.height);
 			al_get_window_position(display, &window_x, &window_y);
 			al_set_window_title(display, cfg.name);

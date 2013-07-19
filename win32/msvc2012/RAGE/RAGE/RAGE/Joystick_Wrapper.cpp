@@ -13,7 +13,7 @@ namespace RAGE
 
 		void JoystickWrapper::rb_destroy(void* ptr)
 		{
-			free((Joystick*)ptr);
+			delete ptr;
 		}
 
 		VALUE JoystickWrapper::rb_initialize(VALUE self, VALUE joystick_num) 

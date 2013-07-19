@@ -13,7 +13,7 @@ namespace RAGE
 
 		void ColorWrapper::rb_destroy(void *value)
 		{
-			free((Color*)value);
+			delete value;
 		}
 
 		VALUE ColorWrapper::rb_from_rgba(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)

@@ -13,7 +13,7 @@ namespace RAGE
 
 		void FontWrapper::rb_destroy(void *value)
 		{
-			free((Font*)value);
+			delete value;
 		}
 		
 		VALUE FontWrapper::rb_load(VALUE self, VALUE font_name, VALUE size)

@@ -168,7 +168,8 @@ namespace RAGE
 
 		KeyboardEvent::~KeyboardEvent(void)
 		{
-
+			if (!disposed)
+				dispose();
 		}
 
 	}

@@ -79,6 +79,8 @@ namespace RAGE
 
 			em_particle_x_add = 0;
 			em_particle_y_add = 0;
+
+			em_particle_region_instant_update = true;
 		}
 
 
@@ -87,7 +89,7 @@ namespace RAGE
 		 - RAGE_CHECK_DISPOSED for all (that means making every setting a function... ugh)
 		 */
 
-		void ParticleEngine::initialize(ALLEGRO_BITMAP* particle, uint64_t emitter_count, float emitter_duration, bool emitter_loop, float emitter_x, float emitter_y)
+		void ParticleEngine::initialize(ALLEGRO_BITMAP* particle, int64_t emitter_count, float emitter_duration, bool emitter_loop, float emitter_x, float emitter_y)
 		{
 			ALLEGRO_STATE st;
 			al_store_state(&st, ALLEGRO_STATE_BITMAP);
@@ -122,7 +124,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			for (uint64_t i = 0; i < particles_len; i++)
+			for (int64_t i = 0; i < particles_len; i++)
 			{
 				set_particle(&particles[i]);
 				particles[i].time = particles[i].life * random_float();
@@ -137,7 +139,7 @@ namespace RAGE
 
 			register int j;
 
-			for (uint64_t i = 0; i < particles_len; i++)
+			for (int64_t i = 0; i < particles_len; i++)
 			{
 				if (particles[i].delay >= 0)
 				{
@@ -151,12 +153,13 @@ namespace RAGE
 					particles[i].x = particles[i].x + particles[i].velocity * sin(particles[i].tr_angle) * dt;
 					particles[i].y = particles[i].y + particles[i].velocity * cos(particles[i].tr_angle) * dt;
 
-					particles[i].current_frame += particles[i].frame_velocity * dt;
 					particles[i].tr_angle += em_particle_tr_angle_change * dt;
 					particles[i].time += particles[i].frame_velocity * dt;
 
 					if (frame_layers_len > 0)
 					{
+						float frame_update = particles[i].frame_velocity * dt;
+
 						particles[i].center_x = particles[i].base_center_x;
 						particles[i].center_y = particles[i].base_center_y;
 						particles[i].scale_x = particles[i].base_scale_x;
@@ -165,26 +168,37 @@ namespace RAGE
 						particles[i].color = particles[i].base_color;
 						particles[i].velocity = particles[i].base_velocity;
 						particles[i].rot_angle = particles[i].base_rot_angle;
+						particles[i].region_x = particles[i].base_region_x;
+						particles[i].region_y = particles[i].base_region_y;
+						particles[i].region_w = particles[i].base_region_w;
+						particles[i].region_h = particles[i].base_region_h;
 					
+
 						for (j = 0; j < frame_layers_len; j++)
 						{
 						
+							particles[i].current_frames[j] += frame_update;
+
 							if (frame_layers[j].data_len > 0)
 							{
 
-								if (particles[i].current_frame >= frame_layers[j].data[particles[i].current_frame_indices[j]].duration)
+								if (particles[i].current_frames[j] >= frame_layers[j].data[particles[i].current_frame_indices[j]].duration)
 								{
-									particles[i].base_center_x = particles[i].base_center_x + frame_layers[j].data[particles[i].current_frame_indices[j]].center_x;
-									particles[i].base_center_y = particles[i].center_y + frame_layers[j].data[particles[i].current_frame_indices[j]].center_y;
-									particles[i].base_scale_x =  particles[i].base_scale_x + frame_layers[j].data[particles[i].current_frame_indices[j]].scale_x;
-									particles[i].base_scale_y = particles[i].base_scale_y + frame_layers[j].data[particles[i].current_frame_indices[j]].scale_y;
-									particles[i].base_tr_angle = particles[i].base_tr_angle + frame_layers[j].data[particles[i].current_frame_indices[j]].tr_angle;
-									particles[i].base_rot_angle = particles[i].base_rot_angle + frame_layers[j].data[particles[i].current_frame_indices[j]].rot_angle;
-									particles[i].base_velocity = particles[i].base_velocity + frame_layers[j].data[particles[i].current_frame_indices[j]].velocity;
-									particles[i].base_color.r = particles[i].base_color.r + frame_layers[j].data[particles[i].current_frame_indices[j]].tint_r;
-									particles[i].base_color.g = particles[i].base_color.g + frame_layers[j].data[particles[i].current_frame_indices[j]].tint_g;
-									particles[i].base_color.b = particles[i].base_color.b + frame_layers[j].data[particles[i].current_frame_indices[j]].tint_b;
-									particles[i].base_color.a = particles[i].base_color.a + frame_layers[j].data[particles[i].current_frame_indices[j]].tint_a;
+									particles[i].base_center_x += frame_layers[j].data[particles[i].current_frame_indices[j]].center_x;
+									particles[i].base_center_y += frame_layers[j].data[particles[i].current_frame_indices[j]].center_y;
+									particles[i].base_scale_x += frame_layers[j].data[particles[i].current_frame_indices[j]].scale_x;
+									particles[i].base_scale_y += frame_layers[j].data[particles[i].current_frame_indices[j]].scale_y;
+									particles[i].base_tr_angle += frame_layers[j].data[particles[i].current_frame_indices[j]].tr_angle;
+									particles[i].base_rot_angle += frame_layers[j].data[particles[i].current_frame_indices[j]].rot_angle;
+									particles[i].base_velocity += frame_layers[j].data[particles[i].current_frame_indices[j]].velocity;
+									particles[i].base_color.r += frame_layers[j].data[particles[i].current_frame_indices[j]].tint_r;
+									particles[i].base_color.g += frame_layers[j].data[particles[i].current_frame_indices[j]].tint_g;
+									particles[i].base_color.b += frame_layers[j].data[particles[i].current_frame_indices[j]].tint_b;
+									particles[i].base_color.a += frame_layers[j].data[particles[i].current_frame_indices[j]].tint_a;
+									particles[i].base_region_x += frame_layers[j].data[particles[i].current_frame_indices[j]].region_x; 
+									particles[i].base_region_y += frame_layers[j].data[particles[i].current_frame_indices[j]].region_y;  
+									particles[i].base_region_w += frame_layers[j].data[particles[i].current_frame_indices[j]].region_w;  
+									particles[i].base_region_h += frame_layers[j].data[particles[i].current_frame_indices[j]].region_h; 
 
 									particles[i].center_x = particles[i].base_center_x;
 									particles[i].center_y = particles[i].base_center_y;
@@ -194,19 +208,23 @@ namespace RAGE
 									particles[i].color = particles[i].base_color;
 									particles[i].velocity = particles[i].base_velocity;
 									particles[i].rot_angle = particles[i].base_rot_angle;
-								
+									particles[i].region_x = particles[i].base_region_x;
+									particles[i].region_y = particles[i].base_region_y;
+									particles[i].region_w = particles[i].base_region_w;
+									particles[i].region_h = particles[i].base_region_h;
+
 									particles[i].current_frame_indices[j]++;
 
 									if (particles[i].current_frame_indices[j] >= frame_layers[j].data_len) 
 										particles[i].current_frame_indices[j] = 0;
 
-									particles[i].current_frame = 0;
+									particles[i].current_frames[j] = 0;
 								}
 
 								int index = particles[i].current_frame_indices[j];
 
 								int b_index = (index > 0) ? index - 1 : 0;
-								float delta = particles[i].current_frame / frame_layers[j].data[index].duration;
+								float delta = particles[i].current_frames[j] / frame_layers[j].data[index].duration;
 
 								particles[i].tr_angle += frame_layers[j].data[index].tr_angle * delta;
 								particles[i].scale_x += frame_layers[j].data[index].scale_x * delta;
@@ -219,6 +237,15 @@ namespace RAGE
 								particles[i].color.g += frame_layers[j].data[index].tint_g * delta;
 								particles[i].color.b += frame_layers[j].data[index].tint_b * delta;
 								particles[i].color.a += frame_layers[j].data[index].tint_a * delta;
+
+								if (!em_particle_region_instant_update)
+								{
+									particles[i].region_x += frame_layers[j].data[index].region_x * delta; 
+									particles[i].region_y += frame_layers[j].data[index].region_y * delta;  
+									particles[i].region_w += frame_layers[j].data[index].region_w * delta;  
+									particles[i].region_h += frame_layers[j].data[index].region_h * delta;  
+								}
+
 							}
 						}
 					}
@@ -250,15 +277,15 @@ namespace RAGE
 					al_set_blender(em_blend_op, em_blend_src, em_blend_dst);
 			}
 
-			for (uint64_t i = 0; i < particles_len; i++)
+			for (int64_t i = 0; i < particles_len; i++)
 			{
 					if (particles[i].visible)
 						al_draw_tinted_scaled_rotated_bitmap_region(
 																	particle_tex, 
-																	p_region_x, 
-																	p_region_y, 
-																	p_region_width, 
-																	p_region_height, 
+																	particles[i].region_x, 
+																	particles[i].region_y, 
+																	particles[i].region_w, 
+																	particles[i].region_h, 
 																	particles[i].color,
 																	particles[i].center_x, 
 																	particles[i].center_y, 
@@ -316,7 +343,11 @@ namespace RAGE
 			pa->x += em_particle_x_add > 0 ? em_particle_x_add * random_float() : 0;
 			pa->y += em_particle_y_add > 0 ? em_particle_y_add * random_float() : 0;
 
-			pa->current_frame = 0;
+			pa->region_x = p_region_x;
+			pa->region_y = p_region_y;
+			pa->region_w = p_region_width;
+			pa->region_h = p_region_height;
+
 			pa->scale_x = em_particle_scale_x + em_particle_scale_x_add * random_float();
 			pa->scale_y = em_particle_scale_y + em_particle_scale_y_add * random_float();
 			pa->frame_velocity = em_particle_frame_velocity + em_particle_frame_velocity_add * random_float();
@@ -333,6 +364,10 @@ namespace RAGE
 			pa->rot_angle = em_particle_rot_angle + em_particle_rot_angle_add * random_float();
 			pa->time = 0;
 
+			pa->base_region_x = pa->region_x;
+			pa->base_region_y = pa->region_y;
+			pa->base_region_w = pa->region_w;
+			pa->base_region_h = pa->region_h;
 			pa->base_tr_angle = pa->tr_angle;
 			pa->base_scale_x = pa->scale_x;
 			pa->base_scale_y = pa->scale_y;
@@ -344,7 +379,10 @@ namespace RAGE
 			
 
 			for (int i = 0; i < frame_layers_len; i++)
+			{
 				pa->current_frame_indices[i] = 0;
+				pa->current_frames[i] = 0;
+			}
 			
 
 			pa->visible = false;
@@ -400,7 +438,8 @@ namespace RAGE
 			else if ((amount > 0) && (amount < frame_layers_len))
 			{
 				for (int i = amount - 1; i < frame_layers_len; i++)
-					al_free(frame_layers[i].data);
+					if (frame_layers[i].data_len > 0) al_free(frame_layers[i].data);
+
 				frame_layers = (EmitterFrameLayer*)al_realloc(frame_layers, (sizeof(EmitterFrameLayer) * amount));
 			}
 			else if ((amount > 0) && (amount > frame_layers_len))
@@ -413,27 +452,38 @@ namespace RAGE
 			else if ((frame_layers_len > 0) && (amount == 0))
 			{	
 				for (int i = 0; i < frame_layers_len; i++)
-					al_free(frame_layers[i].data);
+					if (frame_layers[i].data_len > 0) al_free(frame_layers[i].data);
 
 				al_free(frame_layers);
 			}
 			
-			for (uint64_t i = 0; i < particles_len; i++)
+			for (int64_t i = 0; i < particles_len; i++)
 			{
 				if ((frame_layers_len == 0) && (amount > 0))
+				{
 					particles[i].current_frame_indices = (int*)al_malloc(sizeof(int) * amount);
+					particles[i].current_frames = (float*)al_malloc(sizeof(float) * amount);
+				}
 				else if ((amount > 0) && (amount < frame_layers_len))
 				{
 					particles[i].current_frame_indices = (int*)al_realloc(particles[i].current_frame_indices, sizeof(int) * amount);
+					particles[i].current_frames = (float*)al_realloc(particles[i].current_frames, sizeof(float) * amount);				
 				}
 				else if ((amount > 0) && (amount > frame_layers_len))
 				{
 					particles[i].current_frame_indices = (int*)al_realloc(particles[i].current_frame_indices, sizeof(int) * amount);
+					particles[i].current_frames = (float*)al_realloc(particles[i].current_frames, sizeof(float) * amount);
+
 					for (int j = frame_layers_len - 1; j < amount; j++)
-						particles[j].current_frame_indices = 0;
+					{
+						particles[i].current_frame_indices[j] = 0;
+						particles[i].current_frames[j] = 0;
+					}
 				}
 				else if ((frame_layers_len > 0) && (amount == 0))
-					al_free(particles[i].current_frame_indices);
+				{
+					destroy_particle(&particles[i]);
+				}
 			}
 
 			frame_layers_len = amount;
@@ -441,11 +491,11 @@ namespace RAGE
 			emit();
 		}
 
-		void ParticleEngine::add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float tint_r, float tint_g, float tint_b, float tint_a)
+		void ParticleEngine::add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float region_x, float region_y, float region_w, float region_h, float tint_r, float tint_g, float tint_b, float tint_a)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (layer_index >= frame_layers_len) return;
+			if ((layer_index >= frame_layers_len) || (layer_index < 0)) return;
 
 			if (frame_layers[layer_index].data_len == 0)
 			{
@@ -466,6 +516,10 @@ namespace RAGE
 			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].tint_g = tint_g;
 			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].tint_b = tint_b;
 			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].tint_a = tint_a;
+			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].region_x = region_x;
+			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].region_y = region_y;
+			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].region_w = region_w;
+			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].region_h = region_h;
 			frame_layers[layer_index].data[frame_layers[layer_index].data_len - 1].duration = duration;
 		}
 
@@ -473,9 +527,8 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (layer_index >= frame_layers_len) return;
+			if ((layer_index >= frame_layers_len) || (layer_index < 0)) return;
 			if (frame_index >= frame_layers[layer_index].data_len) return;
-
 
 			for(int i = frame_index; i < frame_layers[layer_index].data_len - 1; i++)
 					frame_layers[layer_index].data[i] = frame_layers[layer_index].data[i + 1];
@@ -487,6 +540,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			if ((layer_index >= frame_layers_len) || (layer_index < 0)) return;
 			if (layer_index >= frame_layers_len) return;
 
 			frame_layers[layer_index].data_len = 0;
@@ -498,15 +552,43 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
-			for (uint64_t i = 0; i < particles_len; i++)
+			for (int64_t i = 0; i < particles_len; i++)
 			{
-				if (Logic::LogicWrappers::collision(x, y, w, h, particles[i].x, particles[i].y, p_region_width * particles[i].scale_x, p_region_height * particles[i].scale_y))
+				if (Logic::LogicWrappers::collision(x, y, w, h, em_particle_ox + particles[i].x - particles[i].center_x * particles[i].scale_x, em_particle_oy + particles[i].y - particles[i].center_y * particles[i].scale_y, particles[i].region_w * particles[i].scale_x, particles[i].region_h * particles[i].scale_y))
 					return true; 
 			}
 			return false;
 		}
 
 		/* Get/Set Ops */
+		float ParticleEngine::get_emitter_angle(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_angle;
+		}
+
+		float ParticleEngine::get_emitter_spread(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_spread;
+		}
+
+		int ParticleEngine::get_emitter_type(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_type;
+		}
+
+		bool ParticleEngine::get_emitter_loop(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			return em_loop;
+		}
+
 		void ParticleEngine::set_emitter_blend_alpha(int op, int src, int dst, int aop, int asrc, int adst)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -565,31 +647,51 @@ namespace RAGE
 			em_type = type;
 		}
 
-		void ParticleEngine::set_particles_num(uint64_t new_num)
+		void ParticleEngine::initialize_particle(Particle *pa)
+		{
+			if (frame_layers_len > 0)
+			{
+				pa->current_frame_indices = (int*)al_malloc(sizeof(int) * frame_layers_len);
+				pa->current_frames = (float*)al_malloc(sizeof(float) * frame_layers_len);
+			}
+
+			set_particle(pa);
+			pa->time = pa->life * random_float();
+			pa->delay = pa->time * random_float();
+		}
+
+		void ParticleEngine::destroy_particle(Particle *pa)
+		{
+			if (frame_layers_len > 0)
+			{
+				al_free(pa->current_frame_indices);
+				al_free(pa->current_frames);
+			}
+		}
+
+		void ParticleEngine::set_particles_num(int64_t new_num)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
+			
+			if (new_num < 0) return;
 
-			if (particles_len == 0)
-			{
-				particles = (Particle*)al_malloc(sizeof(Particle) * new_num);
-				particles_len = new_num;
+			for (int64_t i = 0; i < particles_len; i++)
+				destroy_particle(&particles[i]);
 
-				emit();
-			}
-			else if (particles_len < new_num)
-			{
-				particles = (Particle*)al_realloc(particles, sizeof(Particle) * new_num);
+			al_free(particles);
 
-				for (uint64_t i = particles_len - 1; i < new_num; i++)
-					set_particle(&particles[i]);
+			particles_len = 0;
 
-				particles_len = new_num;
-			}
-			else
-			{
-				particles = (Particle*)al_realloc(particles, sizeof(Particle) * new_num);
-				particles_len = new_num;
-			}
+			particles = NULL;
+
+			if (new_num == 0) return;
+
+			particles_len = new_num;
+
+			particles = (Particle*)al_malloc(sizeof(Particle) * new_num);
+
+			for (int64_t i = 0; i < new_num; i++)
+				initialize_particle(&particles[i]);
 		}
 
 		void ParticleEngine::set_emitter_line_width(float new_width)
@@ -638,7 +740,7 @@ namespace RAGE
 		}
 
 		/* Get Ops */
-		uint64_t ParticleEngine::get_particles_num(void)
+		int64_t ParticleEngine::get_particles_num(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -687,16 +789,596 @@ namespace RAGE
 			return em_use_blending;
 		}
 
+		void ParticleEngine::set_particle_burst_amount(int64_t burst_amount)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			em_burst_amount = burst_amount;
+		}
+
+		int64_t ParticleEngine::get_particle_burst_amount(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_burst_amount;
+		}
+
+		void ParticleEngine::set_particle_region_instant_update(bool update)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			em_particle_region_instant_update = update;
+		}
+
+		bool ParticleEngine::get_particle_region_instant_update(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			return em_particle_region_instant_update;
+		}
+
+		void ParticleEngine::set_emitter_burst(bool emitter_burst)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			em_burst_emit = emitter_burst;
+		}
+
+		bool ParticleEngine::get_emitter_burst(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, true);
+
+			return em_burst_emit;
+		}
+
+		void ParticleEngine::set_particle_life(float life)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_life = life;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_life(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_life;
+
+		}
+
+
+		void ParticleEngine::set_particle_life_add(float life_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_life_add = life_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_life_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_life_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_appear_velocity(float appear_velocity)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_appear_velocity = appear_velocity;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_appear_velocity(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_appear_velocity;
+
+		}
+
+
+		void ParticleEngine::set_particle_velocity(float velocity)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_velocity = velocity;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_velocity(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_velocity;
+
+		}
+
+
+		void ParticleEngine::set_particle_velocity_add(float velocity_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_velocity_add = velocity_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_velocity_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_velocity_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_frame_velocity(float frame_velocity)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_frame_velocity = frame_velocity;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_frame_velocity(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_frame_velocity;
+
+		}
+
+
+		void ParticleEngine::set_particle_frame_velocity_add(float frame_velocity_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_frame_velocity_add = frame_velocity_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_frame_velocity_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_frame_velocity_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_rot_angle(float rot_angle)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_rot_angle = rot_angle;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_rot_angle(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_rot_angle;
+
+		}
+
+
+		void ParticleEngine::set_particle_rot_angle_add(float rot_angle_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_rot_angle_add = rot_angle_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_rot_angle_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_rot_angle_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_scale_x(float scale_x)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_scale_x = scale_x;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_scale_x(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_scale_x;
+
+		}
+
+
+		void ParticleEngine::set_particle_scale_x_add(float scale_x_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_scale_x_add = scale_x_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_scale_x_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_scale_x_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_scale_y(float scale_y)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_scale_y = scale_y;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_scale_y(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_scale_y;
+
+		}
+
+
+		void ParticleEngine::set_particle_scale_y_add(float scale_y_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_scale_y_add = scale_y_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_scale_y_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_scale_y_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_center_x(float center_x)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_center_x = center_x;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_center_x(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_center_x;
+
+		}
+
+
+		void ParticleEngine::set_particle_center_x_add(float center_x_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_center_x_add = center_x_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_center_x_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_center_x_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_center_y(float center_y)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_center_y = center_y;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_center_y(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_center_y;
+
+		}
+
+
+		void ParticleEngine::set_particle_center_y_add(float center_y_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_center_y_add = center_y_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_center_y_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_center_y_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_tr_angle_change(float tr_angle_change)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tr_angle_change = tr_angle_change;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tr_angle_change(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tr_angle_change;
+
+		}
+
+
+		void ParticleEngine::set_particle_delay(float delay)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_delay = delay;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_delay(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_delay;
+
+		}
+
+
+		void ParticleEngine::set_particle_delay_add(float delay_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_delay_add = delay_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_delay_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_delay_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_r(float tint_r)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_r = tint_r;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_r(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_r;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_r_add(float tint_r_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_r_add = tint_r_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_r_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_r_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_g(float tint_g)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_g = tint_g;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_g(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_g;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_g_add(float tint_g_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_g_add = tint_g_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_g_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_g_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_b(float tint_b)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_b = tint_b;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_b(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_b;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_b_add(float tint_b_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_b_add = tint_b_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_b_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_b_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_a(float tint_a)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_a = tint_a;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_a(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_a;
+
+		}
+
+
+		void ParticleEngine::set_particle_tint_a_add(float tint_a_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_tint_a_add = tint_a_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_tint_a_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_tint_a_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_x_add(float x_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_x_add = x_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_x_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_x_add;
+
+		}
+
+
+		void ParticleEngine::set_particle_y_add(float y_add)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+			
+			em_particle_y_add = y_add;
+
+		}
+
+ 
+		float ParticleEngine::get_particle_y_add(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return em_particle_y_add;
+
+		}
+
 		void ParticleEngine::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);			
 
-			if (frame_layers_len > 0) set_frame_layers(0);
+			if (frame_layers_len > 0) 
+				set_frame_layers(0);
 			
 			if (particles_len > 0)
-				particles_len = 0;
-
-			al_free(particles);
+				al_free(particles);
 
 			if (particle_tex != NULL)
 				al_destroy_bitmap(particle_tex);
@@ -704,6 +1386,10 @@ namespace RAGE
 			disposed = true;
 		}
 
-		ParticleEngine::~ParticleEngine(void){ }
+		ParticleEngine::~ParticleEngine(void)
+		{
+			if (!disposed)
+				dispose();
+		}
 	}
 }

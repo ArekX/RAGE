@@ -13,7 +13,7 @@ namespace RAGE
 
 		void ShaderWrapper::rb_destroy(void* value)
 		{
-			free((Shader*)value);
+			delete value;
 		}
 
 		VALUE ShaderWrapper::rb_initialize(VALUE self, VALUE type, VALUE code)

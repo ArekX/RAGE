@@ -18,7 +18,7 @@ namespace RAGE
 
 		void MouseEventWrapper::rb_mouse_event_destroy(void *value)
 		{
-			free((MouseEvent*)value);
+			delete value;
 		}
 
 		VALUE MouseEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)

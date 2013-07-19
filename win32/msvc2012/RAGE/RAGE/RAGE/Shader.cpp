@@ -133,6 +133,8 @@ namespace RAGE
 
 		Shader::~Shader(void)
 		{
+			if (!disposed)
+				dispose();
 		}
 	}
 }

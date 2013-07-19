@@ -22,13 +22,16 @@ namespace RAGE
 			float center_y;
 			float delay;
 			float life;
-			float current_frame;
 			float frame_velocity;
 			float scale_x;
 			float scale_y;
 			float tr_angle;
 			float rot_angle;
 			float velocity;
+			float region_x;
+			float region_y;
+			float region_w;
+			float region_h;
 			bool visible;
 			ALLEGRO_COLOR color;
 
@@ -40,11 +43,16 @@ namespace RAGE
 			float base_center_x;
 			float base_center_y;
 			float base_rot_angle;
+			float base_region_x;
+			float base_region_y;
+			float base_region_w;
+			float base_region_h;
 
 			float time;
 
 			ALLEGRO_COLOR base_color;
 			int *current_frame_indices;
+			float *current_frames;
 		} Particle;
 
 		typedef struct {
@@ -59,6 +67,10 @@ namespace RAGE
 			float tint_g;
 			float tint_b;
 			float tint_a;
+			float region_x;
+			float region_y;
+			float region_w;
+			float region_h;
 			float duration;
 		} EmitterFrameData;
 
@@ -73,8 +85,8 @@ namespace RAGE
 			Particle *particles;
 			EmitterFrameLayer *frame_layers;
 			ALLEGRO_BITMAP *particle_tex;
-			uint64_t particles_len;
-			uint64_t em_burst_amount;
+			int64_t particles_len;
+			int64_t em_burst_amount;
 			int em_type;
 			int frame_layers_len;
 			float em_x;
@@ -85,8 +97,6 @@ namespace RAGE
 			int p_region_height;
 			float em_spread;
 			float em_angle;
-
-			// Needz get set methods... :/
 			
 			float em_particle_life;
 			float em_particle_life_add;
@@ -118,7 +128,6 @@ namespace RAGE
 			float em_particle_tint_a_add;
 			float em_particle_x_add;
 			float em_particle_y_add;
-			// end
 
 			float em_line_width;
 			float em_rect_width;
@@ -141,12 +150,15 @@ namespace RAGE
 			int em_blend_radst;
 			bool em_use_blending;
 			bool em_loop;
-			bool em_burst_emit; // needz prop
+			bool em_particle_region_instant_update;
+			bool em_burst_emit;
+			void initialize_particle(Particle *pa);
+			void destroy_particle(Particle *pa);
 			void set_particle(Particle *pa);
 		public:			
 			bool disposed;
 			ParticleEngine(void);
-			void initialize(ALLEGRO_BITMAP* particle, uint64_t emitter_count, float emitter_duration, bool emitter_loop, float x, float y);
+			void initialize(ALLEGRO_BITMAP* particle, int64_t emitter_count, float emitter_duration, bool emitter_loop, float x, float y);
 			void emit(void);
 			void update(float dt);
 			void draw(void);
@@ -157,12 +169,16 @@ namespace RAGE
 			bool box_collision(float x, float y, float w, float h);
 
 			/* Frame animation operations */
+			float get_emitter_angle(void);
+			float get_emitter_spread(void);
+			int get_emitter_type(void);
+			bool get_emitter_loop(void);
+
 			void set_frame_layers(int amount);
-			void add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float tint_r, float tint_g, float tint_b, float tint_a);
+			void add_frame_to_layer(int layer_index, float duration, float scale_x, float scale_y, float tr_angle, float rot_angle, float velocity, float center_x, float center_y, float region_x, float region_y, float region_w, float region_h, float tint_r, float tint_g, float tint_b, float tint_a);
 			void remove_frame_from_layer(int layer_index, int frame_index);
 			void clear_frames_from_layer(int layer_index);
 
-			/* Set Ops */
 			void set_emitter_blend_alpha(int op, int src, int dst, int aop, int asrc, int adst);
 			void set_emitter_blend(int op, int src, int dst);
 			void set_use_blending(bool use_blending);
@@ -176,10 +192,77 @@ namespace RAGE
 			void set_angle(float angle);
 			void set_spread(float spread);
 			void set_type(int type);
-			void set_particles_num(uint64_t new_num);
+			void set_particles_num(int64_t new_num);
+			void set_particle_burst_amount(int64_t burst_amount);
+			int64_t get_particle_burst_amount(void);
+			void set_emitter_burst(bool emitter_burst);
+			bool get_emitter_burst(void);
+			void set_particle_region_instant_update(bool update);
+			bool get_particle_region_instant_update(void);
+			void set_particle_life(float life); 
+			float get_particle_life(void);
+			void set_particle_life_add(float life_add); 
+			float get_particle_life_add(void);
+			void set_particle_appear_velocity(float appear_velocity); 
+			float get_particle_appear_velocity(void);
+			void set_particle_velocity(float velocity); 
+			float get_particle_velocity(void);
+			void set_particle_velocity_add(float velocity_add); 
+			float get_particle_velocity_add(void);
+			void set_particle_frame_velocity(float frame_velocity); 
+			float get_particle_frame_velocity(void);
+			void set_particle_frame_velocity_add(float frame_velocity_add); 
+			float get_particle_frame_velocity_add(void);
+			void set_particle_rot_angle(float rot_angle); 
+			float get_particle_rot_angle(void);
+			void set_particle_rot_angle_add(float rot_angle_add); 
+			float get_particle_rot_angle_add(void);
+			void set_particle_scale_x(float scale_x); 
+			float get_particle_scale_x(void);
+			void set_particle_scale_x_add(float scale_x_add); 
+			float get_particle_scale_x_add(void);
+			void set_particle_scale_y(float scale_y); 
+			float get_particle_scale_y(void);
+			void set_particle_scale_y_add(float scale_y_add); 
+			float get_particle_scale_y_add(void);
+			void set_particle_center_x(float center_x); 
+			float get_particle_center_x(void);
+			void set_particle_center_x_add(float center_x_add); 
+			float get_particle_center_x_add(void);
+			void set_particle_center_y(float center_y); 
+			float get_particle_center_y(void);
+			void set_particle_center_y_add(float center_y_add); 
+			float get_particle_center_y_add(void);
+			void set_particle_tr_angle_change(float tr_angle_change); 
+			float get_particle_tr_angle_change(void);
+			void set_particle_delay(float delay); 
+			float get_particle_delay(void);
+			void set_particle_delay_add(float delay_add); 
+			float get_particle_delay_add(void);
+			void set_particle_tint_r(float tint_r); 
+			float get_particle_tint_r(void);
+			void set_particle_tint_r_add(float tint_r_add); 
+			float get_particle_tint_r_add(void);
+			void set_particle_tint_g(float tint_g); 
+			float get_particle_tint_g(void);
+			void set_particle_tint_g_add(float tint_g_add); 
+			float get_particle_tint_g_add(void);
+			void set_particle_tint_b(float tint_b); 
+			float get_particle_tint_b(void);
+			void set_particle_tint_b_add(float tint_b_add); 
+			float get_particle_tint_b_add(void);
+			void set_particle_tint_a(float tint_a); 
+			float get_particle_tint_a(void);
+			void set_particle_tint_a_add(float tint_a_add); 
+			float get_particle_tint_a_add(void);
+			void set_particle_x_add(float x_add); 
+			float get_particle_x_add(void);
+			void set_particle_y_add(float y_add); 
+			float get_particle_y_add(void);
+
 
 			/* Get Ops */
-			uint64_t get_particles_num(void);
+			int64_t get_particles_num(void);
 			float get_emitter_line_width(void);
 			float get_emitter_rectangle_width(void);
 			float get_emitter_rectangle_height(void);
