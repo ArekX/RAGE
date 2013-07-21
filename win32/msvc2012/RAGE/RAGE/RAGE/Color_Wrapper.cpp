@@ -193,6 +193,8 @@ namespace RAGE
 
 		void ColorWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Color")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rageColorClass = rb_define_class_under(rage, "Color", rb_cObject);
 

@@ -150,6 +150,8 @@ namespace RAGE
 
 		void EventsWrapper::init_queue(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
+
 			event_queue = al_create_event_queue();
 			event_objects = rb_ary_new();
 
@@ -164,11 +166,15 @@ namespace RAGE
 
 		void EventsWrapper::run_event_thread(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
+
 			eventsThread = rb_thread_create(RFUNC(EventsWrapper::rb_update_event_objects), NULL);
 		}
 
 		void EventsWrapper::finalize_queue(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
+
 			if (event_queue != NULL)
 			{
 				al_destroy_event_queue(event_queue);
@@ -221,6 +227,8 @@ namespace RAGE
 
 		void EventsWrapper::load_wrappers(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE events = rb_define_module_under(rage, "Events");
 

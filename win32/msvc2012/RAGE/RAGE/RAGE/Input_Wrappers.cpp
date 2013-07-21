@@ -109,6 +109,8 @@ namespace RAGE
 
 		void InputWrappers::load_wrappers(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Input")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE input = rb_define_module_under(rage, "Input");
 			rb_define_const(input, "MOUSE_BTN1", INT2FIX(RAGE_MOUSE_BUTTON_1));

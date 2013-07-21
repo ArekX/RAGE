@@ -94,6 +94,8 @@ namespace RAGE
 
 		void ShaderWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Shader")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			
 			VALUE g = rb_define_module_under(rage, "Graphics");

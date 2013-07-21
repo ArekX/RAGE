@@ -460,6 +460,8 @@ namespace RAGE
 
 		void BitmapWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Bitmap")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
 

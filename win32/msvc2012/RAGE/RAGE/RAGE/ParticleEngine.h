@@ -115,7 +115,6 @@ namespace RAGE
 			float em_particle_center_x_add;
 			float em_particle_center_y;
 			float em_particle_center_y_add;
-			float em_particle_tr_angle_change;
 			float em_particle_delay;
 			float em_particle_delay_add;
 			float em_particle_tint_r;
@@ -233,8 +232,6 @@ namespace RAGE
 			float get_particle_center_y(void);
 			void set_particle_center_y_add(float center_y_add); 
 			float get_particle_center_y_add(void);
-			void set_particle_tr_angle_change(float tr_angle_change); 
-			float get_particle_tr_angle_change(void);
 			void set_particle_delay(float delay); 
 			float get_particle_delay(void);
 			void set_particle_delay_add(float delay_add); 

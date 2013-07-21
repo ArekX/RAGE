@@ -78,7 +78,6 @@ namespace RAGE
 		VALUE FSWrappers::rb_physfs_get_mounts(VALUE self)
 		{
 			VALUE list = rb_ary_new();
-			rb_gc_register_address(&list);
 
 			char **lst = PHYSFS_getSearchPath();
 			int i = 0;
@@ -104,7 +103,6 @@ namespace RAGE
 		VALUE FSWrappers::rb_physfs_enum_files(VALUE self, VALUE dir)
 		{
 			VALUE list = rb_ary_new();
-			rb_gc_register_address(&list);
 
 			char **lst = PHYSFS_enumerateFiles(StringValueCStr(dir));
 			int i = 0;
@@ -185,6 +183,8 @@ namespace RAGE
 
 		void FSWrappers::load_wrappers(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::FS")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE fs = rb_define_module_under(rage, "FS");
 

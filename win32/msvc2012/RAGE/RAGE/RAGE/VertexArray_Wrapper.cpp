@@ -25,7 +25,7 @@ namespace RAGE
 			if (argc == 0)
 				va->initialize(0);
 			else if (argc == 1)
-				va->initialize(FIX2INT(args[0]));
+				va->initialize(NUM2LL(args[0]));
 			else
 				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_TOO_MANY_ARGS);
 
@@ -273,6 +273,8 @@ namespace RAGE
 
 		void VertexArrayWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::VertexArray")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 
 			rb_rageVertexArrayClass = rb_define_class_under(rage, "VertexArray", rb_cObject);

@@ -98,6 +98,8 @@ namespace RAGE
 
 		void KeyboardEventWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::KeyEvent")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_KeyEventClass = rb_define_class_under(rage, "KeyEvent", EventWrapper::get_ruby_class());
 

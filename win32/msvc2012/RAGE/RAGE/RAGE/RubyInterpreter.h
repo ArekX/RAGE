@@ -19,36 +19,8 @@
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>
 
+/* Compilation cofiguration */
 #include "rage_config.h"
-
-typedef struct {
-	char* name;
-	int width;
-	int height;
-	bool fullscreen;
-	bool vsync;
-	bool maximized_window;
-	bool use_rageBitmap;
-	bool use_rageMusic;
-	bool use_rageSfx;
-	bool use_rageIniFile;  
-	bool use_rageScreenEvent;
-	bool use_rageKeyEvent;
-	bool use_rageMouseEvent;
-	bool use_rageTimerEvent;
-	bool use_rageJoyEvent;
-	bool use_rageVertexArray;
-	bool use_rageShader;
-	bool use_rageFont;
-	bool use_rageColor;
-	bool use_rageJoystick;
-	bool use_rageEvents;
-	bool use_rageFS;
-	bool use_rageDraw;
-	bool use_rageInput;
-	bool use_rageRubyDL;
-	bool use_rageRubyZlib;
-} RAGEConfig;
 
 /* Include Wrappers */
 #include "Graphics_Wrappers.h"
@@ -75,6 +47,9 @@ typedef struct {
 #include "ParticleEngine_Wrapper.h"
 #include "Logic_Wrappers.h"
 
+/* Include configuration class */
+#include "RAGEConfiguration.h"
+
 namespace RAGE
 {
 	namespace Interpreter
@@ -87,6 +62,7 @@ namespace RAGE
 		public:
 			static int file_exists(VALUE filename);
 			static char* Ruby::get_file_path(VALUE filename);
+			static RAGEConfiguration* get_config(void);
 			Ruby(int argc, char** argv);
 			~Ruby(void);
 		};

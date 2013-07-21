@@ -37,6 +37,8 @@ namespace RAGE
 
 		void LogicWrappers::load_wrappers(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Logic")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 
 			VALUE lg = rb_define_module_under(rage, "Logic");

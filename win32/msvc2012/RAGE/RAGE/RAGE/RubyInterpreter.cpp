@@ -12,7 +12,8 @@ namespace RAGE
 	namespace Interpreter
 	{
 		bool configured = false;
-		RAGEConfig gConfig;
+		std::vector<std::string*> *loaded_files;
+		RAGEConfiguration *gConfig;
 
 		static void load_extension_rb_data()
 		{
@@ -34,52 +35,23 @@ namespace RAGE
 
 		static void set_default_config()
 		{
-			gConfig.name = new char[10];
-			strcpy(gConfig.name, "RAGE Game");
-
-			gConfig.width = 640;
-			gConfig.height = 480;
-			gConfig.fullscreen = false;
-			gConfig.vsync = false;
-			gConfig.maximized_window = false;
-			gConfig.use_rageBitmap = true;
-			gConfig.use_rageSfx = true;
-			gConfig.use_rageIniFile = true;
-			gConfig.use_rageScreenEvent = true;
-			gConfig.use_rageTimerEvent = true;
-			gConfig.use_rageKeyEvent = true;
-			gConfig.use_rageMouseEvent = true;
-			gConfig.use_rageJoyEvent = true;
-			gConfig.use_rageVertexArray = true;
-			gConfig.use_rageShader = true;
-			gConfig.use_rageFont = true;
-			gConfig.use_rageColor = true;
-			gConfig.use_rageJoystick = true;
-			gConfig.use_rageEvents = true;
-			gConfig.use_rageFS = true;
-			gConfig.use_rageDraw = true;
-			gConfig.use_rageInput = true;			
-			gConfig.use_rageRubyDL = true;
-			gConfig.use_rageRubyZlib = true;
+			gConfig = new RAGEConfiguration(NULL);
 		}
 
 		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
 		{
-			int file_status = Ruby::file_exists(filename);
 			ALLEGRO_FILE *afile;
-			if ((file_status < 0) || ((file_status == 2) && !RAGE::Filesystem::FSWrappers::is_physfs_on()))
+			char *absolute_file = Ruby::get_file_path(filename);
+			if (absolute_file == NULL)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
 			}
 
-			if (file_status == 1)
-			{
-				VALUE fname = rb_find_file(filename);
-				afile = al_fopen(StringValueCStr(fname), "rb");
-			}
-			else
-				afile = al_fopen(StringValueCStr(filename), "rb");
+			for (int i = 0; i < loaded_files->size(); i++)
+				if (loaded_files->at(i)->compare(absolute_file) == 0) return Qtrue;
+
+			afile = al_fopen(absolute_file, "rb");
 
 			char *data = new char[al_fsize(afile) + 1];
 			char buffer[2048];
@@ -100,69 +72,27 @@ namespace RAGE
 
 			al_fclose(afile);
 
+			loaded_files->push_back(new std::string(absolute_file));
+
 			rb_eval_string_protect(data, &error);
 			
 			#ifdef DEVELOPMENT_VERSION
-			if (strcmp(StringValueCStr(filename), "boot.rb") == 0)
+			if (strcmp(StringValueCStr(filename), RAGE_BOOT_SCRIPT) == 0)
 				PRINT(RAGE_DEV_END_TEXT);
 			#endif
-
-			return Qnil;
+			return Qtrue;
 		}
 
 		static VALUE rb_rage_configure(VALUE self, VALUE config)
 		{
 			if (!configured)
 			{
-				VALUE item = rb_hash_aref(config, rb_str_new2("name"));
-			
-				if (TYPE(item) != T_NIL)
-				{
-					gConfig.name = new char[RSTRING_LENINT(item)];
-					strcpy(gConfig.name, StringValueCStr(item));
-				}
-				else
-				{
-					gConfig.name = new char[10];
-					strcpy(gConfig.name, "RAGE Game");
-				}
-
-				CONFIG_SET(config, item, "width", gConfig.width, FIX2UINT(item), 640);
-				CONFIG_SET(config, item, "height", gConfig.height, FIX2UINT(item), 480);
-				CONFIG_SET(config, item, "fullscreen", gConfig.fullscreen, (TYPE(item) == T_TRUE), false);
-				CONFIG_SET(config, item, "vsync", gConfig.vsync, (TYPE(item) == T_TRUE), false);
-				CONFIG_SET(config, item, "maximizedWindow", gConfig.maximized_window, (TYPE(item) == T_TRUE), false);
-				CONFIG_SET(config, item, "RAGE::Bitmap", gConfig.use_rageBitmap, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Music", gConfig.use_rageMusic, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Sfx", gConfig.use_rageSfx, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::IniFile", gConfig.use_rageIniFile, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::ScreenEvent", gConfig.use_rageScreenEvent, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::KeyEvent", gConfig.use_rageKeyEvent, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::MouseEvent", gConfig.use_rageMouseEvent, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::TimerEvent", gConfig.use_rageTimerEvent, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "RAGE::JoyEvent", gConfig.use_rageJoyEvent, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "RAGE::VertexArray", gConfig.use_rageVertexArray, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "RAGE::Shader", gConfig.use_rageShader, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Font", gConfig.use_rageFont, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Color", gConfig.use_rageColor, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Joystick", gConfig.use_rageJoystick, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "RAGE::Events", gConfig.use_rageEvents, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::FS", gConfig.use_rageFS, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Draw", gConfig.use_rageDraw, (TYPE(item) == T_TRUE), true);
-			    CONFIG_SET(config, item, "RAGE::Input", gConfig.use_rageInput, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "DL", gConfig.use_rageRubyDL, (TYPE(item) == T_TRUE), true);
-				CONFIG_SET(config, item, "Zlib", gConfig.use_rageRubyZlib, (TYPE(item) == T_TRUE), true);
+				gConfig = new RAGEConfiguration(config);
 
 				configured = true;
 
-				item = rb_hash_aref(config, rb_str_new2("version"));
-
-				if (TYPE(item) != T_NIL)
-				{
-					if (strcmp(StringValueCStr(item), RAGE_ENGINE_VERSION) != 0)
-						PRINT(RAGE_RB_INCOMPATIBLE);
-				}
-
+				if (!gConfig->is_current_version()) PRINT(RAGE_RB_INCOMPATIBLE);
+				
 				return Qtrue;
 			}
 
@@ -187,7 +117,7 @@ namespace RAGE
 			rb_load_protect(full_file, 1, &error);
 
 			#ifdef DEVELOPMENT_VERSION
-			if (strcmp(filename, "boot.rb") == 0) 
+			if (strcmp(filename, RAGE_BOOT_SCRIPT) == 0) 
 				PRINT(RAGE_DEV_END_TEXT);
 			#endif
 		}
@@ -205,8 +135,6 @@ namespace RAGE
 
 			/* Check Ruby search path */
 			VALUE fname = rb_find_file(filename);
-
-			rb_gc_register_address(&fname);
 
 			if (TYPE(fname) != T_STRING)
 				return -1;
@@ -228,16 +156,21 @@ namespace RAGE
 			/* Check Ruby search path */
 			VALUE fname = rb_find_file(filename);
 
-			rb_gc_register_address(&fname);
-
 			if (TYPE(fname) != T_STRING)
 				return NULL;
 			else
 				return StringValueCStr(fname);
 		}
 
+		RAGEConfiguration* Ruby::get_config(void)
+		{
+			return gConfig;
+		}
+
 		Ruby::Ruby(int argc, char** argv)
 		{
+			loaded_files = new std::vector<std::string*>();
+
 			/* Initialize Ruby Interpreter */
 			ruby_sysinit(&argc, &argv);
 			{
@@ -295,9 +228,9 @@ namespace RAGE
 					set_default_config();
 
 				/* Initialize ruby extensions */				
-				if (gConfig.use_rageRubyZlib) Init_zlib();
+				if (gConfig->is_on("Zlib")) Init_zlib();
 
-				if (gConfig.use_rageRubyDL)
+				if (gConfig->is_on("DL"))
 				{
 					Init_dl();
 					load_extension_rb_data();
@@ -306,41 +239,39 @@ namespace RAGE
 				/* Load RAGE modules */
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
 
-				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::load_wrappers();
-				if (gConfig.use_rageInput) RAGE::Input::InputWrappers::load_wrappers();
+				RAGE::Events::EventsWrapper::load_wrappers();
+				RAGE::Input::InputWrappers::load_wrappers();
 				RAGE::Audio::AudioWrappers::load_wrappers();
 				RAGE::Graphics::DrawWrappers::load_wrappers();
-				if (gConfig.use_rageFS) RAGE::Filesystem::FSWrappers::load_wrappers();
+				RAGE::Filesystem::FSWrappers::load_wrappers();
 
 				/* Load RAGE classes */
-				if (gConfig.use_rageBitmap) RAGE::Graphics::BitmapWrapper::load_ruby_class();
-				if (gConfig.use_rageFont) RAGE::Graphics::FontWrapper::load_ruby_class();
-				if (gConfig.use_rageColor) RAGE::Graphics::ColorWrapper::load_ruby_class();
-				if (gConfig.use_rageShader) RAGE::Graphics::ShaderWrapper::load_ruby_class();
-				if (gConfig.use_rageMusic) RAGE::Audio::MusicWrapper::load_ruby_class();
-				if (gConfig.use_rageSfx) RAGE::Audio::SfxWrapper::load_ruby_class();
+				RAGE::Graphics::BitmapWrapper::load_ruby_class();
+				RAGE::Graphics::FontWrapper::load_ruby_class();
+				RAGE::Graphics::ColorWrapper::load_ruby_class();
+				RAGE::Graphics::ShaderWrapper::load_ruby_class();
+				RAGE::Audio::MusicWrapper::load_ruby_class();
+				RAGE::Audio::SfxWrapper::load_ruby_class();
 
-				if (gConfig.use_rageTimerEvent || gConfig.use_rageJoyEvent || gConfig.use_rageKeyEvent || 
-					gConfig.use_rageMouseEvent || gConfig.use_rageScreenEvent) 
-						RAGE::Events::EventWrapper::load_ruby_class();
+				RAGE::Events::EventWrapper::load_ruby_class();
 
-				if (gConfig.use_rageTimerEvent) RAGE::Events::TimerEventWrapper::load_ruby_class();
-				if (gConfig.use_rageJoyEvent) RAGE::Events::JoyEventWrapper::load_ruby_class();
-				if (gConfig.use_rageKeyEvent) RAGE::Events::KeyboardEventWrapper::load_ruby_class();
-				if (gConfig.use_rageMouseEvent) RAGE::Events::MouseEventWrapper::load_ruby_class();
-				if (gConfig.use_rageScreenEvent) RAGE::Events::ScreenEventWrapper::load_ruby_class();
-				if (gConfig.use_rageIniFile) RAGE::Filesystem::IniFileWrapper::load_ruby_class();
-				if (gConfig.use_rageJoystick) RAGE::Input::JoystickWrapper::load_ruby_class();
-				if (gConfig.use_rageVertexArray) RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
+				RAGE::Events::TimerEventWrapper::load_ruby_class();
+				RAGE::Events::JoyEventWrapper::load_ruby_class();
+				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
+				RAGE::Events::MouseEventWrapper::load_ruby_class();
+				RAGE::Events::ScreenEventWrapper::load_ruby_class();
+				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
+				RAGE::Input::JoystickWrapper::load_ruby_class();
+				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
 
 				/* Perform additional tasks */
-				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::init_queue();
-				if (gConfig.use_rageMusic || gConfig.use_rageSfx) RAGE::Audio::AudioWrappers::init_audio();
+				RAGE::Events::EventsWrapper::init_queue();
+				RAGE::Audio::AudioWrappers::init_audio();
 
-				RAGE::Graphics::GraphicsWrappers::initialize_graphics(gConfig);
+				RAGE::Graphics::GraphicsWrappers::initialize_graphics();
 				
-				if (gConfig.use_rageDraw) RAGE::Graphics::DrawWrappers::init();
-				if (gConfig.use_rageEvents) RAGE::Events::EventsWrapper::run_event_thread();
+				RAGE::Graphics::DrawWrappers::init();
+				RAGE::Events::EventsWrapper::run_event_thread();
 
 				/* Particle Engine Loading - Needs fixing */
 				RAGE::Graphics::ParticleEngineWrapper::load_ruby_class();
@@ -371,6 +302,13 @@ namespace RAGE
 
 		Ruby::~Ruby(void)
 		{
+			for (int i = 0; i < loaded_files->size(); i++)
+				delete loaded_files->at(i);
+
+			delete loaded_files;
+
+			delete gConfig;
+
 			/* Close Ruby subsystem */
 			ruby_finalize();
 		}

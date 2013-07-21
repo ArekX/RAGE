@@ -1,11 +1,7 @@
-# Helper method for creating a window close event
-def register_close_button(&b)
-    RAGE::Events.processScreen true
-    screen_event = RAGE::ScreenEvent.new
-    screen_event.register(RAGE::Events::SCREEN_CLOSE, Proc.new(&b))
-    RAGE::Events.register(screen_event)
-end
-
+RAGE.require "rage_utils.rb"
+RAGE.require "rage_utils.rb"
+RAGE.require "rage_utils.rb"
+RAGE.require "rage_utils.rb"
 begin
     $close = false
     register_close_button {
@@ -20,6 +16,8 @@ begin
     pe = RAGE::ParticleEngine.new bit, 300, 25, true, 500, 500
     pe.setParticleRegion 0, 0, 32, 32, true
 
+    pe.particleBurst = true
+    pe.particleBurstAmount = 300
     # Add animation data for particle
 
     # .addToFrameLayer(layerIndex, frameDuration [, addScaleX, addScaleY, addTrajectoryAngle, addRotationAngle,
@@ -65,7 +63,6 @@ begin
 
       # Set emitter position from mouse coordinates
       pe.setEmitterPosition RAGE::Input.getMouseX, RAGE::Input.getMouseY
-      
       # If mouse is pressed down emit particles
       if RAGE::Input.mouseDown?(RAGE::Input::MOUSE_BTN1)
         pe.emit # Resets particles
@@ -89,8 +86,8 @@ begin
         pe.draw
       end
 
-      pe.maxParticles = pe.maxParticles + 10 if RAGE::Input.keyDown?(RAGE::Input::KEY_UP)
-      pe.maxParticles = pe.maxParticles - 10 if RAGE::Input.keyDown?(RAGE::Input::KEY_DOWN)
+      pe.particleBurstAmount = pe.particleBurstAmount + 10 if RAGE::Input.keyDown?(RAGE::Input::KEY_UP)
+      pe.particleBurstAmount = pe.particleBurstAmount - 10 if RAGE::Input.keyDown?(RAGE::Input::KEY_DOWN)
 
       if RAGE::Input.keyDown?(RAGE::Input::KEY_P)
         pe_region_index += 1

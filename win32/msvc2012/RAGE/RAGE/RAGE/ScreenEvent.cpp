@@ -11,10 +11,6 @@ namespace RAGE
 			screen_focus_observer = rb_ary_new();
 			screen_lost_observer = rb_ary_new();
 			screen_resize_observer = rb_ary_new();
-			rb_gc_register_address(&screen_close_observer);
-			rb_gc_register_address(&screen_focus_observer);
-			rb_gc_register_address(&screen_lost_observer);
-			rb_gc_register_address(&screen_resize_observer);
 			
 		}
 

@@ -12,19 +12,7 @@ namespace RAGE
 			mouse_enter_observer = rb_ary_new();
 			mouse_leave_observer = rb_ary_new();
 			mouse_move_observer = rb_ary_new();
-
-			rb_gc_register_address(&mouse_up_observer);
-			rb_gc_register_address(&mouse_down_observer);
-			rb_gc_register_address(&mouse_enter_observer);
-			rb_gc_register_address(&mouse_leave_observer);
-			rb_gc_register_address(&mouse_move_observer);
-
 			mouse_args = new VALUE[4];
-
-			rb_gc_register_address(&mouse_args[0]);
-			rb_gc_register_address(&mouse_args[1]);
-			rb_gc_register_address(&mouse_args[2]);
-			rb_gc_register_address(&mouse_args[3]);
 
 			disposed = false;
 		}
@@ -189,7 +177,6 @@ namespace RAGE
 			rb_gc_mark(mouse_move_observer);
 			rb_gc_mark(mouse_enter_observer);
 			rb_gc_mark(mouse_leave_observer);
-
 			rb_gc_mark(mouse_args[0]);
 			rb_gc_mark(mouse_args[1]);
 			rb_gc_mark(mouse_args[2]);
@@ -216,6 +203,8 @@ namespace RAGE
 			rb_gc_force_recycle(mouse_args[1]);
 			rb_gc_force_recycle(mouse_args[2]);
 			rb_gc_force_recycle(mouse_args[3]);
+
+			delete[] mouse_args;
 
 			disposed = true;
 		}

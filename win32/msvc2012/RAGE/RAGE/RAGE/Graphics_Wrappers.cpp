@@ -4,7 +4,7 @@ namespace RAGE
 {
 	namespace Graphics
 	{
-		RAGEConfig start_config;
+		RAGEConfiguration *start_config;
 		ALLEGRO_DISPLAY *display;
 		ALLEGRO_MOUSE_CURSOR *mouse_bitmap_cursor = NULL;
 		Shader *active_shader = NULL;
@@ -486,29 +486,32 @@ namespace RAGE
 			process_screen_events = process_screen;
 		}
 
-		void GraphicsWrappers::initialize_graphics(RAGEConfig cfg)
+		void GraphicsWrappers::initialize_graphics(void)
 		{
-			start_config = cfg;
+			start_config = Interpreter::Ruby::get_config();
 
 			al_set_new_display_flags(ALLEGRO_OPENGL);
 
-			if (cfg.vsync)
+			if (start_config->vsync_on())
 				al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
 			else
 				al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_REQUIRE);
 
-			if (cfg.fullscreen && !cfg.maximized_window)
+			if (start_config->frameless_on())
+				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FRAMELESS);
+
+			if (start_config->fullscreen_on() && !start_config->maximized_on())
 				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN);
 			
-			if (cfg.maximized_window)
+			if (start_config->maximized_on())
 				al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_FULLSCREEN_WINDOW);
-
+			
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 
-			strcpy(window_title, cfg.name);
-			display = al_create_display(cfg.width, cfg.height);
+			start_config->set_game_name(window_title);
+			display = al_create_display(start_config->get_screen_width(), start_config->get_screen_height());
 			al_get_window_position(display, &window_x, &window_y);
-			al_set_window_title(display, cfg.name);
+			al_set_window_title(display, window_title);
 			al_set_target_backbuffer(display);
 			al_flip_display();
 		}
@@ -518,7 +521,7 @@ namespace RAGE
 			int width = al_get_display_width(display);
 			int height = al_get_display_height(display);
 
-			if (start_config.use_rageEvents)
+			if (start_config->is_on("RAGE::Events"))
 			al_unregister_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 			
 			al_destroy_display(display);
@@ -529,7 +532,7 @@ namespace RAGE
 			al_set_target_backbuffer(display);
 			al_flip_display();
 
-			if (start_config.use_rageEvents && process_screen_events)
+			if (start_config->is_on("RAGE::Events") && process_screen_events)
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
 		}
 

@@ -125,6 +125,8 @@ namespace RAGE
 
 		void JoyEventWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::JoyEvent")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_JoyEventClass = rb_define_class_under(rage, "JoyEvent", EventWrapper::get_ruby_class());
 

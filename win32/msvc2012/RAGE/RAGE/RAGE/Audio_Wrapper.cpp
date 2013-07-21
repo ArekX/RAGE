@@ -10,6 +10,12 @@ namespace RAGE
 		
 		void AudioWrappers::init_audio(void)
 		{
+			if (
+			   (!Interpreter::Ruby::get_config()->is_on("RAGE::Music")) &&
+			   (!Interpreter::Ruby::get_config()->is_on("RAGE::Sfx"))
+			   )
+			   return;
+
 			voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16, ALLEGRO_CHANNEL_CONF_2);
 			mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
 			

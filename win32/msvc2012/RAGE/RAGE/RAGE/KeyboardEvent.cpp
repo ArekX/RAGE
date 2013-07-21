@@ -12,10 +12,6 @@ namespace RAGE
 			key_up_observer = rb_ary_new();
 			key_down_observer = rb_ary_new();
 			key_char_observer = rb_ary_new();
-			rb_gc_register_address(&key_up_observer);
-			rb_gc_register_address(&key_down_observer);
-			rb_gc_register_address(&key_char_observer);
-			rb_gc_register_address(&key);
 		}
 
 		void KeyboardEvent::register_proc(int type, VALUE proc)

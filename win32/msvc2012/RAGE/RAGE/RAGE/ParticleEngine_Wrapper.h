@@ -82,8 +82,6 @@ namespace RAGE
 			static VALUE rb_get_particle_center_y(VALUE self);
 			static VALUE rb_set_particle_center_y_add(VALUE self, VALUE center_y_add); 
 			static VALUE rb_get_particle_center_y_add(VALUE self);
-			static VALUE rb_set_particle_tr_angle_change(VALUE self, VALUE tr_angle_change); 
-			static VALUE rb_get_particle_tr_angle_change(VALUE self);
 			static VALUE rb_set_particle_delay(VALUE self, VALUE delay); 
 			static VALUE rb_get_particle_delay(VALUE self);
 			static VALUE rb_set_particle_delay_add(VALUE self, VALUE delay_add); 

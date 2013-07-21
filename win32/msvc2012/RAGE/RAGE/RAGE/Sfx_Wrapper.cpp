@@ -185,6 +185,8 @@ namespace RAGE
 
 		void SfxWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Sfx")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_SfxClass = rb_define_class_under(rage, "Sfx", rb_cObject);
 			

@@ -308,6 +308,7 @@
     <ClCompile Include="Logic_Wrappers.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
+    <ClCompile Include="RAGEConfiguration.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
     <ClCompile Include="IniFile.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="Logic_Wrappers.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
+    <ClInclude Include="RAGEConfiguration.h" />
     <ClInclude Include="rage_config.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="rage_errors.h" />

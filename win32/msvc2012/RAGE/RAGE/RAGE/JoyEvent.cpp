@@ -11,13 +11,6 @@ namespace RAGE
 			joy_down_observer = rb_ary_new();
 			joy_axis_observer = rb_ary_new();
 			joy_reconf_observer = rb_ary_new();
-			rb_gc_register_address(&joy_up_observer);
-			rb_gc_register_address(&joy_down_observer);
-			rb_gc_register_address(&joy_axis_observer);
-			rb_gc_register_address(&joy_reconf_observer);
-			rb_gc_register_address(&vals[0]);
-			rb_gc_register_address(&vals[1]);
-			rb_gc_register_address(&vals[2]);
 		}
 
 		void JoyEvent::register_proc(int type, VALUE proc)

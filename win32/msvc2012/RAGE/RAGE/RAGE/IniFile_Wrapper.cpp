@@ -86,6 +86,8 @@ namespace RAGE
 
 		void IniFileWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::IniFile")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rageIniFileClass = rb_define_class_under(rage, "IniFile", rb_cObject);
 

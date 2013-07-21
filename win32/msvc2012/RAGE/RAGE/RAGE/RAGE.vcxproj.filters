@@ -265,6 +265,9 @@
     <ClCompile Include="Logic_Wrappers.cpp">
       <Filter>modules\logic</Filter>
     </ClCompile>
+    <ClCompile Include="RAGEConfiguration.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -403,6 +406,9 @@
       <Filter>modules\logic\headers</Filter>
     </ClInclude>
     <ClInclude Include="rage_config.h">
+      <Filter>app\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RAGEConfiguration.h">
       <Filter>app\headers</Filter>
     </ClInclude>
   </ItemGroup>

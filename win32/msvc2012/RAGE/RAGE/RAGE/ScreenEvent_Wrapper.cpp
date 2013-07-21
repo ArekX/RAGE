@@ -82,6 +82,8 @@ namespace RAGE
 
 		void ScreenEventWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::ScreenEvent")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_ScreenEventClass = rb_define_class_under(rage, "ScreenEvent", EventWrapper::get_ruby_class());
 

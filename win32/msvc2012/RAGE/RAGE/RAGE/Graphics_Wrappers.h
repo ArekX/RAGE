@@ -51,7 +51,7 @@ namespace RAGE
 			static VALUE rb_is_bitmap_drawing_held(VALUE self);
 		public:
 			static void load_wrappers(void);
-			static void initialize_graphics(RAGEConfig cfg);
+			static void initialize_graphics(void);
 			static void recreate_display(void);
 			static void set_screen_processing(ALLEGRO_EVENT_QUEUE *queue, bool process_screen);
 			static ALLEGRO_DISPLAY* get_display(void);

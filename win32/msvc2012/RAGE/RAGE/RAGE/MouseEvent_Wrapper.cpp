@@ -82,6 +82,8 @@ namespace RAGE
 
 		void MouseEventWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::MouseEvent")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_MouseEventClass = rb_define_class_under(rage, "MouseEvent", EventWrapper::get_ruby_class());
 

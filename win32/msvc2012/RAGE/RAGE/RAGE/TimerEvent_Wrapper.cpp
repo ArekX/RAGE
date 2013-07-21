@@ -155,6 +155,8 @@ namespace RAGE
 
 		void TimerEventWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::TimerEvent")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_TimerClass = rb_define_class_under(rage, "TimerEvent", EventWrapper::get_ruby_class());
 

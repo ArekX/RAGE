@@ -687,26 +687,6 @@ namespace RAGE
 		}
 
 
-		VALUE ParticleEngineWrapper::rb_set_particle_tr_angle_change(VALUE self, VALUE tr_angle_change)
-		{
-			ParticleEngine *pe;
-			Data_Get_Struct(self, ParticleEngine, pe);
-
-			pe->set_particle_tr_angle_change(NUM2DBL(tr_angle_change));
-		
-			return Qnil;
-		}
-
- 
-		VALUE ParticleEngineWrapper::rb_get_particle_tr_angle_change(VALUE self)
-		{
-			ParticleEngine *pe;
-			Data_Get_Struct(self, ParticleEngine, pe);
-
-			return DBL2NUM(pe->get_particle_tr_angle_change());
-		}
-
-
 		VALUE ParticleEngineWrapper::rb_set_particle_delay(VALUE self, VALUE delay)
 		{
 			ParticleEngine *pe;
@@ -1054,6 +1034,8 @@ namespace RAGE
 
 		void ParticleEngineWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::ParticleEngine")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
 
@@ -1140,8 +1122,6 @@ namespace RAGE
 			rb_define_method(rb_rageParticleEngineClass, "particleCenterY", RFUNC(ParticleEngineWrapper::rb_get_particle_center_y), 0);
 			rb_define_method(rb_rageParticleEngineClass, "particleCenterYAdd=", RFUNC(ParticleEngineWrapper::rb_set_particle_center_y_add), 1); 
 			rb_define_method(rb_rageParticleEngineClass, "particleCenterYAdd", RFUNC(ParticleEngineWrapper::rb_get_particle_center_y_add), 0);
-			rb_define_method(rb_rageParticleEngineClass, "particleTrAngleChange=", RFUNC(ParticleEngineWrapper::rb_set_particle_tr_angle_change), 1); 
-			rb_define_method(rb_rageParticleEngineClass, "particleTrAngleChange", RFUNC(ParticleEngineWrapper::rb_get_particle_tr_angle_change), 0);
 			rb_define_method(rb_rageParticleEngineClass, "particleDelay=", RFUNC(ParticleEngineWrapper::rb_set_particle_delay), 1); 
 			rb_define_method(rb_rageParticleEngineClass, "particleDelay", RFUNC(ParticleEngineWrapper::rb_get_particle_delay), 0);
 			rb_define_method(rb_rageParticleEngineClass, "particleDelayAdd=", RFUNC(ParticleEngineWrapper::rb_set_particle_delay_add), 1); 

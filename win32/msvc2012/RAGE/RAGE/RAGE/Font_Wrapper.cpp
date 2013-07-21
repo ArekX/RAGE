@@ -129,6 +129,8 @@ namespace RAGE
 
 		void FontWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Font")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 
 			rb_define_const(rage, "TTF_NO_KERNING", FIX2INT(ALLEGRO_TTF_NO_KERNING));

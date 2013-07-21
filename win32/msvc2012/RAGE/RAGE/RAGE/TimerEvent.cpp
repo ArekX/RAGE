@@ -8,7 +8,6 @@ namespace RAGE
 		TimerEvent::TimerEvent()
 		{
 			timer_observer = rb_ary_new();
-			rb_gc_register_address(&timer_observer);
 			disposed = false;
 			timer_queue = NULL;
 			timer = NULL;

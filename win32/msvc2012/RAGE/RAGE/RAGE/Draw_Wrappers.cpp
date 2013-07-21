@@ -242,6 +242,8 @@ namespace RAGE
 
 		void DrawWrappers::load_wrappers(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Draw")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			VALUE draw = rb_define_module_under(rage, "Draw");
 			

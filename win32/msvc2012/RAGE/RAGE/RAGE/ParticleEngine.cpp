@@ -40,8 +40,6 @@ namespace RAGE
 			em_circle_inner_radius = 50;
 			em_circle_outer_radius = 100;
 
-			em_particle_tr_angle_change = 0;
-
 			em_type = RAGE_POINT_EMITTER;
 
 			em_particle_tint_r = 1;
@@ -66,9 +64,9 @@ namespace RAGE
 			particles = NULL;
 			particles_len = 0;
 
-			em_blend_op = -1;
-			em_blend_src = 0;
-			em_blend_dst = 0;
+			em_blend_op = ALLEGRO_ADD;
+			em_blend_src = ALLEGRO_ONE;
+			em_blend_dst = ALLEGRO_INVERSE_ALPHA;
 			em_blend_aop = -1;
 			em_blend_asrc = 0;
 			em_blend_adst = 0;
@@ -82,12 +80,6 @@ namespace RAGE
 
 			em_particle_region_instant_update = true;
 		}
-
-
-		/*
-		 * TODO:
-		 - RAGE_CHECK_DISPOSED for all (that means making every setting a function... ugh)
-		 */
 
 		void ParticleEngine::initialize(ALLEGRO_BITMAP* particle, int64_t emitter_count, float emitter_duration, bool emitter_loop, float emitter_x, float emitter_y)
 		{
@@ -153,7 +145,6 @@ namespace RAGE
 					particles[i].x = particles[i].x + particles[i].velocity * sin(particles[i].tr_angle) * dt;
 					particles[i].y = particles[i].y + particles[i].velocity * cos(particles[i].tr_angle) * dt;
 
-					particles[i].tr_angle += em_particle_tr_angle_change * dt;
 					particles[i].time += particles[i].frame_velocity * dt;
 
 					if (frame_layers_len > 0)
@@ -560,7 +551,6 @@ namespace RAGE
 			return false;
 		}
 
-		/* Get/Set Ops */
 		float ParticleEngine::get_emitter_angle(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
@@ -644,6 +634,8 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			if (type > RAGE_RING_EMITTER) return;
+
 			em_type = type;
 		}
 
@@ -664,8 +656,8 @@ namespace RAGE
 		{
 			if (frame_layers_len > 0)
 			{
-				al_free(pa->current_frame_indices);
-				al_free(pa->current_frames);
+					al_free(pa->current_frame_indices);
+					al_free(pa->current_frames);
 			}
 		}
 
@@ -674,24 +666,18 @@ namespace RAGE
 			RAGE_CHECK_DISPOSED(disposed);
 			
 			if (new_num < 0) return;
-
+			
 			for (int64_t i = 0; i < particles_len; i++)
 				destroy_particle(&particles[i]);
 
 			al_free(particles);
 
-			particles_len = 0;
-
-			particles = NULL;
-
-			if (new_num == 0) return;
-
-			particles_len = new_num;
-
 			particles = (Particle*)al_malloc(sizeof(Particle) * new_num);
 
 			for (int64_t i = 0; i < new_num; i++)
 				initialize_particle(&particles[i]);
+
+			particles_len = new_num;
 		}
 
 		void ParticleEngine::set_emitter_line_width(float new_width)
@@ -793,6 +779,22 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			if (burst_amount < 0) burst_amount = 0;
+			if (burst_amount > particles_len) burst_amount = particles_len;
+
+			if ((burst_amount > 0) && (em_burst_amount > 0))
+			{
+				if (burst_amount > em_burst_amount)
+					for (int64_t i = em_burst_amount - 1; i < burst_amount; i++)
+					{
+						set_particle(&particles[i]);
+						particles[i].time = particles[i].life * random_float();
+						particles[i].delay = particles[i].time * random_float();
+					}
+			}
+			else
+				emit();
+
 			em_burst_amount = burst_amount;
 		}
 
@@ -834,6 +836,8 @@ namespace RAGE
 		void ParticleEngine::set_particle_life(float life)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
+
+			if (life < 0) life = 0;
 			
 			em_particle_life = life;
 
@@ -870,7 +874,8 @@ namespace RAGE
 		void ParticleEngine::set_particle_appear_velocity(float appear_velocity)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
-			
+			if (appear_velocity < 0) appear_velocity = 0;
+
 			em_particle_appear_velocity = appear_velocity;
 
 		}
@@ -879,6 +884,8 @@ namespace RAGE
 		float ParticleEngine::get_particle_appear_velocity(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			
 
 			return em_particle_appear_velocity;
 
@@ -1136,25 +1143,6 @@ namespace RAGE
 
 		}
 
-
-		void ParticleEngine::set_particle_tr_angle_change(float tr_angle_change)
-		{
-			RAGE_CHECK_DISPOSED(disposed);
-			
-			em_particle_tr_angle_change = tr_angle_change;
-
-		}
-
- 
-		float ParticleEngine::get_particle_tr_angle_change(void)
-		{
-			RAGE_CHECK_DISPOSED_RET(disposed, 0);
-
-			return em_particle_tr_angle_change;
-
-		}
-
-
 		void ParticleEngine::set_particle_delay(float delay)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -1194,7 +1182,7 @@ namespace RAGE
 		void ParticleEngine::set_particle_tint_r(float tint_r)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
-			
+
 			em_particle_tint_r = tint_r;
 
 		}

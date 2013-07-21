@@ -185,6 +185,8 @@ namespace RAGE
 
 		void MusicWrapper::load_ruby_class(void)
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Music")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 			rb_rage_MusicClass = rb_define_class_under(rage, "Music", rb_cObject);
 			

@@ -163,6 +163,8 @@ namespace RAGE
 
 		void JoystickWrapper::load_ruby_class(void) 
 		{
+			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Joystick")) return;
+
 			VALUE rage = rb_define_module("RAGE");
 
 			rb_rage_JoystickClass = rb_define_class_under(rage, "Joystick", rb_cObject);
