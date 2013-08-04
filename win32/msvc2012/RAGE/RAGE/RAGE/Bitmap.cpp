@@ -9,7 +9,7 @@ namespace RAGE
 		Bitmap::Bitmap(void)
 		{
 			bitmap = NULL;
-			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
+			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | GraphicsWrappers::get_bitmap_flags());
 			disposed = false;
 
 			scale_x = 1;

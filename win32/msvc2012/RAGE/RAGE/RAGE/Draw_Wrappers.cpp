@@ -1,4 +1,3 @@
-#define ALLEGRO_STATICLINK
 #include "Draw_Wrappers.h"
 
 namespace RAGE
@@ -10,6 +9,7 @@ namespace RAGE
 		ALLEGRO_USTR *str;
 		ALLEGRO_FONT *fnt, *def_font;
 		Font *set_fnt = NULL;
+		VALUE rb_font = Qnil;
 
 		VALUE DrawWrappers::rb_draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
 		{
@@ -105,6 +105,14 @@ namespace RAGE
 			Font *dfnt;
 			Data_Get_Struct(sfont, Font, dfnt);
 
+			if (dfnt->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS);
+				return Qnil;
+			}
+
+			rb_font = sfont;
+
 			if (dfnt->font != NULL)
 			{
 				if (set_fnt != NULL)
@@ -129,6 +137,12 @@ namespace RAGE
 
 			Color *cl;
 			Data_Get_Struct(scolor, Color, cl);
+
+			if (cl->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS);
+				return Qnil;
+			}
 
 			color = cl->color;
 
@@ -227,14 +241,85 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE DrawWrappers::rb_get_font(VALUE self)
+		{
+			return rb_font;
+		}
+
+		VALUE DrawWrappers::rb_get_bg_color(VALUE self)
+		{
+			VALUE rt_color = ColorWrapper::new_ruby_class_instance();
+			Color *cl;
+			Data_Get_Struct(rt_color, Color, cl);
+
+			cl->color = bg_color;
+
+			return rt_color;
+		}
+
+		VALUE DrawWrappers::rb_get_set_color(VALUE self)
+		{
+			VALUE rt_color = ColorWrapper::new_ruby_class_instance();
+			Color *cl;
+			Data_Get_Struct(rt_color, Color, cl);
+
+			cl->color = color;
+
+			return rt_color;
+		}
+
+		VALUE DrawWrappers::rb_draw_triangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3, VALUE thickness)
+		{
+			al_draw_triangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(x3), NUM2DBL(y3), color, NUM2DBL(thickness));
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_triangle_filled(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3)
+		{
+			al_draw_filled_triangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(x3), NUM2DBL(y3), color);
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_pieslice(VALUE self, VALUE cx, VALUE cy, VALUE r, VALUE s_theta, VALUE d_theta, VALUE thickness)
+		{
+			al_draw_pieslice(NUM2DBL(cx), NUM2DBL(cy), NUM2DBL(r), NUM2DBL(s_theta), NUM2DBL(d_theta), color, NUM2DBL(thickness));   
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_pieslice_filled(VALUE self, VALUE cx, VALUE cy, VALUE r, VALUE s_theta, VALUE d_theta)
+		{
+			al_draw_filled_pieslice(NUM2DBL(cx), NUM2DBL(cy), NUM2DBL(r), NUM2DBL(s_theta), NUM2DBL(d_theta), color);   
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_arc_elliptical(VALUE self, VALUE cx, VALUE cy, VALUE rx, VALUE ry, VALUE s_theta, VALUE d_theta, VALUE thickness)
+		{
+			al_draw_elliptical_arc(NUM2DBL(cx), NUM2DBL(cy), NUM2DBL(rx), NUM2DBL(ry), NUM2DBL(s_theta), NUM2DBL(d_theta), color, NUM2DBL(thickness));
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_spline(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3, VALUE x4, VALUE y4, VALUE thickness)
+		{
+			float points[] = { NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(x3), NUM2DBL(y3), NUM2DBL(x4), NUM2DBL(y4) };
+			
+			al_draw_spline(points, color, NUM2DBL(thickness));
+			
+			return Qnil;
+		}
+
 		void DrawWrappers::reset_font(void)
 		{
 			fnt = def_font;
+			rb_font = Qnil;
 		}
 
 		void DrawWrappers::init(void)
 		{
-			
 			str = al_ustr_new("");
 			def_font = al_create_builtin_font();
 			fnt = def_font;
@@ -243,6 +328,8 @@ namespace RAGE
 		void DrawWrappers::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Draw")) return;
+
+			rb_gc_register_address(&rb_font);
 
 			VALUE rage = rb_define_module("RAGE");
 			VALUE draw = rb_define_module_under(rage, "Draw");
@@ -256,6 +343,12 @@ namespace RAGE
 			rb_define_const(draw, "PRIM_TRIANGLE_FAN", INT2FIX(ALLEGRO_PRIM_TRIANGLE_FAN));
 
 			rb_define_module_function(draw, "line", RFUNC(DrawWrappers::rb_draw_line), 5);
+			rb_define_module_function(draw, "arc", RFUNC(DrawWrappers::rb_draw_arc_elliptical), 7);
+			rb_define_module_function(draw, "spline", RFUNC(DrawWrappers::rb_draw_spline), 9);
+			rb_define_module_function(draw, "triangle", RFUNC(DrawWrappers::rb_draw_triangle), 7);
+			rb_define_module_function(draw, "filledTriangle", RFUNC(DrawWrappers::rb_draw_triangle), 6);
+			rb_define_module_function(draw, "pieslice", RFUNC(DrawWrappers::rb_draw_pieslice), 6);
+			rb_define_module_function(draw, "filledPieslice", RFUNC(DrawWrappers::rb_draw_pieslice_filled), 5);
 			rb_define_module_function(draw, "clear", RFUNC(DrawWrappers::rb_clear), 0);
 			rb_define_module_function(draw, "setClippingRect", RFUNC(DrawWrappers::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(draw, "resetClippingRect", RFUNC(DrawWrappers::rb_graphics_reset_clipping_rect), 0);
@@ -276,6 +369,9 @@ namespace RAGE
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::rb_set_color), 4);
 			rb_define_module_function(draw, "setColorO", RFUNC(DrawWrappers::rb_set_color_o), 1);
 			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::rb_set_font), 1);
+			rb_define_module_function(draw, "getFont", RFUNC(DrawWrappers::rb_get_font), 0);
+			rb_define_module_function(draw, "getColor", RFUNC(DrawWrappers::rb_get_set_color), 0);
+			rb_define_module_function(draw, "getBackgroundColor", RFUNC(DrawWrappers::rb_get_set_color), 0);
 			rb_define_module_function(draw, "text", RFUNC(DrawWrappers::rb_draw_text), 3);
 			rb_define_module_function(draw, "justifyText", RFUNC(DrawWrappers::rb_draw_justified_text), 5);
 		}

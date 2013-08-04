@@ -21,6 +21,7 @@ namespace RAGE
 			 static VALUE rb_process_mouse(VALUE self, VALUE val);
 			 static VALUE rb_process_joystick(VALUE self, VALUE val);
 			 static VALUE rb_process_display(VALUE self, VALUE val);
+			 static VALUE rb_get_events_array(VALUE self);
 			 static void* rb_update_event_objects(void* ptr);
 		public:
 			static ALLEGRO_EVENT_QUEUE* get_queue(void);

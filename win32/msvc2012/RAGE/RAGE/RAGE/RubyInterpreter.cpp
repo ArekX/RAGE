@@ -25,7 +25,7 @@ namespace RAGE
 
 		static VALUE rb_rage_about(VALUE self)
 		{
-			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION);
+			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s \[%s\]\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION, RAGE_ENGINE_CODE_NAME);
 			PRINT("[Ruby Interpreter]\n");
 			ruby_show_version();
 			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
@@ -261,6 +261,7 @@ namespace RAGE
 				RAGE::Events::MouseEventWrapper::load_ruby_class();
 				RAGE::Events::ScreenEventWrapper::load_ruby_class();
 				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
+				RAGE::Filesystem::FileWrapper::load_ruby_class();
 				RAGE::Input::JoystickWrapper::load_ruby_class();
 				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
 

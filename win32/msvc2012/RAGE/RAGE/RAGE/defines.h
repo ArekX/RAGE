@@ -6,12 +6,12 @@
 
 #ifdef WIN32
 #define DS '\\'
-#define PRINTF(format, data) printf_s(format, data)
 #define PRINT(data) printf_s(data)
 #else
-#define PRINTF(format, data) printf(format, data)
-#define PRINT(data) printf(data)
+#define PRINT(data) printf_s(data)
 #endif
+
+#define PRINTF PRINT
 
 /* Errors */
 #include "rage_errors.h"
@@ -27,7 +27,8 @@
 #define CONFIG_SET(sconfig, sitem, scstr, sset, sval, sdefval) item = rb_hash_aref(sconfig, rb_str_new2(scstr)); if (TYPE(sitem) != T_NIL) { sset = sval; } else { sset = sdefval; }
 #define RDEF_KEY(name, keycode) rb_define_const(input, name, INT2FIX(keycode));
 
-#define RAGE_ENGINE_VERSION "0.0.3-beta"
+#define RAGE_ENGINE_VERSION "1.0.0"
+#define RAGE_ENGINE_CODE_NAME "Flame"
 
 #define RAGE_DEBUG_GLOBAL_VAR "$DEBUG"
 #define RAGE_ARGS_VAR "$RARGV"

@@ -26,7 +26,7 @@ namespace RAGE
 			
 			pe->initialize(bmp->bitmap, NUM2LL(count), NUM2DBL(duration), (TYPE(loop) == T_TRUE), NUM2DBL(x), NUM2DBL(y));
 
-			return self;
+			return Qnil;
 		}
 		
 		VALUE ParticleEngineWrapper::rb_emit(VALUE self)

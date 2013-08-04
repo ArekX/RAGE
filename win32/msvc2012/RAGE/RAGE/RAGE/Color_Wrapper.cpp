@@ -16,6 +16,31 @@ namespace RAGE
 			delete value;
 		}
 
+		VALUE ColorWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc >= 1)
+			{
+				Color *clr;
+
+				Data_Get_Struct(self, Color, clr);
+
+				switch(argc)
+				{
+					case 1:
+						clr->from_name(StringValueCStr(args[0]));
+						break;
+					case 3:
+						clr->from_rgba(FIX2INT(args[0]), FIX2INT(args[1]), FIX2INT(args[2]), 1);
+						break;
+					case 4:
+						clr->from_rgba(FIX2INT(args[0]), FIX2INT(args[1]), FIX2INT(args[2]), FIX2INT(args[3]));
+						break;
+				}
+			}
+
+			return Qnil;
+		}
+
 		VALUE ColorWrapper::rb_from_rgba(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
 			Color *clr;
@@ -200,6 +225,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rageColorClass, ColorWrapper::rb_alloc);
 
+			rb_define_method(rb_rageColorClass, "initialize", RFUNC(ColorWrapper::rb_initialize), -1);
 			rb_define_method(rb_rageColorClass, "setRGBA", RFUNC(ColorWrapper::rb_from_rgba), 4);
 			rb_define_method(rb_rageColorClass, "setCMYK", RFUNC(ColorWrapper::rb_from_cmyk), 4);
 			rb_define_method(rb_rageColorClass, "setHSL", RFUNC(ColorWrapper::rb_from_hsl), 3);

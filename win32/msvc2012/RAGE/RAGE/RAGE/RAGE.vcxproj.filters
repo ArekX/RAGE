@@ -268,6 +268,12 @@
     <ClCompile Include="RAGEConfiguration.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Wrapper.cpp">
+      <Filter>modules\filesystem\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -410,6 +416,12 @@
     </ClInclude>
     <ClInclude Include="RAGEConfiguration.h">
       <Filter>app\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>modules\filesystem\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="File_Wrapper.h">
+      <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

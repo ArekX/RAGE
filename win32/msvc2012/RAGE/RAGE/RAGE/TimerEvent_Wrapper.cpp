@@ -186,9 +186,10 @@ namespace RAGE
 			return rb_rage_TimerClass;
 		}
 
-		VALUE TimerEventWrapper::new_ruby_class_instance(void)
+		VALUE TimerEventWrapper::new_ruby_class_instance(int seconds)
 		{
-			return rb_class_new_instance(0, NULL, rb_rage_TimerClass);
+			VALUE secs = INT2FIX(seconds);
+			return rb_class_new_instance(1, &secs, rb_rage_TimerClass);
 		}
 	}
 }

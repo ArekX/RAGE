@@ -92,6 +92,9 @@ namespace RAGE
 			glAttachObjectARB(glsl_shader_program, src->glslhandle);
 			glLinkProgramARB(glsl_shader_program);
 			check_errors(GL_LINK_STATUS);
+			glDetachObjectARB(glsl_shader_program, src->glslhandle);
+
+			check_errors(GL_LINK_STATUS);
 		}
 
 		void Shader::bind_bitmap(char *texture_name, ALLEGRO_BITMAP *bitmap)

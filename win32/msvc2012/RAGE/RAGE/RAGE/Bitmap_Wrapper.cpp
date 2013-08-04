@@ -19,6 +19,27 @@ namespace RAGE
 				rb_raise(rb_eTypeError, RAGE_BITMAP_ERROR);
 			
 			
+			return Qnil;
+		}
+
+		VALUE BitmapWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc >= 1)
+			{
+				Bitmap *bmp;
+				Data_Get_Struct(self, Bitmap, bmp);
+
+				switch(argc)
+				{
+					case 1:
+						bmp->initialize(StringValueCStr(args[0]));
+						break;
+					case 2:
+						bmp->initialize(FIX2UINT(args[0]), FIX2UINT(args[1]));
+						break;
+				}
+			}
+
 			return self;
 		}
 
@@ -465,12 +486,13 @@ namespace RAGE
 			VALUE rage = rb_define_module("RAGE");
 			VALUE g = rb_define_module_under(rage, "Graphics");
 
-			rb_define_const(g, "FLIP_H", INT2FIX(1));
-			rb_define_const(g, "FLIP_V", INT2FIX(2));
-			rb_define_const(g, "FLIP_VH", INT2FIX(3));
+			rb_define_const(g, "FLIP_H", INT2FIX(ALLEGRO_FLIP_HORIZONTAL));
+			rb_define_const(g, "FLIP_V", INT2FIX(ALLEGRO_FLIP_VERTICAL));
+
 			rb_rageBitmapClass = rb_define_class_under(rage, "Bitmap", rb_cObject);
 			rb_define_alloc_func(rb_rageBitmapClass, BitmapWrapper::rb_bitmap_alloc);
 
+			rb_define_method(rb_rageBitmapClass, "initialize", RFUNC(BitmapWrapper::rb_initialize), -1);
 			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
 			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), 1);
 			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);

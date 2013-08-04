@@ -107,6 +107,7 @@ namespace RAGE
 			return (al_reconfigure_joysticks() == true) ? Qtrue : Qfalse;
 		}
 
+
 		void InputWrappers::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Input")) return;

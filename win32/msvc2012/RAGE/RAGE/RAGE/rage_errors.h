@@ -6,6 +6,7 @@
 #define RAGE_BITMAP_ERROR "Width and Height values need to be Fixnum."
 #define RAGE_BITMAP_PARENT_ERROR "Parent argument must be an instance of RAGE::Bitmap."
 #define RAGE_BITMAP_NOT_CREATED_ERROR "Cannot set nil bitmap as drawing target. Create or load a bitmap first."
+#define RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS "Cannot set disposed objects."
 #define RAGE_COLOR_ERROR "Argument must be an instance of RAGE::Color class."
 #define RAGE_FONT_ERROR "Argument must be an instance of RAGE::Font class."
 #define RAGE_ERROR_DISPOSED_OBJECT "Cannot call methods or properties of disposed objects."
@@ -34,3 +35,5 @@
 #define RAGE_RB_EVENT_REG_ERR "You can register only instances of RAGE::Event objects."
 #define RAGE_ERROR_CANNOT_DISPOSE_DRAWING_TARGET "Cannot dispose current drawing target bitmap."
 #define RAGE_ERROR_CANNOT_DISPOSE_LOCKED_BITMAP "Cannot dispose locked bitmap. Unlock this bitmap first."
+#define RAGE_ERROR_FS_CANNOT_LOAD "File '%s' not found or cannot be loaded."
+#define RAGE_ERROR_FS_FILE_NOT_LOADED "No file loaded or created."

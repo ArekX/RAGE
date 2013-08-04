@@ -11,6 +11,12 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
+			static VALUE rb_draw_triangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3, VALUE thickness);
+			static VALUE rb_draw_triangle_filled(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3);
+			static VALUE rb_draw_pieslice(VALUE self, VALUE cx, VALUE cy, VALUE r, VALUE s_theta, VALUE d_theta, VALUE thickness);
+			static VALUE rb_draw_pieslice_filled(VALUE self, VALUE cx, VALUE cy, VALUE r, VALUE s_theta, VALUE d_theta);
+			static VALUE rb_draw_arc_elliptical(VALUE self, VALUE cx, VALUE cy, VALUE rx, VALUE ry, VALUE s_theta, VALUE d_theta, VALUE thickness);
+			static VALUE rb_draw_spline(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3, VALUE x4, VALUE y4, VALUE thickness);
 			static VALUE rb_draw_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness);
 			static VALUE rb_draw_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2);
 			static VALUE rb_draw_rounded_rect(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry, VALUE thickness);
@@ -28,6 +34,9 @@ namespace RAGE
 			static VALUE rb_draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type);
 			static VALUE rb_set_color_o(VALUE self, VALUE scolor);
 			static VALUE rb_set_font(VALUE self, VALUE sfont);
+			static VALUE rb_get_font(VALUE self);
+			static VALUE rb_get_bg_color(VALUE self);
+			static VALUE rb_get_set_color(VALUE self);
 			static VALUE rb_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_set_background_color_o(VALUE self, VALUE color);
 			static VALUE rb_clear(VALUE self);

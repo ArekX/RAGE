@@ -195,9 +195,10 @@ namespace RAGE
 			return rb_rage_JoystickClass;
 		}
 
-		VALUE JoystickWrapper::new_ruby_class_instance(void)
+		VALUE JoystickWrapper::new_ruby_class_instance(int joy_num)
 		{
-			return rb_class_new_instance(1, FIX2UINT(0), rb_rage_JoystickClass);
+			VALUE jnum = FIX2UINT(joy_num);
+			return rb_class_new_instance(1, &jnum, rb_rage_JoystickClass);
 		}
 	}
 }

@@ -16,6 +16,27 @@ namespace RAGE
 			delete value;
 		}
 		
+		VALUE FontWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc >= 2)
+			{
+				Font *fnt;
+				Data_Get_Struct(self, Font, fnt);
+
+				switch(argc)
+				{
+					case 2:
+						fnt->load_ttf_font(StringValueCStr(args[0]), FIX2INT(args[1]));
+						break;
+					case 3:
+						fnt->load_ttf_font_stretch(StringValueCStr(args[0]), FIX2INT(args[1]), FIX2INT(args[2]));
+						break;
+				}
+			}
+
+			return Qnil;
+		}
+
 		VALUE FontWrapper::rb_load(VALUE self, VALUE font_name, VALUE size)
 		{
 			char *absolute_file = Interpreter::Ruby::get_file_path(font_name);
@@ -141,6 +162,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rageFontClass, FontWrapper::rb_alloc);
 
+			rb_define_method(rb_rageFontClass, "initialize", RFUNC(FontWrapper::rb_initialize), -1);
 			rb_define_method(rb_rageFontClass, "load", RFUNC(FontWrapper::rb_load), 2);
 			rb_define_method(rb_rageFontClass, "loadStretch", RFUNC(FontWrapper::rb_load_stretch), 3);
 			rb_define_method(rb_rageFontClass, "loadFlags", RFUNC(FontWrapper::rb_load_flags), 3);

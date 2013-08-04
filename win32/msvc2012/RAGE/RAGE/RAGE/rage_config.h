@@ -1,3 +1,4 @@
+#define OLD_CONFIG 1
 
 #ifndef OLD_CONFIG
 	#if XP_TARGETING

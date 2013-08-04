@@ -1,12 +1,28 @@
 RAGE.require "rage_utils.rb"
-RAGE.require "rage_utils.rb"
-RAGE.require "rage_utils.rb"
-RAGE.require "rage_utils.rb"
+
+class Tlest < Object
+  def initialize
+    @setko = 0
+  end
+
+  def mee
+    @setko = @setko + 200
+  end
+
+  def pr
+    puts @setko.to_s
+  end
+end
+
 begin
     $close = false
     register_close_button {
       $close = true
     }
+
+    RAGE.about()
+
+    gt = RAGE::Graphics.getTarget().clone()
 
     # Load particle
     bit = RAGE::Bitmap.new
@@ -44,7 +60,13 @@ begin
     RAGE::Draw.setBackgroundColor 0, 0, 0.2, 1
     type = 0
     pe_region_index = -1
+
+    s = Tlest.new
+    s.mee
+    s.mee
+
 	  loop do
+      #RAGE::Graphics.setTarget(gt)
       RAGE::Draw.clear
       
       
@@ -125,6 +147,7 @@ begin
       RAGE::Draw.text 20, 570, "Number of particles: " + pe.maxParticles.to_s
 
       break if RAGE::Input.keyDown?(RAGE::Input::KEY_ESCAPE) || $close
+      RAGE::Graphics.setTarget(nil)
 
       RAGE::Graphics.update
 	  end

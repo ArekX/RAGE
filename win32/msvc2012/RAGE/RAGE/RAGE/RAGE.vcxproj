@@ -298,6 +298,8 @@
     <ClCompile Include="Draw_Wrappers.cpp" />
     <ClCompile Include="Events_Wrapper.cpp" />
     <ClCompile Include="Event_Wrapper.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="File_Wrapper.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Font_Wrapper.cpp" />
     <ClCompile Include="FS_Wrappers.cpp" />
@@ -344,6 +346,8 @@
     <ClInclude Include="Color_Wrapper.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Draw_Wrappers.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="File_Wrapper.h" />
     <ClInclude Include="JoyEvent.h" />
     <ClInclude Include="JoyEvent_Wrapper.h" />
     <ClInclude Include="Joystick.h" />

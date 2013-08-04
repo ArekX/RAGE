@@ -225,6 +225,11 @@ namespace RAGE
 			return Qfalse;
 		}
 
+		VALUE EventsWrapper::rb_get_events_array(VALUE self)
+		{
+			return rb_obj_clone(event_objects);
+		}
+
 		void EventsWrapper::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
@@ -234,6 +239,7 @@ namespace RAGE
 
 			rb_define_module_function(events, "register", RFUNC(EventsWrapper::rb_register_event), 1);
 			rb_define_module_function(events, "unregister", RFUNC(EventsWrapper::rb_unregister_event), 1);
+			rb_define_module_function(events, "getEventsArray", RFUNC(EventsWrapper::rb_get_events_array), 0);
 			rb_define_module_function(events, "isRegistered?", RFUNC(EventsWrapper::rb_event_is_registered), 1);
 			rb_define_module_function(events, "processKeyboard", RFUNC(EventsWrapper::rb_process_keyboard), 1);
 			rb_define_module_function(events, "processMouse", RFUNC(EventsWrapper::rb_process_mouse), 1);

@@ -12,6 +12,7 @@ namespace RAGE
 		private:
 			static VALUE rb_alloc(VALUE self);
 			static void rb_destroy(void *value);
+			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_from_rgba(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_from_cmyk(VALUE self, VALUE c, VALUE m, VALUE y, VALUE k);
 			static VALUE rb_from_hsl(VALUE self, VALUE h, VALUE s, VALUE l);

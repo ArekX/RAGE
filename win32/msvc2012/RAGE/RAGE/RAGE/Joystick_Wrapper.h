@@ -31,7 +31,7 @@ namespace RAGE
 		public:
 			static void load_ruby_class(void);
 			static VALUE get_ruby_class(void);
-			static VALUE new_ruby_class_instance(void);
+			static VALUE new_ruby_class_instance(int joy_num);
 		};
 
 	}

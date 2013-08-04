@@ -30,6 +30,8 @@ namespace RAGE
 			static VALUE rb_get_screen_h(VALUE self);
 
 			static VALUE rb_set_icon(VALUE self, VALUE icon_bitmap);
+			static VALUE rb_get_icon(VALUE self);
+
 			static VALUE rb_inhibit_screen_saver(VALUE self, VALUE val);
 
 			static VALUE rb_set_mouse_xy(VALUE self, VALUE x, VALUE y);
@@ -41,6 +43,7 @@ namespace RAGE
 			static VALUE rb_set_grab_mouse(VALUE self, VALUE val);
 
 			static VALUE rb_set_shader(VALUE self, VALUE shader);
+			static VALUE rb_get_shader(VALUE self);
 
 			static VALUE rb_get_glsl_version(VALUE self);
 			static VALUE rb_get_opengl_version(VALUE self);
@@ -49,10 +52,13 @@ namespace RAGE
 			static VALUE rb_get_blending_mode_alpha(VALUE self);
 			static VALUE rb_hold_bitmap_drawing(VALUE self, VALUE val);
 			static VALUE rb_is_bitmap_drawing_held(VALUE self);
+
+			static VALUE rb_set_bitmap_flags(VALUE self, VALUE flags);
 		public:
 			static void load_wrappers(void);
 			static void initialize_graphics(void);
 			static void recreate_display(void);
+			static int get_bitmap_flags(void);
 			static void set_screen_processing(ALLEGRO_EVENT_QUEUE *queue, bool process_screen);
 			static ALLEGRO_DISPLAY* get_display(void);
 		};

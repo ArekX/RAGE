@@ -11,6 +11,7 @@ namespace RAGE
 		class BitmapWrapper
 		{
 		private:
+			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_create(VALUE self, VALUE width, VALUE height);
 			static VALUE rb_create_sub(VALUE self, VALUE parent, VALUE x, VALUE y, VALUE width, VALUE height);
 			static VALUE rb_load_f(VALUE self, VALUE filename);

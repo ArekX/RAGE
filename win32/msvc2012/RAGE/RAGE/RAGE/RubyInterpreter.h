@@ -46,6 +46,7 @@
 #include "VertexArray_Wrapper.h"
 #include "ParticleEngine_Wrapper.h"
 #include "Logic_Wrappers.h"
+#include "File_Wrapper.h"
 
 /* Include configuration class */
 #include "RAGEConfiguration.h"
