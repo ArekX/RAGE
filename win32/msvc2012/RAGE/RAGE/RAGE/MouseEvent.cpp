@@ -209,6 +209,32 @@ namespace RAGE
 			disposed = true;
 		}
 
+		VALUE MouseEvent::get_observer_array(int type)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
+
+			switch(type)
+			{
+				case RAGE_EVENT_MOUSE_UP:
+					return rb_obj_clone(mouse_up_observer);
+
+				case RAGE_EVENT_MOUSE_DOWN:
+					return rb_obj_clone(mouse_down_observer);
+
+				case RAGE_EVENT_MOUSE_MOVE:
+					return rb_obj_clone(mouse_move_observer);
+
+				case RAGE_EVENT_MOUSE_ENTER:
+					return rb_obj_clone(mouse_enter_observer);
+
+				case RAGE_EVENT_MOUSE_LEAVE:
+					return rb_obj_clone(mouse_leave_observer);
+
+				default:
+					return Qnil;
+			}
+		}
+
 		MouseEvent::~MouseEvent(void)
 		{
 			if (!disposed)

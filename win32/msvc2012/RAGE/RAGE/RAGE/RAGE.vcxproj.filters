@@ -98,6 +98,15 @@
     <Filter Include="modules\physics\wrappers">
       <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules\network\headers">
+      <UniqueIdentifier>{ef6a46d5-be68-4565-8257-96cef9a052a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\network\wrappers">
+      <UniqueIdentifier>{3a521115-d227-4e4b-bc99-52e0e9b72a2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\network\wrappers\headers">
+      <UniqueIdentifier>{a209ab40-9378-4fd6-b934-9332c50be254}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -274,6 +283,12 @@
     <ClCompile Include="File_Wrapper.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="TCPSocket.cpp">
+      <Filter>modules\network</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPSocket_Wrapper.cpp">
+      <Filter>modules\network\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -422,6 +437,12 @@
     </ClInclude>
     <ClInclude Include="File_Wrapper.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPSocket.h">
+      <Filter>modules\network\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPSocket_Wrapper.h">
+      <Filter>modules\network\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

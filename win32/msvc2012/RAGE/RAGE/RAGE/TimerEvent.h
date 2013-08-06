@@ -35,6 +35,7 @@ namespace RAGE
 			void register_callback(VALUE proc);
 			void unregister_callback(VALUE proc);
 			void callback(ALLEGRO_EVENT *ev);
+			VALUE get_observer_array(void);
 			~TimerEvent(void);
 		};
 

@@ -21,9 +21,9 @@ namespace RAGE
 			VALUE key_char_observer;
 			VALUE key_up_observer;
 			VALUE key_down_observer;
-		public:
 			bool unichar;
 			bool keycode_names;
+		public:
 			KeyboardEvent(void);
 			void register_proc(int type, VALUE proc);
 			void unregister_proc(int type, VALUE proc);
@@ -33,6 +33,11 @@ namespace RAGE
 			void callback(ALLEGRO_EVENT *ev);
 			void gc_mark(void);
 			void dispose(void);
+			bool get_unichar(void);
+			void set_unichar(bool unichr);
+			bool get_keycode_names(void);
+			void set_keycode_names(bool kcode_names);
+			VALUE get_observer_array(int type);
 			~KeyboardEvent(void);
 		};
 

@@ -25,8 +25,8 @@ namespace RAGE
 			VALUE joy_axis_observer;
 			VALUE joy_reconf_observer;
 			VALUE vals[3];
-		public:
 			ALLEGRO_JOYSTICK *event_set_joy;
+		public:
 			JoyEvent(void);
 			bool is_joystick(ALLEGRO_JOYSTICK *check_joy);
 			void register_proc(int type, VALUE proc);
@@ -39,6 +39,8 @@ namespace RAGE
 			void callback(ALLEGRO_EVENT *ev);
 			void gc_mark(void);
 			void dispose(void);
+			void set_joystick(ALLEGRO_JOYSTICK *joy);
+			VALUE get_observer_array(int type);
 			~JoyEvent(void);
 		};
 

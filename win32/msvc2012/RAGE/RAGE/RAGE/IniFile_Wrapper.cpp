@@ -16,6 +16,14 @@ namespace RAGE
 			return Data_Wrap_Struct(self, 0, IniFileWrapper::rb_destroy, new IniFile());
 		}
 
+		VALUE IniFileWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 1)
+				return rb_load(self, args[0]);
+			
+			return rb_create(self);
+		}
+
 		VALUE IniFileWrapper::rb_create(VALUE self)
 		{
 			IniFile *ini;
@@ -93,6 +101,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rageIniFileClass, IniFileWrapper::rb_alloc);
 
+			rb_define_method(rb_rageIniFileClass, "initialize", RFUNC(IniFileWrapper::rb_initialize), -1);
 			rb_define_method(rb_rageIniFileClass, "create", RFUNC(IniFileWrapper::rb_create), 0);
 			rb_define_method(rb_rageIniFileClass, "load", RFUNC(IniFileWrapper::rb_load), 1);
 			rb_define_method(rb_rageIniFileClass, "save", RFUNC(IniFileWrapper::rb_save), 1);

@@ -13,6 +13,7 @@ namespace RAGE
 			static void rb_destroy(void *value);
 			static VALUE rb_alloc(VALUE self);
 			static VALUE rb_create(VALUE self);
+			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_load(VALUE self, VALUE filename);
 			static VALUE rb_save(VALUE self, VALUE filename);
 			static VALUE rb_get(VALUE self, VALUE section, VALUE key);

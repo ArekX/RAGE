@@ -27,6 +27,7 @@
 #define RAGE_ERROR_NO_EXT_VERTEX_SHADERS "Your OpenGL implementation does not support vertex shaders."
 #define RAGE_JOYSTICK_NOT_FOUND_ERROR "Joystick with index %d is not available."
 #define RAGE_VAR_FUNCTION_TOO_MANY_ARGS "Too many arguments passed."
+#define RAGE_VAR_FUNCTION_INCOMP_ARGS "Too many or too little arguments passed. Minimum %d of maximum %d."
 #define RAGE_ERROR_INDICES_NOT_ARRAY "You must pass an indices must be passed as an array."
 #define RAGE_ERROR_DL_EXT_RB_DATA_FAILED "DL/Win32API extension RB class data failed to parse."
 #define RAGE_ERROR_CANNOT_CREATE_VOICE "RAGE Error: Failed to allocate audio voice. Audio functions will not work.\n"

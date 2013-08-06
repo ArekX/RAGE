@@ -34,6 +34,13 @@ namespace RAGE
 			}
 		}
 
+		void JoyEvent::set_joystick(ALLEGRO_JOYSTICK *joy)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			event_set_joy = joy;
+		}
+
 		bool JoyEvent::is_joystick(ALLEGRO_JOYSTICK *check_joy)
 		{
 			return (check_joy == event_set_joy);
@@ -208,6 +215,29 @@ namespace RAGE
 			rb_gc_force_recycle(vals[2]);
 
 			disposed = true;
+		}
+
+		VALUE JoyEvent::get_observer_array(int type)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
+
+			switch(type)
+			{
+				case RAGE_EVENTS_JOY_UP:
+					return rb_obj_clone(joy_up_observer);
+					
+				case RAGE_EVENTS_JOY_DOWN:
+					return rb_obj_clone(joy_down_observer);
+					
+				case RAGE_EVENTS_JOY_AXIS:
+					return rb_obj_clone(joy_axis_observer);
+					
+				case RAGE_EVENTS_JOY_CONFIG:
+					return rb_obj_clone(joy_reconf_observer);
+
+				default:
+					return Qnil;
+			}
 		}
 
 		JoyEvent::~JoyEvent(void)

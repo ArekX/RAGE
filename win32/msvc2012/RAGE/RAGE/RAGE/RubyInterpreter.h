@@ -47,6 +47,7 @@
 #include "ParticleEngine_Wrapper.h"
 #include "Logic_Wrappers.h"
 #include "File_Wrapper.h"
+#include "TCPSocket_Wrapper.h"
 
 /* Include configuration class */
 #include "RAGEConfiguration.h"

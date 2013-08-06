@@ -21,6 +21,14 @@ namespace RAGE
 			delete value;
 		}
 
+		VALUE ScreenEventWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 2)
+				return rb_register(self, args[0], args[1]);
+
+			return Qnil;
+		}
+
 		VALUE ScreenEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)
 		{
 			ScreenEvent *screen_event;
@@ -80,6 +88,14 @@ namespace RAGE
 			return screen_event->disposed ? Qtrue : Qfalse;
 		}
 
+		VALUE ScreenEventWrapper::rb_get_procs_array(VALUE self, VALUE event_type)
+		{
+			ScreenEvent *screen_event;
+			Data_Get_Struct(self, ScreenEvent, screen_event);
+
+			return screen_event->get_observer_array(FIX2INT(event_type));
+		}
+
 		void ScreenEventWrapper::load_ruby_class(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::ScreenEvent")) return;
@@ -96,11 +112,13 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rage_ScreenEventClass, ScreenEventWrapper::rb_screen_event_alloc);
 
+			rb_define_method(rb_rage_ScreenEventClass, "initialize", RFUNC(ScreenEventWrapper::rb_initialize), -1);
 			rb_define_method(rb_rage_ScreenEventClass, "register", RFUNC(ScreenEventWrapper::rb_register), 2);
 			rb_define_method(rb_rage_ScreenEventClass, "unregister", RFUNC(ScreenEventWrapper::rb_unregister), 2);
 			rb_define_method(rb_rage_ScreenEventClass, "clear", RFUNC(ScreenEventWrapper::rb_clear), 1);
 			rb_define_method(rb_rage_ScreenEventClass, "run", RFUNC(ScreenEventWrapper::rb_run), 1);
 			rb_define_method(rb_rage_ScreenEventClass, "getProcCount", RFUNC(ScreenEventWrapper::rb_get_proc_count), 1);
+			rb_define_method(rb_rage_ScreenEventClass, "getProcsAsArray", RFUNC(ScreenEventWrapper::rb_get_procs_array), 1);
 			rb_define_method(rb_rage_ScreenEventClass, "dispose", RFUNC(ScreenEventWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_ScreenEventClass, "disposed?", RFUNC(ScreenEventWrapper::rb_disposed), 0);
 		}

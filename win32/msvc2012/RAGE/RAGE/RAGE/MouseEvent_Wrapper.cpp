@@ -21,6 +21,14 @@ namespace RAGE
 			delete value;
 		}
 
+		VALUE MouseEventWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 2)
+				return rb_register(self, args[0], args[1]);
+
+			return Qnil;
+		}
+
 		VALUE MouseEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)
 		{
 			MouseEvent *mouse_event;
@@ -80,6 +88,14 @@ namespace RAGE
 			return mouse_event->disposed ? Qtrue : Qfalse;
 		}
 
+		VALUE MouseEventWrapper::rb_get_procs_array(VALUE self, VALUE event_type)
+		{
+			MouseEvent *mouse_event;
+			Data_Get_Struct(self, MouseEvent, mouse_event);
+
+			return mouse_event->get_observer_array(FIX2INT(event_type));
+		}
+
 		void MouseEventWrapper::load_ruby_class(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::MouseEvent")) return;
@@ -97,11 +113,13 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rage_MouseEventClass, MouseEventWrapper::rb_mouse_event_alloc);
 
+			rb_define_method(rb_rage_MouseEventClass, "initialize", RFUNC(MouseEventWrapper::rb_initialize), -1);
 			rb_define_method(rb_rage_MouseEventClass, "register", RFUNC(MouseEventWrapper::rb_register), 2);
 			rb_define_method(rb_rage_MouseEventClass, "unregister", RFUNC(MouseEventWrapper::rb_unregister), 2);
 			rb_define_method(rb_rage_MouseEventClass, "clear", RFUNC(MouseEventWrapper::rb_clear), 1);
 			rb_define_method(rb_rage_MouseEventClass, "run", RFUNC(MouseEventWrapper::rb_run), 5);
 			rb_define_method(rb_rage_MouseEventClass, "getProcCount", RFUNC(MouseEventWrapper::rb_get_proc_count), 1);
+			rb_define_method(rb_rage_MouseEventClass, "getProcsAsArray", RFUNC(MouseEventWrapper::rb_get_procs_array), 1);
 			rb_define_method(rb_rage_MouseEventClass, "dispose", RFUNC(MouseEventWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_MouseEventClass, "disposed?", RFUNC(MouseEventWrapper::rb_disposed), 0);
 		}

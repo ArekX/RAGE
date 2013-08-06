@@ -13,7 +13,7 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_timer_alloc(VALUE self);
-			static VALUE rb_timer_initialize(VALUE self, VALUE seconds);
+			static VALUE rb_timer_initialize(int argc, VALUE *args, VALUE self);
 			static void  rb_timer_gc_mark(void *value);
 			static void  rb_timer_destroy(void *value);
 			static VALUE rb_timer_register_proc(VALUE self, VALUE proc);
@@ -30,6 +30,7 @@ namespace RAGE
 			static VALUE rb_timer_clear(VALUE self);
 			static VALUE rb_timer_dispose(VALUE self);
 			static VALUE rb_timer_disposed(VALUE self);
+			static VALUE rb_timer_get_procs_array(VALUE self);
 		public:
 			static void load_ruby_class(void);
 			static VALUE get_ruby_class(void);

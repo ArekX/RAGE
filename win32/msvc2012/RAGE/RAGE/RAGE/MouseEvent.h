@@ -34,6 +34,7 @@ namespace RAGE
 			void callback(ALLEGRO_EVENT *ev);
 			void gc_mark(void);
 			void dispose(void);
+			VALUE get_observer_array(int type);
 			~MouseEvent(void);
 		};
 	}

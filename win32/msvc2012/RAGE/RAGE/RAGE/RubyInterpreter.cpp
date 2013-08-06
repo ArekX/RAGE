@@ -25,7 +25,7 @@ namespace RAGE
 
 		static VALUE rb_rage_about(VALUE self)
 		{
-			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s \[%s\]\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION, RAGE_ENGINE_CODE_NAME);
+			PRINT("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION);
 			PRINT("[Ruby Interpreter]\n");
 			ruby_show_version();
 			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
@@ -52,6 +52,12 @@ namespace RAGE
 				if (loaded_files->at(i)->compare(absolute_file) == 0) return Qtrue;
 
 			afile = al_fopen(absolute_file, "rb");
+
+			if ((afile == NULL) || al_ferror(afile))
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_FS_CANNOT_LOAD, StringValueCStr(filename));
+				return Qfalse;
+			}
 
 			char *data = new char[al_fsize(afile) + 1];
 			char buffer[2048];
@@ -264,6 +270,7 @@ namespace RAGE
 				RAGE::Filesystem::FileWrapper::load_ruby_class();
 				RAGE::Input::JoystickWrapper::load_ruby_class();
 				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
+				RAGE::Network::TCPSocketWrapper::load_ruby_class();
 
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();

@@ -21,6 +21,14 @@ namespace RAGE
 			delete value;
 		}
 
+		VALUE JoyEventWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 2)
+				return rb_register(self, args[0], args[1]);
+
+			return Qnil;
+		}
+
 		VALUE JoyEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)
 		{
 			JoyEvent *joy_event;
@@ -107,7 +115,7 @@ namespace RAGE
 			Data_Get_Struct(joystick, Input::Joystick, joy);
 			Data_Get_Struct(self, JoyEvent, joy_event);
 
-			joy_event->event_set_joy = joy->joy;
+			joy_event->set_joystick(joy->joy);
 
 			return Qnil;
 		}
@@ -121,6 +129,14 @@ namespace RAGE
 			Data_Get_Struct(self, JoyEvent, joy_event);
 
 			return joy_event->is_joystick(joy->joy) ? Qtrue : Qfalse;
+		}
+
+		VALUE JoyEventWrapper::rb_get_proc_array(VALUE self, VALUE event_type)
+		{
+			JoyEvent *joy_event;
+			Data_Get_Struct(self, JoyEvent, joy_event);
+
+			return joy_event->get_observer_array(FIX2INT(event_type));
 		}
 
 		void JoyEventWrapper::load_ruby_class(void)
@@ -139,6 +155,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rage_JoyEventClass, JoyEventWrapper::rb_alloc);
 
+			rb_define_method(rb_rage_JoyEventClass, "initialize", RFUNC(JoyEventWrapper::rb_initialize), -1);
 			rb_define_method(rb_rage_JoyEventClass, "register", RFUNC(JoyEventWrapper::rb_register), 2);
 			rb_define_method(rb_rage_JoyEventClass, "unregister", RFUNC(JoyEventWrapper::rb_unregister), 2);
 			rb_define_method(rb_rage_JoyEventClass, "clear", RFUNC(JoyEventWrapper::rb_clear), 1);
@@ -146,6 +163,7 @@ namespace RAGE
 			rb_define_method(rb_rage_JoyEventClass, "runAxisProcs", RFUNC(JoyEventWrapper::rb_run_axis), 3);
 			rb_define_method(rb_rage_JoyEventClass, "runReconfiguredProcs", RFUNC(JoyEventWrapper::rb_run_reconfigured), 0);
 			rb_define_method(rb_rage_JoyEventClass, "getProcCount", RFUNC(JoyEventWrapper::rb_get_proc_count), 1);
+			rb_define_method(rb_rage_JoyEventClass, "getProcsAsArray", RFUNC(JoyEventWrapper::rb_get_proc_array), 1);
 			rb_define_method(rb_rage_JoyEventClass, "setJoystick", RFUNC(JoyEventWrapper::rb_set_event_joystick), 1);
 			rb_define_method(rb_rage_JoyEventClass, "isFromJoystick?", RFUNC(JoyEventWrapper::rb_is_event_joystick), 1);
 			rb_define_method(rb_rage_JoyEventClass, "dispose", RFUNC(JoyEventWrapper::rb_dispose), 0);

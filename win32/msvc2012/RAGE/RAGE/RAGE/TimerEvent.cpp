@@ -187,6 +187,13 @@ namespace RAGE
 				run_procs();
 		}
 
+		VALUE TimerEvent::get_observer_array(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
+
+			return rb_obj_clone(timer_observer);
+		}
+
 		TimerEvent::~TimerEvent(void)
 		{
 			if (!disposed)

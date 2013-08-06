@@ -21,6 +21,14 @@ namespace RAGE
 			delete value;
 		}
 
+		VALUE KeyboardEventWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 2)
+				return rb_register(self, args[0], args[1]);
+
+			return Qnil;
+		}
+
 		VALUE KeyboardEventWrapper::rb_register(VALUE self, VALUE event_type, VALUE proc)
 		{
 			KeyboardEvent *key_event;
@@ -84,7 +92,7 @@ namespace RAGE
 		{
 			KeyboardEvent *key_event;
 			Data_Get_Struct(self, KeyboardEvent, key_event);
-			key_event->keycode_names = (TYPE(val) == T_TRUE);
+			key_event->set_keycode_names((TYPE(val) == T_TRUE));
 			return Qnil;
 		}
 
@@ -92,8 +100,34 @@ namespace RAGE
 		{
 			KeyboardEvent *key_event;
 			Data_Get_Struct(self, KeyboardEvent, key_event);
-			key_event->unichar = (TYPE(val) == T_TRUE);
+
+			key_event->set_unichar((TYPE(val) == T_TRUE));
+
 			return Qtrue;
+		}
+
+		VALUE KeyboardEventWrapper::rb_get_use_typed(VALUE self)
+		{
+			KeyboardEvent *key_event;
+			Data_Get_Struct(self, KeyboardEvent, key_event);
+
+			return key_event->get_unichar() ? Qtrue : Qfalse;
+		}
+
+		VALUE KeyboardEventWrapper::rb_get_keycode_names(VALUE self)
+		{
+			KeyboardEvent *key_event;
+			Data_Get_Struct(self, KeyboardEvent, key_event);
+
+			return key_event->get_keycode_names() ? Qtrue : Qfalse;
+		}
+
+		VALUE KeyboardEventWrapper::rb_get_procs_array(VALUE self, VALUE event_type)
+		{
+			KeyboardEvent *key_event;
+			Data_Get_Struct(self, KeyboardEvent, key_event);
+
+			return key_event->get_observer_array(FIX2INT(event_type));
 		}
 
 		void KeyboardEventWrapper::load_ruby_class(void)
@@ -111,13 +145,17 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rage_KeyEventClass, KeyboardEventWrapper::rb_key_event_alloc);
 
+			rb_define_method(rb_rage_KeyEventClass, "initialize", RFUNC(KeyboardEventWrapper::rb_initialize), -1);
 			rb_define_method(rb_rage_KeyEventClass, "register", RFUNC(KeyboardEventWrapper::rb_register), 2);
 			rb_define_method(rb_rage_KeyEventClass, "unregister", RFUNC(KeyboardEventWrapper::rb_unregister), 2);
-			rb_define_method(rb_rage_KeyEventClass, "useTyped", RFUNC(KeyboardEventWrapper::rb_use_typed_char), 1);
-			rb_define_method(rb_rage_KeyEventClass, "useKeyCodeNames", RFUNC(KeyboardEventWrapper::rb_use_keycode_names), 1);
+			rb_define_method(rb_rage_KeyEventClass, "asTypedKeys=", RFUNC(KeyboardEventWrapper::rb_use_typed_char), 1);
+			rb_define_method(rb_rage_KeyEventClass, "asTypedKeys", RFUNC(KeyboardEventWrapper::rb_get_use_typed), 0);
+			rb_define_method(rb_rage_KeyEventClass, "asKeycodeNames=", RFUNC(KeyboardEventWrapper::rb_use_keycode_names), 1);
+			rb_define_method(rb_rage_KeyEventClass, "asKeycodeNames", RFUNC(KeyboardEventWrapper::rb_get_keycode_names), 0);
 			rb_define_method(rb_rage_KeyEventClass, "clear", RFUNC(KeyboardEventWrapper::rb_clear), 1);
 			rb_define_method(rb_rage_KeyEventClass, "run", RFUNC(KeyboardEventWrapper::rb_run), 2);
 			rb_define_method(rb_rage_KeyEventClass, "getProcCount", RFUNC(KeyboardEventWrapper::rb_get_proc_count), 1);
+			rb_define_method(rb_rage_KeyEventClass, "getProcsAsArray", RFUNC(KeyboardEventWrapper::rb_get_procs_array), 1);
 			rb_define_method(rb_rage_KeyEventClass, "dispose", RFUNC(KeyboardEventWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_KeyEventClass, "disposed?", RFUNC(KeyboardEventWrapper::rb_disposed), 0);
 		}

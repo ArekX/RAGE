@@ -162,6 +162,54 @@ namespace RAGE
 			disposed = true;
 		}
 
+		bool KeyboardEvent::get_unichar(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			return unichar;
+		}
+
+		void KeyboardEvent::set_unichar(bool unichr)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			unichar = unichr;
+		}
+
+		bool KeyboardEvent::get_keycode_names(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			return keycode_names;
+		}
+
+		void KeyboardEvent::set_keycode_names(bool kcode_names)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			keycode_names = kcode_names;
+		}
+
+		VALUE KeyboardEvent::get_observer_array(int type)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
+
+			switch(type)
+			{
+				case RAGE_EVENTS_KEY_CHAR:
+					return rb_obj_clone(key_char_observer);
+
+				case RAGE_EVENTS_KEY_UP:
+					return rb_obj_clone(key_up_observer);
+	
+				case RAGE_EVENTS_KEY_DOWN:
+					return rb_obj_clone(key_down_observer);
+
+				default:
+					return Qnil;
+			}
+		}
+
 		KeyboardEvent::~KeyboardEvent(void)
 		{
 			if (!disposed)

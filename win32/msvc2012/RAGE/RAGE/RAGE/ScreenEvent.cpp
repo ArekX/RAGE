@@ -172,7 +172,24 @@ namespace RAGE
 			disposed = true;
 		}
 
+		VALUE ScreenEvent::get_observer_array(int type)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
 
+			switch(type)
+			{
+				case RAGE_EVENT_SCREEN_CLOSE:
+					return rb_obj_clone(screen_close_observer);
+				case RAGE_EVENT_SCREEN_FOCUS:
+					return rb_obj_clone(screen_focus_observer);
+				case RAGE_EVENT_SCREEN_LOST:
+					return rb_obj_clone(screen_lost_observer);
+				case RAGE_EVENT_SCREEN_RESIZE:
+					return rb_obj_clone(screen_resize_observer);
+				default:
+					return Qnil;
+			}
+		}
 
 		ScreenEvent::~ScreenEvent(void)
 		{

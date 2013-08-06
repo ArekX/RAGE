@@ -15,6 +15,7 @@ namespace RAGE
 			static VALUE rb_alloc(VALUE self);
 			static void rb_mark(void *ptr);
 			static void rb_destroy(void *value);
+			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_register(VALUE self, VALUE event_type, VALUE proc);
 			static VALUE rb_unregister(VALUE self, VALUE event_type, VALUE proc);
 			static VALUE rb_clear(VALUE self, VALUE event_type);
@@ -24,6 +25,7 @@ namespace RAGE
 			static VALUE rb_set_event_joystick(VALUE self, VALUE joystick);
 			static VALUE rb_is_event_joystick(VALUE self, VALUE joystick);
 			static VALUE rb_get_proc_count(VALUE self, VALUE event_type);
+			static VALUE rb_get_proc_array(VALUE self, VALUE event_type);
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:

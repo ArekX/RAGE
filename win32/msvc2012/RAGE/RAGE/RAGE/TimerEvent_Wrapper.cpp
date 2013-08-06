@@ -17,12 +17,26 @@ namespace RAGE
 			((TimerEvent*)value)->gc_mark();
 		}
 
-		VALUE TimerEventWrapper::rb_timer_initialize(VALUE self, VALUE seconds)
+		VALUE TimerEventWrapper::rb_timer_initialize(int argc, VALUE *args, VALUE self)
 		{
 			TimerEvent *tm;
 			Data_Get_Struct(self, TimerEvent, tm);
-			tm->initialize(NUM2DBL(seconds));
-			return self;
+
+			if (argc == 1)
+			{
+				tm->initialize(NUM2DBL(args[0]));
+			}
+			else if (argc == 2)
+			{
+				tm->initialize(NUM2DBL(args[0]));
+				rb_timer_register_proc(self, args[1]);
+			}
+			else
+			{
+				rb_raise(rb_eException, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+			}
+			
+			return Qnil;
 		}
 
 		void TimerEventWrapper::rb_timer_destroy(void *value)
@@ -153,6 +167,14 @@ namespace RAGE
 			return tm->disposed ? Qtrue : Qfalse;
 		}
 
+		VALUE TimerEventWrapper::rb_timer_get_procs_array(VALUE self)
+		{
+			TimerEvent *tm;
+			Data_Get_Struct(self, TimerEvent, tm);
+
+			return tm->get_observer_array();
+		}
+
 		void TimerEventWrapper::load_ruby_class(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::TimerEvent")) return;
@@ -164,7 +186,7 @@ namespace RAGE
 
 			rb_define_alloc_func(rb_rage_TimerClass, TimerEventWrapper::rb_timer_alloc);
 			
-			rb_define_method(rb_rage_TimerClass, "initialize", RFUNC(TimerEventWrapper::rb_timer_initialize), 1);
+			rb_define_method(rb_rage_TimerClass, "initialize", RFUNC(TimerEventWrapper::rb_timer_initialize), -1);
 			rb_define_method(rb_rage_TimerClass, "register", RFUNC(TimerEventWrapper::rb_timer_register_proc), 1);
 			rb_define_method(rb_rage_TimerClass, "unregister", RFUNC(TimerEventWrapper::rb_timer_unregister_proc), 1);
 			rb_define_method(rb_rage_TimerClass, "start", RFUNC(TimerEventWrapper::rb_timer_start), 0);
@@ -172,6 +194,7 @@ namespace RAGE
 			rb_define_method(rb_rage_TimerClass, "started?", RFUNC(TimerEventWrapper::rb_timer_get_started), 0);
 			rb_define_method(rb_rage_TimerClass, "count", RFUNC(TimerEventWrapper::rb_timer_get_count), 0);
 			rb_define_method(rb_rage_TimerClass, "getProcCount", RFUNC(TimerEventWrapper::rb_timer_get_proc_count), 0);
+			rb_define_method(rb_rage_TimerClass, "getProcsAsArray", RFUNC(TimerEventWrapper::rb_timer_get_procs_array), 0);
 			rb_define_method(rb_rage_TimerClass, "count=", RFUNC(TimerEventWrapper::rb_timer_set_count), 1);
 			rb_define_method(rb_rage_TimerClass, "speed", RFUNC(TimerEventWrapper::rb_timer_get_speed), 0);
 			rb_define_method(rb_rage_TimerClass, "speed=", RFUNC(TimerEventWrapper::rb_timer_set_speed), 1);
