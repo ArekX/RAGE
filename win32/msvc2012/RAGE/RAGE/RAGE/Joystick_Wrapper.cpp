@@ -21,7 +21,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			joy->initialize(FIX2UINT(joystick_num));
+			joy->initialize(FIX2INT(joystick_num));
 
 			return Qnil;
 		}
@@ -42,9 +42,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			joy->is_button_repeat(FIX2UINT(button_num));
-
-			return Qnil;
+			return joy->is_button_repeat(FIX2INT(button_num)) ? Qtrue : Qfalse;
 		}
 		
 		VALUE JoystickWrapper::rb_button_down(VALUE self, VALUE button_num) 
@@ -52,9 +50,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			joy->is_button_down(FIX2UINT(button_num));
-
-			return Qnil;
+			return joy->is_button_down(FIX2INT(button_num)) ? Qtrue : Qfalse;
 		}
 
 		VALUE JoystickWrapper::rb_button_up(VALUE self, VALUE button_num) 
@@ -62,9 +58,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			joy->is_button_up(FIX2UINT(button_num));
-
-			return Qnil;
+			return joy->is_button_up(FIX2INT(button_num)) ? Qtrue : Qfalse;
 		}
 		
 		VALUE JoystickWrapper::rb_get_axis(VALUE self, VALUE stick_num, VALUE axis_num) 
@@ -72,9 +66,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			joy->get_axis(FIX2UINT(stick_num), FIX2UINT(axis_num));
-
-			return Qnil;
+			return DBL2NUM(joy->get_axis(FIX2INT(stick_num), FIX2INT(axis_num)));
 		}
 
 		VALUE JoystickWrapper::rb_get_name(VALUE self) 
@@ -90,7 +82,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			return rb_str_new2(joy->get_button_name(FIX2UINT(button_num)));
+			return rb_str_new2(joy->get_button_name(FIX2INT(button_num)));
 		}
 
 		VALUE JoystickWrapper::rb_get_stick_name(VALUE self, VALUE stick_num)
@@ -98,7 +90,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			return rb_str_new2(joy->get_stick_name(FIX2UINT(stick_num)));
+			return rb_str_new2(joy->get_stick_name(FIX2INT(stick_num)));
 		}
 
 		VALUE JoystickWrapper::rb_get_axis_name(VALUE self, VALUE stick_num, VALUE axis_num)
@@ -106,7 +98,7 @@ namespace RAGE
 			Joystick *joy;
 			Data_Get_Struct(self, Joystick, joy);
 
-			return rb_str_new2(joy->get_axis_name(FIX2UINT(stick_num), FIX2UINT(axis_num)));
+			return rb_str_new2(joy->get_axis_name(FIX2INT(stick_num), FIX2UINT(axis_num)));
 		}
 
 		VALUE JoystickWrapper::rb_get_max_buttons(VALUE self)

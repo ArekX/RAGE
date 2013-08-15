@@ -154,9 +154,9 @@ namespace RAGE
 
 			VALUE rage = rb_define_module("RAGE");
 
-			rb_define_const(rage, "TTF_NO_KERNING", FIX2INT(ALLEGRO_TTF_NO_KERNING));
-			rb_define_const(rage, "TTF_MONOCHROME", FIX2INT(ALLEGRO_TTF_MONOCHROME));
-			rb_define_const(rage, "TTF_NO_AUTOHINT", FIX2INT(ALLEGRO_TTF_NO_AUTOHINT));
+			rb_define_const(rage, "TTF_NO_KERNING", INT2FIX(ALLEGRO_TTF_NO_KERNING));
+			rb_define_const(rage, "TTF_MONOCHROME", INT2FIX(ALLEGRO_TTF_MONOCHROME));
+			rb_define_const(rage, "TTF_NO_AUTOHINT", INT2FIX(ALLEGRO_TTF_NO_AUTOHINT));
 
 			rb_rageFontClass = rb_define_class_under(rage, "Font", rb_cObject);
 

@@ -6,9 +6,10 @@ namespace RAGE
 	{
 		is_default = false;
 
-		if (conf_hash == 0) 
+		if (conf_hash == Qnil) 
 		{
 			is_default = true;
+			hash = NULL;
 			return;
 		}
 		else

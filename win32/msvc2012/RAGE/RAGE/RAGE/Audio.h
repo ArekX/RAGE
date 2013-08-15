@@ -6,7 +6,7 @@ namespace RAGE
 {
 	namespace Audio
 	{
-		extern class Audio
+        class Audio
 		{
 		protected:
 			ALLEGRO_MIXER *mixer;

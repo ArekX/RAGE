@@ -14,7 +14,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_physfs.h>
-#include <allegro5/platform/almsvc.h>
 #include <physfs.h>
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>

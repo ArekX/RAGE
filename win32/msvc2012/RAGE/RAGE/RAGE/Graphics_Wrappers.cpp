@@ -331,6 +331,8 @@ namespace RAGE
 
 			Shader *sh;
 
+			Data_Get_Struct(shader, Shader, sh);
+
 			if (sh->disposed)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS);
@@ -338,8 +340,6 @@ namespace RAGE
 			}
 
 			rb_shader = shader;
-
-			Data_Get_Struct(shader, Shader, sh);
 
 			if (sh->code_added)
 			{

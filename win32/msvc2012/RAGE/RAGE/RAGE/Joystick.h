@@ -9,6 +9,10 @@ namespace RAGE
 
 		class Joystick
 		{
+		private:
+			int buttons_num;
+			int sticks_num;
+			int *axes_nums;
 		public:
 			bool disposed;
 			ALLEGRO_JOYSTICK *joy;

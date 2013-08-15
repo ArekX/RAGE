@@ -25,8 +25,8 @@ namespace RAGE
 
 		static VALUE rb_rage_about(VALUE self)
 		{
-			PRINT("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s\nCopyright (c) Panic Aleksandar\n\n", RAGE_ENGINE_VERSION);
-			PRINT("[Ruby Interpreter]\n");
+			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s", RAGE_ENGINE_VERSION);
+			PRINTF(" [%s] \nCopyright (c) Panic Aleksandar[Ruby Interpreter]\n", RAGE_ENGINE_CODE_NAME);
 			ruby_show_version();
 			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
 			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
@@ -35,7 +35,7 @@ namespace RAGE
 
 		static void set_default_config()
 		{
-			gConfig = new RAGEConfiguration(NULL);
+			gConfig = new RAGEConfiguration(Qnil);
 		}
 
 		static VALUE rb_rage_require_wrapper(VALUE self, VALUE filename)
@@ -295,9 +295,9 @@ namespace RAGE
 				else
 				{
 					#ifdef WIN32
-					MessageBox(al_get_win_window_handle(RAGE::Graphics::GraphicsWrappers::get_display()), RAGE_DEV_MESSAGE, L"RAGE Game Engine", MB_OK | MB_ICONINFORMATION);
+					MessageBox(al_get_win_window_handle(RAGE::Graphics::GraphicsWrappers::get_display()), RAGE_DEV_MESSAGE_W, L"RAGE Game Engine", MB_OK | MB_ICONINFORMATION);
 					#else
-					PRINT(RAGE_DEV_MESSAGE);
+					PRINT(RAGE_DEV_MESSAGE_L);
 					#endif
 					PRINT(RAGE_DEV_MESSAGE_EXIT);
 					getc(stdin);

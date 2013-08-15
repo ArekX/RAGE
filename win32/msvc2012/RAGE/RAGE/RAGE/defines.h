@@ -7,11 +7,14 @@
 #ifdef WIN32
 #define DS '\\'
 #define PRINT(data) printf_s(data)
+#define PRINTF(data, arg) printf_s(data, arg)
 #else
-#define PRINT(data) printf_s(data)
+#define PRINT(data) printf(data)
+#define PRINTF(data, arg) printf(data, arg)
+#define DS '/'
 #endif
 
-#define PRINTF PRINT
+
 
 /* Errors */
 #include "rage_errors.h"
@@ -28,13 +31,16 @@
 #define RDEF_KEY(name, keycode) rb_define_const(input, name, INT2FIX(keycode));
 
 #define RAGE_ENGINE_VERSION "1.0.0"
+#define RAGE_DEV_CONSOLE_NAME_W L"RAGE Development Console"
+#define RAGE_DEV_CONSOLE_NAME_L "RAGE Development Console"
 #define RAGE_ENGINE_CODE_NAME "Flame"
 
 #define RAGE_DEBUG_GLOBAL_VAR "$DEBUG"
 #define RAGE_ARGS_VAR "$RARGV"
 
 #define RAGE_DEV_END_TEXT "Your game has ended. Interpreter returned -> %d\n\n", error
-#define RAGE_DEV_MESSAGE L"Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
+#define RAGE_DEV_MESSAGE_W L"Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
+#define RAGE_DEV_MESSAGE_L "Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
 #define RAGE_DEV_MESSAGE_EXIT "\n\nPress any key to close this engine."
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
 
