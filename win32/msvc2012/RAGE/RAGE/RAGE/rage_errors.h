@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #define RAGE_RB_PROC_ERROR "You can only pass instances of Proc object as an argument."
 #define RAGE_RB_INCOMPATIBLE "This game may be incompatible with this version of RAGE.\n\n"
 #define RAGE_RB_FILE_MISSING_ERROR "File '%s' not found."
@@ -27,7 +50,7 @@
 #define RAGE_ERROR_NO_EXT_VERTEX_SHADERS "Your OpenGL implementation does not support vertex shaders."
 #define RAGE_JOYSTICK_NOT_FOUND_ERROR "Joystick with index %d is not available."
 #define RAGE_VAR_FUNCTION_TOO_MANY_ARGS "Too many arguments passed."
-#define RAGE_VAR_FUNCTION_INCOMP_ARGS "Too many or too little arguments passed. Minimum %d of maximum %d."
+#define RAGE_VAR_FUNCTION_INCOMP_ARGS "Too many or too little arguments passed. Minimum %d or maximum %d arguments need to be passed."
 #define RAGE_ERROR_INDICES_NOT_ARRAY "You must pass an indices must be passed as an array."
 #define RAGE_ERROR_DL_EXT_RB_DATA_FAILED "DL/Win32API extension RB class data failed to parse."
 #define RAGE_ERROR_CANNOT_CREATE_VOICE "RAGE Error: Failed to allocate audio voice. Audio functions will not work.\n"
@@ -38,3 +61,6 @@
 #define RAGE_ERROR_CANNOT_DISPOSE_LOCKED_BITMAP "Cannot dispose locked bitmap. Unlock this bitmap first."
 #define RAGE_ERROR_FS_CANNOT_LOAD "File '%s' not found or cannot be loaded."
 #define RAGE_ERROR_FS_FILE_NOT_LOADED "No file loaded or created."
+#define RAGE_ERROR_SHADER_ARG_NOT_ARY "Passed variable must be an array."
+#define RAGE_FATAL_ERROR_SIGSEGV "Fatal error: Segmentation fault.\nPress any key to exit."
+#define RAGE_FATAL_ERROR_SIGSEGV_DEBUG "Fatal error: Segmentation fault!"

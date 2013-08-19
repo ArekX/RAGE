@@ -7,9 +7,9 @@ namespace RAGE
 	{
 		ALLEGRO_EVENT_QUEUE* event_queue;
 
-		VALUE eventsThread;
+		VALUE eventsThread = Qnil;
 		bool  stopThread = false;
-		VALUE event_objects;
+		VALUE event_objects = Qnil;
 
 		void* EventsWrapper::rb_update_event_objects(void* ptr)
 		{
@@ -176,9 +176,13 @@ namespace RAGE
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
 
 			if (event_queue != NULL)
-			{
 				al_destroy_event_queue(event_queue);
-			}
+
+			if (eventsThread != Qnil)
+				rb_thread_kill(eventsThread);
+
+			if (event_objects != Qnil)
+				rb_ary_clear(event_objects);
 		}
 
 		VALUE EventsWrapper::rb_process_keyboard(VALUE self, VALUE val)
