@@ -306,7 +306,7 @@ namespace RAGE
 				RAGE::Input::JoystickWrapper::load_ruby_class();
 				
 				/* Network classes */
-				RAGE::Network::TCPSocketWrapper::load_ruby_class();
+				//RAGE::Network::TCPSocketWrapper::load_ruby_class();
 
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();

@@ -72,7 +72,7 @@ freely, subject to the following restrictions:
 #include "BaseFile_Wrapper.h"
 #include "MemFile_Wrapper.h"
 #include "File_Wrapper.h"
-#include "TCPSocket_Wrapper.h"
+//#include "TCPSocket_Wrapper.h"
 
 /* Include configuration class */
 #include "RAGEConfiguration.h"
