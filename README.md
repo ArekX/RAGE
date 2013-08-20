@@ -7,9 +7,9 @@ You can make all kinds of 2D games using RAGE engine.
 You use Ruby, an Interpreter language to handle all game logic, most of the heavy lifting is done by the engine itself
 so you can concentrate more on making awesome games. Enjoy!
 
-Using Ruby Version: 2.0.0-p247
+Using [Ruby](http://www.ruby-lang.org/en/downloads/) Version: 2.0.0-p247
 
-Using Allegro Version: 5.0.10
+Using [Allegro](http://alleg.sourceforge.net) Version: 5.0.10
 
 Releases
 ====
