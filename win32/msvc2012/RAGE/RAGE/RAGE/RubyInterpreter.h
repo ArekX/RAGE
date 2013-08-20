@@ -37,6 +37,7 @@ freely, subject to the following restrictions:
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_physfs.h>
+#include <allegro5/allegro_memfile.h>
 #include <physfs.h>
 #include <ruby/thread.h>
 #include <exts/dl/dl.h>
@@ -68,6 +69,8 @@ freely, subject to the following restrictions:
 #include "VertexArray_Wrapper.h"
 #include "ParticleEngine_Wrapper.h"
 #include "Logic_Wrappers.h"
+#include "BaseFile_Wrapper.h"
+#include "MemFile_Wrapper.h"
 #include "File_Wrapper.h"
 #include "TCPSocket_Wrapper.h"
 

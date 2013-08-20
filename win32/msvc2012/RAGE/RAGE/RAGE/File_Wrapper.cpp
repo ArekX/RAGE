@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "File_Wrapper.h"
 
 namespace RAGE
@@ -23,7 +46,7 @@ namespace RAGE
 				File *fl;
 				Data_Get_Struct(self, File, fl);
 
-				fl->load(StringValueCStr(args[0]), StringValueCStr(args[1]));
+				fl->open(StringValueCStr(args[0]), StringValueCStr(args[1]));
 			}
 
 			return Qnil;
@@ -34,7 +57,7 @@ namespace RAGE
 			File *fl;
 			Data_Get_Struct(self, File, fl);
 
-			fl->load(StringValueCStr(filename), StringValueCStr(mode));
+			fl->open(StringValueCStr(filename), StringValueCStr(mode));
 			
 			return Qnil;
 		}
@@ -230,12 +253,7 @@ namespace RAGE
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::File")) return;
 
 			VALUE rage = rb_define_module("RAGE");
-			rb_rageFileClass = rb_define_class_under(rage, "File", rb_cObject);
-
-			VALUE fs = rb_define_module_under(rage, "FS");
-			rb_define_const(fs, "SEEK_SET", INT2FIX(ALLEGRO_SEEK_SET));
-			rb_define_const(fs, "SEEK_CUR", INT2FIX(ALLEGRO_SEEK_CUR));
-			rb_define_const(fs, "SEEK_END", INT2FIX(ALLEGRO_SEEK_END));
+			rb_rageFileClass = rb_define_class_under(rage, "File", BaseFileWrapper::get_ruby_class());
 
 			rb_define_alloc_func(rb_rageFileClass, FileWrapper::rb_alloc);
 
@@ -259,6 +277,8 @@ namespace RAGE
 			rb_define_method(rb_rageFileClass, "position=", RFUNC(FileWrapper::rb_set_position), 1);
 			rb_define_method(rb_rageFileClass, "position", RFUNC(FileWrapper::rb_get_position), 0);
 			rb_define_method(rb_rageFileClass, "close", RFUNC(FileWrapper::rb_close), 0);
+			rb_define_method(rb_rageFileClass, "dispose", RFUNC(FileWrapper::rb_dispose), 0);
+			rb_define_method(rb_rageFileClass, "disposed?", RFUNC(FileWrapper::rb_is_disposed), 0);
 
 		}
 

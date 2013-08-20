@@ -24,15 +24,16 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
+#include "BaseFile.h"
 
 namespace RAGE
 {
-	namespace Events
+	namespace Filesystem
 	{
-		class EventWrapper
+		class BaseFileWrapper
 		{
 		private:
-			static VALUE rb_err(VALUE self);
+			static VALUE rb_error_abstract(VALUE self);
 			static bool rb_is_enabled(void);
 		public:
 			static void load_ruby_class(void);

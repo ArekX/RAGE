@@ -31,41 +31,18 @@ namespace RAGE
 		{
 			disposed = false;
 			is_set = false;
+			rage_file = Qnil;
 			font = al_create_builtin_font();
 		}
 
-		void Font::load_ttf_font(char *filename, int size)
+		void Font::load_ttf_font(char *filename, int size, int flags)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (font != NULL) 
 				al_destroy_font(font);
 
-			font = al_load_font(filename, size, 0);
-
-			if (font == NULL)
-			{
-				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
-				return;
-			}
-		}
-
-		void Font::load_ttf_font_stretch(char *filename, int w, int h)
-		{
-			RAGE_CHECK_DISPOSED(disposed);
-
-			if (font != NULL) 
-				al_destroy_font(font);
-
-			font = al_load_ttf_font_stretch(filename, w, h, 0);
-		}
-
-		void Font::load_ttf_font_f(char *filename, int size, int flags)
-		{
-			RAGE_CHECK_DISPOSED(disposed);
-
-			if (font != NULL) 
-				al_destroy_font(font);
+			rage_file = Qnil;
 
 			font = al_load_font(filename, size, flags);
 
@@ -76,18 +53,105 @@ namespace RAGE
 			}
 		}
 
-		void Font::load_ttf_font_stretch_f(char *filename, int w, int h, int flags)
+		void Font::load_ttf_font_stretch(char *filename, int w, int h, int flags)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (font != NULL) 
 				al_destroy_font(font);
 
+			rage_file = Qnil;
+
 			font = al_load_ttf_font_stretch(filename, w, h, flags);
 
 			if (font == NULL)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
+				return;
+			}
+		}
+
+		void Font::load_ttf_font_rage_file(VALUE r_file, char *filename, int size, int flags)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (font != NULL) 
+				al_destroy_font(font);
+
+			Filesystem::BaseFile *fl;
+			Data_Get_Struct(r_file, Filesystem::BaseFile, fl);
+
+			if (fl->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_DISPOSED_RAGE_FILE_READ);
+				return;
+			}
+
+			if (fl->file == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
+				return;
+			}
+
+			rage_file = r_file;
+
+			font = al_load_ttf_font_f(fl->file, filename, size, flags);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BASE_FILE);
+				return;
+			}
+		}
+
+		void Font::gc_mark(void)
+		{
+			if (!disposed && (rage_file != Qnil))
+				rb_gc_mark(rage_file);
+		}
+
+		void Font::load_ttf_font_stretch_rage_file(VALUE r_file, char *filename, int w, int h, int flags)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (font != NULL) 
+				al_destroy_font(font);
+
+			Filesystem::BaseFile *fl;
+			Data_Get_Struct(r_file, Filesystem::BaseFile, fl);
+
+			if (fl->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_DISPOSED_RAGE_FILE_READ);
+				return;
+			}
+
+			if (fl->file == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
+				return;
+			}
+
+			rage_file = r_file;
+
+			font = al_load_ttf_font_stretch_f(fl->file, filename, w, h, flags);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BASE_FILE);
+				return;
+			}
+		}
+
+		void Font::get_font_from_bitmap(ALLEGRO_BITMAP *bmp, int num_ranges, int *ranges)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			font = al_grab_font_from_bitmap(bmp, num_ranges, ranges);
+
+			if (font == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BITMAP);
 				return;
 			}
 		}
@@ -118,6 +182,8 @@ namespace RAGE
 
 			if (font != NULL)
 				al_destroy_font(font);
+
+			rage_file = Qnil;
 
 			disposed = true;
 		}

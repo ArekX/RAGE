@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "Sfx_Wrapper.h"
 
 namespace RAGE
@@ -8,7 +31,7 @@ namespace RAGE
 
 		VALUE SfxWrapper::rb_sfx_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, SfxWrapper::rb_sfx_free, new Sfx(AudioWrappers::get_mixer()));
+			return Data_Wrap_Struct(self, SfxWrapper::rb_mark, SfxWrapper::rb_sfx_free, new Sfx(AudioWrappers::get_mixer()));
 		}
 
 		void SfxWrapper::rb_sfx_free(void* ptr)
@@ -16,22 +39,54 @@ namespace RAGE
 			delete ptr;
 		}
 
-		VALUE SfxWrapper::rb_load(VALUE self, VALUE filename)
+		void SfxWrapper::rb_mark(void *ptr)
 		{
-			char *absolute_file = Interpreter::Ruby::get_file_path(filename);
-			if (absolute_file == NULL)
-			{
-				
-				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
-				return Qfalse;
-			}
-			
+			((Sfx*)ptr)->gc_mark();
+		}
+
+		VALUE SfxWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc > 0)
+				SfxWrapper::rb_load(argc, args, self);
+
+			return Qnil;
+		}
+
+		VALUE SfxWrapper::rb_load(int argc, VALUE *args, VALUE self)
+		{
 			Sfx *aud;
 			Data_Get_Struct(self, Sfx, aud);
 
-			aud->load(absolute_file);
+			if (argc == 0)
+			{
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+				return Qnil;
+			}
 
-			return Qtrue;
+			if (RAGE_IS_SUPERCLASS_OF(args[0], Filesystem::BaseFileWrapper))
+			{	
+				if (argc != 2)
+				{
+					rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+					return Qnil;
+				}
+
+				aud->load_rage_file(args[0], StringValueCStr(args[1]));
+			}
+			else
+			{
+				char *absolute_file = Interpreter::Ruby::get_file_path(args[0]);
+				if (absolute_file == NULL)
+				{
+				
+					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(args[0]));
+					return Qfalse;
+				}
+
+				aud->load(absolute_file);
+			}
+
+			return Qnil;
 		}
 
 		VALUE SfxWrapper::rb_play(VALUE self)
@@ -192,7 +247,8 @@ namespace RAGE
 			
 			rb_define_alloc_func(rb_rage_SfxClass, SfxWrapper::rb_sfx_alloc);
 
-			rb_define_method(rb_rage_SfxClass, "load", RFUNC(SfxWrapper::rb_load), 1);
+			rb_define_method(rb_rage_SfxClass, "initialize", RFUNC(SfxWrapper::rb_initialize), -1);
+			rb_define_method(rb_rage_SfxClass, "load", RFUNC(SfxWrapper::rb_load), -1);
 			rb_define_method(rb_rage_SfxClass, "play", RFUNC(SfxWrapper::rb_play), 0);
 			rb_define_method(rb_rage_SfxClass, "pause", RFUNC(SfxWrapper::rb_pause), 0);
 			rb_define_method(rb_rage_SfxClass, "stop", RFUNC(SfxWrapper::rb_stop), 0);

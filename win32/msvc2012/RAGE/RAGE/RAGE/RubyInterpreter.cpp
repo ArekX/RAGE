@@ -267,42 +267,51 @@ namespace RAGE
 					load_extension_rb_data();
 				}
 
-				/* Load RAGE modules */
+				/* = Load RAGE modules = */
+				RAGE::Filesystem::FSWrappers::load_wrappers();
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
-
 				RAGE::Events::EventsWrapper::load_wrappers();
 				RAGE::Input::InputWrappers::load_wrappers();
 				RAGE::Audio::AudioWrappers::load_wrappers();
 				RAGE::Graphics::DrawWrappers::load_wrappers();
-				RAGE::Filesystem::FSWrappers::load_wrappers();
 
-				/* Load RAGE classes */
+				/* = Load RAGE classes = */
+
+				/* Filesystem classes */
+				RAGE::Filesystem::BaseFileWrapper::load_ruby_class();
+				RAGE::Filesystem::FileWrapper::load_ruby_class();
+				RAGE::Filesystem::MemFileWrapper::load_ruby_class();
+				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
+
+				/* Graphics classes */
 				RAGE::Graphics::BitmapWrapper::load_ruby_class();
 				RAGE::Graphics::FontWrapper::load_ruby_class();
 				RAGE::Graphics::ColorWrapper::load_ruby_class();
 				RAGE::Graphics::ShaderWrapper::load_ruby_class();
-				RAGE::Audio::MusicWrapper::load_ruby_class();
-				RAGE::Audio::SfxWrapper::load_ruby_class();
+				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
 
+				/* Event classes */
 				RAGE::Events::EventWrapper::load_ruby_class();
-
 				RAGE::Events::TimerEventWrapper::load_ruby_class();
 				RAGE::Events::JoyEventWrapper::load_ruby_class();
 				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
 				RAGE::Events::MouseEventWrapper::load_ruby_class();
 				RAGE::Events::ScreenEventWrapper::load_ruby_class();
-				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
-				RAGE::Filesystem::FileWrapper::load_ruby_class();
+
+				/* Audio classes */
+				RAGE::Audio::MusicWrapper::load_ruby_class();
+				RAGE::Audio::SfxWrapper::load_ruby_class();
+				
+				/* Input classes */
 				RAGE::Input::JoystickWrapper::load_ruby_class();
-				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
+				
+				/* Network classes */
 				RAGE::Network::TCPSocketWrapper::load_ruby_class();
 
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();
 				RAGE::Audio::AudioWrappers::init_audio();
-
 				RAGE::Graphics::GraphicsWrappers::initialize_graphics();
-				
 				RAGE::Graphics::DrawWrappers::init();
 				RAGE::Events::EventsWrapper::run_event_thread();
 
@@ -332,7 +341,7 @@ namespace RAGE
 
 				/* Run Finalizer for modules */
 				RAGE::Events::EventsWrapper::finalize_queue();
-
+				RAGE::Audio::AudioWrappers::finalize_audio();
 			}
 		}
 

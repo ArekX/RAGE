@@ -22,6 +22,14 @@ begin
 
     RAGE.about()
 
+    f = RAGE::File.new RAGE::FS.getAbsolutePath("data/bgm.ogg"), "rb"
+
+    bgm = RAGE::Music.new f, ".ogg"
+    bgm.play
+
+    puts "Max joysticks: " + RAGE::Input.getMaxJoysticks().to_s
+
+
     gt = RAGE::Graphics.getTarget().clone()
 
     # Load particle
@@ -65,16 +73,16 @@ begin
     s.mee
     s.mee
 
+    x,y = 0, 0
+
 	  loop do
       #RAGE::Graphics.setTarget(gt)
       RAGE::Draw.clear
-      
-      
-      if pe.inCollision?(400, 400, 50, 50)
+      if pe.inCollision?(x + 400, y + 400, 50, 50)
         RAGE::Draw.setColor(1, 1, 0, 1)
       end
 
-      RAGE::Draw.rectangle(400, 400, 450, 450, 2)
+      RAGE::Draw.rectangle(x + 400, y + 400, x + 450, y + 450, 2)
 
       # Get current engine time
       newTime = RAGE::Graphics.getTime()
@@ -86,6 +94,9 @@ begin
       # Set emitter position from mouse coordinates
       pe.setEmitterPosition RAGE::Input.getMouseX, RAGE::Input.getMouseY
       # If mouse is pressed down emit particles
+
+      do_draw = true
+
       if RAGE::Input.mouseDown?(RAGE::Input::MOUSE_BTN1)
         pe.emit # Resets particles
         do_draw = true

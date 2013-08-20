@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c" />
     <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c" />
     <ClCompile Include="Audio_Wrapper.cpp" />
+    <ClCompile Include="BaseFile_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
     <ClCompile Include="Color.cpp" />
@@ -308,6 +309,8 @@
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Joystick_Wrapper.cpp" />
     <ClCompile Include="Logic_Wrappers.cpp" />
+    <ClCompile Include="MemFile.cpp" />
+    <ClCompile Include="MemFile_Wrapper.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
     <ClCompile Include="RAGEConfiguration.cpp" />
@@ -342,6 +345,8 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="BaseEvent.h" />
+    <ClInclude Include="BaseFile.h" />
+    <ClInclude Include="BaseFile_Wrapper.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
     <ClInclude Include="Color.h" />
@@ -355,6 +360,8 @@
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Joystick_Wrapper.h" />
     <ClInclude Include="Logic_Wrappers.h" />
+    <ClInclude Include="MemFile.h" />
+    <ClInclude Include="MemFile_Wrapper.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
     <ClInclude Include="RAGEConfiguration.h" />

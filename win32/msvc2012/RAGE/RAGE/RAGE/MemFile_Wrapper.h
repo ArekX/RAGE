@@ -23,43 +23,45 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-#include "Music.h"
+#include "MemFile.h"
 
 namespace RAGE
 {
-	namespace Audio
+	namespace Filesystem
 	{
-
-		class MusicWrapper
+		class MemFileWrapper
 		{
 		private:
-			static VALUE rb_music_alloc(VALUE self);
-			static void rb_music_free(void *ptr);
-			static void rb_mark(void *ptr);
+			static VALUE rb_alloc(VALUE self);
+			static void rb_destroy(void *ptr);
 			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
-			static VALUE rb_load(int argc, VALUE *args, VALUE self);
-			static VALUE rb_play(VALUE self);
-			static VALUE rb_pause(VALUE self);
-			static VALUE rb_stop(VALUE self);
-			static VALUE rb_set_position(VALUE self, VALUE val);
+			static VALUE rb_load_rage_file(VALUE self, VALUE ragefile, VALUE mode);
+			static VALUE rb_open(VALUE self, VALUE filename, VALUE mode);
+			static VALUE rb_read(int argc, VALUE *args, VALUE self);
+			static VALUE rb_write(VALUE self, VALUE data);
+			static VALUE rb_close(VALUE self);
+			static VALUE rb_is_open(VALUE self);
+			static VALUE rb_write_byte(VALUE self, VALUE byte);
+			static VALUE rb_write_word(VALUE self, VALUE word);
+			static VALUE rb_write_dword(VALUE self, VALUE dword);
+			static VALUE rb_write_float(VALUE self, VALUE flt);
+			static VALUE rb_write_double(VALUE self, VALUE dbl);
+			static VALUE rb_read_byte(VALUE self);
+			static VALUE rb_read_word(VALUE self);
+			static VALUE rb_read_dword(VALUE self);
+			static VALUE rb_read_float(VALUE self);
+			static VALUE rb_read_double(VALUE self);
+			static VALUE rb_is_eof(VALUE self);
+			static VALUE rb_get_size(VALUE self);
 			static VALUE rb_get_position(VALUE self);
-			static VALUE rb_set_speed(VALUE self, VALUE val);
-			static VALUE rb_get_speed(VALUE self);
-			static VALUE rb_set_volume(VALUE self, VALUE val);
-			static VALUE rb_get_volume(VALUE self);
-			static VALUE rb_set_pan(VALUE self, VALUE val);
-			static VALUE rb_get_pan(VALUE self);
-			static VALUE rb_set_loop(VALUE self, VALUE val);
-			static VALUE rb_get_loop(VALUE self);
-			static VALUE rb_disposed(VALUE self);
-			static VALUE rb_length(VALUE self);
+			static VALUE rb_set_position(VALUE self, VALUE offset);
+			static VALUE rb_seek(VALUE self, VALUE offset, VALUE type);
 			static VALUE rb_dispose(VALUE self);
+			static VALUE rb_is_disposed(VALUE self);
 		public:
 			static void load_ruby_class(void);
 			static VALUE get_ruby_class(void);
 			static VALUE new_ruby_class_instance(void);
 		};
-
-	} // Audio
-} // RAGE
+	}
+}

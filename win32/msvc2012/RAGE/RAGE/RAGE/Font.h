@@ -22,8 +22,8 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-
 #include "RubyInterpreter.h"
+#include "BaseFile.h"
 
 namespace RAGE
 {
@@ -31,17 +31,21 @@ namespace RAGE
 	{
 		class Font
 		{
+		private:
+			VALUE rage_file;
 		public:
 			bool disposed;
 			bool is_set;
 			ALLEGRO_FONT *font;
 			Font(void);
-			void load_ttf_font(char *filename, int size);
-			void load_ttf_font_stretch(char *filename, int w, int h);
-			void load_ttf_font_f(char *filename, int size, int flags);
-			void load_ttf_font_stretch_f(char *filename, int w, int h, int flags);
+			void load_ttf_font(char *filename, int size, int flags);
+			void load_ttf_font_stretch(char *filename, int w, int h, int flags);
+			void load_ttf_font_rage_file(VALUE r_file, char *filename, int size, int flags);
+			void load_ttf_font_stretch_rage_file(VALUE r_file, char *filename, int w, int h, int flags);
+			void get_font_from_bitmap(ALLEGRO_BITMAP *bmp, int num_ranges, int *ranges);
 			int get_text_width(ALLEGRO_USTR *text);
 			int get_text_line_length(void);
+			void gc_mark(void);
 			void dispose(void);
 			~Font(void);
 		};

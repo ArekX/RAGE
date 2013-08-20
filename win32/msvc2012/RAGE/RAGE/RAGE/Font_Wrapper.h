@@ -34,13 +34,13 @@ namespace RAGE
 		private:
 			static VALUE rb_alloc(VALUE self);
 			static void rb_destroy(void *value);
+			static void rb_mark(void *ptr);
 			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
-			static VALUE rb_load(VALUE self, VALUE font_name, VALUE size);
-			static VALUE rb_load_stretch(VALUE self, VALUE font_name, VALUE w, VALUE h);
-			static VALUE rb_load_flags(VALUE self, VALUE font_name, VALUE size, VALUE flags);
-			static VALUE rb_load_stretch_flags(VALUE self, VALUE font_name, VALUE w, VALUE h, VALUE flags);
+			static VALUE rb_load(int argc, VALUE *args, VALUE self);
+			static VALUE rb_load_stretch(int argc, VALUE *args, VALUE self);
 			static VALUE rb_text_width(VALUE self, VALUE text);
 			static VALUE rb_text_height(VALUE self);
+			static VALUE rb_get_from_bitmap(VALUE self, VALUE bitmap, VALUE ranges);
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:

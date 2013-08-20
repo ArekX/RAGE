@@ -289,6 +289,15 @@
     <ClCompile Include="TCPSocket_Wrapper.cpp">
       <Filter>modules\network\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="MemFile.cpp">
+      <Filter>modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MemFile_Wrapper.cpp">
+      <Filter>modules\filesystem\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseFile_Wrapper.cpp">
+      <Filter>modules\filesystem\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -443,6 +452,18 @@
     </ClInclude>
     <ClInclude Include="TCPSocket_Wrapper.h">
       <Filter>modules\network\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemFile.h">
+      <Filter>modules\filesystem\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemFile_Wrapper.h">
+      <Filter>modules\filesystem\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseFile.h">
+      <Filter>modules\filesystem\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseFile_Wrapper.h">
+      <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

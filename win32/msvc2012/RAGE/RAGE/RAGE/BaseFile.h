@@ -25,19 +25,36 @@ freely, subject to the following restrictions:
 
 #include "RubyInterpreter.h"
 
+#define RAGE_BASE_FILE "RAGE::BaseFile"
+
 namespace RAGE
 {
-	namespace Events
+	namespace Filesystem
 	{
-		class EventWrapper
+		class BaseFile
 		{
-		private:
-			static VALUE rb_err(VALUE self);
-			static bool rb_is_enabled(void);
 		public:
-			static void load_ruby_class(void);
-			static VALUE get_ruby_class(void);
-			static VALUE new_ruby_class_instance(void);
+			bool disposed;
+			ALLEGRO_FILE *file;
+			virtual void close(void) = 0;
+			virtual void dispose(void) = 0;
+			virtual void seek(int64_t offset, int seek_type) = 0;
+			virtual size_t write(const char* data, size_t len) = 0;
+			virtual int write_byte(char data) = 0;
+			virtual int write_word(int16_t data) = 0;
+			virtual int write_dword(int32_t data) = 0;
+			virtual int write_float(float data) = 0;
+			virtual int write_double(double data) = 0;
+			virtual char read_byte(void) = 0;
+			virtual int16_t read_word(void) = 0;
+			virtual int32_t read_dword(void) = 0;
+			virtual float read_float(void) = 0;
+			virtual double read_double(void) = 0;
+			virtual int64_t get_size(void) = 0;
+			virtual int64_t get_position(void) = 0;
+			virtual void set_position(int64_t pos) = 0;
+			virtual bool is_eof(void) = 0;
+			virtual VALUE read(size_t amount) = 0;
 		};
 	}
 }

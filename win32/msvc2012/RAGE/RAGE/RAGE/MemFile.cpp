@@ -21,48 +21,71 @@ freely, subject to the following restrictions:
    distribution.
 */
 
-#include "File.h"
+#include "MemFile.h"
 
 namespace RAGE
 {
 	namespace Filesystem
 	{
-		File::File(void)
+		MemFile::MemFile(void)
 		{
-			file = NULL;
 			disposed = false;
-			can_read = false;
+			file = NULL;
+			data = NULL;
+			len = 0;
 		}
 
-		void File::open(char *filename, char *mode)
+		void MemFile::load_from_rage_file(BaseFile *b_file, char* mode)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
-			
-			if (file != NULL)
-				al_fclose(file);
 
-			file = al_fopen(filename, mode);
-
-			int i = 0;
-			while(mode[i] != 0)
+			if (b_file->disposed)
 			{
-				if ((mode[i] == 'r') || (mode[i] == '+'))
-				{
-					can_read = true;
-					break;
-				}
-				i++;
+				rb_raise(rb_eArgError, RAGE_ERROR_FS_DISPOSED_RAGE_FILE);
+				return;
 			}
+
+			if (data != NULL)
+			{
+				if (file != NULL)
+					al_fclose(file);
+
+				al_free(data);
+			}
+			
+			len = al_fsize(b_file->file);
+
+			data = (char*)al_malloc(len);
+			al_fread(b_file->file, data, len);
+
+			file = al_open_memfile(data, len, mode);
+		}
+
+		void MemFile::open(int64_t size, char* mode)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (data != NULL)
+			{
+				if (file != NULL)
+					al_fclose(file);
+
+				al_free(data);
+			}
+
+			data = (char*)al_malloc(size);
+			len = size;
+
+			file = al_open_memfile(data, size, mode);
 
 			if (file == NULL)
 			{
-				rb_raise(rb_eException, RAGE_ERROR_FS_CANNOT_LOAD, filename);
-				disposed = true;
+				rb_raise(rb_eException, RAGE_ERROR_FS_MEMFILE_CANNOT_OPEN);
 				return;
 			}
 		}
 
-		int File::write_byte(char data)
+		int MemFile::write_byte(char data)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -75,7 +98,7 @@ namespace RAGE
 			return al_fputc(file, data);
 		}
 
-		int File::write_word(int16_t data)
+		int MemFile::write_word(int16_t data)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -88,7 +111,7 @@ namespace RAGE
 			return al_fwrite(file, &data, sizeof(data));
 		}
 
-		int File::write_dword(int32_t data)
+		int MemFile::write_dword(int32_t data)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -101,7 +124,7 @@ namespace RAGE
 			return al_fwrite(file, &data, sizeof(data));
 		}
 
-		int File::write_float(float data)
+		int MemFile::write_float(float data)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -114,7 +137,7 @@ namespace RAGE
 			return al_fwrite(file, &data, sizeof(data));
 		}
 
-		int File::write_double(double data)
+		int MemFile::write_double(double data)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -127,7 +150,7 @@ namespace RAGE
 			return al_fwrite(file, &data, sizeof(data));
 		}
 
-		size_t File::write(const char* data, size_t len)
+		size_t MemFile::write(const char* data, size_t len)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -140,7 +163,7 @@ namespace RAGE
 			return al_fwrite(file, data, len);
 		}
 
-		char File::read_byte(void)
+		char MemFile::read_byte(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -153,7 +176,7 @@ namespace RAGE
 			return al_fgetc(file);
 		}
 
-		int16_t File::read_word(void)
+		int16_t MemFile::read_word(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -168,7 +191,7 @@ namespace RAGE
 			return ret;
 		}
 
-		int32_t File::read_dword(void)
+		int32_t MemFile::read_dword(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -183,7 +206,7 @@ namespace RAGE
 			return ret;
 		}
 
-		float File::read_float(void)
+		float MemFile::read_float(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -199,7 +222,7 @@ namespace RAGE
 			return ret;
 		}
 
-		double File::read_double(void)
+		double MemFile::read_double(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -215,7 +238,7 @@ namespace RAGE
 			return ret;
 		}
 
-		VALUE File::read(size_t amount)
+		VALUE MemFile::read(size_t amount)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
 
@@ -248,19 +271,7 @@ namespace RAGE
 			
 		}
 
-		int64_t File::get_size(void)
-		{
-			RAGE_CHECK_DISPOSED_RET(disposed, 0);
-
-			if (file != NULL)
-				return al_fsize(file);
-			else
-				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
-
-			return 0;
-		}
-
-		int64_t File::get_position(void)
+		int64_t MemFile::get_position(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
@@ -273,7 +284,7 @@ namespace RAGE
 			return al_ftell(file);
 		}
 
-		void File::set_position(int64_t pos)
+		void MemFile::set_position(int64_t pos)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -286,7 +297,7 @@ namespace RAGE
 			al_fseek(file, pos, ALLEGRO_SEEK_SET);
 		}
 
-		void File::seek(int64_t offset, int seek_type)
+		void MemFile::seek(int64_t offset, int seek_type)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
@@ -299,7 +310,7 @@ namespace RAGE
 			al_fseek(file, offset, seek_type);
 		}
 
-		bool File::is_eof(void)
+		bool MemFile::is_eof(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
@@ -312,28 +323,44 @@ namespace RAGE
 			return al_feof(file);
 		}
 
-		void File::close(void)
-		{
-			RAGE_CHECK_DISPOSED(disposed);
-
-			if (file != NULL)
-				al_fclose(file);
-			else
-				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
-		}
-
-		void File::dispose(void)
+		void MemFile::close(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			if (file != NULL)
 			{
 				al_fclose(file);
-				file = NULL;
+				al_free(data);
+				len = 0;
 			}
+			else
+				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 		}
 
-		File::~File(void)
+
+		int64_t MemFile::get_size(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return len;
+		}
+
+		void MemFile::dispose(void)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			if (data != NULL)
+			{
+				if (file != NULL)
+					al_fclose(file);
+
+				al_free(data);
+			}
+
+			disposed = true;
+		}
+
+		MemFile::~MemFile(void)
 		{
 			if (!disposed)
 				dispose();

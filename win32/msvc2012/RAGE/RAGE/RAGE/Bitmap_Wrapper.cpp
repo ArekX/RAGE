@@ -52,28 +52,29 @@ namespace RAGE
 				Bitmap *bmp;
 				Data_Get_Struct(self, Bitmap, bmp);
 
-				switch(argc)
-				{
-					case 1:
-						bmp->initialize(StringValueCStr(args[0]));
-						break;
-					case 2:
-						bmp->initialize(FIX2UINT(args[0]), FIX2UINT(args[1]));
-						break;
-				}
+				if ((argc == 1) || RAGE_IS_SUPERCLASS_OF(args[0], Filesystem::BaseFileWrapper))
+					BitmapWrapper::rb_load_f(argc, args, self);
+
+				else if (argc == 2)
+					bmp->initialize(FIX2UINT(args[0]), FIX2UINT(args[1]));
 			}
 
-			return self;
+			return Qnil;
 		}
 
 		VALUE BitmapWrapper::rb_bitmap_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, BitmapWrapper::rb_bitmap_destroy, new Bitmap());
+			return Data_Wrap_Struct(self, BitmapWrapper::rb_mark, BitmapWrapper::rb_bitmap_destroy, new Bitmap());
 		}
 
 		void BitmapWrapper::rb_bitmap_destroy(void *value)
 		{
 			delete value;
+		}
+
+		void BitmapWrapper::rb_mark(void *ptr)
+		{
+			((Bitmap*)ptr)->gc_mark();
 		}
 
 		VALUE BitmapWrapper::rb_get_width(VALUE self)
@@ -104,30 +105,71 @@ namespace RAGE
 			return ret_bmp;
 		}
 
-		VALUE BitmapWrapper::rb_load_f(VALUE self, VALUE filename)
+		VALUE BitmapWrapper::rb_load_f(int argc, VALUE *args, VALUE self)
 		{
-			char *absolute_file = Interpreter::Ruby::get_file_path(filename);
-			if (absolute_file == NULL)
-			{
-				
-				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
-				return Qfalse;
-			}
-			
-
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
+
+			if (argc == 0)
+			{
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+				return Qnil;
+			}
+
+			if (RAGE_IS_SUPERCLASS_OF(args[0], Filesystem::BaseFileWrapper))
+			{
+				if (argc != 2)
+				{
+					rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+					return Qnil;
+				}
+
+				bmp->initialize(args[0], StringValueCStr(args[1]));
+			}
+			else
+			{
+				char *absolute_file = Interpreter::Ruby::get_file_path(args[0]);
+
+				if (absolute_file == NULL)
+				{
+				
+					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(args[0]));
+					return Qfalse;
+				}
 			
-			bmp->initialize(absolute_file);
-			
+				bmp->initialize(absolute_file);
+			}
 			return Qtrue;
 		}
 
-		VALUE BitmapWrapper::rb_save_f(VALUE self, VALUE filename)
+		VALUE BitmapWrapper::rb_save_f(int argc, VALUE *args, VALUE self)
 		{
 			Bitmap *bmp;
 			Data_Get_Struct(self, Bitmap, bmp);
-			bool result = bmp->save(StringValueCStr(filename));
+			bool result = false;
+
+			if (argc == 0)
+			{
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+				return Qnil;
+			}
+
+			if (RAGE_IS_SUPERCLASS_OF(args[0], Filesystem::BaseFileWrapper))
+			{
+				if (argc != 2)
+				{
+					rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+					return Qnil;
+				}
+
+				Filesystem::BaseFile *fl;
+				Data_Get_Struct(args[0], Filesystem::BaseFile, fl);
+
+				result = bmp->save(fl, StringValueCStr(args[1]));
+			}
+			else
+				result = bmp->save(StringValueCStr(args[0]));
+
 			return result ? Qtrue : Qfalse;
 		}
 
@@ -516,8 +558,8 @@ namespace RAGE
 			rb_define_alloc_func(rb_rageBitmapClass, BitmapWrapper::rb_bitmap_alloc);
 
 			rb_define_method(rb_rageBitmapClass, "initialize", RFUNC(BitmapWrapper::rb_initialize), -1);
-			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), 1);
-			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), 1);
+			rb_define_method(rb_rageBitmapClass, "load", RFUNC(BitmapWrapper::rb_load_f), -1);
+			rb_define_method(rb_rageBitmapClass, "save", RFUNC(BitmapWrapper::rb_save_f), -1);
 			rb_define_method(rb_rageBitmapClass, "create", RFUNC(BitmapWrapper::rb_create), 2);
 			rb_define_method(rb_rageBitmapClass, "createSub", RFUNC(BitmapWrapper::rb_create_sub), 5);
 			rb_define_method(rb_rageBitmapClass, "recreate", RFUNC(BitmapWrapper::rb_recreate), 0);

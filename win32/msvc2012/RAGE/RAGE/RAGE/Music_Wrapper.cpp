@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "Music_Wrapper.h"
 
 namespace RAGE
@@ -8,7 +31,7 @@ namespace RAGE
 
 		VALUE MusicWrapper::rb_music_alloc(VALUE self)
 		{
-			return Data_Wrap_Struct(self, 0, MusicWrapper::rb_music_free, new Music(AudioWrappers::get_mixer()));
+			return Data_Wrap_Struct(self, MusicWrapper::rb_mark, MusicWrapper::rb_music_free, new Music(AudioWrappers::get_mixer()));
 		}
 
 		void MusicWrapper::rb_music_free(void* ptr)
@@ -16,22 +39,54 @@ namespace RAGE
 			al_free(ptr);
 		}
 
-		VALUE MusicWrapper::rb_load(VALUE self, VALUE filename)
+		void MusicWrapper::rb_mark(void *ptr)
 		{
-			char *absolute_file = Interpreter::Ruby::get_file_path(filename);
-			if (absolute_file == NULL)
-			{
-				
-				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
-				return Qfalse;
-			}
-			
+			((Music*)ptr)->gc_mark();
+		}
+
+		VALUE MusicWrapper::rb_initialize(int argc, VALUE *args, VALUE self)
+		{
+			if (argc > 0)
+				MusicWrapper::rb_load(argc, args, self);
+
+			return Qnil;
+		}
+
+		VALUE MusicWrapper::rb_load(int argc, VALUE *args, VALUE self)
+		{
 			Music *aud;
 			Data_Get_Struct(self, Music, aud);
 
-			aud->load(absolute_file);
+			if (argc == 0)
+			{
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+				return Qnil;
+			}
 
-			return Qtrue;
+			if (RAGE_IS_SUPERCLASS_OF(args[0], Filesystem::BaseFileWrapper))
+			{	
+				if (argc != 2)
+				{
+					rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 1, 2);
+					return Qnil;
+				}
+
+				aud->load_rage_file(args[0], StringValueCStr(args[1]));
+			}
+			else
+			{
+				char *absolute_file = Interpreter::Ruby::get_file_path(args[0]);
+				if (absolute_file == NULL)
+				{
+				
+					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(args[0]));
+					return Qfalse;
+				}
+
+				aud->load(absolute_file);
+			}
+
+			return Qnil;
 		}
 
 		VALUE MusicWrapper::rb_play(VALUE self)
@@ -191,7 +246,9 @@ namespace RAGE
 			rb_rage_MusicClass = rb_define_class_under(rage, "Music", rb_cObject);
 			
 			rb_define_alloc_func(rb_rage_MusicClass, MusicWrapper::rb_music_alloc);
-			rb_define_method(rb_rage_MusicClass, "load", RFUNC(MusicWrapper::rb_load), 1);
+
+			rb_define_method(rb_rage_MusicClass, "initialize", RFUNC(MusicWrapper::rb_initialize), -1);
+			rb_define_method(rb_rage_MusicClass, "load", RFUNC(MusicWrapper::rb_load), -1);
 			rb_define_method(rb_rage_MusicClass, "play", RFUNC(MusicWrapper::rb_play), 0);
 			rb_define_method(rb_rage_MusicClass, "pause", RFUNC(MusicWrapper::rb_pause), 0);
 			rb_define_method(rb_rage_MusicClass, "stop", RFUNC(MusicWrapper::rb_stop), 0);

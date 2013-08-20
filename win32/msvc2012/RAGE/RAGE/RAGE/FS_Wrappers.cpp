@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "FS_Wrappers.h"
 
 namespace RAGE
@@ -178,7 +201,22 @@ namespace RAGE
 
 		VALUE FSWrappers::rb_physfs_get_last_error(VALUE self)
 		{
-			return rb_str_new_cstr(PHYSFS_getLastError());
+			const char *error = PHYSFS_getLastError();
+
+			if (error == NULL)
+				return rb_str_new_cstr("");
+
+			return rb_str_new_cstr(error);
+		}
+
+		VALUE FSWrappers::rb_get_absolute_path(VALUE self, VALUE filename)
+		{
+			char *fname = Interpreter::Ruby::get_file_path(filename);
+
+			if (fname == NULL)
+				return Qnil;
+
+			return rb_str_new2(fname);
 		}
 
 		void FSWrappers::load_wrappers(void)
@@ -187,6 +225,9 @@ namespace RAGE
 
 			VALUE rage = rb_define_module("RAGE");
 			VALUE fs = rb_define_module_under(rage, "FS");
+			rb_define_const(fs, "SEEK_SET", INT2FIX(ALLEGRO_SEEK_SET));
+			rb_define_const(fs, "SEEK_CUR", INT2FIX(ALLEGRO_SEEK_CUR));
+			rb_define_const(fs, "SEEK_END", INT2FIX(ALLEGRO_SEEK_END));
 
 			rb_define_module_function(fs, "startFS", RFUNC(FSWrappers::rb_physfs_start), 0);
 			rb_define_module_function(fs, "stopFS", RFUNC(FSWrappers::rb_physfs_stop), 0);
@@ -200,6 +241,7 @@ namespace RAGE
 			rb_define_module_function(fs, "writeDir", RFUNC(FSWrappers::rb_physfs_get_write_dir), 0);
 			rb_define_module_function(fs, "getMountPath", RFUNC(FSWrappers::rb_get_mount_path), 1);
 			rb_define_module_function(fs, "getModTime", RFUNC(FSWrappers::rb_physfs_get_modified_time), 1);
+			rb_define_module_function(fs, "getAbsolutePath", RFUNC(FSWrappers::rb_get_absolute_path), 1);
 			rb_define_module_function(fs, "fileExists?", RFUNC(FSWrappers::rb_physfs_file_exists), 1);
 			rb_define_module_function(fs, "dirExists?", RFUNC(FSWrappers::rb_physfs_dir_exists), 1);
 			rb_define_module_function(fs, "mkDir", RFUNC(FSWrappers::rb_physfs_make_dir), 1);

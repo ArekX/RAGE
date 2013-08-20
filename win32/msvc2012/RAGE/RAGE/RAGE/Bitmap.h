@@ -24,7 +24,9 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
+#include "BaseFile.h"
 
+#define RAGE_BITMAP "RAGE::Bitmap"
 
 namespace RAGE
 {
@@ -33,7 +35,6 @@ namespace RAGE
 		class Bitmap
 		{
 		private:
-			char* filename;
 			int flags;
 			float center_x;
 			float center_y;
@@ -41,6 +42,7 @@ namespace RAGE
 			float scale_x;
 			float scale_y;
 			ALLEGRO_COLOR tint;
+			VALUE rage_file;
 		public:
 			ALLEGRO_BITMAP* bitmap;
 			bool disposed;
@@ -49,6 +51,7 @@ namespace RAGE
 			void initialize(int width, int height);
 			void initialize_sub(ALLEGRO_BITMAP* parent, int x, int y, int width, int height);
 			void initialize(char* filename);
+			void initialize(VALUE r_file, char *ext);
 
 			void lock(void);
 			void lock_region(int x, int y, int w, int h);
@@ -96,8 +99,12 @@ namespace RAGE
 			float get_tint_blue(void);
 
 			bool save(char* filename);
+			bool save(Filesystem::BaseFile *fl, char *ext);
 			void assign(Bitmap* src);
 			void assign_parent(Bitmap* src);
+
+			void gc_mark(void);
+
 			void dispose(void);
 			void recreate_video_bitmap(void);
 		};

@@ -31,6 +31,7 @@ namespace RAGE
 
 		Bitmap::Bitmap(void)
 		{
+			rage_file = Qnil;
 			bitmap = NULL;
 			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | GraphicsWrappers::get_bitmap_flags());
 			disposed = false;
@@ -56,6 +57,8 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			rage_file = Qnil;
+
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
 
@@ -74,6 +77,8 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			rage_file = Qnil;
+
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
 
@@ -90,16 +95,51 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			rage_file = Qnil;
+
 			if (bitmap != NULL) 
 				al_destroy_bitmap(bitmap);
-
-			this->filename = filename;
 
 			bitmap = al_load_bitmap(filename);
 
 			if (bitmap == NULL)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_BITMAP_LOAD_FAIL, filename);
+				return;
+			}
+		}
+
+		void Bitmap::initialize(VALUE r_file, char *ext)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			rage_file = Qnil;
+
+			if (bitmap != NULL) 
+				al_destroy_bitmap(bitmap);
+
+			Filesystem::BaseFile *fl;
+			Data_Get_Struct(r_file, Filesystem::BaseFile, fl);
+
+			if (fl->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_DISPOSED_RAGE_FILE_READ);
+				return;
+			}
+
+			if (fl->file == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
+				return;
+			}
+
+			rage_file = r_file;
+
+			bitmap = al_load_bitmap_f(fl->file, ext);
+
+			if (bitmap == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_BITMAP_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
 			}
 		}
@@ -351,9 +391,14 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
-			this->filename = filename;
-
 			return al_save_bitmap(filename, bitmap);
+		}
+
+		bool Bitmap::save(Filesystem::BaseFile *fl, char *ext)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			return al_save_bitmap_f(fl->file, ext, bitmap);
 		}
 
 		void Bitmap::assign(Bitmap* src)
@@ -376,6 +421,12 @@ namespace RAGE
 			bitmap = al_clone_bitmap(al_get_parent_bitmap(src->bitmap));
 		}
 
+		void Bitmap::gc_mark(void)
+		{
+			if (!disposed && (rage_file != Qnil))
+				rb_gc_mark(rage_file);
+		}
+
 		void Bitmap::dispose(void)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -395,6 +446,7 @@ namespace RAGE
 				al_destroy_bitmap(bitmap);
 
 			bitmap = NULL;
+			rage_file = Qnil;
 
 			disposed = true;
 		}

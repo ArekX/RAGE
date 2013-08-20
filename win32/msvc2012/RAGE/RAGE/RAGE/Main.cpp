@@ -35,6 +35,8 @@ void sigsegv_handler(int param)
 {	
 	#ifdef DEBUG
 	PRINT(RAGE_FATAL_ERROR_SIGSEGV_DEBUG);
+	_CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_DEBUG );
+	_CrtDumpMemoryLeaks();
 	#else
 	PRINT(RAGE_FATAL_ERROR_SIGSEGV);
 	getc(stdin);

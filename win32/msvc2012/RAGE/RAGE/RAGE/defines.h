@@ -59,6 +59,11 @@ freely, subject to the following restrictions:
 #define RAGE_DEBUG_GLOBAL_VAR "$DEBUG"
 #define RAGE_ARGS_VAR "$RARGV"
 
+#define RAGE_GET_DATA(valueVar, asType, asVar) asType *asVar; Data_Get_Struct(valueVar, asType, asVar); 
+
+#define RAGE_IS_CLASS_OF(var, klass) (rb_class_of(var) == klass::get_ruby_class())
+#define RAGE_IS_SUPERCLASS_OF(var, klass) (rb_class_get_superclass(rb_class_of(var)) == klass::get_ruby_class())
+
 #define RAGE_DEV_END_TEXT "Your game has ended. Interpreter returned -> %d\n\n", error
 #define RAGE_DEV_MESSAGE_W L"Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
 #define RAGE_DEV_MESSAGE_L "Welcome to RAGE - Ruby Awesome Game Engine. To start making games you need a file called boot.rb which needs to be in the same folder as this executable.\n\nIf you need to make an initial configuration for your game you need another file called conf.rb in the same folder as this executable. To learn more about game making process, please refer to the developer documentation which should come together as this executable.\n\nHave fun using RAGE!"
