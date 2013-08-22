@@ -43,8 +43,10 @@ namespace RAGE
 		{
 			if (argc == 2)
 			{
-				if (rb_class_get_superclass(rb_class_of(args[0])) == BaseFileWrapper::get_ruby_class())
-					MemFileWrapper::rb_load_rage_file(self, args[0], args[1]); 
+				if (RAGE_IS_SUPERCLASS_OF(args[0], BaseFileWrapper))
+					MemFileWrapper::rb_load_rage_file(self, args[0], args[1]);
+				else if (TYPE(args[0]) == T_STRING)
+					MemFileWrapper::rb_load_from_string(self, args[0], args[1]);
 				else
 					MemFileWrapper::rb_open(self, args[0], args[1]);
 			}
@@ -64,6 +66,22 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE MemFileWrapper::rb_load_from_string(VALUE self, VALUE string, VALUE mode)
+		{
+			MemFile *fl;
+			Data_Get_Struct(self, MemFile, fl);
+
+			if (TYPE(string) != T_STRING)
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_FS_PASSED_ARGUMENT_NOT_STRING);
+				return Qnil;
+			}
+
+			fl->load_from_string(RSTRING_PTR(string), RSTRING_LEN(string), StringValueCStr(mode));
+
+			return Qnil;
+		}
+
 		VALUE MemFileWrapper::rb_open(VALUE self, VALUE size, VALUE mode)
 		{
 			MemFile *fl;
@@ -79,9 +97,13 @@ namespace RAGE
 			MemFile *fl;
 			Data_Get_Struct(self, MemFile, fl);
 
-			const char *c_data = StringValueCStr(data);
+			if (TYPE(data) != T_STRING)
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_FS_PASSED_ARGUMENT_NOT_STRING);
+				return Qnil;
+			}
 
-			return LL2NUM(fl->write(c_data, strlen(c_data)));
+			return LL2NUM(fl->write(RSTRING_PTR(data), RSTRING_LEN(data)));
 		}
 
 		VALUE MemFileWrapper::rb_close(VALUE self)
@@ -275,6 +297,7 @@ namespace RAGE
 			rb_define_method(rb_rageMemFileClass, "size", RFUNC(MemFileWrapper::rb_get_size), 0);
 			rb_define_method(rb_rageMemFileClass, "open", RFUNC(MemFileWrapper::rb_open), 2);
 			rb_define_method(rb_rageMemFileClass, "openAsMemory", RFUNC(MemFileWrapper::rb_load_rage_file), 2);
+			rb_define_method(rb_rageMemFileClass, "openFromString", RFUNC(MemFileWrapper::rb_load_from_string), 2);
 			rb_define_method(rb_rageMemFileClass, "read", RFUNC(MemFileWrapper::rb_read), -1);
 			rb_define_method(rb_rageMemFileClass, "write", RFUNC(MemFileWrapper::rb_write), 1);
 			rb_define_method(rb_rageMemFileClass, "writeByte", RFUNC(MemFileWrapper::rb_write_byte), 1);

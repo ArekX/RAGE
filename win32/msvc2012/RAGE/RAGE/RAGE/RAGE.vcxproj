@@ -311,6 +311,7 @@
     <ClCompile Include="Logic_Wrappers.cpp" />
     <ClCompile Include="MemFile.cpp" />
     <ClCompile Include="MemFile_Wrapper.cpp" />
+    <ClCompile Include="Network_Wrappers.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
     <ClCompile Include="RAGEConfiguration.cpp" />
@@ -332,8 +333,6 @@
     <ClCompile Include="Sfx.cpp" />
     <ClCompile Include="Sfx_Wrapper.cpp" />
     <ClCompile Include="Shader_Wrapper.cpp" />
-    <ClCompile Include="TCPSocket.cpp" />
-    <ClCompile Include="TCPSocket_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
     <ClCompile Include="VertexArray.cpp" />
@@ -362,6 +361,7 @@
     <ClInclude Include="Logic_Wrappers.h" />
     <ClInclude Include="MemFile.h" />
     <ClInclude Include="MemFile_Wrapper.h" />
+    <ClInclude Include="Network_Wrappers.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
     <ClInclude Include="RAGEConfiguration.h" />
@@ -389,8 +389,6 @@
     <ClInclude Include="Sfx.h" />
     <ClInclude Include="Sfx_Wrapper.h" />
     <ClInclude Include="Shader_Wrapper.h" />
-    <ClInclude Include="TCPSocket.h" />
-    <ClInclude Include="TCPSocket_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
     <ClInclude Include="VertexArray.h" />

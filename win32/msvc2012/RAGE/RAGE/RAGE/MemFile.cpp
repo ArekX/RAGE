@@ -61,6 +61,27 @@ namespace RAGE
 			file = al_open_memfile(data, len, mode);
 		}
 
+		void MemFile::load_from_string(char *l_data, size_t l_len, char *mode)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+		
+			if (data != NULL)
+			{
+				if (file != NULL)
+					al_fclose(file);
+
+				al_free(data);
+			}
+
+			data = (char*)al_malloc(l_len);
+
+			memcpy(data, l_data, l_len);
+
+			len = l_len;
+
+			file = al_open_memfile(data, len, mode);
+		}
+
 		void MemFile::open(int64_t size, char* mode)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
@@ -74,6 +95,7 @@ namespace RAGE
 			}
 
 			data = (char*)al_malloc(size);
+			memset(data, 0, size);
 			len = size;
 
 			file = al_open_memfile(data, size, mode);
@@ -263,7 +285,7 @@ namespace RAGE
 			{
 				data[amount] = 0;
 				
-				VALUE ret_string = rb_str_new2(data);
+				VALUE ret_string = rb_str_new(data, amount);
 				delete[] data;
 
 				return ret_string;

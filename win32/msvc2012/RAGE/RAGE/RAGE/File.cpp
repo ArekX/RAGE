@@ -240,7 +240,7 @@ namespace RAGE
 			{
 				data[amount] = 0;
 				
-				VALUE ret_string = rb_str_new2(data);
+				VALUE ret_string = rb_str_new(data, amount);
 				delete[] data;
 
 				return ret_string;

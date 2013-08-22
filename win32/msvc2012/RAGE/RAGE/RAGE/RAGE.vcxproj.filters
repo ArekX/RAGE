@@ -283,12 +283,6 @@
     <ClCompile Include="File_Wrapper.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="TCPSocket.cpp">
-      <Filter>modules\network</Filter>
-    </ClCompile>
-    <ClCompile Include="TCPSocket_Wrapper.cpp">
-      <Filter>modules\network\wrappers</Filter>
-    </ClCompile>
     <ClCompile Include="MemFile.cpp">
       <Filter>modules\filesystem</Filter>
     </ClCompile>
@@ -297,6 +291,9 @@
     </ClCompile>
     <ClCompile Include="BaseFile_Wrapper.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Network_Wrappers.cpp">
+      <Filter>modules\network\wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -447,12 +444,6 @@
     <ClInclude Include="File_Wrapper.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="TCPSocket.h">
-      <Filter>modules\network\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TCPSocket_Wrapper.h">
-      <Filter>modules\network\wrappers\headers</Filter>
-    </ClInclude>
     <ClInclude Include="MemFile.h">
       <Filter>modules\filesystem\headers</Filter>
     </ClInclude>
@@ -464,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="BaseFile_Wrapper.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Network_Wrappers.h">
+      <Filter>modules\network\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

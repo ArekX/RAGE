@@ -67,9 +67,13 @@ namespace RAGE
 			File *fl;
 			Data_Get_Struct(self, File, fl);
 
-			const char *c_data = StringValueCStr(data);
+			if (TYPE(data) != T_STRING)
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_FS_PASSED_ARGUMENT_NOT_STRING);
+				return Qnil;
+			}
 
-			return LL2NUM(fl->write(c_data, strlen(c_data)));
+			return LL2NUM(fl->write(RSTRING_PTR(data), RSTRING_LEN(data)));
 		}
 
 		VALUE FileWrapper::rb_close(VALUE self)

@@ -38,6 +38,7 @@ namespace RAGE
 		public:
 			MemFile(void);
 			void load_from_rage_file(BaseFile *b_file, char* mode);
+			void load_from_string(char *l_data, size_t l_len, char *mode);
 			void open(int64_t size, char* mode);
 			void close(void);
 			void dispose(void);

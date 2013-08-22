@@ -70,6 +70,23 @@ freely, subject to the following restrictions:
 #define RAGE_DEV_MESSAGE_EXIT "\n\nPress any key to close this engine."
 #define RAGE_DEV_TEXT "You are using Development Version of RAGE.\nFor distribution please use Production Version of RAGE.\n\n"
 
+/* Socket Defines */
+#define RUBY_HASH_PASSTHROUGH rb_str_new2("passthrough")
+#define SOCKET_POST_EQUALS "="
+#define SOCKET_HTTP_REQ_END "\r\n\r\n"
+#define SOCKET_POST_AND "&"
+#define SOCKET_PORT_HTTP "http"
+#define SOCKET_HTTP_STRIP "http://"
+#define SOCKET_PORT_SEPARATOR ":"
+#define SOCKET_URI_SEPARATOR "/"
+#define SOCKET_HEADERS_GET "GET "
+#define SOCKET_HEADERS_POST "POST "
+#define SOCKET_HEADERS_1 " HTTP/1.1\r\nHost: "
+#define SOCKET_HEADERS_2 "\r\nConnection: keep-alive\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nUser-Agent: RAGE\r\n\r\n"
+#define SOCKET_HEADERS_POST_1 "\r\nContent-Type: application/x-www-form-urlencoded"
+#define SOCKET_HEADERS_POST_LENGTH "\r\nContent-Length: "
+#define SOCKET_HEADERS_POST_2 "\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nUser-Agent: RAGE\r\n\r\n"
+
 #define random_float() (float)rand() / RAND_MAX
 #define polar_radius(px, py) sqrt(px * px + py * py)
 #define polar_angle(px, py) atan2(py, px)

@@ -36,6 +36,7 @@ namespace RAGE
 			static void rb_destroy(void *ptr);
 			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_load_rage_file(VALUE self, VALUE ragefile, VALUE mode);
+			static VALUE rb_load_from_string(VALUE self, VALUE string, VALUE mode);
 			static VALUE rb_open(VALUE self, VALUE filename, VALUE mode);
 			static VALUE rb_read(int argc, VALUE *args, VALUE self);
 			static VALUE rb_write(VALUE self, VALUE data);
