@@ -295,6 +295,18 @@
     <ClCompile Include="Network_Wrappers.cpp">
       <Filter>modules\network\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="TCPServer.cpp">
+      <Filter>modules\network</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer_Wrapper.cpp">
+      <Filter>modules\network\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient.cpp">
+      <Filter>modules\network</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient_Wrapper.cpp">
+      <Filter>modules\network\wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -457,6 +469,18 @@
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
     <ClInclude Include="Network_Wrappers.h">
+      <Filter>modules\network\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPServer.h">
+      <Filter>modules\network\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPServer_Wrapper.h">
+      <Filter>modules\network\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPClient.h">
+      <Filter>modules\network\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPClient_Wrapper.h">
       <Filter>modules\network\wrappers\headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,15 +1,5 @@
 #include "Network_Wrappers.h"
 
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
-
 namespace RAGE
 {
 	namespace Network
@@ -43,7 +33,7 @@ namespace RAGE
 			WSAData wd_data;
 			WSAStartup(MAKEWORD(2,0), &wd_data);
 			#endif
-
+		
 			SOCKET sock;
 			int status;
 			addrinfo hints, *servinfo;
@@ -375,6 +365,9 @@ namespace RAGE
 
 			VALUE rage = rb_define_module("RAGE");
 			VALUE net = rb_define_module_under(rage, "Net");
+
+			rb_define_const(net, "IP_V4", INT2FIX(AF_INET));
+			rb_define_const(net, "IP_V6", INT2FIX(AF_INET6));
 
 			rb_define_module_function(net, "httpGET", RFUNC(NetworkWrappers::rb_get_string), -1);
 			rb_define_module_function(net, "httpPOST", RFUNC(NetworkWrappers::rb_post_string), -1);

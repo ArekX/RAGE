@@ -333,6 +333,10 @@
     <ClCompile Include="Sfx.cpp" />
     <ClCompile Include="Sfx_Wrapper.cpp" />
     <ClCompile Include="Shader_Wrapper.cpp" />
+    <ClCompile Include="TCPClient.cpp" />
+    <ClCompile Include="TCPClient_Wrapper.cpp" />
+    <ClCompile Include="TCPServer.cpp" />
+    <ClCompile Include="TCPServer_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
     <ClCompile Include="VertexArray.cpp" />
@@ -389,6 +393,10 @@
     <ClInclude Include="Sfx.h" />
     <ClInclude Include="Sfx_Wrapper.h" />
     <ClInclude Include="Shader_Wrapper.h" />
+    <ClInclude Include="TCPClient.h" />
+    <ClInclude Include="TCPClient_Wrapper.h" />
+    <ClInclude Include="TCPServer.h" />
+    <ClInclude Include="TCPServer_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
     <ClInclude Include="VertexArray.h" />

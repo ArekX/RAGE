@@ -73,6 +73,8 @@ freely, subject to the following restrictions:
 #include "MemFile_Wrapper.h"
 #include "File_Wrapper.h"
 #include "Network_Wrappers.h"
+#include "TCPServer_Wrapper.h"
+#include "TCPClient_Wrapper.h"
 
 /* Include configuration class */
 #include "RAGEConfiguration.h"
