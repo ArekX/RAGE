@@ -87,6 +87,8 @@ https://www.dropbox.com/s/5htrpbqa0lxfr98/rage-doc.chm
 License
 ====
 
+**Beta 0.0.3 license**
+
 Ruby License: http://www.ruby-lang.org/en/about/license.txt
 
 Allegro License: http://alleg.sourceforge.net/license.html
