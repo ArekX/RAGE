@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "TCPServer_Wrapper.h"
 
 namespace RAGE
@@ -48,6 +71,13 @@ namespace RAGE
 				return LL2NUM(client);
 		}
 
+		VALUE TCPServerWrapper::rb_data_available(VALUE self, VALUE client)
+		{
+			RAGE_GET_DATA(self, TCPServer, sv);
+
+			return sv->get_is_data_available(NUM2LL(client)) ? Qtrue : Qfalse;
+		}
+
 		VALUE TCPServerWrapper::rb_send(VALUE self, VALUE client, VALUE data)
 		{
 			RAGE_GET_DATA(self, TCPServer, sv);
@@ -74,7 +104,7 @@ namespace RAGE
 		{
 			RAGE_GET_DATA(self, TCPServer, sv);
 
-			return INT2FIX(sv->data_available(NUM2LL(client)));
+			return sv->get_is_connected(NUM2LL(client)) ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPServerWrapper::rb_get_ip(VALUE self, VALUE client, VALUE ip_type)
@@ -101,6 +131,27 @@ namespace RAGE
 			sv->disconnect(NUM2LL(client));
 
 			return Qnil;
+		}
+
+		VALUE TCPServerWrapper::rb_get_is_blocking(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPServer, sv);
+
+			return sv->get_is_blocking() ? Qtrue : Qfalse;
+		}
+
+		VALUE TCPServerWrapper::rb_get_port(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPServer, sv);
+
+			return INT2FIX(sv->get_server_port());
+		}
+
+		VALUE TCPServerWrapper::rb_get_max_clients(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPServer, sv);
+
+			return INT2FIX(sv->get_max_clients());
 		}
 
 		VALUE TCPServerWrapper::rb_dispose(VALUE self)
@@ -138,11 +189,15 @@ namespace RAGE
 
 			rb_define_method(rb_rage_TCPServerClass, "initialize", RFUNC(TCPServerWrapper::rb_initialize), -1);
 			rb_define_method(rb_rage_TCPServerClass, "id", RFUNC(TCPServerWrapper::rb_get_id), 0);
+			rb_define_method(rb_rage_TCPServerClass, "port", RFUNC(TCPServerWrapper::rb_get_port), 0);
+			rb_define_method(rb_rage_TCPServerClass, "maxClients", RFUNC(TCPServerWrapper::rb_get_max_clients), 0);
 			rb_define_method(rb_rage_TCPServerClass, "listen", RFUNC(TCPServerWrapper::rb_listen), -1);
 			rb_define_method(rb_rage_TCPServerClass, "send", RFUNC(TCPServerWrapper::rb_send), 2);
 			rb_define_method(rb_rage_TCPServerClass, "receive", RFUNC(TCPServerWrapper::rb_recv), -1);
 			rb_define_method(rb_rage_TCPServerClass, "getIP", RFUNC(TCPServerWrapper::rb_get_ip), 2);
-			rb_define_method(rb_rage_TCPServerClass, "getAvailableData", RFUNC(TCPServerWrapper::rb_is_connected), 1);
+			rb_define_method(rb_rage_TCPServerClass, "dataAvailable?", RFUNC(TCPServerWrapper::rb_data_available), 1);
+			rb_define_method(rb_rage_TCPServerClass, "isConnected?", RFUNC(TCPServerWrapper::rb_is_connected), 1);
+			rb_define_method(rb_rage_TCPServerClass, "isBlocking?", RFUNC(TCPServerWrapper::rb_get_is_blocking), 0);
 			rb_define_method(rb_rage_TCPServerClass, "disconnect", RFUNC(TCPServerWrapper::rb_disconnect), 1);
 			rb_define_method(rb_rage_TCPServerClass, "dispose", RFUNC(TCPServerWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_TCPServerClass, "disposed?", RFUNC(TCPServerWrapper::rb_dispose), 0);

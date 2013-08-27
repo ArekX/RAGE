@@ -88,3 +88,4 @@ freely, subject to the following restrictions:
 #define RAGE_ERROR_CLIENT_NOT_CONNECTED "Cannot use this method. Not connected to host."
 #define RAGE_ERROR_SERVER_CANNOT_DISCONNECT_SELF "Cannot disconnect self."
 #define RAGE_ERROR_SOCKET_CANNOT_CLOSE_SERVER "Socket Error: Could not close server socket."
+#define RAGE_ERROR_SOCKET_TIMEOUT_CANNOT_SET "Socket Error: Could not set timeout."

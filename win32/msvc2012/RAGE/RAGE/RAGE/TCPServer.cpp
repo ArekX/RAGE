@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "TCPServer.h"
 
 namespace RAGE
@@ -167,6 +190,23 @@ namespace RAGE
 			return send(client_sock, data, size, 0);
 		}
 
+		bool TCPServer::get_is_data_available(SOCKET client_sock)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			if (!connected)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
+				return false;
+			}
+
+			char t = 0;
+
+			int result = recv(client_sock, &t, 1, MSG_PEEK);
+
+			return (result > 0);
+		}
+
 		VALUE TCPServer::receive_data(SOCKET client_sock, int max_buffer)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
@@ -231,13 +271,58 @@ namespace RAGE
 			return ret_str;
 		}
 
-		int TCPServer::data_available(SOCKET client_sock)
+		bool TCPServer::get_is_connected(SOCKET client_sock)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			if (!connected)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
+				return false;
+			}
 
 			char test_data[RAGE_SERVER_TCP_MAX_BUFFER];
 
 			return recv(client_sock, test_data, RAGE_SERVER_TCP_MAX_BUFFER, MSG_PEEK);
+		}
+
+		int TCPServer::get_server_port(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			if (!connected)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
+				return 0;
+			}
+
+			return serv_port;
+		}
+
+		bool TCPServer::get_is_blocking(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, false);
+
+			if (!connected)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
+				return false;
+			}
+
+			return (blocking_default == 0) ? true : false;
+		}
+
+		int TCPServer::get_max_clients(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			if (!connected)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
+				return 0;
+			}
+
+			return max_clients;
 		}
 
 		void TCPServer::disconnect(SOCKET client_sock)

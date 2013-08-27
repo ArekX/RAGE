@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "TCPClient.h"
 
 namespace RAGE
@@ -15,15 +38,20 @@ namespace RAGE
 			}
 			#endif
 
+			memset(&timeout, 0, sizeof(timeout));
+
 			blocking_mode = 0;
 
 			disposed = false;
 			connected = false;
 		}
 
-		void TCPClient::tcp_connect(char *host, char *port)
+		void TCPClient::tcp_connect(char *host, int prt)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
+
+			if (connected)
+				disconnect();
 
 			addrinfo *servinfo, hints;
 
@@ -32,9 +60,20 @@ namespace RAGE
 			hints.ai_socktype = SOCK_STREAM;
 			hints.ai_flags = AI_PASSIVE;
 
-			if (getaddrinfo(host, port, &hints, &servinfo) != 0)
+			port = prt;
+
+			char c_port[12] = {0};
+
+			#ifdef WIN32
+			sprintf_s(c_port, 12, "%d", prt);
+			#else
+			sprintf(c_port, "%d", prt);
+			#endif
+
+			if (getaddrinfo(host, c_port, &hints, &servinfo) != 0)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SOCKET_CANNOT_RESOLVE_HOST);
+				connected = false;
 				return;
 			}
 
@@ -43,28 +82,23 @@ namespace RAGE
 			if (sock == INVALID_SOCKET)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SOCKET_CANNOT_CREATE);
+				connected = false;
 				return;
 			}
 
 			if (connect(sock, servinfo->ai_addr, servinfo->ai_addrlen) == SOCKET_ERROR)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SOCKET_CANNOT_CONNECT_HOST);
+				connected = false;
 				return;
 			}
 
 			connected = true;
-			
 		}
 
 		int TCPClient::tcp_send(char *data, int len)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
-
-			if (!connected)
-			{
-				rb_raise(rb_eException, RAGE_ERROR_CLIENT_NOT_CONNECTED);
-				return 0;
-			}
 
 			return send(sock, data, len, 0);
 		}
@@ -79,12 +113,6 @@ namespace RAGE
 		VALUE TCPClient::tcp_recv(int max_buffer)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
-
-			if (!connected)
-			{
-				rb_raise(rb_eException, RAGE_ERROR_CLIENT_NOT_CONNECTED);
-				return Qnil;
-			}
 
 			char *buffer = NULL;
 			VALUE ret_str;
@@ -112,7 +140,7 @@ namespace RAGE
 					}
 					else if (result == 0)
 					{
-						connected = false;
+						disconnect();
 					}
 
 
@@ -176,6 +204,36 @@ namespace RAGE
 				return true;
 		}
 
+		int TCPClient::get_timeout(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return timeout.tv_sec;
+		}
+
+		void TCPClient::set_timeout(int seconds)
+		{
+			RAGE_CHECK_DISPOSED(disposed);
+
+			timeout.tv_sec = seconds;
+			
+			#ifdef WIN32
+			int miliseconds = seconds * 1000;
+			if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&miliseconds, sizeof(miliseconds)))
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SOCKET_TIMEOUT_CANNOT_SET);
+				return;
+			}
+			#else
+			if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (timeval*)&timeout, sizeof(timeout)))
+			{
+				rb_raise(rb_eException, RAGE_ERROR_SOCKET_TIMEOUT_CANNOT_SET);
+				return;
+			}
+			#endif
+
+		}
+
 		bool TCPClient::get_connected(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
@@ -199,6 +257,27 @@ namespace RAGE
 			#endif
 
 			disposed = true;
+		}
+
+		int TCPClient::get_port(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			return port;
+		}
+
+		bool TCPClient::get_data_available(void)
+		{
+			RAGE_CHECK_DISPOSED_RET(disposed, 0);
+
+			char t = 0;
+
+			int result = recv(sock, &t, 1, MSG_PEEK);
+
+			if (result == 0)
+				disconnect();
+
+			return (result > 0);
 		}
 
 		void TCPClient::disconnect(void)

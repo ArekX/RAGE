@@ -1,3 +1,26 @@
+/*
+Copyright (c) 2013 Aleksandar Panic
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
+*/
+
 #include "TCPClient_Wrapper.h"
 
 namespace RAGE
@@ -34,10 +57,8 @@ namespace RAGE
 		VALUE TCPClientWrapper::rb_connect(VALUE self, VALUE host, VALUE port)
 		{
 			RAGE_GET_DATA(self, TCPClient, cl);
-
-			VALUE port_string = rb_fix2str(port, 10);
 			
-			cl->tcp_connect(StringValueCStr(host), StringValueCStr(port_string));
+			cl->tcp_connect(StringValueCStr(host), FIX2INT(port));
 
 			return Qnil;
 		}
@@ -94,6 +115,43 @@ namespace RAGE
 			return Qnil;
 		}
 
+		VALUE TCPClientWrapper::rb_get_id(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPClient, cl);
+
+			return LL2NUM(cl->get_id());
+		}
+
+		VALUE TCPClientWrapper::rb_get_port(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPClient, cl);
+
+			return INT2FIX(cl->get_port());
+		}
+
+		VALUE TCPClientWrapper::rb_get_timeout(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPClient, cl);
+
+			return INT2FIX(cl->get_timeout());
+		}
+
+		VALUE TCPClientWrapper::rb_set_timeout(VALUE self, VALUE val)
+		{
+			RAGE_GET_DATA(self, TCPClient, cl);
+
+			cl->set_timeout(FIX2INT(val));
+
+			return Qnil;
+		}
+
+		VALUE TCPClientWrapper::rb_data_available(VALUE self)
+		{
+			RAGE_GET_DATA(self, TCPClient, cl);
+
+			return cl->get_data_available() ? Qtrue : Qfalse;
+		}
+
 		VALUE TCPClientWrapper::rb_dispose(VALUE self)
 		{
 			RAGE_GET_DATA(self, TCPClient, cl);
@@ -121,12 +179,18 @@ namespace RAGE
 			rb_define_alloc_func(rb_rage_TCPClientClass, TCPClientWrapper::rb_alloc);
 
 			rb_define_method(rb_rage_TCPClientClass, "initialize", RFUNC(TCPClientWrapper::rb_initialize), -1);
+			rb_define_method(rb_rage_TCPClientClass, "connect", RFUNC(TCPClientWrapper::rb_connect), 2);
 			rb_define_method(rb_rage_TCPClientClass, "connected?", RFUNC(TCPClientWrapper::rb_get_connected), 0);
+			rb_define_method(rb_rage_TCPClientClass, "dataAvailable?", RFUNC(TCPClientWrapper::rb_data_available), 0);
+			rb_define_method(rb_rage_TCPClientClass, "id", RFUNC(TCPClientWrapper::rb_get_id), 0);
+			rb_define_method(rb_rage_TCPClientClass, "port", RFUNC(TCPClientWrapper::rb_get_port), 0);
 			rb_define_method(rb_rage_TCPClientClass, "connect", RFUNC(TCPClientWrapper::rb_connect), 2);
 			rb_define_method(rb_rage_TCPClientClass, "send", RFUNC(TCPClientWrapper::rb_send), 1);
 			rb_define_method(rb_rage_TCPClientClass, "receive", RFUNC(TCPClientWrapper::rb_recv), -1);
 			rb_define_method(rb_rage_TCPClientClass, "blocking=", RFUNC(TCPClientWrapper::rb_set_blocking), 1);
 			rb_define_method(rb_rage_TCPClientClass, "blocking", RFUNC(TCPClientWrapper::rb_get_blocking), 0);
+			rb_define_method(rb_rage_TCPClientClass, "timeout=", RFUNC(TCPClientWrapper::rb_set_timeout), 1);
+			rb_define_method(rb_rage_TCPClientClass, "timeout", RFUNC(TCPClientWrapper::rb_get_timeout), 0);
 			rb_define_method(rb_rage_TCPClientClass, "disconnect", RFUNC(TCPClientWrapper::rb_disconnect), 0);
 			rb_define_method(rb_rage_TCPClientClass, "dispose", RFUNC(TCPClientWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_TCPClientClass, "disposed?", RFUNC(TCPClientWrapper::rb_disposed), 0);
