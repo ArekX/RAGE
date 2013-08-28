@@ -284,7 +284,6 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			shutdown(sock, SD_BOTH);
 			closesocket(sock);
 
 			connected = false;

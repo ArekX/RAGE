@@ -20,35 +20,41 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
 #pragma once
 
 #include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "Box2D.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+
+		typedef struct
+		{
+		   float32 x, y;
+		   ALLEGRO_COLOR color;
+		} DEBUG_VERTEX;
+
+		class DebugDraw : public b2Draw
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			void draw_poly(const b2Vec2* vertices, int32 vertexCount, ALLEGRO_COLOR cl, int type);
+			float32 alpha;
+			float32 line_width;
+			ALLEGRO_VERTEX_DECL *decl;
 		public:
-			static void load_wrappers(void);
+			DebugDraw(void);
+			void set_debug_opacity(float s_alpha);
+			float32 get_debug_opacity(void);
+			void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
+			void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
+			void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+			void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
+			void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color);
+			void DrawTransform(const b2Transform& xf);
+			~DebugDraw(void);
 		};
+
 	}
 }
-

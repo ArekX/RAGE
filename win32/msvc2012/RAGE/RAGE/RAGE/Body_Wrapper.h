@@ -24,31 +24,29 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "World.h"
+#include "BodyDef.h"
+#include "Body.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+		class BodyWrapper
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			static VALUE rb_alloc(VALUE self);
+			static void rb_destroy(void *ptr);
+			static void rb_mark(void *ptr);
+			static VALUE rb_initialize(VALUE self, VALUE world, VALUE body_def);
 		public:
-			static void load_wrappers(void);
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
 	}
 }
+
+
+
 

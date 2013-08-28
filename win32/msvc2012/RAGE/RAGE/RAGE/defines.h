@@ -87,6 +87,9 @@ freely, subject to the following restrictions:
 #define SOCKET_HEADERS_POST_LENGTH "\r\nContent-Length: "
 #define SOCKET_HEADERS_POST_2 "\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nUser-Agent: RAGE\r\n\r\n"
 
+#define BOOL2RB(x) ((x) ? Qtrue : Qfalse)
+#define RB2BOOL(x) (TYPE(x) == T_TRUE)
+
 #define random_float() (float)rand() / RAND_MAX
 #define polar_radius(px, py) sqrt(px * px + py * py)
 #define polar_angle(px, py) atan2(py, px)

@@ -20,35 +20,53 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
 #pragma once
 
-#include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include <ruby.h>
+#include "defines.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+		class PhObject
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			int dependency_count;
 		public:
-			static void load_wrappers(void);
+			bool disposed;
+			
+			void virtual physics_dispose(void) = 0;
+
+			PhObject(void)
+			{
+				dependency_count = 0;
+				disposed = false;
+			}
+
+			void add_dependency(void)
+			{
+				dependency_count++;
+			}
+			
+			void dispose(void)
+			{
+				RAGE_CHECK_DISPOSED(disposed);
+
+				if (dependency_count > 0)
+					dependency_count--;
+				else
+					physics_dispose();
+
+				disposed = true;
+			}
+
+			~PhObject(void)
+			{
+				dependency_count = 0;
+				if (!disposed)
+					dispose();
+			}
 		};
 	}
 }
-

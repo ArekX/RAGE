@@ -23,37 +23,43 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "TCPServer.h"
+#include "RubyInterpreter.h"
+#include "Vector2.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-
-		class TCPServerWrapper
+		class Vector2Wrapper
 		{
 		private:
 			static VALUE rb_alloc(VALUE self);
 			static void rb_destroy(void *ptr);
 			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
-			static VALUE rb_listen(int argc, VALUE *args, VALUE self);
-			static VALUE rb_send(VALUE self, VALUE client, VALUE data);
-			static VALUE rb_recv(int argc, VALUE *args, VALUE self);
-			static VALUE rb_get_ip(VALUE self, VALUE client);
-			static VALUE rb_disconnect(VALUE self, VALUE client);
-			static VALUE rb_is_connected(VALUE self, VALUE client);
-			static VALUE rb_data_available(VALUE self, VALUE client);
-			static VALUE rb_get_is_blocking(VALUE self);
-			static VALUE rb_get_port(VALUE self);
-			static VALUE rb_get_max_clients(VALUE self);
-			static VALUE rb_get_id(VALUE self);
+			static VALUE rb_get_x(VALUE self);
+			static VALUE rb_get_y(VALUE self);
+			static VALUE rb_set_x(VALUE self, VALUE val);
+			static VALUE rb_set_y(VALUE self, VALUE val);
+			static VALUE rb_skew(VALUE self);
+			static VALUE rb_is_valid(VALUE self);
+			static VALUE rb_normalize(VALUE self);
+			static VALUE rb_set(VALUE self, VALUE x, VALUE y);
+			static VALUE rb_set_zero(VALUE self);
+			static VALUE rb_length(VALUE self);
+			static VALUE rb_length_squared(VALUE self);
+			static VALUE rb_add_operator(VALUE self, VALUE val);
+			static VALUE rb_sub_operator(VALUE self, VALUE val);
+			static VALUE rb_mul_operator(VALUE self, VALUE val);
+			static VALUE rb_negate(VALUE self);
+			static VALUE rb_indexed_get(VALUE self, VALUE index);
+			static VALUE rb_indexed_set(VALUE self, VALUE index, VALUE val);
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_disposed(VALUE self);
 		public:
 			static void load_ruby_class(void);
 			static VALUE get_ruby_class(void);
-			static VALUE new_ruby_class_instance(int argc, VALUE *args);
+			static VALUE new_ruby_class_instance(void);
 		};
+
 	}
 }
-

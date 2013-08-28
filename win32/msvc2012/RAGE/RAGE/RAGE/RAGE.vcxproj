@@ -102,8 +102,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -115,8 +115,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-dev</TargetName>
     <OutDir>$(SolutionDir)WinAll\</OutDir>
     <IntDir>WinAll\</IntDir>
@@ -294,8 +294,13 @@
     <ClCompile Include="BaseFile_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
+    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="BodyDef.cpp" />
+    <ClCompile Include="BodyDef_Wrapper.cpp" />
+    <ClCompile Include="Body_Wrapper.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Color_Wrapper.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Draw_Wrappers.cpp" />
     <ClCompile Include="Events_Wrapper.cpp" />
     <ClCompile Include="Event_Wrapper.cpp" />
@@ -314,6 +319,7 @@
     <ClCompile Include="Network_Wrappers.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
+    <ClCompile Include="Physics_Wrappers.cpp" />
     <ClCompile Include="RAGEConfiguration.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
@@ -339,8 +345,14 @@
     <ClCompile Include="TCPServer_Wrapper.cpp" />
     <ClCompile Include="TimerEvent.cpp" />
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
+    <ClCompile Include="UDPSocket.cpp" />
+    <ClCompile Include="UDPSocket_Wrapper.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector2_Wrapper.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArray_Wrapper.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="World_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h" />
@@ -352,8 +364,13 @@
     <ClInclude Include="BaseFile_Wrapper.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
+    <ClInclude Include="Body.h" />
+    <ClInclude Include="BodyDef.h" />
+    <ClInclude Include="BodyDef_Wrapper.h" />
+    <ClInclude Include="Body_Wrapper.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Color_Wrapper.h" />
+    <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="Draw_Wrappers.h" />
     <ClInclude Include="File.h" />
@@ -368,6 +385,8 @@
     <ClInclude Include="Network_Wrappers.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
+    <ClInclude Include="PhObject.h" />
+    <ClInclude Include="Physics_Wrappers.h" />
     <ClInclude Include="RAGEConfiguration.h" />
     <ClInclude Include="rage_config.h" />
     <ClInclude Include="Shader.h" />
@@ -399,8 +418,14 @@
     <ClInclude Include="TCPServer_Wrapper.h" />
     <ClInclude Include="TimerEvent.h" />
     <ClInclude Include="TimerEvent_Wrapper.h" />
+    <ClInclude Include="UDPSocket.h" />
+    <ClInclude Include="UDPSocket_Wrapper.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector2_Wrapper.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArray_Wrapper.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="World_Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc" />

@@ -24,31 +24,35 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "Box2D.h"
+#include "Vector2_Wrapper.h"
+#include "DebugDraw.h"
+#include "PhObject.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+		// TODO: Needs to be finished. Make sure you use add_dependency
+
+		class World : public PhObject
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			DebugDraw *debug;
+			VALUE body_ary;
+			VALUE g_vector;
 		public:
-			static void load_wrappers(void);
+			b2World *wld;
+			World(void);
+			void initialize(VALUE gravity_vector);
+			VALUE get_gravity(void);
+			void set_gravity(VALUE gravity);
+			void draw_debug_objects(void);
+			void setup_debug_draw_objects(int flags);
+			VALUE create_body(b2BodyDef *def);
+			void physics_dispose(void);
+			void gc_mark(void);
+			~World(void);
 		};
 	}
 }
-

@@ -75,6 +75,10 @@ freely, subject to the following restrictions:
 #include "Network_Wrappers.h"
 #include "TCPServer_Wrapper.h"
 #include "TCPClient_Wrapper.h"
+#include "UDPSocket_Wrapper.h"
+
+/* Box2D Wrappers */
+
 
 /* Include configuration class */
 #include "RAGEConfiguration.h"

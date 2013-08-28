@@ -23,31 +23,29 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "UDPSocket.h"
 
 namespace RAGE
 {
 	namespace Network
 	{
-		class NetworkWrappers
+
+		class UDPSocketWrapper
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			static VALUE rb_alloc(VALUE self);
+			static void rb_destroy(void *ptr);
+			static VALUE rb_initialize(VALUE self, VALUE port);
+			static VALUE rb_send(VALUE self, VALUE data, VALUE host, VALUE port);
+			static VALUE rb_recv(int argc, VALUE *args, VALUE self);
+			static VALUE rb_get_port(VALUE self);
+			static VALUE rb_get_id(VALUE self);
+			static VALUE rb_dispose(VALUE self);
+			static VALUE rb_disposed(VALUE self);
 		public:
-			static void load_wrappers(void);
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(int argc, VALUE *args);
 		};
 	}
 }

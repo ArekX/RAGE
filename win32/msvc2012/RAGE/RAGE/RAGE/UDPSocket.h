@@ -35,20 +35,27 @@ freely, subject to the following restrictions:
 #include <netinet/in.h>
 #endif
 
+#define RAGE_SOCKET_UDP_MAX_BUFFER 65536
+
 namespace RAGE
 {
 	namespace Network
 	{
-		class NetworkWrappers
+		class UDPSocket
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			SOCKET server_sock;
+			int serv_port;
 		public:
-			static void load_wrappers(void);
+			bool disposed;
+			UDPSocket(void);
+			void initialize(int port);
+			SOCKET get_id(void);
+			int send_data(char *data, int data_size, char *host, char *via_port);
+			VALUE receive_data(int max_buffer);
+			int get_server_port(void);
+			void dispose(void);
+			~UDPSocket(void);
 		};
 	}
 }
-

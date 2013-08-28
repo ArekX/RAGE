@@ -78,6 +78,7 @@ namespace RAGE
 
 			static VALUE rb_set_bitmap_flags(VALUE self, VALUE flags);
 		public:
+			static void restore_drawing_target(void);
 			static void load_wrappers(void);
 			static void initialize_graphics(void);
 			static void recreate_display(void);

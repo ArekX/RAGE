@@ -382,6 +382,34 @@ namespace RAGE
 			return ret_str;
 		}
 
+		VALUE NetworkWrappers::rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type)
+		{
+			VALUE ret_str = Qnil;
+
+			char c_ip[INET6_ADDRSTRLEN];
+
+			return rb_str_new2(inet_ntop(FIX2INT(ip_type), RSTRING_PTR(ip_data), c_ip, INET6_ADDRSTRLEN));
+		}
+
+		VALUE NetworkWrappers::rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type)
+		{
+			if (FIX2INT(ip_type) == AF_INET)
+			{
+				sockaddr_in sa;
+				inet_pton(FIX2INT(ip_type), StringValueCStr(ip), &sa.sin_addr);
+				return rb_str_new((const char*)&sa.sin_addr, sizeof(sa.sin_addr));
+				
+			}
+			else if (FIX2INT(ip_type) == AF_INET6)
+			{
+				sockaddr_in6 sa6;
+				inet_pton(FIX2INT(ip_type), StringValueCStr(ip), &sa6.sin6_addr);
+				return rb_str_new((const char*)&sa6.sin6_addr, sizeof(sa6.sin6_addr));
+			}
+			else
+				return Qnil;
+		}
+
 		void NetworkWrappers::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Net")) return;
@@ -389,11 +417,13 @@ namespace RAGE
 			VALUE rage = rb_define_module("RAGE");
 			VALUE net = rb_define_module_under(rage, "Net");
 
-			rb_define_const(net, "IP_V4", INT2FIX(AF_INET));
-			rb_define_const(net, "IP_V6", INT2FIX(AF_INET6));
+			rb_define_const(net, "AF_INET", INT2FIX(AF_INET));
+			rb_define_const(net, "AF_INET6", INT2FIX(AF_INET6));
 
 			rb_define_module_function(net, "httpGET", RFUNC(NetworkWrappers::rb_get_string), -1);
 			rb_define_module_function(net, "httpPOST", RFUNC(NetworkWrappers::rb_post_string), -1);
+			rb_define_module_function(net, "inetPtoN", RFUNC(NetworkWrappers::rb_inet_pton), 2);
+			rb_define_module_function(net, "inetNtoP", RFUNC(NetworkWrappers::rb_inet_ntop), 2);
 		}
 	}
 }

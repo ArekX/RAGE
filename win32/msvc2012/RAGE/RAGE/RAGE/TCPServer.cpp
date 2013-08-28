@@ -121,11 +121,11 @@ namespace RAGE
 			return server_sock;
 		}
 
-		char* TCPServer::get_client_ip(SOCKET client_sock, int ip_type)
+		char* TCPServer::get_client_ip(SOCKET client_sock)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
 
-			sockaddr name;
+			sockaddr_storage name;
 			socklen_t namelen = sizeof(name);
 
 			char *str = new char[INET6_ADDRSTRLEN];
@@ -138,8 +138,15 @@ namespace RAGE
 			}
 			else
 			{
-				inet_ntop(ip_type, &name.sa_data, str, INET6_ADDRSTRLEN);
-				return str;
+				void *ip;
+				int family = ((sockaddr*)&name)->sa_family;
+
+				if (family == AF_INET) 
+					ip = &(((sockaddr_in*)&name)->sin_addr);
+				else
+					ip = &(((sockaddr_in6*)&name)->sin6_addr);
+
+				return (char*)inet_ntop(family, ip, str, INET6_ADDRSTRLEN);
 			}
 		}
 
@@ -210,7 +217,7 @@ namespace RAGE
 		VALUE TCPServer::receive_data(SOCKET client_sock, int max_buffer)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
-
+			
 			if (!connected)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SERVER_NOT_CONNECTED);
@@ -281,9 +288,10 @@ namespace RAGE
 				return false;
 			}
 
-			char test_data[RAGE_SERVER_TCP_MAX_BUFFER];
+			char test_data;
+			int result = recv(client_sock, &test_data, 1, MSG_PEEK);
 
-			return recv(client_sock, test_data, RAGE_SERVER_TCP_MAX_BUFFER, MSG_PEEK);
+			return (result != 0);
 		}
 
 		int TCPServer::get_server_port(void)
@@ -343,20 +351,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (connected)
-			{
-				if (shutdown(server_sock, SD_BOTH) == SOCKET_ERROR)
-				{
-					rb_raise(rb_eException, RAGE_ERROR_SOCKET_CANNOT_CLOSE_SERVER);
-					return;
-				}
-
-				if (close(server_sock) == SOCKET_ERROR)
-				{
-					rb_raise(rb_eException, RAGE_ERROR_SOCKET_CANNOT_CLOSE_SERVER);
-					return;
-				}
-			}
+			closesocket(server_sock);
 
 			#ifdef WIN32
 			if (!WSACleanup())

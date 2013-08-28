@@ -24,31 +24,37 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "Box2D.h"
+#include "PhObject.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+		class Vector2 : public PhObject
 		{
-		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
 		public:
-			static void load_wrappers(void);
+			b2Vec2 *vec;
+			Vector2(void);
+			void initialize(void);
+			void initialize(float32 x, float32 y);
+			float32 length(void);
+			float32 length_squared(void);
+			bool is_valid(void);
+			float32 normalize(void);
+			void skew(b2Vec2 *set);
+			void set_zero(void);
+			void set(float32 x, float32 y);
+			void set_x(float32 new_x);
+			void set_y(float32 new_y);
+			void add(b2Vec2 *other_vec);
+			void sub(b2Vec2 *other_vec);
+			void mul(float32 val);
+			void negate(void);
+			void physics_dispose(void);
+			float32 get_x(void);
+			float32 get_y(void);
+			~Vector2(void);
 		};
 	}
 }
-

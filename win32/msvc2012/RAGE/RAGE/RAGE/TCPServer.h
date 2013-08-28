@@ -60,7 +60,7 @@ namespace RAGE
 			int send_data(SOCKET client_sock, char *data, int size);
 			bool get_is_data_available(SOCKET client_sock);
 			VALUE receive_data(SOCKET client_sock, int max_buffer);
-			char* get_client_ip(SOCKET client_sock, int ip_type);
+			char* get_client_ip(SOCKET client_sock);
 			void disconnect(SOCKET client_sock);
 			bool get_is_connected(SOCKET client_sock);
 			int get_server_port(void);

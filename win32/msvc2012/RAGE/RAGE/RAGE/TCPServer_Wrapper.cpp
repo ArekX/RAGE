@@ -107,11 +107,11 @@ namespace RAGE
 			return sv->get_is_connected(NUM2LL(client)) ? Qtrue : Qfalse;
 		}
 
-		VALUE TCPServerWrapper::rb_get_ip(VALUE self, VALUE client, VALUE ip_type)
+		VALUE TCPServerWrapper::rb_get_ip(VALUE self, VALUE client)
 		{
 			RAGE_GET_DATA(self, TCPServer, sv);
 
-			char *str = sv->get_client_ip(NUM2LL(client), FIX2INT(ip_type));
+			char *str = sv->get_client_ip(NUM2LL(client));
 
 			if (str == NULL)
 				return Qnil;
@@ -194,7 +194,7 @@ namespace RAGE
 			rb_define_method(rb_rage_TCPServerClass, "listen", RFUNC(TCPServerWrapper::rb_listen), -1);
 			rb_define_method(rb_rage_TCPServerClass, "send", RFUNC(TCPServerWrapper::rb_send), 2);
 			rb_define_method(rb_rage_TCPServerClass, "receive", RFUNC(TCPServerWrapper::rb_recv), -1);
-			rb_define_method(rb_rage_TCPServerClass, "getIP", RFUNC(TCPServerWrapper::rb_get_ip), 2);
+			rb_define_method(rb_rage_TCPServerClass, "getIP", RFUNC(TCPServerWrapper::rb_get_ip), 1);
 			rb_define_method(rb_rage_TCPServerClass, "dataAvailable?", RFUNC(TCPServerWrapper::rb_data_available), 1);
 			rb_define_method(rb_rage_TCPServerClass, "isConnected?", RFUNC(TCPServerWrapper::rb_is_connected), 1);
 			rb_define_method(rb_rage_TCPServerClass, "isBlocking?", RFUNC(TCPServerWrapper::rb_get_is_blocking), 0);

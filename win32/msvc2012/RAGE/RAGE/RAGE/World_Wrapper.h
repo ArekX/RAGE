@@ -23,32 +23,33 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-
-#ifdef WIN32
-#include <WinSock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#endif
+#include "Vector2.h"
+#include "BodyDef.h"
+#include "World.h"
+#include "Vector2_Wrapper.h"
 
 namespace RAGE
 {
-	namespace Network
+	namespace Physics
 	{
-		class NetworkWrappers
+		class WorldWrapper
 		{
 		private:
-			static VALUE rb_get_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_post_string(int argc, VALUE *args, VALUE self);
-			static VALUE rb_inet_ntop(VALUE self, VALUE ip_data, VALUE ip_type);
-			static VALUE rb_inet_pton(VALUE self, VALUE ip, VALUE ip_type);
+			static VALUE rb_alloc(VALUE self);
+			static void rb_destroy(void *ptr);
+			static void rb_mark(void *ptr);
+			static VALUE rb_initialize(VALUE self, VALUE gravity_vector);
+			static VALUE rb_get_gravity(VALUE self);
+			static VALUE rb_create_body(VALUE self, VALUE body_def);
+			static VALUE rb_draw_debug(VALUE self);
+			static VALUE rb_set_debug_draw_objects(VALUE self, VALUE flags);
+			static VALUE rb_dispose(VALUE self);
+			static VALUE rb_disposed(VALUE self);
 		public:
-			static void load_wrappers(void);
+			static void load_ruby_class(void);
+			static VALUE get_ruby_class(void);
+			static VALUE new_ruby_class_instance(void);
 		};
+
 	}
 }
-

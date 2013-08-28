@@ -92,9 +92,6 @@
     <Filter Include="modules\logic\headers">
       <UniqueIdentifier>{f7b099a1-5d99-4001-9307-9a69728ac84a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="modules\physics\box2d">
-      <UniqueIdentifier>{54841219-62e5-4e1a-8ffc-dc14d9641111}</UniqueIdentifier>
-    </Filter>
     <Filter Include="modules\physics\wrappers">
       <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
     </Filter>
@@ -106,6 +103,12 @@
     </Filter>
     <Filter Include="modules\network\wrappers\headers">
       <UniqueIdentifier>{a209ab40-9378-4fd6-b934-9332c50be254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics\wrappers\headers">
+      <UniqueIdentifier>{d3e6290a-e71e-40b5-979a-dacb287dad3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\physics\headers">
+      <UniqueIdentifier>{0a83c753-b3ef-46ee-85d8-6b8d4329e146}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +310,42 @@
     <ClCompile Include="TCPClient_Wrapper.cpp">
       <Filter>modules\network\wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="UDPSocket.cpp">
+      <Filter>modules\network</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPSocket_Wrapper.cpp">
+      <Filter>modules\network\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="World_Wrapper.cpp">
+      <Filter>modules\physics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>modules\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>modules\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2_Wrapper.cpp">
+      <Filter>modules\physics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDraw.cpp">
+      <Filter>modules\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="BodyDef.cpp">
+      <Filter>modules\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="BodyDef_Wrapper.cpp">
+      <Filter>modules\physics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics_Wrappers.cpp">
+      <Filter>modules\physics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Body_Wrapper.cpp">
+      <Filter>modules\physics\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Body.cpp">
+      <Filter>modules\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -482,6 +521,45 @@
     </ClInclude>
     <ClInclude Include="TCPClient_Wrapper.h">
       <Filter>modules\network\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPSocket_Wrapper.h">
+      <Filter>modules\network\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPSocket.h">
+      <Filter>modules\network\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="World_Wrapper.h">
+      <Filter>modules\physics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2_Wrapper.h">
+      <Filter>modules\physics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDraw.h">
+      <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BodyDef.h">
+      <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics_Wrappers.h">
+      <Filter>modules\physics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BodyDef_Wrapper.h">
+      <Filter>modules\physics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhObject.h">
+      <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Body_Wrapper.h">
+      <Filter>modules\physics\wrappers\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Body.h">
+      <Filter>modules\physics\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -467,6 +467,11 @@ namespace RAGE
 			return bitmap_filter_flags;
 		}
 
+		void GraphicsWrappers::restore_drawing_target(void)
+		{
+			GraphicsWrappers::rb_set_target(Qnil, rb_target_bitmap);
+		}
+
 		void GraphicsWrappers::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");

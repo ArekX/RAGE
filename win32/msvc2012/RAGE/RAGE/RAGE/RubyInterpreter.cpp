@@ -24,6 +24,13 @@ freely, subject to the following restrictions:
 #include "RubyInterpreter.h"
 #include <exts/dl/ruby_ext_dl_rb_data.h>
 
+/* BOX2D */
+#include "Physics_Wrappers.h"
+#include "Vector2_Wrapper.h"
+#include "World_Wrapper.h"
+#include "BodyDef_Wrapper.h"
+#include "Body_Wrapper.h"
+
 extern "C"
 {
 	void Init_dl(void);
@@ -309,6 +316,14 @@ namespace RAGE
 				/* Network classes */
 				RAGE::Network::TCPServerWrapper::load_ruby_class();
 				RAGE::Network::TCPClientWrapper::load_ruby_class();
+				RAGE::Network::UDPSocketWrapper::load_ruby_class();
+
+				/* Box2D Wrapper classes */
+				RAGE::Physics::PhysicsWrappers::load_wrappers();
+				RAGE::Physics::Vector2Wrapper::load_ruby_class();
+				RAGE::Physics::WorldWrapper::load_ruby_class();
+				RAGE::Physics::BodyDefWrapper::load_ruby_class();
+				RAGE::Physics::BodyWrapper::load_ruby_class();
 
 				/* Perform additional tasks */
 				RAGE::Events::EventsWrapper::init_queue();

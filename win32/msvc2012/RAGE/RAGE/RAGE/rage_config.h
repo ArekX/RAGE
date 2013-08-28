@@ -26,9 +26,7 @@ freely, subject to the following restrictions:
 #ifdef WIN32
 #include <allegro5/platform/almsvc.h>
 #include <allegro5/allegro_windows.h>
-#else
-#include <allegro5/platform/alunix.h>
-#endif
+
 
 #ifndef OLD_CONFIG
 	#pragma comment(lib, "msvcr110-ruby200-static.lib")
@@ -60,6 +58,7 @@ freely, subject to the following restrictions:
 		#pragma comment(lib, "libvorbisfile-1.3.2-static-mt.lib")
 		#pragma comment(lib, "zlib-1.2.5-static-mt.lib")
 		#pragma comment(lib, "dumb-0.9.3-static-mt.lib")
+		#pragma comment(lib, "box2d.lib")
 	#endif
 
 	#if _MSC_VER == 1600
@@ -74,5 +73,9 @@ freely, subject to the following restrictions:
 		#pragma comment(lib, "libvorbisfile-1.3.2-static-mt-10.lib")
 		#pragma comment(lib, "zlib-1.2.5-static-mt-10.lib")
 		#pragma comment(lib, "dumb-0.9.3-static-mt-10.lib")
+		#pragma comment(lib, "box2d-10.lib")
 	#endif
+#endif
+#else
+#include <allegro5/platform/alunix.h>
 #endif

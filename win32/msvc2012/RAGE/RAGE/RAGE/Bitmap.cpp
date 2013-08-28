@@ -169,14 +169,18 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			al_set_target_bitmap(bitmap);
 			al_put_pixel(x, y, color);
+			RAGE::Graphics::GraphicsWrappers::restore_drawing_target();
 		}
 
 		void Bitmap::set_blended_pixel(int x, int y, ALLEGRO_COLOR color)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
+			al_set_target_bitmap(bitmap);
 			al_put_blended_pixel(x, y, color);
+			RAGE::Graphics::GraphicsWrappers::restore_drawing_target();
 		}
 
 		bool Bitmap::is_sub(void)
@@ -189,7 +193,7 @@ namespace RAGE
 		ALLEGRO_BITMAP* Bitmap::get_parent(void)
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
-
+		
 			return al_get_parent_bitmap(bitmap);
 		}
 
