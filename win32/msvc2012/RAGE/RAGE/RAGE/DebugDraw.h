@@ -22,8 +22,10 @@ freely, subject to the following restrictions:
 */
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
 #include "Box2D.h"
+
+#if RAGE_COMPILE_PHYSICS && RAGE_COMPILE_PHYS_DEBUG_DRAW
 
 namespace RAGE
 {
@@ -58,3 +60,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

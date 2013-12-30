@@ -22,8 +22,11 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-#include "RubyInterpreter.h"
+
 #include "Audio.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_AUDIO && RAGE_COMPILE_SFX
 
 namespace RAGE
 {
@@ -59,3 +62,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

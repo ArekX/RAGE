@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "ScreenEvent.h"
 
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_SCREEN_EVENT
+
 namespace RAGE
 {
 	namespace Events
@@ -221,3 +223,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

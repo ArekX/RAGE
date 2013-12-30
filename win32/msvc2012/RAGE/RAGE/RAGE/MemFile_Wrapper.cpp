@@ -22,6 +22,11 @@ freely, subject to the following restrictions:
 */
 
 #include "MemFile_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "MemFile.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_MEM_FILE
 
 namespace RAGE
 {
@@ -329,3 +334,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

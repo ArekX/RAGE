@@ -22,6 +22,11 @@ freely, subject to the following restrictions:
 */
 
 #include "IniFile_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "IniFile.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_INI_FILE
 
 namespace RAGE
 {
@@ -166,3 +171,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

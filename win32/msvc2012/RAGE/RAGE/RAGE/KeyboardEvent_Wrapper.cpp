@@ -22,6 +22,12 @@ freely, subject to the following restrictions:
 */
 
 #include "KeyboardEvent_Wrapper.h"
+#include "Event_Wrapper.h"
+#include "Events_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "KeyboardEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_KEYBOARD_EVENT
 
 namespace RAGE
 {
@@ -194,3 +200,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

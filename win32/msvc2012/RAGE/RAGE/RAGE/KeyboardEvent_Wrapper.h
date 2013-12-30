@@ -24,7 +24,8 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "RubyInterpreter.h"
-#include "KeyboardEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_KEYBOARD_EVENT
 
 #define RAGE_KEYBOARD_EVENT 2
 
@@ -58,3 +59,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

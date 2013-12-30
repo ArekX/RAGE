@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "FS_Wrappers.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_FS
 
 namespace RAGE
 {
@@ -251,3 +254,4 @@ namespace RAGE
 		}
 	}
 }
+#endif

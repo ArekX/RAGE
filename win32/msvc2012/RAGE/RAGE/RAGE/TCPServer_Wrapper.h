@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "TCPServer.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_TCP_SERVER
 
 namespace RAGE
 {
@@ -57,3 +59,4 @@ namespace RAGE
 	}
 }
 
+#endif

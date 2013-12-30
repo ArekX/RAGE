@@ -21,7 +21,12 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "Shader.h"
+#include "Bitmap.h"
 #include "Shader_Wrapper.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_BITMAP && RAGE_COMPILE_SHADER
 
 namespace RAGE
 {
@@ -317,3 +322,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

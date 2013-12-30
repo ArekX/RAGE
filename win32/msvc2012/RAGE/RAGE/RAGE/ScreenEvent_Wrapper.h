@@ -23,8 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-#include "ScreenEvent.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_SCREEN_EVENT
 
 #define RAGE_SCREEN_EVENT 1
 
@@ -56,3 +57,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

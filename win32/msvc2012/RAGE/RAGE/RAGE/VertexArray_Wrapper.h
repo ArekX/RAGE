@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "VertexArray.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_VERTEX_ARRAY
 
 namespace RAGE
 {
@@ -36,8 +38,15 @@ namespace RAGE
 			static void rb_destroy(void* ptr);
 			static VALUE rb_initialize(int argc, VALUE *args, VALUE self);
 			static VALUE rb_push_c(VALUE self, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE r, VALUE g, VALUE b, VALUE a);
+			
+			#if RAGE_COMPILE_COLOR
 			static VALUE rb_push(VALUE self, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color);
 			static VALUE rb_change(VALUE self, VALUE index, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color);
+			static VALUE rb_get_color(VALUE self, VALUE index);
+			static VALUE rb_get_color_to(VALUE self, VALUE index, VALUE color);
+			static VALUE rb_set_color(VALUE self, VALUE index, VALUE color);
+			#endif
+
 			static VALUE rb_change_c(VALUE self, VALUE index, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_pop(VALUE self);
 			static VALUE rb_remove(VALUE self, VALUE index);
@@ -48,14 +57,11 @@ namespace RAGE
 			static VALUE rb_get_z(VALUE self, VALUE index);
 			static VALUE rb_get_u(VALUE self, VALUE index);
 			static VALUE rb_get_v(VALUE self, VALUE index);
-			static VALUE rb_get_color(VALUE self, VALUE index);
-			static VALUE rb_get_color_to(VALUE self, VALUE index, VALUE color);
 			static VALUE rb_set_x(VALUE self, VALUE index, VALUE x);
 			static VALUE rb_set_y(VALUE self, VALUE index, VALUE y);
 			static VALUE rb_set_z(VALUE self, VALUE index, VALUE z);
 			static VALUE rb_set_u(VALUE self, VALUE index, VALUE u);
 			static VALUE rb_set_v(VALUE self, VALUE index, VALUE v);
-			static VALUE rb_set_color(VALUE self, VALUE index, VALUE color);
 			static VALUE rb_set_color_c(VALUE self, VALUE index, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_dispose(VALUE self);
 			static VALUE rb_is_disposed(VALUE self);
@@ -67,3 +73,4 @@ namespace RAGE
 	}
 }
 
+#endif

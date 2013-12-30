@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "ParticleEngine.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_BITMAP && RAGE_COMPILE_PARTICLE_ENGINE
 
 namespace RAGE
 {
@@ -151,3 +153,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

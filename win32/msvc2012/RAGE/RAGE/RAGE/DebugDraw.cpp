@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "DebugDraw.h"
+#include "Graphics_Wrappers.h"
+
+#if RAGE_COMPILE_PHYSICS && RAGE_COMPILE_PHYS_DEBUG_DRAW
 
 namespace RAGE
 {
@@ -130,3 +133,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -102,8 +102,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2012\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2012\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -172,7 +172,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -275,29 +275,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-0.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-1.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-2.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-3.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-4.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-5.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-6.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-7.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-8.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cfunc.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cptr.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-3.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-4.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-6.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-7.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-8.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cfunc.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c" />
     <ClCompile Include="Audio_Wrapper.cpp" />
     <ClCompile Include="BaseFile_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Bitmap_Wrapper.cpp" />
-    <ClCompile Include="Body.cpp" />
-    <ClCompile Include="BodyDef.cpp" />
-    <ClCompile Include="BodyDef_Wrapper.cpp" />
-    <ClCompile Include="Body_Wrapper.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Color_Wrapper.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
@@ -319,7 +316,6 @@
     <ClCompile Include="Network_Wrappers.cpp" />
     <ClCompile Include="ParticleEngine.cpp" />
     <ClCompile Include="ParticleEngine_Wrapper.cpp" />
-    <ClCompile Include="Physics_Wrappers.cpp" />
     <ClCompile Include="RAGEConfiguration.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Graphics_Wrappers.cpp" />
@@ -347,16 +343,12 @@
     <ClCompile Include="TimerEvent_Wrapper.cpp" />
     <ClCompile Include="UDPSocket.cpp" />
     <ClCompile Include="UDPSocket_Wrapper.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector2_Wrapper.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArray_Wrapper.cpp" />
-    <ClCompile Include="World.cpp" />
-    <ClCompile Include="World_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="BaseEvent.h" />
@@ -364,10 +356,6 @@
     <ClInclude Include="BaseFile_Wrapper.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Bitmap_Wrapper.h" />
-    <ClInclude Include="Body.h" />
-    <ClInclude Include="BodyDef.h" />
-    <ClInclude Include="BodyDef_Wrapper.h" />
-    <ClInclude Include="Body_Wrapper.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Color_Wrapper.h" />
     <ClInclude Include="DebugDraw.h" />
@@ -385,10 +373,9 @@
     <ClInclude Include="Network_Wrappers.h" />
     <ClInclude Include="ParticleEngine.h" />
     <ClInclude Include="ParticleEngine_Wrapper.h" />
-    <ClInclude Include="PhObject.h" />
-    <ClInclude Include="Physics_Wrappers.h" />
     <ClInclude Include="RAGEConfiguration.h" />
     <ClInclude Include="rage_config.h" />
+    <ClInclude Include="rage_standard_headers.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="rage_errors.h" />
     <ClInclude Include="Events_Wrapper.h" />
@@ -420,12 +407,8 @@
     <ClInclude Include="TimerEvent_Wrapper.h" />
     <ClInclude Include="UDPSocket.h" />
     <ClInclude Include="UDPSocket_Wrapper.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector2_Wrapper.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArray_Wrapper.h" />
-    <ClInclude Include="World.h" />
-    <ClInclude Include="World_Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Keyboard_Consts.inc" />

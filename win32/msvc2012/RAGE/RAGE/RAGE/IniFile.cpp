@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "IniFile.h"
 
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_INI_FILE
+
 namespace RAGE
 {
 	namespace Filesystem
@@ -180,3 +182,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

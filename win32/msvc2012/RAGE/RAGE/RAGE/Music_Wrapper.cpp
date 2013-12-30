@@ -22,6 +22,12 @@ freely, subject to the following restrictions:
 */
 
 #include "Music_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "Audio_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "Music.h"
+
+#if RAGE_COMPILE_AUDIO && RAGE_COMPILE_MUSIC
 
 namespace RAGE
 {
@@ -278,3 +284,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

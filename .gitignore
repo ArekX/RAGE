@@ -27,6 +27,11 @@
 *.APS
 *.ini
 *.chm
+*.opensdf
 *.txt
 *.png
 *.ttf
+*.suo
+/win32/msvc2012/RAGE/RAGE/RAGE/WinAll
+/win32/msvc2012/RAGE/RAGE/Win7
+/win32/msvc2012/RAGE/RAGE/Release

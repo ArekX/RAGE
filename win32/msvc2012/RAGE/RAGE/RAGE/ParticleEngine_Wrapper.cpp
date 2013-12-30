@@ -22,6 +22,11 @@ freely, subject to the following restrictions:
 */
 
 #include "ParticleEngine_Wrapper.h"
+#include "Bitmap.h"
+#include "ParticleEngine.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_BITMAP && RAGE_COMPILE_PARTICLE_ENGINE
 
 namespace RAGE
 {
@@ -1190,3 +1195,4 @@ namespace RAGE
 		}
 	}
 }
+#endif

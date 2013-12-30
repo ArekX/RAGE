@@ -22,6 +22,10 @@ freely, subject to the following restrictions:
 */
 
 #include "UDPSocket_Wrapper.h"
+#include "UDPSocket.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_UDP_SOCKET
 
 namespace RAGE
 {
@@ -131,3 +135,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

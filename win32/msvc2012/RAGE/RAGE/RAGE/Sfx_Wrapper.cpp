@@ -22,6 +22,12 @@ freely, subject to the following restrictions:
 */
 
 #include "Sfx_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "Audio_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "Sfx.h"
+
+#if RAGE_COMPILE_AUDIO && RAGE_COMPILE_SFX
 
 namespace RAGE
 {
@@ -36,7 +42,7 @@ namespace RAGE
 
 		void SfxWrapper::rb_sfx_free(void* ptr)
 		{
-			delete ptr;
+			RAGE_DESTROY_PTR(ptr, Sfx);
 		}
 
 		void SfxWrapper::rb_mark(void *ptr)
@@ -278,3 +284,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -22,6 +22,17 @@ freely, subject to the following restrictions:
 */
 
 #include "Font_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "BaseFile_Wrapper.h"
+#include "Draw_Wrappers.h"
+#include "Bitmap_Wrapper.h"
+#include "Font.h"
+
+#if RAGE_COMPILE_FONT
+
+#if RAGE_COMPILE_BITMAP
+#include "Bitmap.h"
+#endif
 
 namespace RAGE
 {
@@ -207,6 +218,7 @@ namespace RAGE
 			return fnt->disposed ? Qtrue : Qfalse;
 		}
 
+		#if RAGE_COMPILE_BITMAP
 		VALUE FontWrapper::rb_get_from_bitmap(VALUE self, VALUE bitmap, VALUE ranges)
 		{
 			Bitmap *bmp;
@@ -238,6 +250,7 @@ namespace RAGE
 			
 			return Qnil;
 		}
+		#endif
 
 		void FontWrapper::load_ruby_class(void)
 		{
@@ -256,7 +269,13 @@ namespace RAGE
 			rb_define_method(rb_rageFontClass, "initialize", RFUNC(FontWrapper::rb_initialize), -1);
 			rb_define_method(rb_rageFontClass, "load", RFUNC(FontWrapper::rb_load), -1);
 			rb_define_method(rb_rageFontClass, "loadStretch", RFUNC(FontWrapper::rb_load_stretch), -1);
+
+			#if RAGE_COMPILE_BITMAP
 			rb_define_method(rb_rageFontClass, "getFromBitmap", RFUNC(FontWrapper::rb_get_from_bitmap), 2);
+			#endif
+
+			// TODO: Add get ascent,descent,etc.
+
 			rb_define_method(rb_rageFontClass, "textWidth", RFUNC(FontWrapper::rb_text_width), 1);
 			rb_define_method(rb_rageFontClass, "textHeight", RFUNC(FontWrapper::rb_text_height), 0);
 			rb_define_method(rb_rageFontClass, "dispose", RFUNC(FontWrapper::rb_dispose), 0);
@@ -274,3 +293,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -22,7 +22,7 @@ freely, subject to the following restrictions:
 */
 
 #include "Bitmap.h"
-
+#include "Graphics_Wrappers.h"
 
 namespace RAGE
 {

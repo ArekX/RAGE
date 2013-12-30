@@ -74,15 +74,6 @@
     <Filter Include="modules\filesystem\wrappers\headers">
       <UniqueIdentifier>{6abb159f-af50-4283-86f4-9b0a2f207734}</UniqueIdentifier>
     </Filter>
-    <Filter Include="app\ruby_ext">
-      <UniqueIdentifier>{9e46a1ea-716d-4121-8d51-ad817947cad0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\ruby_ext\Zlib">
-      <UniqueIdentifier>{9abfd54b-a9a3-4cef-8136-4ff6eee51bb9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\ruby_ext\DL">
-      <UniqueIdentifier>{4c12998a-1b2e-46f7-adcf-b53ae8ce1901}</UniqueIdentifier>
-    </Filter>
     <Filter Include="modules\input\headers">
       <UniqueIdentifier>{a96aa3b6-2582-4cfc-b40f-281c5cfafe2d}</UniqueIdentifier>
     </Filter>
@@ -91,9 +82,6 @@
     </Filter>
     <Filter Include="modules\logic\headers">
       <UniqueIdentifier>{f7b099a1-5d99-4001-9307-9a69728ac84a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="modules\physics\wrappers">
-      <UniqueIdentifier>{138aa8f9-e54a-4295-8fbc-359f28dd3989}</UniqueIdentifier>
     </Filter>
     <Filter Include="modules\network\headers">
       <UniqueIdentifier>{ef6a46d5-be68-4565-8257-96cef9a052a7}</UniqueIdentifier>
@@ -104,11 +92,20 @@
     <Filter Include="modules\network\wrappers\headers">
       <UniqueIdentifier>{a209ab40-9378-4fd6-b934-9332c50be254}</UniqueIdentifier>
     </Filter>
-    <Filter Include="modules\physics\wrappers\headers">
-      <UniqueIdentifier>{d3e6290a-e71e-40b5-979a-dacb287dad3e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="modules\physics\headers">
       <UniqueIdentifier>{0a83c753-b3ef-46ee-85d8-6b8d4329e146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts">
+      <UniqueIdentifier>{73839496-6370-447d-ac0a-931ef2c52ce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\dl">
+      <UniqueIdentifier>{7b2b0876-d085-4755-b413-1dca81896c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\zlib">
+      <UniqueIdentifier>{6e144183-445a-478c-b0c8-95ffe1fb4052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\thread">
+      <UniqueIdentifier>{bd6ccf9e-9050-48b5-8533-7103316b0003}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,51 +193,6 @@
     <ClCompile Include="FS_Wrappers.cpp">
       <Filter>modules\filesystem\wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\zlib\zlib.c">
-      <Filter>app\ruby_ext\Zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-0.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-1.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-2.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-3.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-4.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-5.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-6.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-7.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\callback-8.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cfunc.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\cptr.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby200\include\exts\dl\handle.c">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>modules\graphics</Filter>
     </ClCompile>
@@ -316,35 +268,56 @@
     <ClCompile Include="UDPSocket_Wrapper.cpp">
       <Filter>modules\network\wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="World_Wrapper.cpp">
-      <Filter>modules\physics\wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>modules\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>modules\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2_Wrapper.cpp">
-      <Filter>modules\physics\wrappers</Filter>
-    </ClCompile>
     <ClCompile Include="DebugDraw.cpp">
       <Filter>modules\physics</Filter>
     </ClCompile>
-    <ClCompile Include="BodyDef.cpp">
-      <Filter>modules\physics</Filter>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback.c">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClCompile>
-    <ClCompile Include="BodyDef_Wrapper.cpp">
-      <Filter>modules\physics\wrappers</Filter>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClCompile>
-    <ClCompile Include="Physics_Wrappers.cpp">
-      <Filter>modules\physics\wrappers</Filter>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClCompile>
-    <ClCompile Include="Body_Wrapper.cpp">
-      <Filter>modules\physics\wrappers</Filter>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClCompile>
-    <ClCompile Include="Body.cpp">
-      <Filter>modules\physics</Filter>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-3.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-4.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-5.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-6.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-7.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-8.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cfunc.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c">
+      <Filter>app\ruby_exts\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c">
+      <Filter>app\ruby_exts\thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -441,12 +414,6 @@
     <ClInclude Include="FS_Wrappers.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\callback.h">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby200\include\exts\dl\dl.h">
-      <Filter>app\ruby_ext\DL</Filter>
-    </ClInclude>
     <ClInclude Include="rage_errors.h">
       <Filter>app\headers</Filter>
     </ClInclude>
@@ -528,38 +495,17 @@
     <ClInclude Include="UDPSocket.h">
       <Filter>modules\network\headers</Filter>
     </ClInclude>
-    <ClInclude Include="World_Wrapper.h">
-      <Filter>modules\physics\wrappers\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>modules\physics\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>modules\physics\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2_Wrapper.h">
-      <Filter>modules\physics\wrappers\headers</Filter>
-    </ClInclude>
     <ClInclude Include="DebugDraw.h">
       <Filter>modules\physics\headers</Filter>
     </ClInclude>
-    <ClInclude Include="BodyDef.h">
-      <Filter>modules\physics\headers</Filter>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClInclude>
-    <ClInclude Include="Physics_Wrappers.h">
-      <Filter>modules\physics\wrappers\headers</Filter>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h">
+      <Filter>app\ruby_exts\dl</Filter>
     </ClInclude>
-    <ClInclude Include="BodyDef_Wrapper.h">
-      <Filter>modules\physics\wrappers\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="PhObject.h">
-      <Filter>modules\physics\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Body_Wrapper.h">
-      <Filter>modules\physics\wrappers\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Body.h">
-      <Filter>modules\physics\headers</Filter>
+    <ClInclude Include="rage_standard_headers.h">
+      <Filter>app\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,15 +20,9 @@ begin
       $close = true
     }
 
+    RAGE::Events.processScreen true
+
     RAGE.about()
-
-    f = RAGE::File.new RAGE::FS.getAbsolutePath("data/bgm.ogg"), "rb"
-
-    bgm = RAGE::Music.new f, ".ogg"
-    bgm.play
-
-    puts "Max joysticks: " + RAGE::Input.getMaxJoysticks().to_s
-
 
     gt = RAGE::Graphics.getTarget().clone()
 
@@ -72,12 +66,14 @@ begin
     s = Tlest.new
     s.mee
     s.mee
-
     x,y = 0, 0
+    id = nil
 
 	  loop do
-      #RAGE::Graphics.setTarget(gt)
+  
+
       RAGE::Draw.clear
+
       if pe.inCollision?(x + 400, y + 400, 50, 50)
         RAGE::Draw.setColor(1, 1, 0, 1)
       end
@@ -160,6 +156,7 @@ begin
       break if RAGE::Input.keyDown?(RAGE::Input::KEY_ESCAPE) || $close
       RAGE::Graphics.setTarget(nil)
 
+      RAGE::Events.update
       RAGE::Graphics.update
 	  end
 

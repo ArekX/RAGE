@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "Font.h"
+#include "Bitmap.h"
+
+#if RAGE_COMPILE_FONT
 
 namespace RAGE
 {
@@ -195,3 +198,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

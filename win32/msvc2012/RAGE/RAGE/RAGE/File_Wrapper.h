@@ -22,8 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
+#include "rage_standard_headers.h"
 
-#include "File.h"
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_FILE
 
 namespace RAGE
 {
@@ -64,3 +65,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

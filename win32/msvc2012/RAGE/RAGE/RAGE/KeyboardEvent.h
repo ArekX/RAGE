@@ -22,13 +22,14 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+#include "BaseEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_KEYBOARD_EVENT
 
 #define RAGE_EVENTS_KEY_UP 1
 #define RAGE_EVENTS_KEY_DOWN 2
 #define RAGE_EVENTS_KEY_CHAR 3
-
-#include "BaseEvent.h"
 
 
 namespace RAGE
@@ -66,3 +67,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

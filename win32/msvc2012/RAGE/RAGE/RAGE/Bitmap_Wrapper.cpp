@@ -22,6 +22,15 @@ freely, subject to the following restrictions:
 */
 
 #include "Bitmap_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "Bitmap.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_BITMAP
+
+#if RAGE_COMPILE_COLOR
+#include "Color.h"
+#endif
 
 namespace RAGE
 {
@@ -511,6 +520,7 @@ namespace RAGE
 			return Qnil;
 		}
 
+		#if RAGE_COMPILE_COLOR
 		VALUE BitmapWrapper::rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
 			Bitmap *bmp;
@@ -520,6 +530,7 @@ namespace RAGE
 
 			return Qnil;
 		}
+		#endif
 
 		VALUE BitmapWrapper::rb_bitmap_set_blended_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
@@ -595,7 +606,9 @@ namespace RAGE
 			rb_define_method(rb_rageBitmapClass, "unlock", RFUNC(BitmapWrapper::rb_bitmap_unlock), 0);
 			rb_define_method(rb_rageBitmapClass, "setPixel", RFUNC(BitmapWrapper::rb_bitmap_set_pixel), 6);
 			rb_define_method(rb_rageBitmapClass, "blendPixel", RFUNC(BitmapWrapper::rb_bitmap_set_blended_pixel), 6);
+			#if RAGE_COMPILE_COLOR
 			rb_define_method(rb_rageBitmapClass, "getPixel", RFUNC(BitmapWrapper::rb_bitmap_get_pixel), 3);
+			#endif
 
 			rb_define_method(rb_rageBitmapClass, "clone", RFUNC(BitmapWrapper::rb_clone), 0);
 			rb_define_method(rb_rageBitmapClass, "dispose", RFUNC(BitmapWrapper::rb_dispose), 0);
@@ -616,3 +629,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

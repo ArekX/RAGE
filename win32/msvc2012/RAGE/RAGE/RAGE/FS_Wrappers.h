@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_FS
 
 namespace RAGE
 {
@@ -60,3 +62,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

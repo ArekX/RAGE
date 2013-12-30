@@ -22,6 +22,10 @@ freely, subject to the following restrictions:
 */
 
 #include "Joystick_Wrapper.h"
+#include "Joystick.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_INPUT && RAGE_COMPILE_JOYSTICK
 
 namespace RAGE
 {
@@ -217,3 +221,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

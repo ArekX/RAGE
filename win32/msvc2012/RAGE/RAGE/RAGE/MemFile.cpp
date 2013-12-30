@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "MemFile.h"
 
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_MEM_FILE
+
 namespace RAGE
 {
 	namespace Filesystem
@@ -389,3 +391,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -22,15 +22,15 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+#include "BaseEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_JOY_EVENT
 
 #define RAGE_EVENTS_JOY_UP 13
 #define RAGE_EVENTS_JOY_DOWN 14
 #define RAGE_EVENTS_JOY_AXIS 15
 #define RAGE_EVENTS_JOY_CONFIG 16
-
-#include "BaseEvent.h"
-
 
 namespace RAGE
 {
@@ -69,3 +69,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

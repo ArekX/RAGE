@@ -22,6 +22,12 @@ freely, subject to the following restrictions:
 */
 
 #include "MouseEvent_Wrapper.h"
+#include "Event_Wrapper.h"
+#include "Events_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "MouseEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_MOUSE_EVENT
 
 namespace RAGE
 {
@@ -159,3 +165,6 @@ namespace RAGE
 
 	}
 }
+
+
+#endif

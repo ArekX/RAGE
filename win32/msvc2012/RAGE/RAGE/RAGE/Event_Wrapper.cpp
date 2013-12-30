@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "Event_Wrapper.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_EVENTS
 
 namespace RAGE
 {
@@ -73,3 +76,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

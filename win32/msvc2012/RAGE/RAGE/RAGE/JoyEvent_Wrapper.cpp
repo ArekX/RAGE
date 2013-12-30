@@ -22,6 +22,16 @@ freely, subject to the following restrictions:
 */
 
 #include "JoyEvent_Wrapper.h"
+#include "JoyEvent.h"
+#include "Event_Wrapper.h"
+#include "Events_Wrapper.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_JOY_EVENT
+
+#if RAGE_COMPILE_JOYSTICK
+#include "Joystick.h"
+#endif
 
 namespace RAGE
 {
@@ -131,8 +141,10 @@ namespace RAGE
 			return Qnil;
 		}
 
+		#if RAGE_COMPILE_JOYSTICK
 		VALUE JoyEventWrapper::rb_set_event_joystick(VALUE self, VALUE joystick)
 		{
+
 			Input::Joystick *joy;
 			JoyEvent *joy_event;
 			Data_Get_Struct(joystick, Input::Joystick, joy);
@@ -143,7 +155,6 @@ namespace RAGE
 			return Qnil;
 		}
 
-
 		VALUE JoyEventWrapper::rb_is_event_joystick(VALUE self, VALUE joystick)
 		{
 			Input::Joystick *joy;
@@ -153,6 +164,7 @@ namespace RAGE
 
 			return joy_event->is_joystick(joy->joy) ? Qtrue : Qfalse;
 		}
+		#endif
 
 		VALUE JoyEventWrapper::rb_get_proc_array(VALUE self, VALUE event_type)
 		{
@@ -187,8 +199,10 @@ namespace RAGE
 			rb_define_method(rb_rage_JoyEventClass, "runReconfiguredProcs", RFUNC(JoyEventWrapper::rb_run_reconfigured), 0);
 			rb_define_method(rb_rage_JoyEventClass, "getProcCount", RFUNC(JoyEventWrapper::rb_get_proc_count), 1);
 			rb_define_method(rb_rage_JoyEventClass, "getProcsAsArray", RFUNC(JoyEventWrapper::rb_get_proc_array), 1);
+			#if RAGE_COMPILE_JOYSTICK
 			rb_define_method(rb_rage_JoyEventClass, "setJoystick", RFUNC(JoyEventWrapper::rb_set_event_joystick), 1);
 			rb_define_method(rb_rage_JoyEventClass, "isFromJoystick?", RFUNC(JoyEventWrapper::rb_is_event_joystick), 1);
+			#endif
 			rb_define_method(rb_rage_JoyEventClass, "dispose", RFUNC(JoyEventWrapper::rb_dispose), 0);
 			rb_define_method(rb_rage_JoyEventClass, "disposed?", RFUNC(JoyEventWrapper::rb_disposed), 0);
 		}
@@ -204,3 +218,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

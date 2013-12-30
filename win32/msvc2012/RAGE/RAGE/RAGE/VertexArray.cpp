@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "VertexArray.h"
 
+#if RAGE_COMPILE_VERTEX_ARRAY
+
 namespace RAGE
 {
 	namespace Graphics
@@ -225,3 +227,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

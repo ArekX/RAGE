@@ -23,9 +23,10 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-
+#include "rage_standard_headers.h"
 #include "BaseEvent.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_TIMER_EVENT
 
 namespace RAGE
 {
@@ -64,3 +65,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

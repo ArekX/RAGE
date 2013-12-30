@@ -22,19 +22,54 @@ freely, subject to the following restrictions:
 */
 
 #include "RubyInterpreter.h"
-#include <exts/dl/ruby_ext_dl_rb_data.h>
 
-/* BOX2D */
-#include "Physics_Wrappers.h"
-#include "Vector2_Wrapper.h"
-#include "World_Wrapper.h"
-#include "BodyDef_Wrapper.h"
-#include "Body_Wrapper.h"
+/* RAGE Classes and modules */
+#include "Graphics_Wrappers.h"
+#include "Font_Wrapper.h"
+#include "Audio_Wrapper.h"
+#include "Music_Wrapper.h"
+#include "Sfx_Wrapper.h"
+#include "Color_Wrapper.h"
+#include "BaseFile_Wrapper.h"
+#include "Draw_Wrappers.h"
+#include "Bitmap_Wrapper.h"
+#include "Shader_Wrapper.h"
+#include "Events_Wrapper.h"
+#include "Input_Wrappers.h"
+#include "TimerEvent_Wrapper.h"
+#include "Event_Wrapper.h"
+#include "KeyboardEvent_Wrapper.h"
+#include "MouseEvent_Wrapper.h"
+#include "ScreenEvent_Wrapper.h"
+#include "JoyEvent_Wrapper.h"
+#include "IniFile_Wrapper.h"
+#include "FS_Wrappers.h"
+#include "Joystick_Wrapper.h"
+#include "VertexArray_Wrapper.h"
+#include "ParticleEngine_Wrapper.h"
+#include "Logic_Wrappers.h"
+#include "MemFile_Wrapper.h"
+#include "File_Wrapper.h"
+#include "Network_Wrappers.h"
+#include "TCPServer_Wrapper.h"
+#include "TCPClient_Wrapper.h"
+#include "UDPSocket_Wrapper.h"
+
+#if RAGE_COMPILE_DL
+#include <ext\dl\dl_ruby.h>
+#endif
 
 extern "C"
 {
+#if RAGE_COMPILE_DL
 	void Init_dl(void);
+#endif
+
+#if RAGE_COMPILE_ZLIB
 	void Init_zlib(void);
+#endif
+
+	void Init_thread(void);
 }
 
 namespace RAGE
@@ -49,8 +84,11 @@ namespace RAGE
 		{
 			int error = 0;
 
-			rb_eval_string_protect(ruby_dl_extension_rb_data, &error);
+			#if RAGE_COMPILE_DL
+			// DL extension ruby script data
+			rb_eval_string_protect(dl_rb_data, &error);
 			if (error) PRINT(RAGE_ERROR_DL_EXT_RB_DATA_FAILED);
+			#endif
 		}
 
 		static VALUE rb_rage_about(VALUE self)
@@ -265,76 +303,66 @@ namespace RAGE
 				if (!configured)
 					set_default_config();
 
-				/* Initialize ruby extensions */				
-				if (gConfig->is_on("Zlib")) Init_zlib();
+				// Initialize Ruby Threads
+				Init_thread();
 
+				/* Initialize ruby extensions */
+				#if RAGE_COMPILE_ZLIB
+				if (gConfig->is_on("Zlib")) 
+					Init_zlib();
+				#endif
+
+				#if RAGE_COMPILE_DL
 				if (gConfig->is_on("DL"))
-				{
 					Init_dl();
-					load_extension_rb_data();
-				}
+				#endif
+
+				// Load Ruby Extension data
+				#if RAGE_COMPILE_DL
+				load_extension_rb_data();
+				#endif
 
 				/* = Load RAGE modules = */
-				RAGE::Filesystem::FSWrappers::load_wrappers();
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
-				RAGE::Events::EventsWrapper::load_wrappers();
-				RAGE::Input::InputWrappers::load_wrappers();
-				RAGE::Audio::AudioWrappers::load_wrappers();
-				RAGE::Graphics::DrawWrappers::load_wrappers();
-				RAGE::Network::NetworkWrappers::load_wrappers();
 
-				/* = Load RAGE classes = */
+				RAGE_INIT_FS_MODULE 
+				RAGE_INIT_EVENTS_MODULE 
+				RAGE_INIT_INPUT_MODULE 
+				RAGE_INIT_AUDIO_MODULE 
+				RAGE_INIT_DRAW_MODULE
+				RAGE_INIT_NETWORK_MODULE 
+				RAGE_INIT_LOGIC_MODULE 
 
-				/* Filesystem classes */
-				RAGE::Filesystem::BaseFileWrapper::load_ruby_class();
-				RAGE::Filesystem::FileWrapper::load_ruby_class();
-				RAGE::Filesystem::MemFileWrapper::load_ruby_class();
-				RAGE::Filesystem::IniFileWrapper::load_ruby_class();
-
-				/* Graphics classes */
-				RAGE::Graphics::BitmapWrapper::load_ruby_class();
-				RAGE::Graphics::FontWrapper::load_ruby_class();
-				RAGE::Graphics::ColorWrapper::load_ruby_class();
-				RAGE::Graphics::ShaderWrapper::load_ruby_class();
-				RAGE::Graphics::VertexArrayWrapper::load_ruby_class();
-
-				/* Event classes */
-				RAGE::Events::EventWrapper::load_ruby_class();
-				RAGE::Events::TimerEventWrapper::load_ruby_class();
-				RAGE::Events::JoyEventWrapper::load_ruby_class();
-				RAGE::Events::KeyboardEventWrapper::load_ruby_class();
-				RAGE::Events::MouseEventWrapper::load_ruby_class();
-				RAGE::Events::ScreenEventWrapper::load_ruby_class();
-
-				/* Audio classes */
-				RAGE::Audio::MusicWrapper::load_ruby_class();
-				RAGE::Audio::SfxWrapper::load_ruby_class();
-				
-				/* Input classes */
-				RAGE::Input::JoystickWrapper::load_ruby_class();
-				
-				/* Network classes */
-				RAGE::Network::TCPServerWrapper::load_ruby_class();
-				RAGE::Network::TCPClientWrapper::load_ruby_class();
-				RAGE::Network::UDPSocketWrapper::load_ruby_class();
-
-				/* Box2D Wrapper classes */
-				RAGE::Physics::PhysicsWrappers::load_wrappers();
-				RAGE::Physics::Vector2Wrapper::load_ruby_class();
-				RAGE::Physics::WorldWrapper::load_ruby_class();
-				RAGE::Physics::BodyDefWrapper::load_ruby_class();
-				RAGE::Physics::BodyWrapper::load_ruby_class();
+				RAGE_INIT_BASE_FILE_CLASS 
+				RAGE_INIT_FILE_CLASS 
+				RAGE_INIT_MEM_FILE_CLASS 
+				RAGE_INIT_INI_FILE_CLASS 
+				RAGE_INIT_BITMAP_CLASS 
+				RAGE_INIT_FONT_CLASS 
+				RAGE_INIT_COLOR_CLASS 
+				RAGE_INIT_SHADER_CLASS 
+				RAGE_INIT_VERTEX_ARRAY_CLASS 
+				RAGE_INIT_BASE_EVENT_CLASS 
+				RAGE_INIT_TIMER_EVENT_CLASS 
+				RAGE_INIT_JOY_EVENT_CLASS 
+				RAGE_INIT_KEYBOARD_EVENT_CLASS 
+				RAGE_INIT_MOUSE_EVENT_CLASS 
+				RAGE_INIT_SCREEN_EVENT_CLASS 
+				RAGE_INIT_MUSIC_CLASS 
+				RAGE_INIT_SFX_CLASS 
+				RAGE_INIT_JOYSTICK_CLASS 
+				RAGE_INIT_NETWORK_CLASS 
+				RAGE_INIT_TCP_CLIENT_CLASS 
+				RAGE_INIT_UDP_SOCKET_CLASS 
+				RAGE_INIT_PARTICLE_ENGINE_CLASS 
 
 				/* Perform additional tasks */
-				RAGE::Events::EventsWrapper::init_queue();
-				RAGE::Audio::AudioWrappers::init_audio();
-				RAGE::Graphics::GraphicsWrappers::initialize_graphics();
-				RAGE::Graphics::DrawWrappers::init();
-				RAGE::Events::EventsWrapper::run_event_thread();
+				RAGE_EVENT_MODULE_START
+				RAGE_AUDIO_MODULE_START
 
-				/* Particle Engine Loading - Needs fixing */
-				RAGE::Graphics::ParticleEngineWrapper::load_ruby_class();
-				RAGE::Logic::LogicWrappers::load_wrappers();
+				RAGE::Graphics::GraphicsWrappers::initialize_graphics();
+				
+				RAGE_DRAW_MODULE_START
 
 				/* Load boot script */
 				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))

@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_SHADER
 
 #define SHADER_LEN 1
 #define RAGE_FRAGMENT_SHADER 1
@@ -75,3 +77,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

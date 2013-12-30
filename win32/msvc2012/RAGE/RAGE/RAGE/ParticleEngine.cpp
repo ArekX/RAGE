@@ -22,6 +22,7 @@ freely, subject to the following restrictions:
 */
 
 #include "ParticleEngine.h"
+#include "Logic_Wrappers.h"
 
 namespace RAGE
 {

@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "JoyEvent.h"
 
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_JOY_EVENT
+
 namespace RAGE
 {
 	namespace Events
@@ -271,3 +273,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

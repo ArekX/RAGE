@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "TCPClient.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_TCP_CLIENT
 
 namespace RAGE
 {
@@ -58,3 +60,4 @@ namespace RAGE
 	}
 }
 
+#endif

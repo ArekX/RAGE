@@ -22,6 +22,27 @@ freely, subject to the following restrictions:
 */
 
 #include "Draw_Wrappers.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_DRAW
+
+#if RAGE_COMPILE_COLOR
+#include "Color.h"
+#include "Color_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_FONT
+#include "Font.h"
+#include "Font_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_BITMAP
+#include "Bitmap.h"
+#endif
+
+#if RAGE_COMPILE_VERTEX_ARRAY
+#include "VertexArray.h"
+#endif
 
 namespace RAGE
 {
@@ -117,6 +138,7 @@ namespace RAGE
 			return Qnil;
 		}
 
+		#if RAGE_COMPILE_FONT
 		VALUE DrawWrappers::rb_set_font(VALUE self, VALUE sfont)
 		{			
 			if (rb_class_of(sfont) != RAGE::Graphics::FontWrapper::get_ruby_class())
@@ -149,7 +171,14 @@ namespace RAGE
 
 			return Qnil;
 		}
+		
+		VALUE DrawWrappers::rb_get_font(VALUE self)
+		{
+			return rb_font;
+		}
+		#endif
 
+		#if RAGE_COMPILE_COLOR
 		VALUE DrawWrappers::rb_set_color_o(VALUE self, VALUE scolor)
 		{
 			if (rb_class_of(scolor) != RAGE::Graphics::ColorWrapper::get_ruby_class())
@@ -172,70 +201,6 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE DrawWrappers::rb_draw_rounded_rect(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry, VALUE thickness)
-		{
-			al_draw_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color, NUM2DBL(thickness));
-			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_draw_rounded_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry)
-		{
-			al_draw_filled_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color);
-			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_draw_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE start, VALUE end, VALUE type)
-		{
-			VertexArray *va;
-			Data_Get_Struct(vertex_array, VertexArray, va);
-
-			if (TYPE(texture) != T_NIL)
-			{
-				Bitmap *bmp;
-				Data_Get_Struct(texture, Bitmap, bmp);
-
-				return INT2FIX(al_draw_prim(va->ary, NULL, bmp->bitmap, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
-			}
-
-			return INT2FIX(al_draw_prim(va->ary, NULL, NULL, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
-		}	
-
-		VALUE DrawWrappers::rb_draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type)
-		{
-			if (TYPE(indices_array) != T_ARRAY)
-			{
-				rb_raise(rb_eArgError, RAGE_ERROR_INDICES_NOT_ARRAY);
-				return Qnil;
-			}
-
-			VertexArray *va;
-			Data_Get_Struct(vertex_array, VertexArray, va);
-			
-			int *indices = new int[RARRAY_LEN(indices_array)];
-
-			for (int i = 0; i < RARRAY_LEN(indices_array); i++)
-					indices[i] = FIX2INT(rb_ary_entry(indices_array, i));
-
-			if (TYPE(texture) != T_NIL)
-			{
-				Bitmap *bmp;
-				Data_Get_Struct(texture, Bitmap, bmp);
-
-				return INT2FIX(al_draw_indexed_prim(va->ary, NULL, bmp->bitmap, indices, FIX2INT(indices_num), FIX2INT(type)));
-			}
-
-			return INT2FIX(al_draw_indexed_prim(va->ary, NULL, NULL, indices, FIX2INT(indices_num), FIX2INT(type)));
-
-			delete[] indices;
-		}
-
-		VALUE DrawWrappers::rb_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
-		{
-			bg_color = al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a));
-
-			return Qnil;
-		}
-
 		VALUE DrawWrappers::rb_set_background_color_o(VALUE self, VALUE color)
 		{
 			Color *cl;
@@ -244,29 +209,6 @@ namespace RAGE
 			bg_color = cl->color;
 
 			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_clear(VALUE self)
-		{
-			al_clear_to_color(bg_color);
-			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
-		{
-			al_set_clipping_rectangle(NUM2DBL(x), NUM2DBL(y), NUM2DBL(w), NUM2DBL(h));
-			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_graphics_reset_clipping_rect(VALUE self)
-		{
-			al_reset_clipping_rectangle();
-			return Qnil;
-		}
-
-		VALUE DrawWrappers::rb_get_font(VALUE self)
-		{
-			return rb_font;
 		}
 
 		VALUE DrawWrappers::rb_get_bg_color(VALUE self)
@@ -289,6 +231,97 @@ namespace RAGE
 			cl->color = color;
 
 			return rt_color;
+		}
+		#endif
+
+		#if RAGE_COMPILE_VERTEX_ARRAY
+		VALUE DrawWrappers::rb_draw_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE start, VALUE end, VALUE type)
+		{
+			VertexArray *va;
+			Data_Get_Struct(vertex_array, VertexArray, va);
+
+			#if RAGE_COMPILE_BITMAP
+			if (TYPE(texture) != T_NIL)
+			{
+				RAGE_GET_DATA(texture, Bitmap, bmp);
+
+				return INT2FIX(al_draw_prim(va->ary, NULL, bmp->bitmap, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+			}
+			#endif
+
+			return INT2FIX(al_draw_prim(va->ary, NULL, NULL, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+		}	
+
+		VALUE DrawWrappers::rb_draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type)
+		{
+			if (TYPE(indices_array) != T_ARRAY)
+			{
+				rb_raise(rb_eArgError, RAGE_ERROR_INDICES_NOT_ARRAY);
+				return Qnil;
+			}
+
+			VertexArray *va;
+			Data_Get_Struct(vertex_array, VertexArray, va);
+			
+			int *indices = new int[RARRAY_LEN(indices_array)];
+
+			for (int i = 0; i < RARRAY_LEN(indices_array); i++)
+					indices[i] = FIX2INT(rb_ary_entry(indices_array, i));
+
+			#if RAGE_COMPILE_BITMAP
+			if (TYPE(texture) != T_NIL)
+			{
+				RAGE_GET_DATA(texture, Bitmap, bmp);
+
+				delete[] indices;
+				
+				return INT2FIX(al_draw_indexed_prim(va->ary, NULL, bmp->bitmap, indices, FIX2INT(indices_num), FIX2INT(type)));
+			}
+			#endif
+
+			delete[] indices;
+			
+			return INT2FIX(al_draw_indexed_prim(va->ary, NULL, NULL, indices, FIX2INT(indices_num), FIX2INT(type)));
+
+			
+		}
+		#endif
+
+		VALUE DrawWrappers::rb_draw_rounded_rect(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry, VALUE thickness)
+		{
+			al_draw_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color, NUM2DBL(thickness));
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_draw_rounded_filled_rectangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE rx, VALUE ry)
+		{
+			al_draw_filled_rounded_rectangle(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(rx), NUM2DBL(ry), color);
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a)
+		{
+			bg_color = al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a));
+
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_clear(VALUE self)
+		{
+			al_clear_to_color(bg_color);
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h)
+		{
+			al_set_clipping_rectangle(NUM2DBL(x), NUM2DBL(y), NUM2DBL(w), NUM2DBL(h));
+			return Qnil;
+		}
+
+		VALUE DrawWrappers::rb_graphics_reset_clipping_rect(VALUE self)
+		{
+			al_reset_clipping_rectangle();
+			return Qnil;
 		}
 
 		VALUE DrawWrappers::rb_draw_triangle(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE x3, VALUE y3, VALUE thickness)
@@ -376,7 +409,6 @@ namespace RAGE
 			rb_define_module_function(draw, "setClippingRect", RFUNC(DrawWrappers::rb_graphics_set_clipping_rect), 4);
 			rb_define_module_function(draw, "resetClippingRect", RFUNC(DrawWrappers::rb_graphics_reset_clipping_rect), 0);
 			rb_define_module_function(draw, "setBackgroundColor", RFUNC(DrawWrappers::rb_set_background_color), 4);
-			rb_define_module_function(draw, "setBackgroundColorO", RFUNC(DrawWrappers::rb_set_background_color_o), 1);
 			rb_define_module_function(draw, "rectangle", RFUNC(DrawWrappers::rb_draw_rectangle), 5);
 			rb_define_module_function(draw, "fillRect", RFUNC(DrawWrappers::rb_draw_filled_rectangle), 4);
 			rb_define_module_function(draw, "roundRect", RFUNC(DrawWrappers::rb_draw_rounded_rect), 7);
@@ -385,18 +417,32 @@ namespace RAGE
 			rb_define_module_function(draw, "ellipseM", RFUNC(DrawWrappers::rb_draw_ellipse2), 5);
 			rb_define_module_function(draw, "fillEllipse", RFUNC(DrawWrappers::rb_draw_filled_ellipse), 4);
 			rb_define_module_function(draw, "fillEllipseM", RFUNC(DrawWrappers::rb_draw_filled_ellipse2), 4);
+
+			#if RAGE_COMPILE_VERTEX_ARRAY
 			rb_define_module_function(draw, "prim", RFUNC(DrawWrappers::rb_draw_vertex), 5);
 			rb_define_module_function(draw, "indexedPrim", RFUNC(DrawWrappers::rb_draw_indexed_vertex), 5);
+			#endif
+
 			rb_define_module_function(draw, "pixel", RFUNC(DrawWrappers::rb_draw_pixel), 2);
 			rb_define_module_function(draw, "pixelC", RFUNC(DrawWrappers::rb_draw_pixel_c), 6);
+			
+			#if RAGE_COMPILE_COLOR
 			rb_define_module_function(draw, "setColor", RFUNC(DrawWrappers::rb_set_color), 4);
-			rb_define_module_function(draw, "setColorO", RFUNC(DrawWrappers::rb_set_color_o), 1);
-			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::rb_set_font), 1);
-			rb_define_module_function(draw, "getFont", RFUNC(DrawWrappers::rb_get_font), 0);
+			rb_define_module_function(draw, "setBackgroundColorO", RFUNC(DrawWrappers::rb_set_background_color_o), 1);
 			rb_define_module_function(draw, "getColor", RFUNC(DrawWrappers::rb_get_set_color), 0);
 			rb_define_module_function(draw, "getBackgroundColor", RFUNC(DrawWrappers::rb_get_set_color), 0);
+			rb_define_module_function(draw, "setColorO", RFUNC(DrawWrappers::rb_set_color_o), 1);
+			#endif
+			
+			#if RAGE_COMPILE_FONT
+			rb_define_module_function(draw, "setFont", RFUNC(DrawWrappers::rb_set_font), 1);
+			rb_define_module_function(draw, "getFont", RFUNC(DrawWrappers::rb_get_font), 0);
+			#endif
+
 			rb_define_module_function(draw, "text", RFUNC(DrawWrappers::rb_draw_text), 3);
 			rb_define_module_function(draw, "justifyText", RFUNC(DrawWrappers::rb_draw_justified_text), 5);
 		}
 	}
 }
+
+#endif

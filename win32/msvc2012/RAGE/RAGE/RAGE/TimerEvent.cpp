@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "TimerEvent.h"
 
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_TIMER_EVENT
+
 namespace RAGE
 {
 	namespace Events
@@ -225,3 +227,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

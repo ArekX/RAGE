@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_PARTICLE_ENGINE
 
 #define RAGE_POINT_EMITTER 0
 #define RAGE_LINE_EMITTER 1
@@ -294,3 +296,4 @@ namespace RAGE
 	}
 }
 
+#endif

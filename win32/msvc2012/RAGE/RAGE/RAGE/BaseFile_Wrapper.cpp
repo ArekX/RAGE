@@ -22,6 +22,7 @@ freely, subject to the following restrictions:
 */
 
 #include "BaseFile_Wrapper.h"
+#include "RubyInterpreter.h"
 
 namespace RAGE
 {

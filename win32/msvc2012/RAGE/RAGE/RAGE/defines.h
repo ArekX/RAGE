@@ -26,6 +26,7 @@ freely, subject to the following restrictions:
 #define RFUNC RUBY_METHOD_FUNC
 #define RAGE_CHECK_DISPOSED(disposed_var) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return; }
 #define RAGE_CHECK_DISPOSED_RET(disposed_var, ret) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return ret; }
+#define RAGE_DESTROY_PTR(ptr, type) delete ptr; *((type*)ptr) = nullptr
 
 #ifdef WIN32
 #define DS '\\'

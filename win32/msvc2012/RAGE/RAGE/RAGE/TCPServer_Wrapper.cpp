@@ -22,6 +22,10 @@ freely, subject to the following restrictions:
 */
 
 #include "TCPServer_Wrapper.h"
+#include "TCPServer.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_TCP_SERVER
 
 namespace RAGE
 {
@@ -214,3 +218,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -22,7 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_EVENTS
 
 extern class BaseEvent
 {
@@ -31,3 +33,4 @@ public:
 	virtual void callback(ALLEGRO_EVENT *ev) = 0;
 };
 
+#endif

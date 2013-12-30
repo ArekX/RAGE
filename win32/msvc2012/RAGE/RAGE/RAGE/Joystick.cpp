@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "Joystick.h"
 
+#if RAGE_COMPILE_INPUT && RAGE_COMPILE_JOYSTICK
+
 namespace RAGE
 {
 	namespace Input
@@ -186,3 +188,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

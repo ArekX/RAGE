@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "TCPServer.h"
 
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_TCP_SERVER
+
 namespace RAGE
 {
 	namespace Network
@@ -372,3 +374,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

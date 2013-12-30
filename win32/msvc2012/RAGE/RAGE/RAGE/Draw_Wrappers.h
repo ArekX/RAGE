@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_DRAW
 
 namespace RAGE
 {
@@ -53,15 +55,26 @@ namespace RAGE
 			static VALUE rb_draw_text(VALUE self, VALUE x, VALUE y, VALUE text);
 			static VALUE rb_draw_justified_text(VALUE self, VALUE x, VALUE y, VALUE width, VALUE diff, VALUE text);
 			static VALUE rb_set_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
+			
+			#if RAGE_COMPILE_VERTEX_ARRAY
 			static VALUE rb_draw_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE start, VALUE end, VALUE type);
 			static VALUE rb_draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type);
+			#endif
+
+			#if RAGE_COMPILE_COLOR
 			static VALUE rb_set_color_o(VALUE self, VALUE scolor);
-			static VALUE rb_set_font(VALUE self, VALUE sfont);
-			static VALUE rb_get_font(VALUE self);
+			static VALUE rb_set_background_color_o(VALUE self, VALUE color);
 			static VALUE rb_get_bg_color(VALUE self);
 			static VALUE rb_get_set_color(VALUE self);
+			#endif
+
+			#if RAGE_COMPILE_FONT
+			static VALUE rb_set_font(VALUE self, VALUE sfont);
+			static VALUE rb_get_font(VALUE self);
+			#endif
+			
 			static VALUE rb_set_background_color(VALUE self, VALUE r, VALUE g, VALUE b, VALUE a);
-			static VALUE rb_set_background_color_o(VALUE self, VALUE color);
+			
 			static VALUE rb_clear(VALUE self);
 			static VALUE rb_graphics_set_clipping_rect(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
 			static VALUE rb_graphics_reset_clipping_rect(VALUE self);
@@ -73,3 +86,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

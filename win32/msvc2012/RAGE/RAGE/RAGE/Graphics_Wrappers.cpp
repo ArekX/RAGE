@@ -22,6 +22,21 @@ freely, subject to the following restrictions:
 */
 
 #include "Graphics_Wrappers.h"
+#include "RAGEConfiguration.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_BITMAP
+#include "Bitmap.h"
+#include "Bitmap_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_SHADER
+#include "Shader.h"
+#endif
+
+#if RAGE_COMPILE_EVENTS
+#include "Events_Wrapper.h"
+#endif
 
 namespace RAGE
 {
@@ -29,16 +44,26 @@ namespace RAGE
 	{
 		RAGEConfiguration *start_config;
 		ALLEGRO_DISPLAY *display;
-		ALLEGRO_MOUSE_CURSOR *mouse_bitmap_cursor = NULL;
-		Shader *active_shader = NULL;
+		ALLEGRO_MOUSE_CURSOR *mouse_bitmap_cursor = nullptr;
+
 		int bitmap_filter_flags = 0;
 		int mouse_focus_x = 0;
 		int mouse_focus_y = 0;
 		int window_x;
 		int window_y;
 		char window_title[255];
-		bool process_screen_events = false;
+
+		#if RAGE_COMPILE_SHADER
+		Shader *active_shader = nullptr;
 		VALUE rb_shader = Qnil;
+		#endif
+
+		#if RAGE_COMPILE_EVENTS
+		bool process_screen_events = false;
+		#endif
+
+		#if RAGE_COMPILE_BITMAP
+
 		VALUE rb_target_bitmap = Qnil;
 		VALUE rb_icon_bitmap = Qnil;
 
@@ -87,6 +112,87 @@ namespace RAGE
 			
 			return rb_target_bitmap;
 		}
+
+		VALUE GraphicsWrappers::rb_set_icon(VALUE self, VALUE icon_bitmap)
+		{
+			if (TYPE(icon_bitmap) == T_NIL)
+			{
+				rb_icon_bitmap = Qnil;
+				al_set_display_icon(display, NULL);
+			}
+
+			Bitmap *bmp;
+			Data_Get_Struct(icon_bitmap, Bitmap, bmp);
+
+			if (bmp->disposed)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS);
+				return Qnil;
+			}
+
+			rb_icon_bitmap = icon_bitmap;
+
+			al_set_display_icon(display, bmp->bitmap);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_get_icon(VALUE self)
+		{
+			return rb_icon_bitmap;
+		}
+
+		VALUE GraphicsWrappers::rb_set_mouse_bitmap(VALUE self, VALUE cursor_bitmap, VALUE focus_x, VALUE focus_y)
+		{
+			Bitmap *bmp;
+
+			Data_Get_Struct(cursor_bitmap, Bitmap, bmp);
+
+			if (mouse_bitmap_cursor != NULL)
+				al_destroy_mouse_cursor(mouse_bitmap_cursor);
+
+			mouse_bitmap_cursor = al_create_mouse_cursor(bmp->bitmap, NUM2UINT(focus_x), NUM2UINT(focus_y));
+
+			if (mouse_bitmap_cursor == NULL)
+			{
+				rb_raise(rb_eException, RAGE_ERROR_MOUSE_CURSOR_CREATE_FAIL);
+			}
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_hold_bitmap_drawing(VALUE self, VALUE val)
+		{
+			if (TYPE(val) == T_TRUE)
+				al_hold_bitmap_drawing(true);
+			else if (TYPE(val) == T_FALSE)
+				al_hold_bitmap_drawing(false);
+
+			return Qnil;
+		}
+
+		VALUE GraphicsWrappers::rb_is_bitmap_drawing_held(VALUE self)
+		{
+			return (al_is_bitmap_drawing_held() == true) ? Qtrue : Qfalse;
+		}
+
+		VALUE GraphicsWrappers::rb_set_bitmap_flags(VALUE self, VALUE flags)
+		{
+			bitmap_filter_flags = FIX2INT(flags);
+
+			return Qnil;
+		}
+
+		int GraphicsWrappers::get_bitmap_flags(void)
+		{
+			return bitmap_filter_flags;
+		}
+
+		void GraphicsWrappers::restore_drawing_target(void)
+		{
+			GraphicsWrappers::rb_set_target(Qnil, rb_target_bitmap);
+		}
+		#endif
 
 		VALUE GraphicsWrappers::rb_graphics_update(VALUE self)
 		{
@@ -169,7 +275,6 @@ namespace RAGE
 		{
 			if (TYPE(val) == T_TRUE)
 			{
-			
 				al_show_mouse_cursor(display);
 				return Qtrue;
 			}
@@ -218,35 +323,6 @@ namespace RAGE
 		VALUE GraphicsWrappers::rb_get_screen_h(VALUE self)
 		{
 			return INT2FIX(al_get_display_height(display));
-		}
-
-		VALUE GraphicsWrappers::rb_set_icon(VALUE self, VALUE icon_bitmap)
-		{
-			if (TYPE(icon_bitmap) == T_NIL)
-			{
-				rb_icon_bitmap = Qnil;
-				al_set_display_icon(display, NULL);
-			}
-
-			Bitmap *bmp;
-			Data_Get_Struct(icon_bitmap, Bitmap, bmp);
-
-			if (bmp->disposed)
-			{
-				rb_raise(rb_eException, RAGE_ERROR_CANNOT_SET_DISPOSED_OBJECTS);
-				return Qnil;
-			}
-
-			rb_icon_bitmap = icon_bitmap;
-
-			al_set_display_icon(display, bmp->bitmap);
-
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_get_icon(VALUE self)
-		{
-			return rb_icon_bitmap;
 		}
 
 		VALUE GraphicsWrappers::rb_inhibit_screen_saver(VALUE self, VALUE val)
@@ -305,27 +381,11 @@ namespace RAGE
 
 			if (c_index != -1)
 				return (al_set_system_mouse_cursor(display, (ALLEGRO_SYSTEM_MOUSE_CURSOR)c_index) == true) ? Qtrue : Qfalse;
+			
+			#if RAGE_COMPILE_BITMAP
 			else if ((c_index == -1) && (mouse_bitmap_cursor != NULL))
 				return (al_set_mouse_cursor(display, mouse_bitmap_cursor) == true) ? Qtrue : Qfalse;
-
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_set_mouse_bitmap(VALUE self, VALUE cursor_bitmap, VALUE focus_x, VALUE focus_y)
-		{
-			Bitmap *bmp;
-
-			Data_Get_Struct(cursor_bitmap, Bitmap, bmp);
-
-			if (mouse_bitmap_cursor != NULL)
-				al_destroy_mouse_cursor(mouse_bitmap_cursor);
-
-			mouse_bitmap_cursor = al_create_mouse_cursor(bmp->bitmap, NUM2UINT(focus_x), NUM2UINT(focus_y));
-
-			if (mouse_bitmap_cursor == NULL)
-			{
-				rb_raise(rb_eException, RAGE_ERROR_MOUSE_CURSOR_CREATE_FAIL);
-			}
+			#endif
 
 			return Qnil;
 		}
@@ -340,6 +400,7 @@ namespace RAGE
 			return Qnil;
 		}
 
+		#if RAGE_COMPILE_SHADER
 		VALUE GraphicsWrappers::rb_set_shader(VALUE self, VALUE shader)
 		{
 			if (active_shader != NULL)
@@ -381,6 +442,7 @@ namespace RAGE
 		{
 			return rb_shader;
 		}
+		#endif
 
 		VALUE GraphicsWrappers::rb_set_fullscreen_window(VALUE self, VALUE val)
 		{
@@ -439,39 +501,6 @@ namespace RAGE
 			return ret_ary;
 		}
 
-
-		VALUE GraphicsWrappers::rb_hold_bitmap_drawing(VALUE self, VALUE val)
-		{
-			if (TYPE(val) == T_TRUE)
-				al_hold_bitmap_drawing(true);
-			else if (TYPE(val) == T_FALSE)
-				al_hold_bitmap_drawing(false);
-
-			return Qnil;
-		}
-
-		VALUE GraphicsWrappers::rb_is_bitmap_drawing_held(VALUE self)
-		{
-			return (al_is_bitmap_drawing_held() == true) ? Qtrue : Qfalse;
-		}
-
-		VALUE GraphicsWrappers::rb_set_bitmap_flags(VALUE self, VALUE flags)
-		{
-			bitmap_filter_flags = FIX2INT(flags);
-
-			return Qnil;
-		}
-
-		int GraphicsWrappers::get_bitmap_flags(void)
-		{
-			return bitmap_filter_flags;
-		}
-
-		void GraphicsWrappers::restore_drawing_target(void)
-		{
-			GraphicsWrappers::rb_set_target(Qnil, rb_target_bitmap);
-		}
-
 		void GraphicsWrappers::load_wrappers(void)
 		{
 			VALUE rage = rb_define_module("RAGE");
@@ -519,12 +548,28 @@ namespace RAGE
 			rb_define_const(g, "MOUSE_BITMAP", INT2FIX(RAGE_MOUSE_BITMAP_CURSOR_INDEX));
 
 			/* Bitmap creation flags */
+			#if RAGE_COMPILE_BITMAP
 			rb_define_const(g, "BITMAP_DEFAULT", INT2FIX(0));
 			rb_define_const(g, "BITMAP_LINEAR_MAG", INT2FIX(ALLEGRO_MAG_LINEAR));
 			rb_define_const(g, "BITMAP_LINEAR_MIN", INT2FIX(ALLEGRO_MIN_LINEAR));
 			rb_define_const(g, "BITMAP_MIPMAP", INT2FIX(ALLEGRO_MIPMAP));
 			rb_define_const(g, "BITMAP_NO_PRE_ALPHA", INT2FIX(ALLEGRO_NO_PREMULTIPLIED_ALPHA));
 			rb_define_const(g, "BITMAP_MEMORY", INT2FIX(ALLEGRO_MEMORY_BITMAP));
+			
+			rb_define_module_function(g, "holdBitmapDrawing", RFUNC(GraphicsWrappers::rb_hold_bitmap_drawing), 1);
+			rb_define_module_function(g, "isBitmapDrawingHeld?", RFUNC(GraphicsWrappers::rb_is_bitmap_drawing_held), 0);
+			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
+			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
+			rb_define_module_function(g, "setMouseBitmap", RFUNC(GraphicsWrappers::rb_set_mouse_bitmap), 3);
+			rb_define_module_function(g, "setBitmapFlags", RFUNC(GraphicsWrappers::rb_set_bitmap_flags), 1);
+			rb_define_module_function(g, "icon=", RFUNC(GraphicsWrappers::rb_set_icon), 1);
+			rb_define_module_function(g, "icon", RFUNC(GraphicsWrappers::rb_get_icon), 0);
+			#endif
+
+			#if RAGE_COMPILE_SHADER
+			rb_define_module_function(g, "shader=", RFUNC(GraphicsWrappers::rb_set_shader), 1);
+			rb_define_module_function(g, "shader", RFUNC(GraphicsWrappers::rb_get_shader), 0);
+			#endif
 
 			/* Define Module Functions */
 			rb_define_module_function(g, "title=", RFUNC(GraphicsWrappers::rb_set_title), 1);
@@ -536,8 +581,6 @@ namespace RAGE
 			rb_define_module_function(g, "setCursorVisible", RFUNC(GraphicsWrappers::rb_cursor_visible), 1);
 			rb_define_module_function(g, "setWindowPosition", RFUNC(GraphicsWrappers::rb_set_window_position), 2);
 			rb_define_module_function(g, "setWindowSize", RFUNC(GraphicsWrappers::rb_set_display_size), 2);
-			rb_define_module_function(g, "icon=", RFUNC(GraphicsWrappers::rb_set_icon), 1);
-			rb_define_module_function(g, "icon", RFUNC(GraphicsWrappers::rb_get_icon), 0);
 
 			rb_define_module_function(g, "positionX", RFUNC(GraphicsWrappers::rb_get_pos_x), 0);
 			rb_define_module_function(g, "positionY", RFUNC(GraphicsWrappers::rb_get_pos_y), 0);
@@ -547,18 +590,12 @@ namespace RAGE
 			rb_define_module_function(g, "inhibitScreenSaver", RFUNC(GraphicsWrappers::rb_inhibit_screen_saver), 1);
 
 			rb_define_module_function(g, "update", RFUNC(GraphicsWrappers::rb_graphics_update), 0);
-			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
-			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
 			rb_define_module_function(g, "getTime", RFUNC(GraphicsWrappers::rb_get_time), 0);
 
 			rb_define_module_function(g, "getDisplayModes", RFUNC(GraphicsWrappers::rb_get_display_modes), 0);
 			rb_define_module_function(g, "setMousePosition", RFUNC(GraphicsWrappers::rb_set_mouse_xy), 2);
 			rb_define_module_function(g, "setMouseCursor", RFUNC(GraphicsWrappers::rb_set_mouse_cursor), 1);
-			rb_define_module_function(g, "setMouseBitmap", RFUNC(GraphicsWrappers::rb_set_mouse_bitmap), 3);
 			rb_define_module_function(g, "setMouseGrab", RFUNC(GraphicsWrappers::rb_set_grab_mouse), 1);
-
-			rb_define_module_function(g, "shader=", RFUNC(GraphicsWrappers::rb_set_shader), 1);
-			rb_define_module_function(g, "shader", RFUNC(GraphicsWrappers::rb_get_shader), 0);
 
 			rb_define_module_function(g, "setMaximizedWindow", RFUNC(GraphicsWrappers::rb_set_fullscreen_window), 1);
 			
@@ -567,13 +604,9 @@ namespace RAGE
 
 			rb_define_module_function(g, "getBlendingMode", RFUNC(GraphicsWrappers::rb_get_blending_mode), 0);
 			rb_define_module_function(g, "getBlendingModeAlpha", RFUNC(GraphicsWrappers::rb_get_blending_mode_alpha), 0);
-			
-			rb_define_module_function(g, "holdBitmapDrawing", RFUNC(GraphicsWrappers::rb_hold_bitmap_drawing), 1);
-			rb_define_module_function(g, "isBitmapDrawingHeld?", RFUNC(GraphicsWrappers::rb_is_bitmap_drawing_held), 0);
-
-			rb_define_module_function(g, "setBitmapFlags", RFUNC(GraphicsWrappers::rb_set_bitmap_flags), 1);
 		}
 
+		#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_SCREEN_EVENT
 		void GraphicsWrappers::set_screen_processing(ALLEGRO_EVENT_QUEUE *queue, bool process_screen)
 		{
 			if (process_screen)
@@ -583,6 +616,7 @@ namespace RAGE
 
 			process_screen_events = process_screen;
 		}
+		#endif
 
 		void GraphicsWrappers::initialize_graphics(void)
 		{
@@ -619,9 +653,11 @@ namespace RAGE
 			int width = al_get_display_width(display);
 			int height = al_get_display_height(display);
 
+			#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_SCREEN_EVENT
 			if (start_config->is_on("RAGE::Events"))
 			al_unregister_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
-			
+			#endif
+
 			al_destroy_display(display);
 			al_set_new_display_flags(al_get_new_display_flags() | ALLEGRO_OPENGL);
 			display = al_create_display(width, height);
@@ -630,8 +666,10 @@ namespace RAGE
 			al_set_target_backbuffer(display);
 			al_flip_display();
 
+			#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_SCREEN_EVENT
 			if (start_config->is_on("RAGE::Events") && process_screen_events)
 			al_register_event_source(RAGE::Events::EventsWrapper::get_queue(), al_get_display_event_source(display));
+			#endif
 		}
 
 		ALLEGRO_DISPLAY* GraphicsWrappers::get_display(void)

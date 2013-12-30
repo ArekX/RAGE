@@ -23,8 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
-#include "MouseEvent.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_EVENTS && RAGE_COMPILE_MOUSE_EVENT
 
 #define RAGE_MOUSE_EVENT 3
 
@@ -56,3 +57,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

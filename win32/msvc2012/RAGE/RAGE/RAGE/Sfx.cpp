@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "Sfx.h"
+#include "BaseFile.h"
+
+#if RAGE_COMPILE_AUDIO && RAGE_COMPILE_SFX
 
 namespace RAGE
 {
@@ -224,3 +227,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

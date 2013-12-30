@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "MemFile.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_MEM_FILE
 
 namespace RAGE
 {
@@ -66,3 +68,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "File.h"
 
+#if RAGE_COMPILE_FILES && RAGE_COMPILE_FILE
+
 namespace RAGE
 {
 	namespace Filesystem
@@ -340,3 +342,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

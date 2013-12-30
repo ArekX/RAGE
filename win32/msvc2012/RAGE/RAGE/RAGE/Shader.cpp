@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "Shader.h"
 
+#if RAGE_COMPILE_SHADER
+
 namespace RAGE
 {
 	namespace Graphics
@@ -249,3 +251,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

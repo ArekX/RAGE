@@ -22,8 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #pragma once
-#include "RubyInterpreter.h"
-#include "Bitmap.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_BITMAP
 
 namespace RAGE
 {
@@ -80,7 +81,9 @@ namespace RAGE
 			static VALUE rb_bitmap_lock_region(VALUE self, VALUE x, VALUE y, VALUE w, VALUE h);
 			static VALUE rb_bitmap_unlock(VALUE self);
 
+			#if RAGE_COMPILE_COLOR
 			static VALUE rb_bitmap_get_pixel(VALUE self, VALUE color, VALUE x, VALUE y);
+			#endif
 			static VALUE rb_bitmap_set_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
 			static VALUE rb_bitmap_set_blended_pixel(VALUE self, VALUE x, VALUE y, VALUE r, VALUE g, VALUE b, VALUE a);
 
@@ -94,3 +97,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

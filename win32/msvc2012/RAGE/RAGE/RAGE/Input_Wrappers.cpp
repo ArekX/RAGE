@@ -22,7 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "Input_Wrappers.h"
+#include "RubyInterpreter.h"
 
+#if RAGE_COMPILE_INPUT
 
 namespace RAGE
 {
@@ -159,3 +161,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

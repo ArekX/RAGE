@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "UDPSocket.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_UDP_SOCKET
 
 namespace RAGE
 {
@@ -50,3 +52,4 @@ namespace RAGE
 	}
 }
 
+#endif

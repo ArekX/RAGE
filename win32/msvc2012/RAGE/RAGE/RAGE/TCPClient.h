@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "RubyInterpreter.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_TCP_CLIENT
 
 #ifdef WIN32
 #include <WinSock2.h>
@@ -69,3 +71,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

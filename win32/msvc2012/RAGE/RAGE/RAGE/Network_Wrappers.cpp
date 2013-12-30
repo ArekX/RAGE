@@ -22,6 +22,19 @@ freely, subject to the following restrictions:
 */
 
 #include "Network_Wrappers.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_NETWORK
+
+#ifdef WIN32
+#include <WinSock2.h>
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#endif
 
 namespace RAGE
 {
@@ -427,3 +440,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

@@ -22,6 +22,9 @@ freely, subject to the following restrictions:
 */
 
 #include "Audio_Wrapper.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_AUDIO
 
 namespace RAGE
 {
@@ -87,3 +90,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

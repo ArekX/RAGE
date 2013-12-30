@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "Color.h"
 
+#if RAGE_COMPILE_COLOR
+
 namespace RAGE
 {
 	namespace Graphics
@@ -96,3 +98,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

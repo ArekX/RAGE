@@ -23,7 +23,9 @@ freely, subject to the following restrictions:
 
 #pragma once
 
-#include "Shader.h"
+#include "rage_standard_headers.h"
+
+#if RAGE_COMPILE_SHADER
 
 namespace RAGE
 {
@@ -55,3 +57,5 @@ namespace RAGE
 		};
 	}
 }
+
+#endif

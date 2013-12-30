@@ -23,6 +23,8 @@ freely, subject to the following restrictions:
 
 #include "UDPSocket.h"
 
+#if RAGE_COMPILE_NETWORK && RAGE_COMPILE_UDP_SOCKET
+
 namespace RAGE
 {
 	namespace Network
@@ -176,3 +178,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

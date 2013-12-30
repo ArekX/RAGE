@@ -22,6 +22,10 @@ freely, subject to the following restrictions:
 */
 
 #include "Color_Wrapper.h"
+#include "RubyInterpreter.h"
+#include "Color.h"
+
+#if RAGE_COMPILE_COLOR
 
 namespace RAGE
 {
@@ -279,3 +283,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif

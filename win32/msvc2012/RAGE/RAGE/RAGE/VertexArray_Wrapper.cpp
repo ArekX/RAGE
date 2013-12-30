@@ -21,7 +21,16 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "VertexArray.h"
 #include "VertexArray_Wrapper.h"
+#include "RubyInterpreter.h"
+
+#if RAGE_COMPILE_VERTEX_ARRAY
+
+#if RAGE_COMPILE_COLOR
+#include "Color.h"
+#include "Color_Wrapper.h"
+#endif
 
 namespace RAGE
 {
@@ -55,6 +64,7 @@ namespace RAGE
 			return self;
 		}
 
+		#if RAGE_COMPILE_COLOR
 		VALUE VertexArrayWrapper::rb_change(VALUE self, VALUE index, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color)
 		{
 			VertexArray *va;
@@ -66,6 +76,58 @@ namespace RAGE
 
 			return Qnil;
 		}
+
+		VALUE VertexArrayWrapper::rb_push(VALUE self, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color)
+		{
+			VertexArray *va;
+			Color *cl;
+			Data_Get_Struct(self, VertexArray, va);
+			Data_Get_Struct(color, Color, cl);
+
+			va->add_vertex(NUM2DBL(x), NUM2DBL(y), NUM2DBL(z), NUM2DBL(u), NUM2DBL(v), cl->color);
+
+			return Qnil;
+		}
+
+		VALUE VertexArrayWrapper::rb_get_color(VALUE self, VALUE index)
+		{
+			VertexArray *va;
+			Color *cl;
+			Data_Get_Struct(self, VertexArray, va);
+
+			VALUE return_color = RAGE::Graphics::ColorWrapper::new_ruby_class_instance();
+
+			Data_Get_Struct(return_color, Color, cl);
+
+			cl->color = va->get_vertex_color(NUM2LL(index));
+
+			return return_color;
+		}
+
+		VALUE VertexArrayWrapper::rb_get_color_to(VALUE self, VALUE index, VALUE color)
+		{
+			VertexArray *va;
+			Color *cl;
+			Data_Get_Struct(self, VertexArray, va);
+			Data_Get_Struct(color, Color, cl);
+
+			cl->color = va->get_vertex_color(NUM2LL(index));
+
+			return Qnil;
+		}
+
+		VALUE VertexArrayWrapper::rb_set_color(VALUE self, VALUE index, VALUE color)
+		{
+			VertexArray *va;
+			Color *cl;
+			Data_Get_Struct(self, VertexArray, va);
+			Data_Get_Struct(color, Color, cl);
+
+			va->set_vertex_color(NUM2LL(index), cl->color);
+
+			return Qnil;
+		}
+		#endif
 
 		VALUE VertexArrayWrapper::rb_change_c(VALUE self, VALUE index, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
@@ -83,18 +145,6 @@ namespace RAGE
 			Data_Get_Struct(self, VertexArray, va);
 
 			va->add_vertex(NUM2DBL(x), NUM2DBL(y), NUM2DBL(z), NUM2DBL(u), NUM2DBL(v), al_map_rgba_f(NUM2DBL(r), NUM2DBL(g), NUM2DBL(b), NUM2DBL(a)));
-
-			return Qnil;
-		}
-
-		VALUE VertexArrayWrapper::rb_push(VALUE self, VALUE x, VALUE y, VALUE z, VALUE u, VALUE v, VALUE color)
-		{
-			VertexArray *va;
-			Color *cl;
-			Data_Get_Struct(self, VertexArray, va);
-			Data_Get_Struct(color, Color, cl);
-
-			va->add_vertex(NUM2DBL(x), NUM2DBL(y), NUM2DBL(z), NUM2DBL(u), NUM2DBL(v), cl->color);
 
 			return Qnil;
 		}
@@ -177,33 +227,6 @@ namespace RAGE
 			return DBL2NUM(va->get_vertex_v(NUM2LL(index)));
 		}
 
-		VALUE VertexArrayWrapper::rb_get_color(VALUE self, VALUE index)
-		{
-			VertexArray *va;
-			Color *cl;
-			Data_Get_Struct(self, VertexArray, va);
-
-			VALUE return_color = RAGE::Graphics::ColorWrapper::new_ruby_class_instance();
-
-			Data_Get_Struct(return_color, Color, cl);
-
-			cl->color = va->get_vertex_color(NUM2LL(index));
-
-			return return_color;
-		}
-
-		VALUE VertexArrayWrapper::rb_get_color_to(VALUE self, VALUE index, VALUE color)
-		{
-			VertexArray *va;
-			Color *cl;
-			Data_Get_Struct(self, VertexArray, va);
-			Data_Get_Struct(color, Color, cl);
-
-			cl->color = va->get_vertex_color(NUM2LL(index));
-
-			return Qnil;
-		}
-
 		VALUE VertexArrayWrapper::rb_set_x(VALUE self, VALUE index, VALUE x)
 		{
 			VertexArray *va;
@@ -254,18 +277,6 @@ namespace RAGE
 			return Qnil;
 		}
 
-		VALUE VertexArrayWrapper::rb_set_color(VALUE self, VALUE index, VALUE color)
-		{
-			VertexArray *va;
-			Color *cl;
-			Data_Get_Struct(self, VertexArray, va);
-			Data_Get_Struct(color, Color, cl);
-
-			va->set_vertex_color(NUM2LL(index), cl->color);
-
-			return Qnil;
-		}
-
 		VALUE VertexArrayWrapper::rb_set_color_c(VALUE self, VALUE index, VALUE r, VALUE g, VALUE b, VALUE a)
 		{
 			VertexArray *va;
@@ -305,27 +316,31 @@ namespace RAGE
 			rb_define_alloc_func(rb_rageVertexArrayClass, VertexArrayWrapper::rb_allocate);
 
 			rb_define_method(rb_rageVertexArrayClass, "initialize", RFUNC(VertexArrayWrapper::rb_initialize), -1);
+			
+			#if RAGE_COMPILE_COLOR
 			rb_define_method(rb_rageVertexArrayClass, "push", RFUNC(VertexArrayWrapper::rb_push), 6);
+			rb_define_method(rb_rageVertexArrayClass, "change", RFUNC(VertexArrayWrapper::rb_change), 7);
+			rb_define_method(rb_rageVertexArrayClass, "setColor", RFUNC(VertexArrayWrapper::rb_set_color), 2);
+			rb_define_method(rb_rageVertexArrayClass, "getColor", RFUNC(VertexArrayWrapper::rb_get_color), 1);
+			rb_define_method(rb_rageVertexArrayClass, "getColorTo", RFUNC(VertexArrayWrapper::rb_get_color_to), 2);
+			#endif
+
 			rb_define_method(rb_rageVertexArrayClass, "pushC", RFUNC(VertexArrayWrapper::rb_push_c), 9);
 			rb_define_method(rb_rageVertexArrayClass, "pop", RFUNC(VertexArrayWrapper::rb_pop), 0);
 			rb_define_method(rb_rageVertexArrayClass, "remove", RFUNC(VertexArrayWrapper::rb_remove), 1);
 			rb_define_method(rb_rageVertexArrayClass, "clear", RFUNC(VertexArrayWrapper::rb_clear), 0);
 			rb_define_method(rb_rageVertexArrayClass, "size", RFUNC(VertexArrayWrapper::rb_size), 0);
-			rb_define_method(rb_rageVertexArrayClass, "change", RFUNC(VertexArrayWrapper::rb_change), 7);
 			rb_define_method(rb_rageVertexArrayClass, "changeC", RFUNC(VertexArrayWrapper::rb_change_c), 10);
 			rb_define_method(rb_rageVertexArrayClass, "getX", RFUNC(VertexArrayWrapper::rb_get_x), 1);
 			rb_define_method(rb_rageVertexArrayClass, "getY", RFUNC(VertexArrayWrapper::rb_get_y), 1);
 			rb_define_method(rb_rageVertexArrayClass, "getZ", RFUNC(VertexArrayWrapper::rb_get_z), 1);
 			rb_define_method(rb_rageVertexArrayClass, "getU", RFUNC(VertexArrayWrapper::rb_get_u), 1);
 			rb_define_method(rb_rageVertexArrayClass, "getV", RFUNC(VertexArrayWrapper::rb_get_v), 1);
-			rb_define_method(rb_rageVertexArrayClass, "getColor", RFUNC(VertexArrayWrapper::rb_get_color), 1);
-			rb_define_method(rb_rageVertexArrayClass, "getColorTo", RFUNC(VertexArrayWrapper::rb_get_color_to), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setX", RFUNC(VertexArrayWrapper::rb_set_x), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setY", RFUNC(VertexArrayWrapper::rb_set_y), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setZ", RFUNC(VertexArrayWrapper::rb_set_z), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setU", RFUNC(VertexArrayWrapper::rb_set_u), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setV", RFUNC(VertexArrayWrapper::rb_set_v), 2);
-			rb_define_method(rb_rageVertexArrayClass, "setColor", RFUNC(VertexArrayWrapper::rb_set_color), 2);
 			rb_define_method(rb_rageVertexArrayClass, "setColorC", RFUNC(VertexArrayWrapper::rb_set_color_c), 5);
 			rb_define_method(rb_rageVertexArrayClass, "dispose", RFUNC(VertexArrayWrapper::rb_dispose), 0);
 			rb_define_method(rb_rageVertexArrayClass, "disposed?", RFUNC(VertexArrayWrapper::rb_is_disposed), 0);
@@ -343,3 +358,5 @@ namespace RAGE
 
 	}
 }
+
+#endif

@@ -21,8 +21,35 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "rage_standard_headers.h"
 #include "Events_Wrapper.h"
+#include "Event_Wrapper.h"
+#include "BaseEvent.h"
+#include "Graphics_Wrappers.h"
+#include "RubyInterpreter.h"
 
+#if RAGE_COMPILE_EVENTS
+
+#if RAGE_COMPILE_TIMER_EVENT
+#include "TimerEvent_Wrapper.h"
+#include "TimerEvent.h"
+#endif
+
+#if RAGE_COMPILE_SCREEN_EVENT
+#include "ScreenEvent_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_KEYBOARD_EVENT
+#include "KeyboardEvent_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_MOUSE_EVENT
+#include "MouseEvent_Wrapper.h"
+#endif
+
+#if RAGE_COMPILE_JOY_EVENT
+#include "JoyEvent_Wrapper.h"
+#endif
 
 namespace RAGE
 {
@@ -30,33 +57,27 @@ namespace RAGE
 	{
 		ALLEGRO_EVENT_QUEUE* event_queue;
 
-		VALUE eventsThread = Qnil;
-		bool  stopThread = false;
+		bool  skip_update = false;
 		VALUE event_objects = Qnil;
 
-		void* EventsWrapper::rb_update_event_objects(void* ptr)
+		VALUE EventsWrapper::rb_update_events(VALUE self)
 		{
+			if (skip_update) return Qnil;
+
 			ALLEGRO_EVENT ev;
 			register int i;
 			BaseEvent *evnt;
-			while(true)
-			{
-				if (stopThread)
-					rb_thread_stop();
 
-				if (al_get_next_event(event_queue, &ev))
+			while(al_get_next_event(event_queue, &ev))
+			{
+				for (i = 0; i < RARRAY_LEN(event_objects); i++)
 				{
-					for (i = 0; i < RARRAY_LEN(event_objects); i++)
-					{
 						Data_Get_Struct(rb_ary_entry(event_objects, i), BaseEvent, evnt);
 						evnt->callback(&ev);
-					}
 				}
-				else
-					rb_thread_schedule();
 			}
 
-			return NULL;
+			return Qnil;
 		}
 
 		VALUE EventsWrapper::rb_register_event(VALUE self, VALUE entry)
@@ -68,12 +89,14 @@ namespace RAGE
 					rb_raise(rb_eArgError, RAGE_RB_EVENT_REG_ERR);
 				else
 				{
+					#if RAGE_COMPILE_TIMER_EVENT
 					if (RAGE_IS_CLASS_OF(entry, TimerEventWrapper))
 					{
 						TimerEvent *tm;
 						Data_Get_Struct(entry, TimerEvent, tm);
 						tm->register_to_queue(event_queue);
 					}
+					#endif
 					rb_ary_push(event_objects, entry);
 				}
 			}
@@ -89,12 +112,14 @@ namespace RAGE
 					rb_raise(rb_eArgError, RAGE_RB_EVENT_REG_ERR);
 				else
 				{
+					#if RAGE_COMPILE_TIMER_EVENT
 					if (RAGE_IS_CLASS_OF(entry, TimerEventWrapper))
 					{
 						TimerEvent *tm;
 						Data_Get_Struct(entry, TimerEvent, tm);
 						tm->unregister_from_queue(event_queue);
 					}
+					#endif
 					rb_ary_delete(event_objects, entry);
 				}
 			}
@@ -106,21 +131,31 @@ namespace RAGE
 			VALUE klass, entry;
 			switch(FIX2INT(event_type))
 			{
+				#if RAGE_COMPILE_KEYBOARD_EVENT
 				case RAGE_KEYBOARD_EVENT:
 					klass = RAGE::Events::KeyboardEventWrapper::get_ruby_class();
 					break;
+				#endif
+				#if RAGE_COMPILE_MOUSE_EVENT
 				case RAGE_MOUSE_EVENT:
 					klass = RAGE::Events::MouseEventWrapper::get_ruby_class();
 					break;
+				#endif
+				#if RAGE_COMPILE_SCREEN_EVENT
 				case RAGE_SCREEN_EVENT:
 					klass = RAGE::Events::ScreenEventWrapper::get_ruby_class();
 					break;
+				#endif
+				#if RAGE_COMPILE_TIMER_EVENT
 				case RAGE_TIMER_EVENT:
 					klass = RAGE::Events::TimerEventWrapper::get_ruby_class();
 					break;
+				#endif
+				#if RAGE_COMPILE_JOY_EVENT
 				case RAGE_JOYSTICK_EVENT:
 					klass = RAGE::Events::JoyEventWrapper::get_ruby_class();
 					break;
+				#endif
 			}
 
 			for (int i = 0; i < RARRAY_LEN(event_objects); i++)
@@ -128,12 +163,14 @@ namespace RAGE
 				entry = rb_ary_entry(event_objects, i);
 				if (rb_class_of(entry) == klass)
 				{
+					#if RAGE_COMPILE_TIMER_EVENT
 					if (FIX2INT(event_type) == RAGE_TIMER_EVENT)
 					{
 						TimerEvent *tm;
 						Data_Get_Struct(entry, TimerEvent, tm);
 						tm->unregister_from_queue(event_queue);
 					}
+					#endif
 					rb_ary_delete(event_objects, entry);
 				}
 			}
@@ -144,12 +181,14 @@ namespace RAGE
 		{
 			for (int i = 0; i < RARRAY_LEN(event_objects); i++)
 			{
+				#if RAGE_COMPILE_TIMER_EVENT
 				if (RAGE_IS_CLASS_OF(rb_ary_entry(event_objects, i), TimerEventWrapper))
 				{
 					TimerEvent *tm;
 					Data_Get_Struct(rb_ary_entry(event_objects, i), TimerEvent, tm);
 					tm->unregister_from_queue(event_queue);
 				}
+				#endif
 			}
 			rb_ary_clear(event_objects);
 			return Qnil;
@@ -157,14 +196,13 @@ namespace RAGE
 
 		VALUE EventsWrapper::rb_freeze_events(VALUE self)
 		{
-			stopThread = true;
+			skip_update = true;
 			return Qnil;
 		}
 
 		VALUE EventsWrapper::rb_unfreeze_events(VALUE self)
 		{
-			stopThread = false;
-			rb_thread_run(eventsThread);
+			skip_update = false;
 			return Qnil;
 		}
 
@@ -189,13 +227,6 @@ namespace RAGE
 			}
 		}
 
-		void EventsWrapper::run_event_thread(void)
-		{
-			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
-
-			eventsThread = rb_thread_create(RFUNC(EventsWrapper::rb_update_event_objects), NULL);
-		}
-
 		void EventsWrapper::finalize_queue(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
@@ -203,13 +234,11 @@ namespace RAGE
 			if (event_queue != NULL)
 				al_destroy_event_queue(event_queue);
 
-			if (eventsThread != Qnil)
-				rb_thread_kill(eventsThread);
-
 			if (event_objects != Qnil)
 				rb_ary_clear(event_objects);
 		}
 
+		#if RAGE_COMPILE_KEYBOARD_EVENT
 		VALUE EventsWrapper::rb_process_keyboard(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
@@ -218,7 +247,9 @@ namespace RAGE
 				al_unregister_event_source(event_queue, al_get_keyboard_event_source());
 			return Qnil;
 		}
+		#endif
 
+		#if RAGE_COMPILE_MOUSE_EVENT
 		VALUE EventsWrapper::rb_process_mouse(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
@@ -227,7 +258,9 @@ namespace RAGE
 				al_unregister_event_source(event_queue, al_get_mouse_event_source());
 			return Qnil;
 		}
+		#endif
 
+		#if RAGE_COMPILE_JOY_EVENT
 		VALUE EventsWrapper::rb_process_joystick(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
@@ -236,7 +269,9 @@ namespace RAGE
 				al_unregister_event_source(event_queue, al_get_joystick_event_source());
 			return Qnil;
 		}
+		#endif
 
+		#if RAGE_COMPILE_SCREEN_EVENT
 		VALUE EventsWrapper::rb_process_display(VALUE self, VALUE val)
 		{
 			if (TYPE(val) == T_TRUE)
@@ -246,6 +281,7 @@ namespace RAGE
 
 			return Qnil;
 		}
+		#endif
 
 		VALUE EventsWrapper::rb_event_is_registered(VALUE self, VALUE entry)
 		{
@@ -274,6 +310,7 @@ namespace RAGE
 			rb_define_module_function(events, "processMouse", RFUNC(EventsWrapper::rb_process_mouse), 1);
 			rb_define_module_function(events, "processJoystick", RFUNC(EventsWrapper::rb_process_joystick), 1);
 			rb_define_module_function(events, "processScreen", RFUNC(EventsWrapper::rb_process_display), 1);
+			rb_define_module_function(events, "update", RFUNC(EventsWrapper::rb_update_events), 0);
 			rb_define_module_function(events, "clear", RFUNC(EventsWrapper::rb_clear_events), 1);
 			rb_define_module_function(events, "clearAll", RFUNC(EventsWrapper::rb_clear_events2), 0);
 			rb_define_module_function(events, "freeze", RFUNC(EventsWrapper::rb_freeze_events), 0);
@@ -286,3 +323,5 @@ namespace RAGE
 		}
 	}
 }
+
+#endif
