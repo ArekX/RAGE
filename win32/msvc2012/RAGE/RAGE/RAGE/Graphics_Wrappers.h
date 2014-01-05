@@ -93,6 +93,8 @@ namespace RAGE
 			static void initialize_graphics(void);
 			static void recreate_display(void);
 			static ALLEGRO_DISPLAY* get_display(void);
+
+			static void finalize_graphics(void);
 		};
 
 	}

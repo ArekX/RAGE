@@ -54,9 +54,22 @@ freely, subject to the following restrictions:
 #include "TCPServer_Wrapper.h"
 #include "TCPClient_Wrapper.h"
 #include "UDPSocket_Wrapper.h"
+#include <Box2D/Common/b2Settings.h>
 
 #if RAGE_COMPILE_DL
 #include <ext\dl\dl_ruby.h>
+#endif
+
+#if RAGE_COMPILE_DATE
+#include <ext/date/date_ruby.h>
+#endif
+
+#if RAGE_COMPILE_PATHNAME
+#include <ext/pathname/pathname_ruby.h>
+#endif
+
+#if RAGE_COMPILE_DIGEST
+#include <ext/digest/digest_ruby.h>
 #endif
 
 extern "C"
@@ -69,7 +82,34 @@ extern "C"
 	void Init_zlib(void);
 #endif
 
+#if RAGE_COMPILE_STRINGIO
+	void Init_stringio(void);
+#endif
+
+#if RAGE_COMPILE_STRSCAN
+	void Init_strscan(void);
+#endif
+
+#if RAGE_COMPILE_DATE
+	void Init_date_core(void);
+#endif
+
+#if RAGE_COMPILE_PATHNAME
+	void Init_pathname(void);
+#endif
+
+#if RAGE_COMPILE_DIGEST
+	void Init_digest(void);
+	void Init_bubblebabble(void);
+	void Init_md5(void);
+	void Init_rmd160(void);
+	void Init_sha1(void);
+	void Init_sha2(void);
+#endif
+
+
 	void Init_thread(void);
+	void ruby_Init_Fiber_as_Coroutine(void);
 }
 
 namespace RAGE
@@ -80,24 +120,14 @@ namespace RAGE
 		std::vector<std::string*> *loaded_files;
 		RAGEConfiguration *gConfig;
 
-		static void load_extension_rb_data()
-		{
-			int error = 0;
-
-			#if RAGE_COMPILE_DL
-			// DL extension ruby script data
-			rb_eval_string_protect(dl_rb_data, &error);
-			if (error) PRINT(RAGE_ERROR_DL_EXT_RB_DATA_FAILED);
-			#endif
-		}
-
 		static VALUE rb_rage_about(VALUE self)
 		{
-			PRINTF("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s", RAGE_ENGINE_VERSION);
-			PRINTF(" [%s] \nCopyright (c) Panic Aleksandar[Ruby Interpreter]\n", RAGE_ENGINE_CODE_NAME);
+			printf("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s", RAGE_ENGINE_VERSION);
+			printf(" [%s] \nCopyright (c) Panic Aleksandar[Ruby Interpreter]\n", RAGE_ENGINE_CODE_NAME);
 			ruby_show_version();
-			PRINT("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
-			PRINTF("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
+			printf("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
+			printf("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
+			printf("[Box2D Physics Engine]\nBox2D Library Version: %ld\.%ld\.%ld\nDeveloped by Erin Catto.\n\n", b2_version.major, b2_version.minor, b2_version.revision);
 			return Qnil;
 		}
 
@@ -200,7 +230,7 @@ namespace RAGE
 
 		int Ruby::file_exists(VALUE filename)
 		{
-
+			#if RAGE_COMPILE_FS
 			if (RAGE::Filesystem::FSWrappers::is_physfs_on())
 			{
 				if (PHYSFS_exists(StringValueCStr(filename)))
@@ -208,6 +238,7 @@ namespace RAGE
 				else
 					return -2;
 			}
+			#endif
 
 			/* Check Ruby search path */
 			VALUE fname = rb_find_file(filename);
@@ -220,7 +251,7 @@ namespace RAGE
 
 		char* Ruby::get_file_path(VALUE filename)
 		{
-
+			#if RAGE_COMPILE_FS
 			if (RAGE::Filesystem::FSWrappers::is_physfs_on())
 			{
 				if (PHYSFS_exists(StringValueCStr(filename)))
@@ -228,6 +259,7 @@ namespace RAGE
 				else
 					return NULL;
 			}
+			#endif
 
 			/* Check Ruby search path */
 			VALUE fname = rb_find_file(filename);
@@ -263,6 +295,7 @@ namespace RAGE
 				std::string str(*argv);
 				rb_ary_push(rb_gv_get("$:"), rb_str_new_cstr(str.substr(0, str.find_last_of(DS) + 1).c_str()));
 
+				#if RAGE_COMPILE_FS
 				if (!PHYSFS_mount(argv[0], "/", 0))
 				{
 					if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_GAME_FILE).c_str()))
@@ -277,9 +310,11 @@ namespace RAGE
 				}
 				else
 					RAGE::Filesystem::FSWrappers::force_physfs_on();
+				
 
 				PHYSFS_setWriteDir(str.substr(0, str.find_last_of(DS) + 1).c_str());
-				
+				#endif
+
 				/* Set Command line arguments */
 				rb_gv_set(RAGE_ARGS_VAR, rb_ary_new());
 				for (int i = 0; i < argc; i++)
@@ -295,32 +330,98 @@ namespace RAGE
 				#endif
 				
 				/* Load config script */
+				#if RAGE_COMPILE_FS
 				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
 					load_protect(RAGE_CONF_SCRIPT);
 				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_CONF_SCRIPT))
 					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
-
+				#else
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
+					load_protect(RAGE_CONF_SCRIPT);
+				#endif
+				
 				if (!configured)
 					set_default_config();
 
 				// Initialize Ruby Threads
 				Init_thread();
+				ruby_Init_Fiber_as_Coroutine();
+				rb_provide("thread.so");
 
 				/* Initialize ruby extensions */
 				#if RAGE_COMPILE_ZLIB
-				if (gConfig->is_on("Zlib")) 
+				if (gConfig->is_on("Zlib"))
+				{
 					Init_zlib();
+					rb_provide("zlib.so");
+				}
+					
+				#endif
+
+				#if RAGE_COMPILE_STRINGIO
+				if (gConfig->is_on("StringIO"))
+				{
+					Init_stringio();
+					rb_provide("stringio.so");
+				}
+				#endif
+
+				#if RAGE_COMPILE_STRSCAN
+				if (gConfig->is_on("StringScanner"))
+				{
+					Init_strscan();
+					rb_provide("strscan.so");
+				}
+				#endif
+
+				#if RAGE_COMPILE_DATE
+				if (gConfig->is_on("Date"))
+				{
+					Init_date_core();
+					rb_eval_string_protect(date_rb_data, nullptr);
+					rb_provide("date_core.so");
+				}
+				#endif
+
+				#if RAGE_COMPILE_PATHNAME
+				if (gConfig->is_on("Pathname"))
+				{
+					Init_pathname();
+					rb_eval_string_protect(pathname_rb_data, nullptr);
+					rb_provide("pathname.so");
+				}
+				
 				#endif
 
 				#if RAGE_COMPILE_DL
 				if (gConfig->is_on("DL"))
+				{
 					Init_dl();
+					rb_eval_string_protect(dl_rb_data, nullptr);
+					rb_provide("dl.so");
+				}
 				#endif
 
-				// Load Ruby Extension data
-				#if RAGE_COMPILE_DL
-				load_extension_rb_data();
+
+				#if RAGE_COMPILE_DIGEST
+				if (gConfig->is_on("Digest"))
+				{
+					Init_digest();
+					Init_bubblebabble();
+					Init_md5();
+					Init_rmd160();
+					Init_sha1();
+					Init_sha2();
+					rb_eval_string_protect(digest_rb_data, nullptr);
+					rb_provide("digest.so");
+					rb_provide("bubblebabble.so");
+					rb_provide("md5.so");
+					rb_provide("rmd160.so");
+					rb_provide("sha1.so");
+					rb_provide("sha2.so");
+				}
 				#endif
+				
 
 				/* = Load RAGE modules = */
 				RAGE::Graphics::GraphicsWrappers::load_wrappers();
@@ -365,10 +466,16 @@ namespace RAGE
 				RAGE_DRAW_MODULE_START
 
 				/* Load boot script */
+
+				#if RAGE_COMPILE_FS
 				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
 					load_protect(RAGE_BOOT_SCRIPT);
 				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_BOOT_SCRIPT))
 					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
+				#else
+				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
+					load_protect(RAGE_BOOT_SCRIPT);
+				#endif
 
 				#ifdef DEVELOPMENT_VERSION
 				else
@@ -385,8 +492,11 @@ namespace RAGE
 				#endif
 
 				/* Run Finalizer for modules */
-				RAGE::Events::EventsWrapper::finalize_queue();
-				RAGE::Audio::AudioWrappers::finalize_audio();
+				RAGE_EVENT_MODULE_FINALIZE
+				RAGE_AUDIO_MODULE_FINALIZE
+
+				/* Finalize graphics */
+				RAGE::Graphics::GraphicsWrappers::finalize_graphics();
 			}
 		}
 

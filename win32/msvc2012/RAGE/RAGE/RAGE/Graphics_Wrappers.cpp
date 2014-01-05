@@ -648,6 +648,12 @@ namespace RAGE
 			al_flip_display();
 		}
 
+		void GraphicsWrappers::finalize_graphics(void)
+		{
+			al_destroy_display(display);
+			al_destroy_mouse_cursor(mouse_bitmap_cursor);
+		}
+
 		void GraphicsWrappers::recreate_display(void)
 		{
 			int width = al_get_display_width(display);

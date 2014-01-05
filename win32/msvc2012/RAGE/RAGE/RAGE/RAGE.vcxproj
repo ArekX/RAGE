@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -35,41 +35,41 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -102,8 +102,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2012\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2012\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -172,7 +172,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>wsock32.lib;ws2_32.lib;Shlwapi.lib;Dbghelp.lib;gdiplus.lib;opengl32.lib;winmm.lib;psapi.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -275,6 +275,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_core.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_parse.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strftime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strptime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\bubblebabble.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\digest.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2init.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c" />
@@ -289,6 +303,9 @@
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\pathname\pathname.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\stringio\stringio.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\strscan\strscan.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c" />
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c" />
     <ClCompile Include="Audio_Wrapper.cpp" />
@@ -347,8 +364,20 @@
     <ClCompile Include="VertexArray_Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_tmx.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\defs.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\md5.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha1.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha2.h" />
     <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h" />
     <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\pathname\pathname_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regenc.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regint.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="BaseEvent.h" />

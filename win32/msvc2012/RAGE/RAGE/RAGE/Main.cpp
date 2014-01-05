@@ -21,6 +21,7 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "rage_standard_headers.h"
 #include "RubyInterpreter.h"
 
 #ifdef WIN32
@@ -71,7 +72,7 @@ int main(int argc, char** argv)
     al_install_keyboard();
 	al_install_joystick();
 	al_install_audio();
-	al_init_acodec_addon();
+	al_init_acodec_addon();// Vidi da li da ubacis conditional compile na ovo?
 
 	#ifdef DEVELOPMENT_VERSION
         #ifdef WIN32

@@ -9,16 +9,16 @@ Permission is granted to anyone to use this software for any purpose,
 including commercial applications, and to alter it and redistribute it
 freely, subject to the following restrictions:
 
-   1. The origin of this software must not be misrepresented; you must not
-   claim that you wrote the original software. If you use this software
-   in a product, an acknowledgment in the product documentation would be
-   appreciated but is not required.
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software
+in a product, an acknowledgment in the product documentation would be
+appreciated but is not required.
 
-   2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
+2. Altered source versions must be plainly marked as such, and must not be
+misrepresented as being the original software.
 
-   3. This notice may not be removed or altered from any source
-   distribution.
+3. This notice may not be removed or altered from any source
+distribution.
 */
 
 #pragma once
@@ -29,41 +29,67 @@ freely, subject to the following restrictions:
 #include <allegro5/platform/almsvc.h>
 #include <allegro5/allegro_windows.h>
 
-	#if _MSC_VER == 1700
-		#pragma comment(lib, "msvcr110-ruby210-static.lib")
-		#pragma comment(lib, "allegro-5.0.10-monolith-static-mt.lib")
-		#pragma comment(lib, "openal-1.14-static-mt.lib")
-		#pragma comment(lib, "freetype-2.4.8-static-mt.lib")
-		#pragma comment(lib, "libFLAC-1.2.1-static-mt.lib")
-		#pragma comment(lib, "libogg-1.2.1-static-mt.lib")
-		#pragma comment(lib, "libvorbis-1.3.2-static-mt.lib")
-		#pragma comment(lib, "libvorbisfile-1.3.2-static-mt.lib")
-		#pragma comment(lib, "zlib-1.2.5-static-mt.lib")
-		#pragma comment(lib, "dumb-0.9.3-static-mt.lib")
-		#pragma comment(lib, "box2d.lib")
-	#endif
+/* Common link dependencies */
+#pragma comment(lib, "wsock32.lib")
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Shlwapi.lib")
+#pragma comment(lib, "Dbghelp.lib")
+#pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "psapi.lib")
+#pragma comment(lib, "Iphlpapi.lib")
 
-	#if _MSC_VER == 1600
-	#define PSAPI_VERSION 1
-		#pragma comment(lib, "msvcr100-ruby210-static.lib")
-		#pragma comment(lib, "allegro-5.0.10-monolith-static-mt-10.lib")
-		#pragma comment(lib, "openal-1.14-static-mt-10.lib")
-		#pragma comment(lib, "freetype-2.4.8-static-mt-10.lib")
-		#pragma comment(lib, "libFLAC-1.2.1-static-mt-10.lib")
-		#pragma comment(lib, "libogg-1.2.1-static-mt-10.lib")
-		#pragma comment(lib, "libvorbis-1.3.2-static-mt-10.lib")
-		#pragma comment(lib, "libvorbisfile-1.3.2-static-mt-10.lib")
-		#pragma comment(lib, "zlib-1.2.5-static-mt-10.lib")
-		#pragma comment(lib, "dumb-0.9.3-static-mt-10.lib")
-		#pragma comment(lib, "box2d-10.lib")
-	#endif
+#if _MSC_VER == 1800
+#pragma comment(lib, "msvcr120-ruby210-static.lib")
+#pragma comment(lib, "allegro-5.0.10-monolith-static-mt.lib")
+#pragma comment(lib, "openal-1.14-static-mt.lib")
+#pragma comment(lib, "freetype-2.4.8-static-mt.lib")
+#pragma comment(lib, "libFLAC-1.2.1-static-mt.lib")
+#pragma comment(lib, "libogg-1.2.1-static-mt.lib")
+#pragma comment(lib, "libvorbis-1.3.2-static-mt.lib")
+#pragma comment(lib, "libvorbisfile-1.3.2-static-mt.lib")
+#pragma comment(lib, "zlib-1.2.5-static-mt.lib")
+#pragma comment(lib, "dumb-0.9.3-static-mt.lib")
+#pragma comment(lib, "box2d.lib")
+#endif
+
+#if _MSC_VER == 1600
+#define PSAPI_VERSION 1
+#pragma comment(lib, "msvcr100-ruby210-static.lib")
+#pragma comment(lib, "allegro-5.0.10-monolith-static-mt-10.lib")
+#pragma comment(lib, "openal-1.14-static-mt-10.lib")
+#pragma comment(lib, "freetype-2.4.8-static-mt-10.lib")
+#pragma comment(lib, "libFLAC-1.2.1-static-mt-10.lib")
+#pragma comment(lib, "libogg-1.2.1-static-mt-10.lib")
+#pragma comment(lib, "libvorbis-1.3.2-static-mt-10.lib")
+#pragma comment(lib, "libvorbisfile-1.3.2-static-mt-10.lib")
+#pragma comment(lib, "zlib-1.2.5-static-mt-10.lib")
+#pragma comment(lib, "dumb-0.9.3-static-mt-10.lib")
+#pragma comment(lib, "box2d-10.lib")
+#endif
 #else
 #include <allegro5/platform/alunix.h>
 #endif
 
+/*
+Information about compilation:
+
+When any of the RAGE_COMPILE_ defines are set to 1
+they will be compiled and included in final executable.
+Please note that some of the features are dependant on
+others (i.e. Particle Engine is dependant on Bitmap),
+and they too will not be compiled without them.
+*/
+
 /* Ruby Extensions */
 #define RAGE_COMPILE_DL 1
 #define RAGE_COMPILE_ZLIB 1
+#define RAGE_COMPILE_STRINGIO 1
+#define RAGE_COMPILE_STRSCAN 1
+#define RAGE_COMPILE_DATE 1
+#define RAGE_COMPILE_PATHNAME 1
+#define RAGE_COMPILE_DIGEST 1
 
 /* Filesystem */
 #define RAGE_COMPILE_FS 1
@@ -112,6 +138,8 @@ freely, subject to the following restrictions:
 #define RAGE_COMPILE_PHYSICS 1
 #define RAGE_COMPILE_PHYS_DEBUG_DRAW 1
 
+/* End of compilation configuration */
+
 /* Initializer methods */
 #define RAGE_INIT_FS_MODULE 
 #define RAGE_INIT_EVENTS_MODULE 
@@ -142,16 +170,18 @@ freely, subject to the following restrictions:
 #define RAGE_INIT_TCP_CLIENT_CLASS 
 #define RAGE_INIT_UDP_SOCKET_CLASS 
 #define RAGE_INIT_PARTICLE_ENGINE_CLASS 
+
+
+/* INIT METHODS */
 #define RAGE_EVENT_MODULE_START 
 #define RAGE_AUDIO_MODULE_START 
 #define RAGE_DRAW_MODULE_START
 
-/* Redefinition methods */
+/* FINALIZE METHODS */
+#define RAGE_EVENT_MODULE_FINALIZE
+#define RAGE_AUDIO_MODULE_FINALIZE
 
-#if RAGE_COMPILE_FS
-#undef RAGE_INIT_FS_MODULE
-#define RAGE_INIT_FS_MODULE RAGE::Filesystem::FSWrappers::load_wrappers();
-#endif
+/* Redefinition methods */
 
 #if RAGE_COMPILE_EVENTS
 #undef RAGE_INIT_EVENTS_MODULE
@@ -296,11 +326,13 @@ freely, subject to the following restrictions:
 #if RAGE_COMPILE_EVENTS
 #undef RAGE_EVENT_MODULE_START
 #define RAGE_EVENT_MODULE_START RAGE::Events::EventsWrapper::init_queue();
+#define RAGE_EVENT_MODULE_FINALIZE RAGE::Events::EventsWrapper::finalize_queue();
 #endif
 
 #if RAGE_COMPILE_AUDIO
 #undef RAGE_AUDIO_MODULE_START
 #define RAGE_AUDIO_MODULE_START RAGE::Audio::AudioWrappers::init_audio();
+#define RAGE_AUDIO_MODULE_FINALIZE RAGE::Audio::AudioWrappers::finalize_audio();
 #endif
 
 #if RAGE_COMPILE_DRAW

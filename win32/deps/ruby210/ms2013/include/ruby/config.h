@@ -1,9 +1,9 @@
 #ifndef INCLUDE_RUBY_CONFIG_H
 #define INCLUDE_RUBY_CONFIG_H 1
-#if _MSC_VER != 1700
-#error MSC version unmatch: _MSC_VER: 1700 is expected.
+#if _MSC_VER != 1800
+#error MSC version unmatch: _MSC_VER: 1800 is expected.
 #endif
-#define RUBY_MSVCRT_VERSION 110
+#define RUBY_MSVCRT_VERSION 120
 #define STDC_HEADERS 1
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_SYS_STAT_H 1
@@ -84,6 +84,16 @@
 #define GETGROUPS_T int
 #define RETSIGTYPE void
 #define TYPEOF_TIMEVAL_TV_SEC long
+#define HAVE_ACOSH 1
+#define HAVE_ASINH 1
+#define HAVE_ATANH 1
+#define HAVE_CBRT 1
+#define HAVE_LOG2 1
+#define log2(x) log2(x)
+#define HAVE_ERF 1
+#define HAVE_ERFC 1
+#define HAVE_ROUND 1
+#define HAVE_TGAMMA 1
 #define HAVE_ALLOCA 1
 #define HAVE_DUP2 1
 #define HAVE_MEMCMP 1
@@ -144,12 +154,12 @@
 #define DLEXT ".so"
 #define EXTSTATIC 1
 #define EXECUTABLE_EXTS ".exe",".com",".cmd",".bat"
-#define RUBY_COREDLL "msvcr110"
-#define LIBRUBY_SO "msvcr110-ruby210.dll"
-#define RUBY_PLATFORM "i386-mswin32_110"
-#define RUBY_SITEARCH "i386-msvcr110"
+#define RUBY_COREDLL "msvcr120"
+#define LIBRUBY_SO "msvcr120-ruby210.dll"
+#define RUBY_PLATFORM "i386-mswin32_120"
+#define RUBY_SITEARCH "i386-msvcr120"
 #if 0
-!if "msvcr110-ruby210"!="$(RUBY_SO_NAME)" || "i386-mswin32_110"!="$(ARCH)-$(PLATFORM)"
+!if "msvcr120-ruby210"!="$(RUBY_SO_NAME)" || "i386-mswin32_120"!="$(ARCH)-$(PLATFORM)"
 config.h: nul
 !endif
 #endif

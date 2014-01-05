@@ -14,11 +14,22 @@ class Tlest < Object
   end
 end
 
+#module User32
+#    extend DL::Importer
+#    dlload 'user32'
+#    extern 'long MessageBox(long, char*, char*, long)'
+#end
+
+#User32.MessageBox(0, 'i love dl', 'hello', 0)
+
+
+
 begin
     $close = false
     register_close_button {
       $close = true
     }
+
 
     RAGE::Events.processScreen true
 

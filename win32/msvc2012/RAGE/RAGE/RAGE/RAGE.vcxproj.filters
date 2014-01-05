@@ -107,6 +107,24 @@
     <Filter Include="app\ruby_exts\thread">
       <UniqueIdentifier>{bd6ccf9e-9050-48b5-8533-7103316b0003}</UniqueIdentifier>
     </Filter>
+    <Filter Include="app\compilation_headers">
+      <UniqueIdentifier>{d691b166-b396-4ce0-9668-23aeeb7f8618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\stringio">
+      <UniqueIdentifier>{4d867e34-e697-453a-afd7-04ac81433c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\strscan">
+      <UniqueIdentifier>{0985d4cd-e1e0-4286-a54e-bc466d0d69da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\pathname">
+      <UniqueIdentifier>{2691d422-5829-4cfc-b4a3-8c3e9b884783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\date">
+      <UniqueIdentifier>{497b41a0-87ad-4170-b860-f85f693aba75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\digest">
+      <UniqueIdentifier>{51bd10cd-dd5d-46fd-a5e2-0947b296209e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -319,6 +337,57 @@
     <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c">
       <Filter>app\ruby_exts\thread</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\stringio\stringio.c">
+      <Filter>app\ruby_exts\stringio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\strscan\strscan.c">
+      <Filter>app\ruby_exts\strscan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\pathname\pathname.c">
+      <Filter>app\ruby_exts\pathname</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_core.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_parse.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strftime.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strptime.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\bubblebabble.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\digest.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RubyInterpreter.h">
@@ -332,9 +401,6 @@
     </ClInclude>
     <ClInclude Include="Input_Wrappers.h">
       <Filter>modules\input\wrappers\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="defines.h">
-      <Filter>app\headers</Filter>
     </ClInclude>
     <ClInclude Include="TimerEvent.h">
       <Filter>modules\events\headers</Filter>
@@ -414,9 +480,6 @@
     <ClInclude Include="FS_Wrappers.h">
       <Filter>modules\filesystem\wrappers\headers</Filter>
     </ClInclude>
-    <ClInclude Include="rage_errors.h">
-      <Filter>app\headers</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>modules\graphics\headers</Filter>
     </ClInclude>
@@ -449,9 +512,6 @@
     </ClInclude>
     <ClInclude Include="Logic_Wrappers.h">
       <Filter>modules\logic\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="rage_config.h">
-      <Filter>app\headers</Filter>
     </ClInclude>
     <ClInclude Include="RAGEConfiguration.h">
       <Filter>app\headers</Filter>
@@ -505,7 +565,52 @@
       <Filter>app\ruby_exts\dl</Filter>
     </ClInclude>
     <ClInclude Include="rage_standard_headers.h">
-      <Filter>app\headers</Filter>
+      <Filter>app\compilation_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>app\compilation_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="rage_config.h">
+      <Filter>app\compilation_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="rage_errors.h">
+      <Filter>app\compilation_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regint.h">
+      <Filter>app\ruby_exts\strscan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regenc.h">
+      <Filter>app\ruby_exts\strscan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\pathname\pathname_ruby.h">
+      <Filter>app\ruby_exts\pathname</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_ruby.h">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_tmx.h">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\defs.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest_ruby.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\md5.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha1.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha2.h">
+      <Filter>app\ruby_exts\digest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
