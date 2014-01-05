@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -32,7 +32,7 @@ namespace RAGE
 		Bitmap::Bitmap(void)
 		{
 			rage_file = Qnil;
-			bitmap = NULL;
+			bitmap = nullptr;
 			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP | GraphicsWrappers::get_bitmap_flags());
 			disposed = false;
 
@@ -48,7 +48,7 @@ namespace RAGE
 		Bitmap::~Bitmap(void)
 		{
 			if (al_get_target_bitmap() == bitmap)
-				bitmap = NULL;
+				bitmap = nullptr;
 			else
 				dispose();
 		}
@@ -59,14 +59,14 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 
 			bitmap = al_create_bitmap(width, height);
 
-			if (bitmap == NULL)
+			if (bitmap == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_BITMAP_CREATE_FAIL);
 				return;
@@ -79,12 +79,12 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			bitmap = al_create_sub_bitmap(parent, x, y, width, height);
 
-			if (bitmap == NULL)
+			if (bitmap == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SUBBITMAP_CREATE_FAIL);
 				return;
@@ -97,12 +97,12 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			bitmap = al_load_bitmap(filename);
 
-			if (bitmap == NULL)
+			if (bitmap == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_BITMAP_LOAD_FAIL, filename);
 				return;
@@ -115,7 +115,7 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			Filesystem::BaseFile *fl;
@@ -127,7 +127,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -137,7 +137,7 @@ namespace RAGE
 
 			bitmap = al_load_bitmap_f(fl->file, ext);
 
-			if (bitmap == NULL)
+			if (bitmap == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_BITMAP_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -192,7 +192,7 @@ namespace RAGE
 
 		ALLEGRO_BITMAP* Bitmap::get_parent(void)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 		
 			return al_get_parent_bitmap(bitmap);
 		}
@@ -208,7 +208,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (bitmap != NULL)
+			if (bitmap != nullptr)
 				return al_get_bitmap_width(bitmap);
 			else
 				return 0;
@@ -218,7 +218,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 			
-			if (bitmap != NULL)
+			if (bitmap != nullptr)
 				return al_get_bitmap_height(bitmap);
 			else
 				return 0;
@@ -228,7 +228,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (bitmap != NULL)
+			if (bitmap != nullptr)
 				al_draw_tinted_scaled_rotated_bitmap(bitmap, tint, center_x, center_y, 
 				                                     x, y, scale_x, scale_y, angle, flags);
 		}
@@ -237,7 +237,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (bitmap != NULL)
+			if (bitmap != nullptr)
 				al_draw_tinted_scaled_rotated_bitmap_region(bitmap, sx, sy, sw, sh, tint, center_x, 
 				                                            center_y, dx, dy, scale_x, scale_y, angle, flags);
 		}
@@ -409,7 +409,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			bitmap = al_clone_bitmap(src->bitmap);
@@ -419,7 +419,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
 			bitmap = al_clone_bitmap(al_get_parent_bitmap(src->bitmap));
@@ -446,10 +446,10 @@ namespace RAGE
 				return;
 			}
 
-			if (bitmap != NULL) 
+			if (bitmap != nullptr) 
 				al_destroy_bitmap(bitmap);
 
-			bitmap = NULL;
+			bitmap = nullptr;
 			rage_file = Qnil;
 
 			disposed = true;
@@ -457,7 +457,7 @@ namespace RAGE
 
 		void Bitmap::recreate_video_bitmap(void)
 		{
-			if (bitmap != NULL && !(al_get_target_bitmap() == bitmap))
+			if (bitmap != nullptr && !(al_get_target_bitmap() == bitmap))
 			{
 				
 				al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -32,7 +32,7 @@ namespace RAGE
 		if (conf_hash == Qnil) 
 		{
 			is_default = true;
-			hash = NULL;
+			hash = Qnil;
 			return;
 		}
 		else
@@ -46,7 +46,7 @@ namespace RAGE
 		if (is_default) return true;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2(name));
 
 		if (TYPE(item) == T_NIL)
@@ -58,7 +58,7 @@ namespace RAGE
 	void RAGEConfiguration::set_game_name(char* set_name)
 	{
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("name"));
 
 		if (is_default || (TYPE(item) == T_NIL))
@@ -71,7 +71,7 @@ namespace RAGE
 		if (is_default) return 640;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("width"));
 
 		if (TYPE(item) != T_NIL)
@@ -85,7 +85,7 @@ namespace RAGE
 		if (is_default) return 480;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("height"));
 
 		if (TYPE(item) != T_NIL)
@@ -99,7 +99,7 @@ namespace RAGE
 		if (is_default) return false;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("fullscreen"));
 
 		if (TYPE(item) == T_NIL)
@@ -113,7 +113,7 @@ namespace RAGE
 		if (is_default) return false;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("vsync"));
 
 		if (TYPE(item) == T_NIL)
@@ -127,7 +127,7 @@ namespace RAGE
 		if (is_default) return false;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("maximizedWindow"));
 
 		if (TYPE(item) == T_NIL)
@@ -141,7 +141,7 @@ namespace RAGE
 		if (is_default) return false;
 
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("framelessWindow"));
 
 		if (TYPE(item) == T_NIL)
@@ -153,7 +153,7 @@ namespace RAGE
 	bool RAGEConfiguration::is_current_version(void)
 	{
 		VALUE item;
-		if (hash != NULL)
+		if (hash != Qnil)
 			item = rb_hash_aref(hash, rb_str_new2("version"));
 
 		if (TYPE(item) != T_NIL)

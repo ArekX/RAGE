@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -32,7 +32,7 @@ namespace RAGE
 		IniFile::IniFile(void)
 		{
 			disposed = false;
-			ini = NULL;
+			ini = nullptr;
 			rage_file = Qnil;
 		}
 
@@ -42,12 +42,12 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (ini != NULL)
+			if (ini != nullptr)
 				al_destroy_config(ini);
 
 			ini = al_create_config();
 
-			if (ini == NULL)
+			if (ini == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_INI_CREATE_FAIL);
 				return;
@@ -60,12 +60,12 @@ namespace RAGE
 
 			rage_file = Qnil;
 
-			if (ini != NULL)
+			if (ini != nullptr)
 				al_destroy_config(ini);
 
 			ini = al_load_config_file(filename);
 
-			if (ini == NULL)
+			if (ini == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_INI_LOAD_FAIL, filename);
 				return;
@@ -85,7 +85,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -93,12 +93,12 @@ namespace RAGE
 
 			rage_file = r_file;
 
-			if (ini != NULL)
+			if (ini != nullptr)
 				al_destroy_config(ini);
 
 			ini = al_load_config_file_f(fl->file);
 
-			if (ini == NULL)
+			if (ini == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_INI_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -109,7 +109,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (ini != NULL)
+			if (ini != nullptr)
 				al_save_config_file_f(fl->file, ini);
 		}
 
@@ -117,13 +117,13 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (ini != NULL)
+			if (ini != nullptr)
 					al_save_config_file(filename, ini);
 		}
 
 		const char* IniFile::get(char *section, char* key)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			if (rage_file != Qnil)
 			{
@@ -133,7 +133,7 @@ namespace RAGE
 				if (fl->disposed)
 				{
 					rb_raise(rb_eException, RAGE_ERROR_FS_DISPOSED_RAGE_FILE_READ);
-					return NULL;
+					return nullptr;
 				}
 			}
 

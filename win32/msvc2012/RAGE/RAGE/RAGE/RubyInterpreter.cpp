@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -140,7 +140,7 @@ namespace RAGE
 		{
 			ALLEGRO_FILE *afile;
 			char *absolute_file = Ruby::get_file_path(filename);
-			if (absolute_file == NULL)
+			if (absolute_file == nullptr)
 			{
 				rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(filename));
 				return Qfalse;
@@ -151,7 +151,7 @@ namespace RAGE
 
 			afile = al_fopen(absolute_file, "rb");
 
-			if ((afile == NULL) || al_ferror(afile))
+			if ((afile == nullptr) || al_ferror(afile))
 			{
 				rb_raise(rb_eArgError, RAGE_ERROR_FS_CANNOT_LOAD, StringValueCStr(filename));
 				return Qfalse;
@@ -257,7 +257,7 @@ namespace RAGE
 				if (PHYSFS_exists(StringValueCStr(filename)))
 					return StringValueCStr(filename);
 				else
-					return NULL;
+					return nullptr;
 			}
 			#endif
 
@@ -265,7 +265,7 @@ namespace RAGE
 			VALUE fname = rb_find_file(filename);
 
 			if (TYPE(fname) != T_STRING)
-				return NULL;
+				return nullptr;
 			else
 				return StringValueCStr(fname);
 		}
@@ -334,7 +334,7 @@ namespace RAGE
 				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
 					load_protect(RAGE_CONF_SCRIPT);
 				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_CONF_SCRIPT))
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_CONF_SCRIPT));
+					rb_rage_require_wrapper(Qnil, rb_str_new_cstr(RAGE_CONF_SCRIPT));
 				#else
 				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_CONF_SCRIPT).c_str()))
 					load_protect(RAGE_CONF_SCRIPT);
@@ -471,7 +471,7 @@ namespace RAGE
 				if (!RAGE::Filesystem::FSWrappers::is_physfs_on() && al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
 					load_protect(RAGE_BOOT_SCRIPT);
 				else if (RAGE::Filesystem::FSWrappers::is_physfs_on() && PHYSFS_exists(RAGE_BOOT_SCRIPT))
-					rb_rage_require_wrapper(NULL, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
+					rb_rage_require_wrapper(Qnil, rb_str_new_cstr(RAGE_BOOT_SCRIPT));
 				#else
 				if (al_filename_exists(str.substr(0, str.find_last_of(DS) + 1).append(RAGE_BOOT_SCRIPT).c_str()))
 					load_protect(RAGE_BOOT_SCRIPT);

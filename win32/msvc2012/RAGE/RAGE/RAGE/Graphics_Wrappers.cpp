@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -87,7 +87,7 @@ namespace RAGE
 
 				rb_target_bitmap = bitmap;
 
-				if (bmp->bitmap == NULL)
+				if (bmp->bitmap == nullptr)
 				{
 					rb_raise(rb_eException, RAGE_BITMAP_NOT_CREATED_ERROR);
 					return Qnil;
@@ -118,7 +118,7 @@ namespace RAGE
 			if (TYPE(icon_bitmap) == T_NIL)
 			{
 				rb_icon_bitmap = Qnil;
-				al_set_display_icon(display, NULL);
+				al_set_display_icon(display, nullptr);
 			}
 
 			Bitmap *bmp;
@@ -148,12 +148,12 @@ namespace RAGE
 
 			Data_Get_Struct(cursor_bitmap, Bitmap, bmp);
 
-			if (mouse_bitmap_cursor != NULL)
+			if (mouse_bitmap_cursor != nullptr)
 				al_destroy_mouse_cursor(mouse_bitmap_cursor);
 
 			mouse_bitmap_cursor = al_create_mouse_cursor(bmp->bitmap, NUM2UINT(focus_x), NUM2UINT(focus_y));
 
-			if (mouse_bitmap_cursor == NULL)
+			if (mouse_bitmap_cursor == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_MOUSE_CURSOR_CREATE_FAIL);
 			}
@@ -301,7 +301,7 @@ namespace RAGE
 		{
 			int x;
 
-			al_get_window_position(display, &x, NULL);
+			al_get_window_position(display, &x, nullptr);
 
 			return INT2FIX(x);
 		}
@@ -310,7 +310,7 @@ namespace RAGE
 		{
 			int y;
 
-			al_get_window_position(display, NULL, &y);
+			al_get_window_position(display, nullptr, &y);
 
 			return INT2FIX(y);
 		}
@@ -383,7 +383,7 @@ namespace RAGE
 				return (al_set_system_mouse_cursor(display, (ALLEGRO_SYSTEM_MOUSE_CURSOR)c_index) == true) ? Qtrue : Qfalse;
 			
 			#if RAGE_COMPILE_BITMAP
-			else if ((c_index == -1) && (mouse_bitmap_cursor != NULL))
+			else if ((c_index == -1) && (mouse_bitmap_cursor != nullptr))
 				return (al_set_mouse_cursor(display, mouse_bitmap_cursor) == true) ? Qtrue : Qfalse;
 			#endif
 
@@ -403,7 +403,7 @@ namespace RAGE
 		#if RAGE_COMPILE_SHADER
 		VALUE GraphicsWrappers::rb_set_shader(VALUE self, VALUE shader)
 		{
-			if (active_shader != NULL)
+			if (active_shader != nullptr)
 				active_shader->is_active = false;
 
 			if (TYPE(shader) == T_NIL)

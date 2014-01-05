@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -52,7 +52,7 @@ namespace RAGE
 		ALLEGRO_COLOR color;
 		ALLEGRO_USTR *str;
 		ALLEGRO_FONT *fnt, *def_font;
-		Font *set_fnt = NULL;
+		Font *set_fnt = nullptr;
 		VALUE rb_font = Qnil;
 
 		VALUE DrawWrappers::rb_draw_line(VALUE self, VALUE x1, VALUE y1, VALUE x2, VALUE y2, VALUE thickness)
@@ -158,9 +158,9 @@ namespace RAGE
 
 			rb_font = sfont;
 
-			if (dfnt->font != NULL)
+			if (dfnt->font != nullptr)
 			{
-				if (set_fnt != NULL)
+				if (set_fnt != nullptr)
 					set_fnt->is_set = false;
 
 				fnt = dfnt->font;
@@ -243,13 +243,14 @@ namespace RAGE
 			#if RAGE_COMPILE_BITMAP
 			if (TYPE(texture) != T_NIL)
 			{
-				RAGE_GET_DATA(texture, Bitmap, bmp);
+				Bitmap *bmp;
+				Data_Get_Struct(texture, Bitmap, bmp);
 
-				return INT2FIX(al_draw_prim(va->ary, NULL, bmp->bitmap, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+				return INT2FIX(al_draw_prim(va->ary, nullptr, bmp->bitmap, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
 			}
 			#endif
 
-			return INT2FIX(al_draw_prim(va->ary, NULL, NULL, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
+			return INT2FIX(al_draw_prim(va->ary, nullptr, nullptr, FIX2INT(start), FIX2INT(end), FIX2INT(type)));
 		}	
 
 		VALUE DrawWrappers::rb_draw_indexed_vertex(VALUE self, VALUE vertex_array, VALUE texture, VALUE indices_array, VALUE indices_num, VALUE type)
@@ -271,17 +272,18 @@ namespace RAGE
 			#if RAGE_COMPILE_BITMAP
 			if (TYPE(texture) != T_NIL)
 			{
-				RAGE_GET_DATA(texture, Bitmap, bmp);
+				Bitmap *bmp;
+				Data_Get_Struct(texture, Bitmap, bmp);
 
 				delete[] indices;
 				
-				return INT2FIX(al_draw_indexed_prim(va->ary, NULL, bmp->bitmap, indices, FIX2INT(indices_num), FIX2INT(type)));
+				return INT2FIX(al_draw_indexed_prim(va->ary, nullptr, bmp->bitmap, indices, FIX2INT(indices_num), FIX2INT(type)));
 			}
 			#endif
 
 			delete[] indices;
 			
-			return INT2FIX(al_draw_indexed_prim(va->ary, NULL, NULL, indices, FIX2INT(indices_num), FIX2INT(type)));
+			return INT2FIX(al_draw_indexed_prim(va->ary, nullptr, nullptr, indices, FIX2INT(indices_num), FIX2INT(type)));
 
 			
 		}

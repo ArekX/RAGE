@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -353,7 +353,7 @@ namespace RAGE
 
 		VALUE VertexArrayWrapper::new_ruby_class_instance(void)
 		{
-			return rb_class_new_instance(0, NULL, rb_rageVertexArrayClass);
+			return rb_class_new_instance(0, nullptr, rb_rageVertexArrayClass);
 		}
 
 	}

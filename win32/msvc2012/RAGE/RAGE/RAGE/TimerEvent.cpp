@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -34,8 +34,8 @@ namespace RAGE
 		{
 			timer_observer = rb_ary_new();
 			disposed = false;
-			timer_queue = NULL;
-			timer = NULL;
+			timer_queue = nullptr;
+			timer = nullptr;
 		}
 
 		void TimerEvent::initialize(double seconds)
@@ -44,7 +44,7 @@ namespace RAGE
 
 			timer = al_create_timer(seconds);
 
-			if (timer == NULL)
+			if (timer == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_TIMER_FAIL);
 				return;
@@ -63,10 +63,10 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (timer_queue != NULL)
+			if (timer_queue != nullptr)
 				al_unregister_event_source(timer_queue, al_get_timer_event_source(timer));
 
-			timer_queue = NULL;
+			timer_queue = nullptr;
 		}
 
 		void TimerEvent::clear(void)
@@ -80,7 +80,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if ((timer != NULL) && !al_get_timer_started(timer))
+			if ((timer != nullptr) && !al_get_timer_started(timer))
 				al_start_timer(timer);
 		}
 
@@ -88,7 +88,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if ((timer != NULL) && al_get_timer_started(timer))
+			if ((timer != nullptr) && al_get_timer_started(timer))
 				al_stop_timer(timer);
 		}
 
@@ -96,7 +96,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (timer != NULL)
+			if (timer != nullptr)
 				return al_get_timer_count(timer);
 			else
 				return -1;
@@ -106,7 +106,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (timer != NULL)
+			if (timer != nullptr)
 				return RARRAY_LEN(timer_observer);
 			else
 				return -1;
@@ -118,7 +118,7 @@ namespace RAGE
 
 			for (int i = 0; i < RARRAY_LEN(timer_observer); i++)
 			{
-				rb_proc_call_with_block(rb_ary_entry(timer_observer, i), 0, NULL, 
+				rb_proc_call_with_block(rb_ary_entry(timer_observer, i), 0, nullptr, 
 										rb_ary_entry(timer_observer, i));
 			}
 		}
@@ -127,7 +127,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if ((timer != NULL) && al_get_timer_started(timer))
+			if ((timer != nullptr) && al_get_timer_started(timer))
 				al_set_timer_count(timer, count);
 		}
 
@@ -135,7 +135,7 @@ namespace RAGE
 		void TimerEvent::set_speed(double speed)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
-			if (timer != NULL)
+			if (timer != nullptr)
 				al_set_timer_speed(timer, speed);
 		}
 
@@ -143,7 +143,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (timer != NULL)
+			if (timer != nullptr)
 				return al_get_timer_speed(timer);
 			else
 				return 0;
@@ -153,7 +153,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
-			if (timer != NULL)
+			if (timer != nullptr)
 				return al_get_timer_started(timer);
 			else 
 				return false;
@@ -161,10 +161,10 @@ namespace RAGE
 
 		void TimerEvent::dispose(void)
 		{
-			if (timer_queue != NULL)
+			if (timer_queue != nullptr)
 				al_unregister_event_source(timer_queue, al_get_timer_event_source(timer));
 
-			if (timer != NULL)
+			if (timer != nullptr)
 				al_destroy_timer(timer);
 
 			rb_ary_clear(timer_observer);

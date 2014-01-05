@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -42,14 +42,14 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (font != NULL) 
+			if (font != nullptr) 
 				al_destroy_font(font);
 
 			rage_file = Qnil;
 
 			font = al_load_font(filename, size, flags);
 
-			if (font == NULL)
+			if (font == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
 				return;
@@ -60,14 +60,14 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (font != NULL) 
+			if (font != nullptr) 
 				al_destroy_font(font);
 
 			rage_file = Qnil;
 
 			font = al_load_ttf_font_stretch(filename, w, h, flags);
 
-			if (font == NULL)
+			if (font == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, filename);
 				return;
@@ -78,7 +78,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (font != NULL) 
+			if (font != nullptr) 
 				al_destroy_font(font);
 
 			Filesystem::BaseFile *fl;
@@ -90,7 +90,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -100,7 +100,7 @@ namespace RAGE
 
 			font = al_load_ttf_font_f(fl->file, filename, size, flags);
 
-			if (font == NULL)
+			if (font == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -117,7 +117,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (font != NULL) 
+			if (font != nullptr) 
 				al_destroy_font(font);
 
 			Filesystem::BaseFile *fl;
@@ -129,7 +129,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -139,7 +139,7 @@ namespace RAGE
 
 			font = al_load_ttf_font_stretch_f(fl->file, filename, w, h, flags);
 
-			if (font == NULL)
+			if (font == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -152,7 +152,7 @@ namespace RAGE
 
 			font = al_grab_font_from_bitmap(bmp, num_ranges, ranges);
 
-			if (font == NULL)
+			if (font == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FONT_LOAD_FAIL, RAGE_BITMAP);
 				return;
@@ -163,7 +163,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (font == NULL)
+			if (font == nullptr)
 				return 0;
 
 			return al_get_ustr_width(font, text);
@@ -173,7 +173,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (font == NULL)
+			if (font == nullptr)
 				return 0;
 
 			return al_get_font_ascent(font);
@@ -183,7 +183,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (font != NULL)
+			if (font != nullptr)
 				al_destroy_font(font);
 
 			rage_file = Qnil;

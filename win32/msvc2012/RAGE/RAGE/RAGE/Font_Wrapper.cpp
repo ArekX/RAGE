@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -114,7 +114,7 @@ namespace RAGE
 			else
 			{
 				char *absolute_file = Interpreter::Ruby::get_file_path(args[0]);
-				if (absolute_file == NULL)
+				if (absolute_file == nullptr)
 				{
 				
 					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(args[0]));
@@ -156,7 +156,7 @@ namespace RAGE
 			else
 			{
 				char *absolute_file = Interpreter::Ruby::get_file_path(args[0]);
-				if (absolute_file == NULL)
+				if (absolute_file == nullptr)
 				{
 				
 					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(args[0]));
@@ -289,7 +289,7 @@ namespace RAGE
 
 		VALUE FontWrapper::new_ruby_class_instance(void)
 		{
-			return rb_class_new_instance(0, NULL, rb_rageFontClass);
+			return rb_class_new_instance(0, nullptr, rb_rageFontClass);
 		}
 	}
 }

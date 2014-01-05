@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -35,7 +35,7 @@ namespace RAGE
 		{
 			mixer = mx;
 			disposed = false;
-			audio = NULL;
+			audio = nullptr;
 			rage_file = Qnil;
 		}
 
@@ -49,7 +49,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (audio != NULL)
+			if (audio != nullptr)
 			{
 				al_drain_audio_stream(audio);
 				al_destroy_audio_stream(audio);
@@ -59,7 +59,7 @@ namespace RAGE
 
 			audio = al_load_audio_stream(filename, 4, 2048);
 			
-			if (audio == NULL)
+			if (audio == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_MUSIC_LOAD_FAIL, filename);
 				return;
@@ -83,7 +83,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -91,7 +91,7 @@ namespace RAGE
 
 			rage_file = r_file;
 
-			if (audio != NULL)
+			if (audio != nullptr)
 			{
 				al_drain_audio_stream(audio);
 				al_destroy_audio_stream(audio);
@@ -99,7 +99,7 @@ namespace RAGE
 
 			audio = al_load_audio_stream_f(fl->file, ext, 4, 2048);
 			
-			if (audio == NULL)
+			if (audio == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_MUSIC_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -217,7 +217,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (audio != NULL)
+			if (audio != nullptr)
 			{
 				al_drain_audio_stream(audio);
 				al_destroy_audio_stream(audio);

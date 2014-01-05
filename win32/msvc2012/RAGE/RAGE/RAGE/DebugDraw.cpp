@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -57,7 +57,7 @@ namespace RAGE
 
 			al_set_target_backbuffer(RAGE::Graphics::GraphicsWrappers::get_display());
 			
-			al_draw_prim(v, decl, NULL, 0, vertexCount, type);
+			al_draw_prim(v, decl, nullptr, 0, vertexCount, type);
 			RAGE::Graphics::GraphicsWrappers::restore_drawing_target();
 
 			delete[] v;

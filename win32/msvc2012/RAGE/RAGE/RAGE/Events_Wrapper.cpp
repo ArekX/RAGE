@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -220,7 +220,7 @@ namespace RAGE
 
 			rb_gc_register_address(&event_objects);
 
-			if (event_queue == NULL)
+			if (event_queue == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_EVENT_QUEUE_FAIL);
 				return;
@@ -231,7 +231,7 @@ namespace RAGE
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
 
-			if (event_queue != NULL)
+			if (event_queue != nullptr)
 				al_destroy_event_queue(event_queue);
 
 			if (event_objects != Qnil)

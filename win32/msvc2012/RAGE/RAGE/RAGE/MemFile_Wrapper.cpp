@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -142,7 +142,7 @@ namespace RAGE
 			MemFile *fl;
 			Data_Get_Struct(self, MemFile, fl);
 
-			return (fl->file != NULL) ? Qtrue : Qfalse;
+			return (fl->file != nullptr) ? Qtrue : Qfalse;
 		}
 
 		VALUE MemFileWrapper::rb_write_byte(VALUE self, VALUE byte)
@@ -330,7 +330,7 @@ namespace RAGE
 
 		VALUE MemFileWrapper::new_ruby_class_instance(void)
 		{
-			return rb_class_new_instance(0, NULL, rb_rageMemFileClass);
+			return rb_class_new_instance(0, nullptr, rb_rageMemFileClass);
 		}
 	}
 }

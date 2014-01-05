@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -77,7 +77,7 @@ namespace RAGE
 			else
 			{
 				char *absolute_file = Interpreter::Ruby::get_file_path(file);
-				if (absolute_file == NULL)
+				if (absolute_file == nullptr)
 				{
 				
 					rb_raise(rb_eArgError, RAGE_RB_FILE_MISSING_ERROR, StringValueCStr(file));
@@ -167,7 +167,7 @@ namespace RAGE
 
 		VALUE IniFileWrapper::new_ruby_class_instance(void)
 		{
-			return rb_class_new_instance(0, NULL, rb_rageIniFileClass);
+			return rb_class_new_instance(0, nullptr, rb_rageIniFileClass);
 		}
 	}
 }

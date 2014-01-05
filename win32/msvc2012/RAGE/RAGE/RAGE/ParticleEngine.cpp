@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -85,7 +85,7 @@ namespace RAGE
 
 			em_particle_appear_velocity = 4;
 
-			particles = NULL;
+			particles = nullptr;
 			particles_len = 0;
 
 			em_blend_op = ALLEGRO_ADD;
@@ -407,10 +407,10 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (particle_tex != NULL)
+			if (particle_tex != nullptr)
 				al_destroy_bitmap(particle_tex);
 
-			if (new_tex != NULL)
+			if (new_tex != nullptr)
 			{
 				ALLEGRO_STATE st;
 
@@ -1392,7 +1392,7 @@ namespace RAGE
 			if (particles_len > 0)
 				al_free(particles);
 
-			if (particle_tex != NULL)
+			if (particle_tex != nullptr)
 				al_destroy_bitmap(particle_tex);
 
 			disposed = true;

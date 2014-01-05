@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -108,7 +108,7 @@ namespace RAGE
 			char **lst = PHYSFS_getSearchPath();
 			int i = 0;
 
-			while (lst[i] != NULL)
+			while (lst[i] != nullptr)
 			{
 				rb_ary_push(list, rb_str_new_cstr(lst[i++]));
 			}
@@ -133,7 +133,7 @@ namespace RAGE
 			char **lst = PHYSFS_enumerateFiles(StringValueCStr(dir));
 			int i = 0;
 
-			while (lst[i] != NULL)
+			while (lst[i] != nullptr)
 			{
 				rb_ary_push(list, rb_str_new_cstr(lst[i++]));
 			}
@@ -206,7 +206,7 @@ namespace RAGE
 		{
 			const char *error = PHYSFS_getLastError();
 
-			if (error == NULL)
+			if (error == nullptr)
 				return rb_str_new_cstr("");
 
 			return rb_str_new_cstr(error);
@@ -216,7 +216,7 @@ namespace RAGE
 		{
 			char *fname = Interpreter::Ruby::get_file_path(filename);
 
-			if (fname == NULL)
+			if (fname == nullptr)
 				return Qnil;
 
 			return rb_str_new2(fname);

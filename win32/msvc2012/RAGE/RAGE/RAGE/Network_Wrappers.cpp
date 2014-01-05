@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -44,7 +44,7 @@ namespace RAGE
 		WSAData w_data;
 		#endif
 
-		std::string *post_buffer = NULL;
+		std::string *post_buffer = nullptr;
 
 		int rb_post_hash_callback(VALUE key, VALUE val, VALUE in)
 		{
@@ -157,7 +157,7 @@ namespace RAGE
 			 
 
 			std::string *str = new std::string();
-			char *data = NULL;
+			char *data = nullptr;
 			int64_t len = 0;
 			int i = 0;
 
@@ -336,7 +336,7 @@ namespace RAGE
 			 
 
 			std::string *str = new std::string();
-			char *data = NULL;
+			char *data = nullptr;
 			int64_t len = 0;
 			int i = 0;
 

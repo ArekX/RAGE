@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -42,7 +42,7 @@ namespace RAGE
 
 		void MusicWrapper::rb_music_free(void* ptr)
 		{
-			al_free(ptr);
+			delete ptr;
 		}
 
 		void MusicWrapper::rb_mark(void *ptr)

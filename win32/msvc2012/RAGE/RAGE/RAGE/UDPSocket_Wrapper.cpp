@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -45,7 +45,8 @@ namespace RAGE
 
 		VALUE UDPSocketWrapper::rb_initialize(VALUE self, VALUE port)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 			
 			sv->initialize(FIX2INT(port));
 
@@ -54,7 +55,8 @@ namespace RAGE
 
 		VALUE UDPSocketWrapper::rb_send(VALUE self, VALUE data, VALUE host, VALUE port)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			VALUE port_string = rb_fix2str(port, 10);
 
@@ -63,7 +65,8 @@ namespace RAGE
 
 		VALUE UDPSocketWrapper::rb_recv(int argc, VALUE *args, VALUE self)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			if (argc == 0)
 				return sv->receive_data(0);
@@ -77,14 +80,16 @@ namespace RAGE
 
 		VALUE UDPSocketWrapper::rb_get_port(VALUE self)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			return INT2FIX(sv->get_server_port());
 		}
 
 		VALUE UDPSocketWrapper::rb_dispose(VALUE self)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			sv->dispose();
 			
@@ -93,14 +98,16 @@ namespace RAGE
 
 		VALUE UDPSocketWrapper::rb_disposed(VALUE self)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			return sv->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE UDPSocketWrapper::rb_get_id(VALUE self)
 		{
-			RAGE_GET_DATA(self, UDPSocket, sv);
+			UDPSocket *sv;
+			Data_Get_Struct(self, UDPSocket, sv);
 
 			return LL2NUM(sv->get_id());
 		}

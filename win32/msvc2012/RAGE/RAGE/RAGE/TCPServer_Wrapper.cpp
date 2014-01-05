@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -51,7 +51,8 @@ namespace RAGE
 			}
 			else
 			{
-				RAGE_GET_DATA(self, TCPServer, sv);
+				TCPServer *sv;
+				Data_Get_Struct(self, TCPServer, sv);
 			
 				sv->initialize(
 								FIX2INT(args[0]), 
@@ -65,7 +66,8 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_listen(int argc, VALUE *args, VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 			
 			SOCKET client = sv->listen_clients();
 
@@ -77,14 +79,16 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_data_available(VALUE self, VALUE client)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return sv->get_is_data_available(NUM2LL(client)) ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPServerWrapper::rb_send(VALUE self, VALUE client, VALUE data)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return INT2FIX(sv->send_data(NUM2LL(client), RSTRING_PTR(data), RSTRING_LEN(data)));
 		}
@@ -97,7 +101,8 @@ namespace RAGE
 			}
 			else
 			{
-				RAGE_GET_DATA(self, TCPServer, sv);
+				TCPServer *sv;
+				Data_Get_Struct(self, TCPServer, sv);
 				return sv->receive_data(NUM2LL(args[0]), (argc == 2) ? FIX2INT(args[1]) : 0);
 			}
 			
@@ -106,18 +111,20 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_is_connected(VALUE self, VALUE client)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return sv->get_is_connected(NUM2LL(client)) ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPServerWrapper::rb_get_ip(VALUE self, VALUE client)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			char *str = sv->get_client_ip(NUM2LL(client));
 
-			if (str == NULL)
+			if (str == nullptr)
 				return Qnil;
 			else
 			{
@@ -130,7 +137,8 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_disconnect(VALUE self, VALUE client)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			sv->disconnect(NUM2LL(client));
 
@@ -139,28 +147,32 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_get_is_blocking(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return sv->get_is_blocking() ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPServerWrapper::rb_get_port(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return INT2FIX(sv->get_server_port());
 		}
 
 		VALUE TCPServerWrapper::rb_get_max_clients(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return INT2FIX(sv->get_max_clients());
 		}
 
 		VALUE TCPServerWrapper::rb_dispose(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			sv->dispose();
 			
@@ -169,14 +181,16 @@ namespace RAGE
 
 		VALUE TCPServerWrapper::rb_disposed(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return sv->disposed ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPServerWrapper::rb_get_id(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPServer, sv);
+			TCPServer *sv;
+			Data_Get_Struct(self, TCPServer, sv);
 
 			return LL2NUM(sv->get_id());
 		}

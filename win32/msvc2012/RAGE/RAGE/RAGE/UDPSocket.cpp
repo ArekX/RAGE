@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -82,7 +82,7 @@ namespace RAGE
 
 			int result = 0;
 
-			addrinfo hints, *s = NULL;
+			addrinfo hints, *s = nullptr;
 			memset(&hints, 0, sizeof(hints));
 
 			hints.ai_family = AF_UNSPEC;
@@ -99,7 +99,7 @@ namespace RAGE
 			else
 				result = -1;
 
-			if (s != NULL)
+			if (s != nullptr)
 				freeaddrinfo(s);
 
 			return result;
@@ -112,7 +112,7 @@ namespace RAGE
 			sockaddr_storage res;
 			socklen_t res_len;
 
-			char *buffer = NULL;
+			char *buffer = nullptr;
 			VALUE ret_str = Qnil;
 			int result = 0;
 

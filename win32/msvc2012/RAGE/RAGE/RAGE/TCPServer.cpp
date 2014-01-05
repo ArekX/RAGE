@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -43,7 +43,7 @@ namespace RAGE
 			blocking_default = 0;
 			max_clients = 10;
 
-			serv_info = NULL;
+			serv_info = nullptr;
 
 			connected = false;
 
@@ -125,7 +125,7 @@ namespace RAGE
 
 		char* TCPServer::get_client_ip(SOCKET client_sock)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			sockaddr_storage name;
 			socklen_t namelen = sizeof(name);
@@ -136,7 +136,7 @@ namespace RAGE
 
 			if (getpeername(client_sock, (sockaddr*)&name, &namelen) == SOCKET_ERROR)
 			{
-				return NULL;
+				return nullptr;
 			}
 			else
 			{
@@ -163,7 +163,7 @@ namespace RAGE
 			}
 			
 
-			SOCKET sc = accept(server_sock, NULL, NULL);
+			SOCKET sc = accept(server_sock, nullptr, nullptr);
 
 			if (sc != INVALID_SOCKET)
 			{
@@ -227,14 +227,14 @@ namespace RAGE
 			}
 
 
-			char *buffer = NULL;
+			char *buffer = nullptr;
 			VALUE ret_str;
 			int result = 0;
 
 			if (max_buffer == 0)
 			{
 				buffer = new char[RAGE_SERVER_TCP_MAX_BUFFER];
-				char *data = NULL;
+				char *data = nullptr;
 				size_t max_len = 0, i, pos = 0;
 
 				do 
@@ -256,7 +256,7 @@ namespace RAGE
 
 				ret_str = rb_str_new(data, max_len);
 
-				if (data != NULL)
+				if (data != nullptr)
 					al_free(data);
 
 			}

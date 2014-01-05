@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -35,9 +35,9 @@ namespace RAGE
 		{
 			mixer = mx;
 			disposed = false;
-			spl = NULL;
+			spl = nullptr;
 			rage_file = Qnil;
-			inst = al_create_sample_instance(NULL);
+			inst = al_create_sample_instance(nullptr);
 			al_attach_sample_instance_to_mixer(inst, mixer);
 		}
 
@@ -52,16 +52,16 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (spl != NULL)
+			if (spl != nullptr)
 			{
-				al_set_sample(inst, NULL);
+				al_set_sample(inst, nullptr);
 				al_destroy_sample(spl);
-				spl = NULL;
+				spl = nullptr;
 			}
 
 			spl = al_load_sample(filename);
 
-			if (spl == NULL)
+			if (spl == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SFX_LOAD_FAIL, filename);
 				return;
@@ -83,7 +83,7 @@ namespace RAGE
 				return;
 			}
 
-			if (fl->file == NULL)
+			if (fl->file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_RAGE_FILE_NOT_LOADED);
 				return;
@@ -91,16 +91,16 @@ namespace RAGE
 
 			rage_file = r_file;
 
-			if (spl != NULL)
+			if (spl != nullptr)
 			{
-				al_set_sample(inst, NULL);
+				al_set_sample(inst, nullptr);
 				al_destroy_sample(spl);
-				spl = NULL;
+				spl = nullptr;
 			}
 
 			spl = al_load_sample_f(fl->file, ext);
 
-			if (spl == NULL)
+			if (spl == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_SFX_LOAD_FAIL, RAGE_BASE_FILE);
 				return;
@@ -215,10 +215,10 @@ namespace RAGE
 		{ 
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (inst != NULL)
+			if (inst != nullptr)
 				al_destroy_sample_instance(inst);
 
-			if (spl != NULL)
+			if (spl != nullptr)
 				al_destroy_sample(spl);
 
 			rage_file = Qnil;

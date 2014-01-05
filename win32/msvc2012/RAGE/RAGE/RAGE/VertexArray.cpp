@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -42,7 +42,7 @@ namespace RAGE
 			if (vertices_count > 0)
 				ary = (ALLEGRO_VERTEX*)al_malloc(sizeof(ALLEGRO_VERTEX) * vertices_count);
 			else
-				ary = NULL;
+				ary = nullptr;
 
 			ary_len = vertices_count;
 		}
@@ -51,7 +51,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (ary == NULL)
+			if (ary == nullptr)
 				ary = (ALLEGRO_VERTEX*)al_malloc(sizeof(ALLEGRO_VERTEX) * ++ary_len);
 			else
 				ary = (ALLEGRO_VERTEX*)al_realloc(ary, sizeof(ALLEGRO_VERTEX) * ++ary_len);

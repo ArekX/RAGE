@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -31,7 +31,7 @@ namespace RAGE
 	{
 		File::File(void)
 		{
-			file = NULL;
+			file = nullptr;
 			disposed = false;
 			can_read = false;
 		}
@@ -40,7 +40,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 			
-			if (file != NULL)
+			if (file != nullptr)
 				al_fclose(file);
 
 			file = al_fopen(filename, mode);
@@ -56,7 +56,7 @@ namespace RAGE
 				i++;
 			}
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_CANNOT_LOAD, filename);
 				disposed = true;
@@ -68,7 +68,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -81,7 +81,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -94,7 +94,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -107,7 +107,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -120,7 +120,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -133,7 +133,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -146,7 +146,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -159,7 +159,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -174,7 +174,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -189,7 +189,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -205,7 +205,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -221,7 +221,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, Qnil);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return Qnil;
@@ -254,7 +254,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file != NULL)
+			if (file != nullptr)
 				return al_fsize(file);
 			else
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
@@ -266,7 +266,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, 0);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return 0;
@@ -279,7 +279,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return;
@@ -292,7 +292,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return;
@@ -305,7 +305,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED_RET(disposed, false);
 
-			if (file == NULL)
+			if (file == nullptr)
 			{
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
 				return false;
@@ -318,7 +318,7 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (file != NULL)
+			if (file != nullptr)
 				al_fclose(file);
 			else
 				rb_raise(rb_eException, RAGE_ERROR_FS_FILE_NOT_LOADED);
@@ -328,10 +328,10 @@ namespace RAGE
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (file != NULL)
+			if (file != nullptr)
 			{
 				al_fclose(file);
-				file = NULL;
+				file = nullptr;
 			}
 		}
 

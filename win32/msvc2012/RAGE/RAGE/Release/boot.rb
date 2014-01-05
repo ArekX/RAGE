@@ -22,14 +22,11 @@ end
 
 #User32.MessageBox(0, 'i love dl', 'hello', 0)
 
-
-
 begin
     $close = false
     register_close_button {
       $close = true
     }
-
 
     RAGE::Events.processScreen true
 

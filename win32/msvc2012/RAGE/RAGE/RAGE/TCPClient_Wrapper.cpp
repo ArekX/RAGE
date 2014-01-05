@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -60,7 +60,8 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_connect(VALUE self, VALUE host, VALUE port)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 			
 			cl->tcp_connect(StringValueCStr(host), FIX2INT(port));
 
@@ -69,14 +70,16 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_send(VALUE self, VALUE data)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return INT2FIX(cl->tcp_send(RSTRING_PTR(data), RSTRING_LEN(data)));
 		}
 
 		VALUE TCPClientWrapper::rb_recv(int argc, VALUE *args, VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			if (argc > 1)
 			{
@@ -89,14 +92,16 @@ namespace RAGE
 
 	    VALUE TCPClientWrapper::rb_get_connected(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return cl->get_connected() ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPClientWrapper::rb_disconnect(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			cl->disconnect();
 
@@ -105,14 +110,16 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_get_blocking(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return cl->get_blocking_mode() ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPClientWrapper::rb_set_blocking(VALUE self, VALUE val)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			cl->set_blocking_mode((TYPE(val) == T_TRUE));
 
@@ -121,28 +128,32 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_get_id(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return LL2NUM(cl->get_id());
 		}
 
 		VALUE TCPClientWrapper::rb_get_port(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return INT2FIX(cl->get_port());
 		}
 
 		VALUE TCPClientWrapper::rb_get_timeout(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return INT2FIX(cl->get_timeout());
 		}
 
 		VALUE TCPClientWrapper::rb_set_timeout(VALUE self, VALUE val)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			cl->set_timeout(FIX2INT(val));
 
@@ -151,14 +162,16 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_data_available(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return cl->get_data_available() ? Qtrue : Qfalse;
 		}
 
 		VALUE TCPClientWrapper::rb_dispose(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			cl->dispose();
 
@@ -167,7 +180,8 @@ namespace RAGE
 
 		VALUE TCPClientWrapper::rb_disposed(VALUE self)
 		{
-			RAGE_GET_DATA(self, TCPClient, cl);
+			TCPClient *cl;
+			Data_Get_Struct(self, TCPClient, cl);
 
 			return cl->disposed ? Qtrue : Qfalse;
 		}

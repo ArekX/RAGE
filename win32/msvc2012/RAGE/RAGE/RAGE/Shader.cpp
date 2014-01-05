@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -90,7 +90,7 @@ namespace RAGE
 				glslhandle = glCreateShader(GL_VERTEX_SHADER_ARB);
 
 			glsl_shader_program = glCreateProgramObjectARB();
-			glShaderSource(glslhandle, SHADER_LEN, (const char**)&code, NULL);
+			glShaderSource(glslhandle, SHADER_LEN, (const char**)&code, nullptr);
 			glCompileShader(glslhandle);
 
 			if (check_errors(GL_COMPILE_STATUS))

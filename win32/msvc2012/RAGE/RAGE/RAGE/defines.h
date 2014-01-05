@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -26,7 +26,6 @@ freely, subject to the following restrictions:
 #define RFUNC RUBY_METHOD_FUNC
 #define RAGE_CHECK_DISPOSED(disposed_var) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return; }
 #define RAGE_CHECK_DISPOSED_RET(disposed_var, ret) if (disposed_var) { rb_raise(rb_eException, RAGE_ERROR_DISPOSED_OBJECT); return ret; }
-#define RAGE_DESTROY_PTR(ptr, type) delete ptr; *((type*)ptr) = nullptr
 
 #ifdef WIN32
 #define DS '\\'
@@ -59,8 +58,6 @@ freely, subject to the following restrictions:
 
 #define RAGE_DEBUG_GLOBAL_VAR "$DEBUG"
 #define RAGE_ARGS_VAR "$RARGV"
-
-#define RAGE_GET_DATA(valueVar, asType, asVar) asType *asVar; Data_Get_Struct(valueVar, asType, asVar); 
 
 #define RAGE_IS_CLASS_OF(var, klass) (rb_class_of(var) == klass::get_ruby_class())
 #define RAGE_IS_SUPERCLASS_OF(var, klass) (rb_class_get_superclass(rb_class_of(var)) == klass::get_ruby_class())

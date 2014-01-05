@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -44,7 +44,7 @@ namespace RAGE
 		{
 			joy = al_get_joystick(joy_num);
 
-			if (joy == NULL)
+			if (joy == nullptr)
 			{
 				rb_raise(rb_eArgError, RAGE_JOYSTICK_NOT_FOUND_ERROR, joy_num);
 				return;
@@ -122,28 +122,28 @@ namespace RAGE
 
 		const char* Joystick::get_name(void)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			return al_get_joystick_name(joy);
 		}
 
 		const char* Joystick::get_button_name(int button_num)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			return al_get_joystick_button_name(joy, button_num);
 		}
 
 		const char* Joystick::get_stick_name(int stick_num)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			return al_get_joystick_stick_name(joy, stick_num);
 		}
 
 		const char* Joystick::get_axis_name(int stick_num, int axis_num)
 		{
-			RAGE_CHECK_DISPOSED_RET(disposed, NULL);
+			RAGE_CHECK_DISPOSED_RET(disposed, nullptr);
 
 			return al_get_joystick_axis_name(joy, stick_num, axis_num);
 		}

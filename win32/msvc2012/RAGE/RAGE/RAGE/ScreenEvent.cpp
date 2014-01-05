@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Aleksandar Panic
+Copyright (c) 2014 Aleksandar Panic
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -45,7 +45,7 @@ namespace RAGE
 
 			for (int i = 0; i < RARRAY_LEN(*observer); i++)
 			{
-				rb_proc_call_with_block(rb_ary_entry(*observer, i), 0, NULL, 
+				rb_proc_call_with_block(rb_ary_entry(*observer, i), 0, nullptr, 
 								        rb_ary_entry(*observer, i));
 			}
 		}
