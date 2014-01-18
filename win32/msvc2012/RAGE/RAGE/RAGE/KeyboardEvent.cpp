@@ -179,11 +179,6 @@ namespace RAGE
 			rb_ary_clear(key_up_observer);
 			rb_ary_clear(key_down_observer);
 
-			rb_gc_force_recycle(key_char_observer);
-			rb_gc_force_recycle(key_up_observer);
-			rb_gc_force_recycle(key_down_observer);
-			rb_gc_force_recycle(key);
-
 			disposed = true;
 		}
 

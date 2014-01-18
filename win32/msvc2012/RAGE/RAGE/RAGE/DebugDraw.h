@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 #pragma once
 
 #include "rage_standard_headers.h"
-#include "Box2D.h"
+#include "box2d-mod/Box2D.h"
 
 #if RAGE_COMPILE_PHYSICS && RAGE_COMPILE_PHYS_DEBUG_DRAW
 

@@ -189,10 +189,6 @@ namespace RAGE
 			rb_ary_clear(screen_lost_observer);
 			rb_ary_clear(screen_resize_observer);
 
-			rb_gc_force_recycle(screen_close_observer);
-			rb_gc_force_recycle(screen_focus_observer);
-			rb_gc_force_recycle(screen_lost_observer);
-			rb_gc_force_recycle(screen_resize_observer);
 
 			disposed = true;
 		}

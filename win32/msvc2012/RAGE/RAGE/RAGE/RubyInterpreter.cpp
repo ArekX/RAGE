@@ -54,7 +54,7 @@ freely, subject to the following restrictions:
 #include "TCPServer_Wrapper.h"
 #include "TCPClient_Wrapper.h"
 #include "UDPSocket_Wrapper.h"
-#include <Box2D/Common/b2Settings.h>
+#include "box2d-mod/Common/b2Settings.h"
 
 #if RAGE_COMPILE_DL
 #include <ext\dl\dl_ruby.h>
@@ -123,11 +123,11 @@ namespace RAGE
 		static VALUE rb_rage_about(VALUE self)
 		{
 			printf("RAGE Engine\nFull Name: Ruby Awesome Game Engine\nVersion: %s", RAGE_ENGINE_VERSION);
-			printf(" [%s] \nCopyright (c) Panic Aleksandar[Ruby Interpreter]\n", RAGE_ENGINE_CODE_NAME);
+			printf(" [%s] \nCopyright (c) Aleksandar Panic \n[Ruby Interpreter]\n", RAGE_ENGINE_CODE_NAME);
 			ruby_show_version();
 			printf("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
 			printf("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
-			printf("[Box2D Physics Engine]\nBox2D Library Version: %ld\.%ld\.%ld\nDeveloped by Erin Catto.\n\n", b2_version.major, b2_version.minor, b2_version.revision);
+			printf("[Modified Box2D Physics Engine]\nBox2D Library Version: %ld\.%ld\.%ld\nModified by Aleksandar Panic\nOriginal developed by Erin Catto.\n\n", b2_version.major, b2_version.minor, b2_version.revision);
 			return Qnil;
 		}
 

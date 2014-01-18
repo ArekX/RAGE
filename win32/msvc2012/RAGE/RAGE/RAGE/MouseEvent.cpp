@@ -218,17 +218,6 @@ namespace RAGE
 			rb_ary_clear(mouse_enter_observer);
 			rb_ary_clear(mouse_leave_observer);
 
-			rb_gc_force_recycle(mouse_down_observer);
-			rb_gc_force_recycle(mouse_up_observer);
-			rb_gc_force_recycle(mouse_move_observer);
-			rb_gc_force_recycle(mouse_enter_observer);
-			rb_gc_force_recycle(mouse_leave_observer);
-
-			rb_gc_force_recycle(mouse_args[0]);
-			rb_gc_force_recycle(mouse_args[1]);
-			rb_gc_force_recycle(mouse_args[2]);
-			rb_gc_force_recycle(mouse_args[3]);
-
 			delete[] mouse_args;
 
 			disposed = true;

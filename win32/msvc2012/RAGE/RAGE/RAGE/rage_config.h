@@ -23,7 +23,6 @@ distribution.
 
 #pragma once
 
-#define OLD_CONFIG 1
 
 #ifdef WIN32
 #include <allegro5/platform/almsvc.h>
@@ -37,8 +36,8 @@ distribution.
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "psapi.lib")
 #pragma comment(lib, "Iphlpapi.lib")
+
 
 #if _MSC_VER == 1800
 #pragma comment(lib, "msvcr120-ruby210-static.lib")
@@ -51,23 +50,8 @@ distribution.
 #pragma comment(lib, "libvorbisfile-1.3.2-static-mt.lib")
 #pragma comment(lib, "zlib-1.2.5-static-mt.lib")
 #pragma comment(lib, "dumb-0.9.3-static-mt.lib")
-#pragma comment(lib, "box2d.lib")
 #endif
 
-#if _MSC_VER == 1600
-#define PSAPI_VERSION 1
-#pragma comment(lib, "msvcr100-ruby210-static.lib")
-#pragma comment(lib, "allegro-5.0.10-monolith-static-mt-10.lib")
-#pragma comment(lib, "openal-1.14-static-mt-10.lib")
-#pragma comment(lib, "freetype-2.4.8-static-mt-10.lib")
-#pragma comment(lib, "libFLAC-1.2.1-static-mt-10.lib")
-#pragma comment(lib, "libogg-1.2.1-static-mt-10.lib")
-#pragma comment(lib, "libvorbis-1.3.2-static-mt-10.lib")
-#pragma comment(lib, "libvorbisfile-1.3.2-static-mt-10.lib")
-#pragma comment(lib, "zlib-1.2.5-static-mt-10.lib")
-#pragma comment(lib, "dumb-0.9.3-static-mt-10.lib")
-#pragma comment(lib, "box2d-10.lib")
-#endif
 #else
 #include <allegro5/platform/alunix.h>
 #endif

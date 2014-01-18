@@ -27,8 +27,18 @@ begin
     register_close_button {
       $close = true
     }
-
+    hgs = RAGE::Bitmap.new "data/x.png"
     RAGE::Events.processScreen true
+
+
+    h = RAGE::ScreenEvent.new
+
+    v = h
+
+    h.dispose
+
+    puts v
+    v.dispose
 
     RAGE.about()
 
@@ -76,9 +86,8 @@ begin
     s.mee
     x,y = 0, 0
     id = nil
-
 	  loop do
-  
+      
 
       RAGE::Draw.clear
 

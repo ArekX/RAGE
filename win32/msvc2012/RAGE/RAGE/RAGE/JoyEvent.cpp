@@ -231,14 +231,6 @@ namespace RAGE
 			rb_ary_clear(joy_axis_observer);
 			rb_ary_clear(joy_reconf_observer);
 
-			rb_gc_force_recycle(joy_up_observer);
-			rb_gc_force_recycle(joy_down_observer);
-			rb_gc_force_recycle(joy_axis_observer);
-			rb_gc_force_recycle(joy_reconf_observer);
-			rb_gc_force_recycle(vals[0]);
-			rb_gc_force_recycle(vals[1]);
-			rb_gc_force_recycle(vals[2]);
-
 			disposed = true;
 		}
 

@@ -121,7 +121,7 @@ namespace RAGE
 		{
 			ScreenEvent *screen_event;
 			Data_Get_Struct(self, ScreenEvent, screen_event);
-
+			
 			return screen_event->get_observer_array(FIX2INT(event_type));
 		}
 

@@ -168,7 +168,6 @@ namespace RAGE
 				al_destroy_timer(timer);
 
 			rb_ary_clear(timer_observer);
-			rb_gc_force_recycle(timer_observer);
 
 			disposed = true;
 		}
