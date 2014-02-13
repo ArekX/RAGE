@@ -32,6 +32,6 @@
 *.png
 *.ttf
 *.suo
-/win32/msvc2012/RAGE/RAGE/RAGE/WinAll
-/win32/msvc2012/RAGE/RAGE/Win7
-/win32/msvc2012/RAGE/RAGE/Release
+/win32/msvc/RAGE/RAGE/Release
+/win32/msvc/RAGE/RAGE/Win7
+/win32/msvc/RAGE/RAGE/WinAll

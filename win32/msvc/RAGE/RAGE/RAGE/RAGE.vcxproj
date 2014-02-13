@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseNoDebug-production|Win32">
+      <Configuration>ReleaseNoDebug-production</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseNoDebugXPSupport-production|Win32">
+      <Configuration>ReleaseNoDebugXPSupport-production</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseNoDebugXPSupport|Win32">
+      <Configuration>ReleaseNoDebugXPSupport</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseNoDebug|Win32">
+      <Configuration>ReleaseNoDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5DBFE078-6782-4FBB-9844-8AF30E6FB15A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>RAGE</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)-dev</TargetName>
+    <OutDir>$(SolutionDir)Win7\</OutDir>
+    <IntDir>Win7\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)-dev</TargetName>
+    <OutDir>$(SolutionDir)WinAll\</OutDir>
+    <IntDir>WinAll\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)WinAll\</OutDir>
+    <IntDir>WinAll\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Win7\</OutDir>
+    <IntDir>Win7\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;DEBUG;_CONSOLE;DEVELOPMENT_VERSION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DEVELOPMENT_VERSION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DEVELOPMENT_VERSION=1;XP_TARGETING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;XP_TARGETING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <UndefinePreprocessorDefinitions>DEVELOPMENT_VERSION</UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_core.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_parse.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strftime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strptime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\bubblebabble.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\digest.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-3.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-4.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-6.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-7.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-8.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cfunc.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\pathname\pathname.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\stringio\stringio.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\strscan\strscan.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c" />
+    <ClCompile Include="Audio_Wrapper.cpp" />
+    <ClCompile Include="BaseFile_Wrapper.cpp" />
+    <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="Bitmap_Wrapper.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2BroadPhase.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2CollideCircle.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2CollideEdge.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2CollidePolygon.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2Collision.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2Distance.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2DynamicTree.cpp" />
+    <ClCompile Include="box2d-mod\Collision\b2TimeOfImpact.cpp" />
+    <ClCompile Include="box2d-mod\Collision\Shapes\b2ChainShape.cpp" />
+    <ClCompile Include="box2d-mod\Collision\Shapes\b2CircleShape.cpp" />
+    <ClCompile Include="box2d-mod\Collision\Shapes\b2EdgeShape.cpp" />
+    <ClCompile Include="box2d-mod\Collision\Shapes\b2PolygonShape.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2BlockAllocator.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2Draw.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2Math.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2Settings.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2StackAllocator.cpp" />
+    <ClCompile Include="box2d-mod\Common\b2Timer.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2Body.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2ContactManager.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2Fixture.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2Island.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2World.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\b2WorldCallbacks.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2ChainAndCircleContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2ChainAndPolygonContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2CircleContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2Contact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2ContactSolver.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2EdgeAndCircleContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2EdgeAndPolygonContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2PolygonAndCircleContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Contacts\b2PolygonContact.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2DistanceJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2FrictionJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2GearJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2Joint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2MotorJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2MouseJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2PrismaticJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2PulleyJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2RevoluteJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2RopeJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2WeldJoint.cpp" />
+    <ClCompile Include="box2d-mod\Dynamics\Joints\b2WheelJoint.cpp" />
+    <ClCompile Include="box2d-mod\Rope\b2Rope.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Color_Wrapper.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="Draw_Wrappers.cpp" />
+    <ClCompile Include="Events_Wrapper.cpp" />
+    <ClCompile Include="Event_Wrapper.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="File_Wrapper.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Font_Wrapper.cpp" />
+    <ClCompile Include="FS_Wrappers.cpp" />
+    <ClCompile Include="JoyEvent.cpp" />
+    <ClCompile Include="JoyEvent_Wrapper.cpp" />
+    <ClCompile Include="Joystick.cpp" />
+    <ClCompile Include="Joystick_Wrapper.cpp" />
+    <ClCompile Include="Logic_Wrappers.cpp" />
+    <ClCompile Include="MemFile.cpp" />
+    <ClCompile Include="MemFile_Wrapper.cpp" />
+    <ClCompile Include="Network_Wrappers.cpp" />
+    <ClCompile Include="ParticleEngine.cpp" />
+    <ClCompile Include="ParticleEngine_Wrapper.cpp" />
+    <ClCompile Include="RAGEConfiguration.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Graphics_Wrappers.cpp" />
+    <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="IniFile_Wrapper.cpp" />
+    <ClCompile Include="Input_Wrappers.cpp" />
+    <ClCompile Include="KeyboardEvent.cpp" />
+    <ClCompile Include="KeyboardEvent_Wrapper.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MouseEvent.cpp" />
+    <ClCompile Include="MouseEvent_Wrapper.cpp" />
+    <ClCompile Include="Music.cpp" />
+    <ClCompile Include="Music_Wrapper.cpp" />
+    <ClCompile Include="RubyInterpreter.cpp" />
+    <ClCompile Include="ScreenEvent.cpp" />
+    <ClCompile Include="ScreenEvent_Wrapper.cpp" />
+    <ClCompile Include="Sfx.cpp" />
+    <ClCompile Include="Sfx_Wrapper.cpp" />
+    <ClCompile Include="Shader_Wrapper.cpp" />
+    <ClCompile Include="TCPClient.cpp" />
+    <ClCompile Include="TCPClient_Wrapper.cpp" />
+    <ClCompile Include="TCPServer.cpp" />
+    <ClCompile Include="TCPServer_Wrapper.cpp" />
+    <ClCompile Include="TimerEvent.cpp" />
+    <ClCompile Include="TimerEvent_Wrapper.cpp" />
+    <ClCompile Include="UDPSocket.cpp" />
+    <ClCompile Include="UDPSocket_Wrapper.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="VertexArray_Wrapper.cpp" />
+    <ClCompile Include="World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_tmx.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\defs.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\md5.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha1.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha2.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\pathname\pathname_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regenc.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regint.h" />
+    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Audio_Wrapper.h" />
+    <ClInclude Include="BaseEvent.h" />
+    <ClInclude Include="BaseFile.h" />
+    <ClInclude Include="BaseFile_Wrapper.h" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="Bitmap_Wrapper.h" />
+    <ClInclude Include="box2d-mod\Box2D.h" />
+    <ClInclude Include="box2d-mod\Collision\b2BroadPhase.h" />
+    <ClInclude Include="box2d-mod\Collision\b2Collision.h" />
+    <ClInclude Include="box2d-mod\Collision\b2Distance.h" />
+    <ClInclude Include="box2d-mod\Collision\b2DynamicTree.h" />
+    <ClInclude Include="box2d-mod\Collision\b2TimeOfImpact.h" />
+    <ClInclude Include="box2d-mod\Collision\Shapes\b2ChainShape.h" />
+    <ClInclude Include="box2d-mod\Collision\Shapes\b2CircleShape.h" />
+    <ClInclude Include="box2d-mod\Collision\Shapes\b2EdgeShape.h" />
+    <ClInclude Include="box2d-mod\Collision\Shapes\b2PolygonShape.h" />
+    <ClInclude Include="box2d-mod\Collision\Shapes\b2Shape.h" />
+    <ClInclude Include="box2d-mod\Common\b2BlockAllocator.h" />
+    <ClInclude Include="box2d-mod\Common\b2Draw.h" />
+    <ClInclude Include="box2d-mod\Common\b2GrowableStack.h" />
+    <ClInclude Include="box2d-mod\Common\b2Math.h" />
+    <ClInclude Include="box2d-mod\Common\b2Settings.h" />
+    <ClInclude Include="box2d-mod\Common\b2StackAllocator.h" />
+    <ClInclude Include="box2d-mod\Common\b2Timer.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2Body.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2ContactManager.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2Fixture.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2Island.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2TimeStep.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2World.h" />
+    <ClInclude Include="box2d-mod\Dynamics\b2WorldCallbacks.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2ChainAndCircleContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2ChainAndPolygonContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2CircleContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2Contact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2ContactSolver.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2EdgeAndCircleContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2EdgeAndPolygonContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2PolygonAndCircleContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Contacts\b2PolygonContact.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2DistanceJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2FrictionJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2GearJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2Joint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2MotorJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2MouseJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2PrismaticJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2PulleyJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2RevoluteJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2RopeJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2WeldJoint.h" />
+    <ClInclude Include="box2d-mod\Dynamics\Joints\b2WheelJoint.h" />
+    <ClInclude Include="box2d-mod\Rope\b2Rope.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Color_Wrapper.h" />
+    <ClInclude Include="DebugDraw.h" />
+    <ClInclude Include="defines.h" />
+    <ClInclude Include="Draw_Wrappers.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="File_Wrapper.h" />
+    <ClInclude Include="JoyEvent.h" />
+    <ClInclude Include="JoyEvent_Wrapper.h" />
+    <ClInclude Include="Joystick.h" />
+    <ClInclude Include="Joystick_Wrapper.h" />
+    <ClInclude Include="Logic_Wrappers.h" />
+    <ClInclude Include="MemFile.h" />
+    <ClInclude Include="MemFile_Wrapper.h" />
+    <ClInclude Include="Network_Wrappers.h" />
+    <ClInclude Include="ParticleEngine.h" />
+    <ClInclude Include="ParticleEngine_Wrapper.h" />
+    <ClInclude Include="RAGEConfiguration.h" />
+    <ClInclude Include="rage_config.h" />
+    <ClInclude Include="rage_standard_headers.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="rage_errors.h" />
+    <ClInclude Include="Events_Wrapper.h" />
+    <ClInclude Include="Event_Wrapper.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Font_Wrapper.h" />
+    <ClInclude Include="FS_Wrappers.h" />
+    <ClInclude Include="Graphics_Wrappers.h" />
+    <ClInclude Include="IniFile.h" />
+    <ClInclude Include="IniFile_Wrapper.h" />
+    <ClInclude Include="Input_Wrappers.h" />
+    <ClInclude Include="KeyboardEvent.h" />
+    <ClInclude Include="KeyboardEvent_Wrapper.h" />
+    <ClInclude Include="MouseEvent.h" />
+    <ClInclude Include="MouseEvent_Wrapper.h" />
+    <ClInclude Include="Music.h" />
+    <ClInclude Include="Music_Wrapper.h" />
+    <ClInclude Include="RubyInterpreter.h" />
+    <ClInclude Include="ScreenEvent.h" />
+    <ClInclude Include="ScreenEvent_Wrapper.h" />
+    <ClInclude Include="Sfx.h" />
+    <ClInclude Include="Sfx_Wrapper.h" />
+    <ClInclude Include="Shader_Wrapper.h" />
+    <ClInclude Include="TCPClient.h" />
+    <ClInclude Include="TCPClient_Wrapper.h" />
+    <ClInclude Include="TCPServer.h" />
+    <ClInclude Include="TCPServer_Wrapper.h" />
+    <ClInclude Include="TimerEvent.h" />
+    <ClInclude Include="TimerEvent_Wrapper.h" />
+    <ClInclude Include="UDPSocket.h" />
+    <ClInclude Include="UDPSocket_Wrapper.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="VertexArray_Wrapper.h" />
+    <ClInclude Include="World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Keyboard_Consts.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RAGE.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="rage.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
