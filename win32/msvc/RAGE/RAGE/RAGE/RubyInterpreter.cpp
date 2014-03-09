@@ -64,16 +64,21 @@ freely, subject to the following restrictions:
 #include <ext/date/date_ruby.h>
 #endif
 
-#if RAGE_COMPILE_PATHNAME
-#include <ext/pathname/pathname_ruby.h>
-#endif
-
 #if RAGE_COMPILE_DIGEST
 #include <ext/digest/digest_ruby.h>
 #endif
 
+#if RAGE_COMPILE_SOCKET
+#include <ext/socket/socket_ruby.h>
+#endif
+
 extern "C"
 {
+
+#if RAGE_COMPILE_SOCKET
+	void Init_socket(void);
+#endif
+
 #if RAGE_COMPILE_DL
 	void Init_dl(void);
 #endif
@@ -92,10 +97,6 @@ extern "C"
 
 #if RAGE_COMPILE_DATE
 	void Init_date_core(void);
-#endif
-
-#if RAGE_COMPILE_PATHNAME
-	void Init_pathname(void);
 #endif
 
 #if RAGE_COMPILE_DIGEST
@@ -351,10 +352,23 @@ namespace RAGE
 
 				// Initialize Ruby Threads
 				Init_thread();
+
 				ruby_Init_Fiber_as_Coroutine();
+				rb_provide("fiber.so");
 				rb_provide("thread.so");
 
 				/* Initialize ruby extensions */
+				#if RAGE_COMPILE_SOCKET
+				if (gConfig->is_on("Socket"))
+				{
+					Init_socket();
+					rb_eval_string_protect(socket_rb_data, nullptr);
+					rb_provide("socket.so");
+				}
+				
+				#endif
+
+
 				#if RAGE_COMPILE_ZLIB
 				if (gConfig->is_on("Zlib"))
 				{
@@ -387,16 +401,6 @@ namespace RAGE
 					rb_eval_string_protect(date_rb_data, nullptr);
 					rb_provide("date_core.so");
 				}
-				#endif
-
-				#if RAGE_COMPILE_PATHNAME
-				if (gConfig->is_on("Pathname"))
-				{
-					Init_pathname();
-					rb_eval_string_protect(pathname_rb_data, nullptr);
-					rb_provide("pathname.so");
-				}
-				
 				#endif
 
 				#if RAGE_COMPILE_DL

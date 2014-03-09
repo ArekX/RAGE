@@ -97,41 +97,41 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby200\include;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby200\lib;..\..\..\..\deps\allegro\allegro-5.0.8-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-dev</TargetName>
     <OutDir>$(SolutionDir)Win7\</OutDir>
     <IntDir>Win7\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-dev</TargetName>
     <OutDir>$(SolutionDir)WinAll\</OutDir>
     <IntDir>WinAll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebugXPSupport-production|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)WinAll\</OutDir>
     <IntDir>WinAll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoDebug-production|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\deps\ruby210\;..\..\..\..\deps\ruby210\ms2013\include;..\..\..\..\deps\allegro\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\..\..\deps\ruby210\ms2013\lib;..\..\..\..\deps\allegro\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\deps\ruby211\;..\..\..\..\deps\ruby211\ms2013\include;..\..\..\..\deps\allegro\include;..\..\..\..\deps\box2d\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\deps\ruby211\ms2013\lib;..\..\..\..\deps\allegro\lib;..\..\..\..\deps\box2d\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Win7\</OutDir>
     <IntDir>Win7\</IntDir>
   </PropertyGroup>
@@ -269,39 +269,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_core.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_parse.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strftime.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strptime.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\bubblebabble.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\digest.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5init.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160init.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1init.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2init.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-3.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-4.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-5.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-6.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-7.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-8.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cfunc.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\pathname\pathname.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\stringio\stringio.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\strscan\strscan.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c" />
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_core.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_parse.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_strftime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_strptime.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\bubblebabble.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\digest.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\md5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\md5init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\rmd160.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\rmd160init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha1init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha2init.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-0.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-1.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-2.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-3.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-4.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-5.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-6.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-7.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-8.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\cfunc.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\cptr.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\dl.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\handle.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\stringio\stringio.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\strscan\strscan.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\thread\thread.c" />
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\zlib\zlib.c" />
     <ClCompile Include="Audio_Wrapper.cpp" />
     <ClCompile Include="BaseFile_Wrapper.cpp" />
     <ClCompile Include="Bitmap.cpp" />
@@ -406,20 +405,18 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_ruby.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_tmx.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\defs.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest_ruby.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\md5.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha1.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha2.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\pathname\pathname_ruby.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regenc.h" />
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regint.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\date\date_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\date\date_tmx.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\defs.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\digest.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\digest_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\md5.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\rmd160.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\sha1.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\sha2.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\dl\dl.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\dl\dl_ruby.h" />
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\socket\socket_ruby.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Audio_Wrapper.h" />
     <ClInclude Include="BaseEvent.h" />

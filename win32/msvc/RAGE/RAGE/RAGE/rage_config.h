@@ -72,7 +72,7 @@ and they too will not be compiled without them.
 #define RAGE_COMPILE_STRINGIO 1
 #define RAGE_COMPILE_STRSCAN 1
 #define RAGE_COMPILE_DATE 1
-#define RAGE_COMPILE_PATHNAME 1
+#define RAGE_COMPILE_SOCKET 1
 #define RAGE_COMPILE_DIGEST 1
 
 /* Filesystem */
@@ -123,6 +123,11 @@ and they too will not be compiled without them.
 #define RAGE_COMPILE_PHYS_DEBUG_DRAW 1
 
 /* End of compilation configuration */
+
+/* Ruby ext libs */
+#if RAGE_COMPILE_SOCKET
+#pragma comment(lib, "socket.lib")
+#endif
 
 /* Initializer methods */
 #define RAGE_INIT_FS_MODULE 

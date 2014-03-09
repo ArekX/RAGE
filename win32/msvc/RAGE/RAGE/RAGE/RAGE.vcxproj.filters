@@ -113,9 +113,6 @@
     <Filter Include="app\ruby_exts\strscan">
       <UniqueIdentifier>{0985d4cd-e1e0-4286-a54e-bc466d0d69da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="app\ruby_exts\pathname">
-      <UniqueIdentifier>{2691d422-5829-4cfc-b4a3-8c3e9b884783}</UniqueIdentifier>
-    </Filter>
     <Filter Include="app\ruby_exts\date">
       <UniqueIdentifier>{497b41a0-87ad-4170-b860-f85f693aba75}</UniqueIdentifier>
     </Filter>
@@ -157,6 +154,9 @@
     </Filter>
     <Filter Include="modules\physics\headers">
       <UniqueIdentifier>{a78720a0-8fce-4b01-b638-f433d41bf644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\ruby_exts\socket">
+      <UniqueIdentifier>{dfe4b95d-bb0c-47a9-8f25-87999158aa46}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -322,105 +322,6 @@
     <ClCompile Include="DebugDraw.cpp">
       <Filter>modules\physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-0.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-1.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-2.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-3.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-4.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-5.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-6.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-7.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\callback-8.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cfunc.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\cptr.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\dl.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\dl\handle.c">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\zlib\zlib.c">
-      <Filter>app\ruby_exts\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\thread\thread.c">
-      <Filter>app\ruby_exts\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\stringio\stringio.c">
-      <Filter>app\ruby_exts\stringio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\strscan\strscan.c">
-      <Filter>app\ruby_exts\strscan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\pathname\pathname.c">
-      <Filter>app\ruby_exts\pathname</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_core.c">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_parse.c">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strftime.c">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\date\date_strptime.c">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\bubblebabble.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\digest.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\md5init.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\rmd160init.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha1init.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\deps\ruby210\ext\digest\sha2init.c">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClCompile>
     <ClCompile Include="box2d-mod\Collision\b2BroadPhase.cpp">
       <Filter>modules\physics\Box2D\Collision</Filter>
     </ClCompile>
@@ -564,6 +465,102 @@
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>modules\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\thread\thread.c">
+      <Filter>app\ruby_exts\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_core.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_parse.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_strftime.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\date\date_strptime.c">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\bubblebabble.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\digest.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\md5.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\md5init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\rmd160.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\rmd160init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha1.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha1init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha2.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\digest\sha2init.c">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-0.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-1.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-2.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-3.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-4.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-5.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-6.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-7.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\callback-8.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\cfunc.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\cptr.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\dl.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\dl\handle.c">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\stringio\stringio.c">
+      <Filter>app\ruby_exts\stringio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\strscan\strscan.c">
+      <Filter>app\ruby_exts\strscan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\ruby211\ext\zlib\zlib.c">
+      <Filter>app\ruby_exts\zlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -735,12 +732,6 @@
     <ClInclude Include="DebugDraw.h">
       <Filter>modules\physics\Box2D\headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl.h">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\dl\dl_ruby.h">
-      <Filter>app\ruby_exts\dl</Filter>
-    </ClInclude>
     <ClInclude Include="rage_standard_headers.h">
       <Filter>app\compilation_headers</Filter>
     </ClInclude>
@@ -752,42 +743,6 @@
     </ClInclude>
     <ClInclude Include="rage_errors.h">
       <Filter>app\compilation_headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regint.h">
-      <Filter>app\ruby_exts\strscan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\strscan\regenc.h">
-      <Filter>app\ruby_exts\strscan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\pathname\pathname_ruby.h">
-      <Filter>app\ruby_exts\pathname</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_ruby.h">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\date\date_tmx.h">
-      <Filter>app\ruby_exts\date</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\defs.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\digest_ruby.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\md5.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\rmd160.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha1.h">
-      <Filter>app\ruby_exts\digest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\deps\ruby210\ext\digest\sha2.h">
-      <Filter>app\ruby_exts\digest</Filter>
     </ClInclude>
     <ClInclude Include="box2d-mod\Box2D.h">
       <Filter>modules\physics\Box2D</Filter>
@@ -935,6 +890,42 @@
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>modules\physics\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\date\date_ruby.h">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\date\date_tmx.h">
+      <Filter>app\ruby_exts\date</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\defs.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\digest.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\digest_ruby.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\md5.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\rmd160.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\sha1.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\digest\sha2.h">
+      <Filter>app\ruby_exts\digest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\dl\dl.h">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\dl\dl_ruby.h">
+      <Filter>app\ruby_exts\dl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\ruby211\ext\socket\socket_ruby.h">
+      <Filter>app\ruby_exts\socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
