@@ -48,6 +48,9 @@ https://www.dropbox.com/s/xlmu3vgts6f7yh9/RAGE001-beta-xp-support.7z
 
 Examples
 ====
+Space Circle (1.0.0-rc1)
+
+https://www.dropbox.com/s/l79to5g5k1jhyh5/SpaceCircle100.zip
 
 Pixel Effects example (0.0.3-beta)
 
