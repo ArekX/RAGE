@@ -215,7 +215,8 @@ namespace RAGE
 
 		void Music::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (audio != nullptr)
 			{

@@ -295,6 +295,28 @@ namespace RAGE
 			return rb_obj_clone(event_objects);
 		}
 
+		VALUE EventsWrapper::rb_has_events(VALUE self)
+		{
+			return BOOL2RB(!al_is_event_queue_empty(event_queue));
+		}
+
+		VALUE EventsWrapper::rb_wait_for_event(VALUE self)
+		{
+			ALLEGRO_EVENT ev;
+			register int i;
+			BaseEvent *evnt;
+
+			al_wait_for_event(event_queue, &ev);
+
+			for (i = 0; i < RARRAY_LEN(event_objects); i++)
+			{
+				Data_Get_Struct(rb_ary_entry(event_objects, i), BaseEvent, evnt);
+				evnt->callback(&ev);
+			}
+
+			return Qnil;
+		}
+
 		void EventsWrapper::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Events")) return;
@@ -310,6 +332,8 @@ namespace RAGE
 			rb_define_module_function(events, "processMouse", RFUNC(EventsWrapper::rb_process_mouse), 1);
 			rb_define_module_function(events, "processJoystick", RFUNC(EventsWrapper::rb_process_joystick), 1);
 			rb_define_module_function(events, "processScreen", RFUNC(EventsWrapper::rb_process_display), 1);
+			rb_define_module_function(events, "waitForEvent", RFUNC(EventsWrapper::rb_wait_for_event), 0);
+			rb_define_module_function(events, "hasEvents?", RFUNC(EventsWrapper::rb_has_events), 0);
 			rb_define_module_function(events, "update", RFUNC(EventsWrapper::rb_update_events), 0);
 			rb_define_module_function(events, "clear", RFUNC(EventsWrapper::rb_clear_events), 1);
 			rb_define_module_function(events, "clearAll", RFUNC(EventsWrapper::rb_clear_events2), 0);

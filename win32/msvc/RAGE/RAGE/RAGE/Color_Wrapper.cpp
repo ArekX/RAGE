@@ -57,10 +57,10 @@ namespace RAGE
 						clr->from_name(StringValueCStr(args[0]));
 						break;
 					case 3:
-						clr->from_rgba(FIX2INT(args[0]), FIX2INT(args[1]), FIX2INT(args[2]), 1);
+						clr->from_rgba(NUM2DBL(args[0]), NUM2DBL(args[1]), NUM2DBL(args[2]), 1);
 						break;
 					case 4:
-						clr->from_rgba(FIX2INT(args[0]), FIX2INT(args[1]), FIX2INT(args[2]), FIX2INT(args[3]));
+						clr->from_rgba(NUM2DBL(args[0]), NUM2DBL(args[1]), NUM2DBL(args[2]), NUM2DBL(args[3]));
 						break;
 				}
 			}

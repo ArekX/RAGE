@@ -161,6 +161,9 @@ namespace RAGE
 
 		void TimerEvent::dispose(void)
 		{
+			if (disposed)
+				return;
+
 			if (timer_queue != nullptr)
 				al_unregister_event_source(timer_queue, al_get_timer_event_source(timer));
 

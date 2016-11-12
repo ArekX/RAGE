@@ -34,6 +34,8 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_register_event(VALUE self, VALUE entry);
+			static VALUE rb_wait_for_event(VALUE self);
+			static VALUE rb_has_events(VALUE self);
 			static VALUE rb_unregister_event(VALUE self, VALUE entry);
 			static VALUE rb_event_is_registered(VALUE self, VALUE entry);
 			static VALUE rb_clear_events(VALUE self, VALUE event_type);

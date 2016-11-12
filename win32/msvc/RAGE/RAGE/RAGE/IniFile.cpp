@@ -167,7 +167,8 @@ namespace RAGE
 
 		void IniFile::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			al_destroy_config(ini);
 			rage_file = Qnil;

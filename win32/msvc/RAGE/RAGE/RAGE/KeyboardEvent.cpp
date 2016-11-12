@@ -34,6 +34,7 @@ namespace RAGE
 			disposed = false;
 			unichar = false;
 			keycode_names = false;
+			key = Qnil;
 			key_up_observer = rb_ary_new();
 			key_down_observer = rb_ary_new();
 			key_char_observer = rb_ary_new();
@@ -173,7 +174,8 @@ namespace RAGE
 
 		void KeyboardEvent::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			rb_ary_clear(key_char_observer);
 			rb_ary_clear(key_up_observer);

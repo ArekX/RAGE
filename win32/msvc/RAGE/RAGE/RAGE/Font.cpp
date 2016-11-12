@@ -181,7 +181,8 @@ namespace RAGE
 
 		void Font::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (font != nullptr)
 				al_destroy_font(font);

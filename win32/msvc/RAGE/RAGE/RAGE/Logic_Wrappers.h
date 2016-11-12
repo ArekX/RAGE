@@ -35,6 +35,7 @@ namespace RAGE
 		{
 		private:
 			static VALUE rb_box_collision(VALUE self, VALUE x1, VALUE y1, VALUE w1, VALUE h1, VALUE x2, VALUE y2, VALUE w2, VALUE h2);
+			static VALUE rb_mt_rand(int argc, VALUE *args, VALUE self);
 
 			#if RAGE_COMPILE_BITMAP
 			static VALUE rb_bitmap_collision(VALUE self, VALUE x1, VALUE y1, VALUE bmp1, VALUE x2, VALUE y2, VALUE bmp2);

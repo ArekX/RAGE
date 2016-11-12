@@ -37,7 +37,7 @@ namespace RAGE
 			static VALUE rb_alloc(VALUE self);
 			static void rb_destroy(void* value);
 			static VALUE rb_initialize(VALUE self, VALUE shader_type, VALUE code);
-			static VALUE rb_bind_texture(VALUE self, VALUE val_name, VALUE bitmap);
+			static VALUE rb_bind_texture(VALUE self, VALUE textureIndex, VALUE val_name, VALUE bitmap);
 			static VALUE rb_set_float(VALUE self, VALUE float_name, VALUE val);
 			static VALUE rb_set_int(VALUE self, VALUE int_name, VALUE val);
 			static VALUE rb_set_iv2(int argc, VALUE *args, VALUE self);

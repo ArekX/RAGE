@@ -182,7 +182,8 @@ namespace RAGE
 
 		void ScreenEvent::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			rb_ary_clear(screen_close_observer);
 			rb_ary_clear(screen_focus_observer);

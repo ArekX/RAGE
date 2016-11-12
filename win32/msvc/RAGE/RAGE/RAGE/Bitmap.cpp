@@ -433,7 +433,8 @@ namespace RAGE
 
 		void Bitmap::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (al_get_target_bitmap() == bitmap)
 			{

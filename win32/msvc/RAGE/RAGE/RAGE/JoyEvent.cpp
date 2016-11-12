@@ -224,7 +224,8 @@ namespace RAGE
 
 		void JoyEvent::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			rb_ary_clear(joy_up_observer);
 			rb_ary_clear(joy_down_observer);

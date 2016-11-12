@@ -177,22 +177,29 @@ namespace RAGE
 
 		void MouseEvent::callback(ALLEGRO_EVENT *ev)
 		{
+			VALUE *observer;
+
 			RAGE_CHECK_DISPOSED(disposed);
 
-			if (ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-				run_procs(&mouse_up_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
-				
-			if (ev->type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-				run_procs(&mouse_down_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
-				
-			if (ev->type == ALLEGRO_EVENT_MOUSE_AXES)
-				run_procs(&mouse_move_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y,&ev->mouse.z);
-				
-			if (ev->type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY)
-				run_procs(&mouse_enter_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
-				
-			if (ev->type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY)
-				run_procs(&mouse_leave_observer, &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
+			run_procs(this->get_observer_by_type(ev->type), &ev->mouse.button, &ev->mouse.x, &ev->mouse.y, &ev->mouse.z);
+		}
+
+		VALUE* MouseEvent::get_observer_by_type(ALLEGRO_EVENT_TYPE type)
+		{
+			switch (type) {
+			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+				return &mouse_up_observer;
+			case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+				return &mouse_down_observer;
+			case ALLEGRO_EVENT_MOUSE_AXES:
+				return &mouse_move_observer;
+			case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY:
+				return &mouse_enter_observer;
+			case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY:
+				return &mouse_leave_observer;
+			}
+
+			return nullptr;
 		}
 
 		void MouseEvent::gc_mark(void)
@@ -210,7 +217,8 @@ namespace RAGE
 
 		void MouseEvent::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			rb_ary_clear(mouse_down_observer);
 			rb_ary_clear(mouse_up_observer);

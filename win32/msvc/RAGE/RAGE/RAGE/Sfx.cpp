@@ -213,7 +213,8 @@ namespace RAGE
 
 		void Sfx::dispose(void)
 		{ 
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (inst != nullptr)
 				al_destroy_sample_instance(inst);

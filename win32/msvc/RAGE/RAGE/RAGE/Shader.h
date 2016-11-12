@@ -25,6 +25,9 @@ freely, subject to the following restrictions:
 
 #include "rage_standard_headers.h"
 
+#include <map>
+#include <string>
+
 #if RAGE_COMPILE_SHADER
 
 #define SHADER_LEN 1
@@ -55,16 +58,16 @@ namespace RAGE
 			bool code_added;
 			bool is_active;
 			void set_code(int shader_type, const char *code);
-			void bind_bitmap(char *texture_name, ALLEGRO_BITMAP *bitmap);
+			void bind_bitmap(int textureIndex, char *texture_name, ALLEGRO_BITMAP *bitmap);
 			
 			void set_float(char *name, float val);
 			void set_int(char *name, int val);
-			void set_ivec2(char *name, int max_val, int val1, int val2);
-			void set_ivec3(char *name, int max_val, int val1, int val2, int val3);
-			void set_ivec4(char *name, int max_val, int val1, int val2, int val3, int val4);
-			void set_fvec2(char *name, int max_val, float val1, float val2);
-			void set_fvec3(char *name, int max_val, float val1, int val2, int val3);
-			void set_fvec4(char *name, int max_val, float val1, float val2, float val3, float val4);
+			void set_ivec2(char *name, int val1, int val2);
+			void set_ivec3(char *name, int val1, int val2, int val3);
+			void set_ivec4(char *name, int val1, int val2, int val3, int val4);
+			void set_fvec2(char *name, float val1, float val2);
+			void set_fvec3(char *name, float val1, int val2, int val3);
+			void set_fvec4(char *name, float val1, float val2, float val3, float val4);
 
 			void set_mat(char *name, int mat_type, int count, bool transpose, float *vals); 
 

@@ -1384,7 +1384,8 @@ namespace RAGE
 
 		void ParticleEngine::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);			
+			if (disposed)
+				return;
 
 			if (frame_layers_len > 0) 
 				set_frame_layers(0);

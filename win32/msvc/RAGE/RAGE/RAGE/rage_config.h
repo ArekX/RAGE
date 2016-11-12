@@ -119,8 +119,8 @@ and they too will not be compiled without them.
 #define RAGE_COMPILE_LOGIC 1
 
 /* Physics */
-#define RAGE_COMPILE_PHYSICS 1
-#define RAGE_COMPILE_PHYS_DEBUG_DRAW 1
+#define RAGE_COMPILE_PHYSICS 0
+#define RAGE_COMPILE_PHYS_DEBUG_DRAW 0
 
 /* End of compilation configuration */
 

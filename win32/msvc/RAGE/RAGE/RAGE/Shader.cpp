@@ -117,81 +117,98 @@ namespace RAGE
 			check_errors(GL_LINK_STATUS);
 		}
 
-		void Shader::bind_bitmap(char *texture_name, ALLEGRO_BITMAP *bitmap)
+		void Shader::bind_bitmap(int textureIndex, char *texture_name, ALLEGRO_BITMAP *bitmap)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			glUniform1i(glGetUniformLocation(glsl_shader_program, texture_name),
-				           al_get_opengl_texture(bitmap));
+			if (textureIndex > 30) {
+				rb_raise(rb_eArgError, "Texture index must be between 0 and 30");
+				return;
+			}
+
+			if (al_get_bitmap_flags(bitmap) & ALLEGRO_MEMORY_BITMAP) {
+				rb_raise(rb_eException, "Cannot use memory type bitmaps as shader source.");
+				return;
+			}
+
+			GLint handle = glGetUniformLocation(glsl_shader_program, texture_name);
+
+			glActiveTexture(GL_TEXTURE0 + textureIndex);
+
+			GLuint texture = bitmap ? al_get_opengl_texture(bitmap) : 0;
+
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glUniform1i(handle, textureIndex);
+			glActiveTexture(GL_TEXTURE0);
 		}
 
 		void Shader::set_float(char *name, float val)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			glUniform1f(glGetUniformLocation(glsl_shader_program, (const char*)name), val);
+			glUniform1f(glGetUniformLocation(glsl_shader_program, name), val);
 		}
 
 		void Shader::set_int(char *name, int val)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 			
-			glUniform1i(glGetUniformLocation(glsl_shader_program, (const char*)name), val);
+			glUniform1i(glGetUniformLocation(glsl_shader_program, name), val);
 		}
 
-		void Shader::set_ivec2(char *name, int max_val, int val1, int val2)
+		void Shader::set_ivec2(char *name, int val1, int val2)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
-			GLint g[2] = { val1, val2 };
+			int g[2] = { val1, val2 };
 
-			glUniform2iv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform2iv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 
 		}
 
-		void Shader::set_ivec3(char *name, int max_val, int val1, int val2, int val3)
+		void Shader::set_ivec3(char *name, int val1, int val2, int val3)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			GLint g[3] = { val1, val2, val3 };
 
-			glUniform3iv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform3iv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 		}
 
-		void Shader::set_ivec4(char *name, int max_val, int val1, int val2, int val3, int val4)
+		void Shader::set_ivec4(char *name, int val1, int val2, int val3, int val4)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			GLint g[4] = { val1, val2, val3, val4 };
 
-			glUniform4iv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform4iv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 		}
 
-		void Shader::set_fvec2(char *name, int max_val, float val1, float val2)
+		void Shader::set_fvec2(char *name, float val1, float val2)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			GLfloat g[2] = { val1, val2 };
 
-			glUniform2fv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform2fv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 		}
 
-		void Shader::set_fvec3(char *name, int max_val, float val1, int val2, int val3)
+		void Shader::set_fvec3(char *name, float val1, int val2, int val3)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			GLfloat g[3] = { val1, val2, val3 };
 
-			glUniform2fv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform2fv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 		}
 
-		void Shader::set_fvec4(char *name, int max_val, float val1, float val2, float val3, float val4)
+		void Shader::set_fvec4(char *name, float val1, float val2, float val3, float val4)
 		{
 			RAGE_CHECK_DISPOSED(disposed);
 
 			GLfloat g[4] = { val1, val2, val3, val4 };
 
-			glUniform4fv(glGetUniformLocation(glsl_shader_program, (const char*)name), max_val, g);
+			glUniform4fv(glGetUniformLocation(glsl_shader_program, name), 1, g);
 		}
 
 		void Shader::set_mat(char *name, int mat_type, int count, bool transpose, float *vals)
@@ -201,37 +218,38 @@ namespace RAGE
 			switch(mat_type)
 			{
 				case RAGE_SHADER_MATRIX_2X2:
-					glUniformMatrix2fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix2fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_3X3:
-					glUniformMatrix3fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix3fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_4X4:
-					glUniformMatrix4fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix4fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_2X3:
-					glUniformMatrix2x3fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix2x3fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_3X2:
-					glUniformMatrix3x2fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix3x2fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_2X4:
-					glUniformMatrix2x4fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix2x4fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_4X2:
-					glUniformMatrix4x2fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix4x2fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_3X4:
-					glUniformMatrix3x4fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix3x4fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 					break;
 				case RAGE_SHADER_MATRIX_4X3:
-					glUniformMatrix4x3fv(glGetUniformLocation(glsl_shader_program, (const char*)name), count, transpose, vals);
+					glUniformMatrix4x3fv(glGetUniformLocation(glsl_shader_program, name), count, transpose, vals);
 			}
 		}
 
 		void Shader::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (code_added)
 			{

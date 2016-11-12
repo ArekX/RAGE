@@ -55,6 +55,7 @@ namespace RAGE
 			static VALUE rb_get_icon(VALUE self);
 			static VALUE rb_set_target(VALUE self, VALUE bitmap);
 			static VALUE rb_get_target(VALUE self);
+			static VALUE rb_get_screen_bitmap(VALUE self);
 			static VALUE rb_set_mouse_bitmap(VALUE self, VALUE cursor_bitmap, VALUE focus_x, VALUE focus_y);
 			static VALUE rb_hold_bitmap_drawing(VALUE self, VALUE val);
 			static VALUE rb_is_bitmap_drawing_held(VALUE self);

@@ -55,7 +55,7 @@ namespace RAGE
 			return Qnil;
 		}
 
-	    VALUE ShaderWrapper::rb_bind_texture(VALUE self, VALUE val_name, VALUE bitmap)
+	    VALUE ShaderWrapper::rb_bind_texture(VALUE self, VALUE textureIndex, VALUE val_name, VALUE bitmap)
 		{
 			Shader *sh;
 			Bitmap *bmp;
@@ -63,7 +63,7 @@ namespace RAGE
 			Data_Get_Struct(self, Shader, sh);
 			Data_Get_Struct(bitmap, Bitmap, bmp);
 
-			sh->bind_bitmap(StringValueCStr(val_name), bmp->bitmap); 
+			sh->bind_bitmap(FIX2INT(textureIndex), StringValueCStr(val_name), bmp->bitmap); 
 
 			return Qnil;
 		}
@@ -111,52 +111,48 @@ namespace RAGE
 
 		VALUE ShaderWrapper::rb_set_iv2(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 4))
+			if (argc == 3)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
-				sh->set_ivec2(
-					          StringValueCStr(args[0]), argc - 1, 
-					          FIX2INT(args[1]), 
-							  (argc == 3) ? FIX2INT(args[2]) : 0  
-							 );
+				sh->set_ivec2(StringValueCStr(args[0]), FIX2INT(args[1]),  FIX2INT(args[2]));
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 3);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 3, 3);
 
 			return Qnil;
 		}
 
 		VALUE ShaderWrapper::rb_set_iv3(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 5))
+			if (argc == 4)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
 				sh->set_ivec3(
-					          StringValueCStr(args[0]), argc - 1, 
+					          StringValueCStr(args[0]), 
 					          FIX2INT(args[1]), 
 							  (argc > 2) ? FIX2INT(args[2]) : 0,
 							  (argc == 4) ? FIX2INT(args[3]) : 0
 							 );
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 4);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 4, 4);
 
 			return Qnil;
 		}
 
 		VALUE ShaderWrapper::rb_set_iv4(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 6))
+			if (argc == 5)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
 				sh->set_ivec4(
-					          StringValueCStr(args[0]), argc - 1, 
+					          StringValueCStr(args[0]), 
 					          FIX2INT(args[1]), 
 							  (argc > 2) ? FIX2INT(args[2]) : 0,
 							  (argc > 3) ? FIX2INT(args[3]) : 0,
@@ -164,59 +160,59 @@ namespace RAGE
 							 );
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 5);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 5, 5);
 
 			return Qnil;
 		}
 
 		VALUE ShaderWrapper::rb_set_fv2(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 4))
+			if (argc == 3)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
 				sh->set_fvec2(
-					          StringValueCStr(args[0]), argc - 1, 
+					          StringValueCStr(args[0]), 
 					          NUM2DBL(args[1]), 
 							  (argc == 3) ? NUM2DBL(args[2]) : 0  
 							 );
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 3);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 3, 3);
 
 			return Qnil;
 		}
 
 		VALUE ShaderWrapper::rb_set_fv3(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 5))
+			if (argc == 4)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
 				sh->set_fvec3(
-					          StringValueCStr(args[0]), argc - 1, 
+					          StringValueCStr(args[0]), 
 					          NUM2DBL(args[1]), 
 							  (argc > 2) ? NUM2DBL(args[2]) : 0,
 							  (argc == 4) ? NUM2DBL(args[3]) : 0
 							 );
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 4);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 4, 4);
 
 			return Qnil;
 		}
 
 		VALUE ShaderWrapper::rb_set_fv4(int argc, VALUE *args, VALUE self)
 		{
-			if ((argc > 1) && (argc < 6))
+			if (argc == 5)
 			{
 				Shader *sh;
 				Data_Get_Struct(self, Shader, sh);
 
 				sh->set_fvec4(
-					          StringValueCStr(args[0]), argc - 1, 
+					          StringValueCStr(args[0]),
 					          NUM2DBL(args[1]), 
 							  (argc > 2) ? NUM2DBL(args[2]) : 0,
 							  (argc > 3) ? NUM2DBL(args[3]) : 0,
@@ -224,7 +220,7 @@ namespace RAGE
 							 );
 			}
 			else
-				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 2, 5);
+				rb_raise(rb_eArgError, RAGE_VAR_FUNCTION_INCOMP_ARGS, 5, 5);
 
 			return Qnil;
 		}
@@ -296,7 +292,7 @@ namespace RAGE
 			rb_define_alloc_func(rb_rageShaderClass, ShaderWrapper::rb_alloc);
 
 			rb_define_method(rb_rageShaderClass, "initialize", RFUNC(ShaderWrapper::rb_initialize), 2);
-			rb_define_method(rb_rageShaderClass, "bindBitmap", RFUNC(ShaderWrapper::rb_bind_texture), 2);
+			rb_define_method(rb_rageShaderClass, "bindBitmap", RFUNC(ShaderWrapper::rb_bind_texture), 3);
 			rb_define_method(rb_rageShaderClass, "setFloat", RFUNC(ShaderWrapper::rb_set_float), 2);
 			rb_define_method(rb_rageShaderClass, "setInt", RFUNC(ShaderWrapper::rb_set_int), 2);
 			rb_define_method(rb_rageShaderClass, "setIntVector2", RFUNC(ShaderWrapper::rb_set_iv2), -1);

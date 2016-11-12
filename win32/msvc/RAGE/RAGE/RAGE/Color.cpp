@@ -86,8 +86,6 @@ namespace RAGE
 
 		void Color::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
-
 			disposed = true;
 		}
 

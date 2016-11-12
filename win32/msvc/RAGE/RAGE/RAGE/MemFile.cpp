@@ -371,7 +371,8 @@ namespace RAGE
 
 		void MemFile::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (data != nullptr)
 			{

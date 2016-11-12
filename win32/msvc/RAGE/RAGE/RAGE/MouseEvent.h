@@ -42,6 +42,7 @@ namespace RAGE
 		{
 		private:
 			void run_procs(VALUE *observer, unsigned int *buttons, int *x, int *y, int *wheel);
+			VALUE* get_observer_by_type(ALLEGRO_EVENT_TYPE type);
 			VALUE *mouse_args;
 			VALUE mouse_up_observer;
 			VALUE mouse_down_observer;

@@ -155,7 +155,8 @@ namespace RAGE
 
 		void UDPSocket::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			closesocket(server_sock);
 

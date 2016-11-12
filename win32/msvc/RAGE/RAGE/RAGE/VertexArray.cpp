@@ -211,7 +211,8 @@ namespace RAGE
 
 		void VertexArray::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (ary_len > 0) 
 				al_free(ary);

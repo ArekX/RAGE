@@ -42,6 +42,10 @@ namespace RAGE
 
 		void KeyboardEventWrapper::rb_key_event_mark(void *value)
 		{
+			if (value == nullptr || value == NULL || (void*)value == nullptr) {
+				return;
+			}
+
 			((KeyboardEvent*)value)->gc_mark();
 		}
 

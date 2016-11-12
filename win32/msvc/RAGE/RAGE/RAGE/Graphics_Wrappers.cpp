@@ -101,16 +101,18 @@ namespace RAGE
 
 		VALUE GraphicsWrappers::rb_get_target(VALUE self)
 		{
-			if (rb_target_bitmap != Qnil) 
-				return rb_target_bitmap;
-			
-			Bitmap *bmp;
-			rb_target_bitmap = RAGE::Graphics::BitmapWrapper::new_ruby_class_instance();
-
-			Data_Get_Struct(rb_target_bitmap, Bitmap, bmp);
-			bmp->bitmap = al_get_target_bitmap();
-			
 			return rb_target_bitmap;
+		}
+
+		VALUE GraphicsWrappers::rb_get_screen_bitmap(VALUE self)
+		{
+			Bitmap *bmp;
+			VALUE screen_bitmap = RAGE::Graphics::BitmapWrapper::new_ruby_class_instance();
+
+			Data_Get_Struct(screen_bitmap, Bitmap, bmp);
+			bmp->bitmap = al_clone_bitmap(al_get_target_bitmap());
+
+			return screen_bitmap;
 		}
 
 		VALUE GraphicsWrappers::rb_set_icon(VALUE self, VALUE icon_bitmap)
@@ -558,8 +560,9 @@ namespace RAGE
 			
 			rb_define_module_function(g, "holdBitmapDrawing", RFUNC(GraphicsWrappers::rb_hold_bitmap_drawing), 1);
 			rb_define_module_function(g, "isBitmapDrawingHeld?", RFUNC(GraphicsWrappers::rb_is_bitmap_drawing_held), 0);
-			rb_define_module_function(g, "setTarget", RFUNC(GraphicsWrappers::rb_set_target), 1);
-			rb_define_module_function(g, "getTarget", RFUNC(GraphicsWrappers::rb_get_target), 0);
+			rb_define_module_function(g, "target=", RFUNC(GraphicsWrappers::rb_set_target), 1);
+			rb_define_module_function(g, "target", RFUNC(GraphicsWrappers::rb_get_target), 0);
+			rb_define_module_function(g, "screenToBitmap", RFUNC(GraphicsWrappers::rb_get_screen_bitmap), 0);
 			rb_define_module_function(g, "setMouseBitmap", RFUNC(GraphicsWrappers::rb_set_mouse_bitmap), 3);
 			rb_define_module_function(g, "setBitmapFlags", RFUNC(GraphicsWrappers::rb_set_bitmap_flags), 1);
 			rb_define_module_function(g, "icon=", RFUNC(GraphicsWrappers::rb_set_icon), 1);

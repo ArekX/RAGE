@@ -26,12 +26,17 @@ freely, subject to the following restrictions:
 #include "Bitmap.h"
 #include "RubyInterpreter.h"
 
+#include <random>
+
 #if RAGE_COMPILE_LOGIC
 
 namespace RAGE
 {
 	namespace Logic
 	{
+		std::random_device random_device;
+		std::mt19937 mt_random_engine(random_device());
+		std::uniform_real_distribution<double> mt_distributor_double(0.0, 1.0);
 
 		bool LogicWrappers::collision(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2)
 		{
@@ -65,6 +70,41 @@ namespace RAGE
 			return LogicWrappers::collision(NUM2DBL(x1), NUM2DBL(y1), NUM2DBL(w1), NUM2DBL(h1), NUM2DBL(x2), NUM2DBL(y2), NUM2DBL(w2), NUM2DBL(h2)) ? Qtrue : Qfalse;  
 		}
 
+		VALUE LogicWrappers::rb_mt_rand(int argc, VALUE *args, VALUE self)
+		{
+			if (argc == 0) {
+				return DBL2NUM(mt_distributor_double(mt_random_engine));
+			}
+
+			if (argc > 3) {
+				rb_raise(rb_eArgError, "Invalid number of arguments.");
+				return Qnil;
+			}
+
+			if (argc == 1) {
+				mt_random_engine.seed(FIX2INT(args[0]));
+				return DBL2NUM(mt_distributor_double(mt_random_engine));
+			}
+
+			int min = 0;
+			int max = 0;
+
+			if (argc == 2) {
+				min = FIX2INT(args[0]);
+				max = FIX2INT(args[1]);
+			}
+
+
+			if (argc == 3) {
+				min = FIX2INT(args[0]);
+				max = FIX2INT(args[1]);
+				mt_random_engine.seed(FIX2INT(args[2]));
+			}
+
+			std::uniform_int_distribution<int> mt_distributor_int(min, max);
+			return INT2FIX(mt_distributor_int(mt_random_engine));
+		}
+
 		void LogicWrappers::load_wrappers(void)
 		{
 			if (!Interpreter::Ruby::get_config()->is_on("RAGE::Logic")) return;
@@ -79,6 +119,7 @@ namespace RAGE
 			#endif
 
 			rb_define_module_function(lg, "boxVsBoxCollision?", RFUNC(LogicWrappers::rb_box_collision), 8);
+			rb_define_module_function(lg, "uniformRand", RFUNC(LogicWrappers::rb_mt_rand), -1);
 		}
 	}
 }

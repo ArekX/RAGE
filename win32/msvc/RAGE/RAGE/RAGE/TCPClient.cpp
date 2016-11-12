@@ -284,7 +284,8 @@ namespace RAGE
 
 		void TCPClient::disconnect(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			closesocket(sock);
 

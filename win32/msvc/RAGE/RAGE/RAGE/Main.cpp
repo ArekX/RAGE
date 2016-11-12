@@ -45,6 +45,8 @@ void sigsegv_handler(int param)
 	#endif
 }
 
+extern "C" _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+
 /**
  * Main Initialize Function
  * Arguments:
@@ -52,6 +54,8 @@ void sigsegv_handler(int param)
 **/
 int main(int argc, char** argv)
 {
+	SetProcessDPIAware();
+
 	#ifdef WIN32
 		#ifdef DEBUG
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );

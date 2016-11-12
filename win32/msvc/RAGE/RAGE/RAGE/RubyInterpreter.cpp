@@ -54,7 +54,6 @@ freely, subject to the following restrictions:
 #include "TCPServer_Wrapper.h"
 #include "TCPClient_Wrapper.h"
 #include "UDPSocket_Wrapper.h"
-#include "box2d-mod/Common/b2Settings.h"
 
 #if RAGE_COMPILE_DL
 #include <ext\dl\dl_ruby.h>
@@ -128,7 +127,6 @@ namespace RAGE
 			ruby_show_version();
 			printf("Copyright (c) Yukihiro Matsumoto (a.k.a matz)\n\n");
 			printf("[Allegro Game Library]\nAllegro Game Library Version: %s\nCopyright (c) Allegro Development Team\n\n", ALLEGRO_VERSION_STR);
-			printf("[Modified Box2D Physics Engine]\nBox2D Library Version: %ld\.%ld\.%ld\nModified by Aleksandar Panic\nOriginal developed by Erin Catto.\n\n", b2_version.major, b2_version.minor, b2_version.revision);
 			return Qnil;
 		}
 
@@ -179,7 +177,8 @@ namespace RAGE
 
 			loaded_files->push_back(new std::string(absolute_file));
 
-			rb_eval_string_protect(data, &error);
+
+			VALUE result = rb_eval_string_protect(data, nullptr);
 
 			delete[] data;
 			
@@ -187,7 +186,8 @@ namespace RAGE
 			if (strcmp(StringValueCStr(filename), RAGE_BOOT_SCRIPT) == 0)
 				PRINT(RAGE_DEV_END_TEXT);
 			#endif
-			return Qtrue;
+
+			return result;
 		}
 
 		static VALUE rb_rage_configure(VALUE self, VALUE config)

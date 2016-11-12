@@ -173,7 +173,8 @@ namespace RAGE
 
 		void Joystick::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			disposed = true;
 

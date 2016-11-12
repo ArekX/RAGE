@@ -326,7 +326,8 @@ namespace RAGE
 
 		void File::dispose(void)
 		{
-			RAGE_CHECK_DISPOSED(disposed);
+			if (disposed)
+				return;
 
 			if (file != nullptr)
 			{
