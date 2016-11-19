@@ -11,9 +11,6 @@ Scripting: [Ruby](http://www.ruby-lang.org/en/downloads/) Version: 2.1.0-p0
 
 Game Library: [Allegro](http://alleg.sourceforge.net) Version: 5.0.10
 
-Official site:
-http://www.rage2d.co/
-
 Releases
 ====
 
@@ -74,10 +71,6 @@ API
 RAGE CHM Help API Documentation:
 
 https://www.dropbox.com/s/upgbx7mixhtuyz3/RAGE%20Documentation.7z
-
-Online API documentation:
-
-http://www.rage2d.co/rage-doc/
 
 Ruby 2.0 Core API Documentation:
 
